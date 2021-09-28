@@ -40,3 +40,4 @@
 ## Dependencies
 * [Android X](https://developer.android.com/jetpack/androidx/) - [Android Open Source Project](https://source.android.com/) — [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
 * [Glide](https://github.com/bumptech/glide) - [Bump Technologies](https://github.com/bumptech) - [BSD, part MIT and Apache 2.0](https://github.com/bumptech/glide/blob/master/LICENSE)
+* [Timber](https://github.com/JakeWharton/timber) - [Jake Wharton](https://github.com/JakeWharton) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
