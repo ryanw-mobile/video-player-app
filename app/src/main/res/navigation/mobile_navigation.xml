@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_events">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="uk.ryanwong.dazn.codechallenge.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_events"
+        android:name="uk.ryanwong.dazn.codechallenge.ui.events.EventsFragment"
+        android:label="@string/events"
+        tools:layout="@layout/fragment_events" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="uk.ryanwong.dazn.codechallenge.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_schedule"
+        android:name="uk.ryanwong.dazn.codechallenge.ui.schedule.ScheduleFragment"
+        android:label="@string/schedule"
+        tools:layout="@layout/fragment_schedule" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="uk.ryanwong.dazn.codechallenge.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_nonetwork"
+        android:name="uk.ryanwong.dazn.codechallenge.ui.nonetwork.NoNetworkFragment"
+        android:label="@string/no_network"
+        tools:layout="@layout/fragment_nonetwork" />
 </navigation>
