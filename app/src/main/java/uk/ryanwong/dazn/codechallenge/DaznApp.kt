@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2021. Ryan Wong (hello@ryanwong.co.uk)
+ *
+ */
+
 package uk.ryanwong.dazn.codechallenge
 
 import android.app.Application
@@ -5,8 +10,12 @@ import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import timber.log.Timber
 import timber.log.Timber.Forest.plant
+import uk.ryanwong.dazn.codechallenge.data.repository.DaznApiRepository
 
 class DaznApp : Application() {
+
+    val apiRepository: DaznApiRepository
+        get() = ServiceLocator.provideApiRepository(this)
 
     override fun onCreate() {
         super.onCreate()
