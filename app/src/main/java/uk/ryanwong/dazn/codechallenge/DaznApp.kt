@@ -13,8 +13,10 @@ class DaznApp : Application() {
 
         if (BuildConfig.DEBUG) {
             plant(Timber.DebugTree())
+            Timber.d("Using debug tree - this is a debug build")
         } else {
             plant(CrashReportingTree())
+            Timber.d("Using CrashReporting tree - if you see this it means something is wrong")
         }
     }
 
