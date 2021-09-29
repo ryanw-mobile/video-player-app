@@ -1,11 +1,11 @@
-package uk.ryanwong.dazn.codechallenge.database
+package uk.ryanwong.dazn.codechallenge.data.source.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import uk.ryanwong.dazn.codechallenge.network.models.Event
+import uk.ryanwong.dazn.codechallenge.data.model.Event
 
 @Dao
 interface EventsDao {

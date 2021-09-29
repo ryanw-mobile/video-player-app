@@ -1,4 +1,4 @@
-package uk.ryanwong.dazn.codechallenge.database
+package uk.ryanwong.dazn.codechallenge.data.source.local
 
 import androidx.room.TypeConverter
 import java.util.*

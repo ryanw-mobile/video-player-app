@@ -1,12 +1,12 @@
-package uk.ryanwong.dazn.codechallenge.database
+package uk.ryanwong.dazn.codechallenge.data.source.local
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import uk.ryanwong.dazn.codechallenge.network.models.Event
-import uk.ryanwong.dazn.codechallenge.network.models.Schedule
+import uk.ryanwong.dazn.codechallenge.data.model.Event
+import uk.ryanwong.dazn.codechallenge.data.model.Schedule
 
 @Database(entities = [Event::class, Schedule::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
