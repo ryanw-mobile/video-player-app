@@ -1,4 +1,4 @@
-package uk.ryanwong.dazn.codechallenge.network.models
+package uk.ryanwong.dazn.codechallenge.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
