@@ -17,14 +17,20 @@ interface EventsDao {
     suspend fun insertAll(events: List<Event>)
 
     @Query("SELECT * FROM event_table ORDER BY date ASC")
-    fun getAllEvents(): LiveData<List<Event>>
+    fun observeEvents(): LiveData<List<Event>>
+
+    @Query("SELECT * FROM event_table ORDER BY date ASC")
+    fun getEvents(): List<Event>
 
     @Query("SELECT * FROM event_table WHERE id = :eventId")
-    fun getEvent(eventId: Int): LiveData<Event>
+    fun observeEventById(eventId: Int): LiveData<Event>
+
+    @Query("SELECT * FROM event_table WHERE id = :eventId")
+    fun getEventById(eventId: Int): Event
 
     // For unit tests
     @Query("SELECT * FROM event_table WHERE dirty = 1")
-    fun getDirtyEvents(): LiveData<List<Event>>
+    fun getDirtyEvents(): List<Event>
 
     // SQLite does not have a boolean data type.
     // Room maps it to an INTEGER column, mapping true to 1 and false to 0.

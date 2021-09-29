@@ -17,14 +17,20 @@ interface ScheduleDao {
     suspend fun insertAll(schedules: List<Schedule>)
 
     @Query("SELECT * FROM schedule_table ORDER BY date ASC")
-    fun getAllSchedules(): LiveData<List<Schedule>>
+    fun observeSchedules(): LiveData<List<Schedule>>
+
+    @Query("SELECT * FROM schedule_table ORDER BY date ASC")
+    suspend fun getSchedules(): List<Schedule>
 
     @Query("SELECT * FROM schedule_table WHERE id = :scheduleId")
-    fun getSchedule(scheduleId: Int): LiveData<Schedule>
+    fun observeScheduleById(scheduleId: Int): LiveData<Schedule>
+
+    @Query("SELECT * FROM schedule_table WHERE id = :scheduleId")
+    suspend fun getScheduleById(scheduleId: Int): Schedule
 
     // For unit tests
     @Query("SELECT * FROM schedule_table WHERE dirty = 1")
-    fun getDirtyEvents(): LiveData<List<Schedule>>
+    suspend fun getDirtySchedules(): List<Schedule>
 
     // SQLite does not have a boolean data type.
     // Room maps it to an INTEGER column, mapping true to 1 and false to 0.
