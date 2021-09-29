@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "992701631817",
+    "project_id": "dazn-code-challenge-debug",
+    "storage_bucket": "dazn-code-challenge-debug.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:992701631817:android:f6bde5e726e58a783f9e98",
+        "android_client_info": {
+          "package_name": "uk.ryanwong.dazn.codechallenge.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "992701631817-d0t91j8e3hpppt4acl6g0musvgpcs4l8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNBiI2BLQ-HGcNoUVxpi4Naf6z_U1u4eI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "992701631817-d0t91j8e3hpppt4acl6g0musvgpcs4l8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

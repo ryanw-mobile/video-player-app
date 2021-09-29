@@ -2,8 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="uk.ryanwong.dazn.codechallenge">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:name=".DaznApp"
+        android:name="uk.ryanwong.dazn.codechallenge.DaznApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
