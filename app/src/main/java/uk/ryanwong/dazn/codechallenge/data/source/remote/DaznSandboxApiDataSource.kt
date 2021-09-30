@@ -65,7 +65,8 @@ class DaznSandboxApiDataSource(private val ioDispatcher: CoroutineDispatcher = D
 
     override suspend fun getEvents(): ApiResult<List<Event>> = withContext(ioDispatcher) {
         return@withContext try {
-            ApiResult.Success(retrofitService.getEvents())
+            // We could add sorting here if we intend to show network data without using DB
+            ApiResult.Success(retrofitService.getEvents())  // .sortedBy { it.date }
         } catch (e: Exception) {
             ApiResult.Error(e)
         }
@@ -73,7 +74,8 @@ class DaznSandboxApiDataSource(private val ioDispatcher: CoroutineDispatcher = D
 
     override suspend fun getSchedules(): ApiResult<List<Schedule>> = withContext(ioDispatcher) {
         return@withContext try {
-            ApiResult.Success(retrofitService.getSchedule())
+            // We could add sorting here if we intend to show network data without using DB
+            ApiResult.Success(retrofitService.getSchedule())  // .sortedBy { it.date }
         } catch (e: Exception) {
             ApiResult.Error(e)
         }
