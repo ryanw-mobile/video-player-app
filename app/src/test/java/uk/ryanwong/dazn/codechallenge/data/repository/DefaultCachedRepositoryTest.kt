@@ -20,7 +20,7 @@ import uk.ryanwong.dazn.codechallenge.data.model.Schedule
 import uk.ryanwong.dazn.codechallenge.data.repository.DefaultCachedRepositoryTest.TestData.event1
 import uk.ryanwong.dazn.codechallenge.data.repository.DefaultCachedRepositoryTest.TestData.event2
 import uk.ryanwong.dazn.codechallenge.data.repository.DefaultCachedRepositoryTest.TestData.event3
-import util.parseTimeStamp
+import uk.ryanwong.dazn.codechallenge.util.parseTimeStamp
 
 @ExperimentalCoroutinesApi
 class DefaultCachedRepositoryTest {

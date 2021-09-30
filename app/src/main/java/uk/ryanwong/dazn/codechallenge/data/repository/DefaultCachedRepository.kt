@@ -12,7 +12,7 @@ import uk.ryanwong.dazn.codechallenge.data.ApiResult
 import uk.ryanwong.dazn.codechallenge.data.model.Event
 import uk.ryanwong.dazn.codechallenge.data.model.Schedule
 import uk.ryanwong.dazn.codechallenge.data.source.DaznApiDataSource
-import util.wrapEspressoIdlingResource
+import uk.ryanwong.dazn.codechallenge.util.wrapEspressoIdlingResource
 
 /**
  * Default user-facing Repository

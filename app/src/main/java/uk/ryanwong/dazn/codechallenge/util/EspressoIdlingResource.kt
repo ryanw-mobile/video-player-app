@@ -1,4 +1,4 @@
-package util
+package uk.ryanwong.dazn.codechallenge.util
 
 import androidx.test.espresso.idling.CountingIdlingResource
 

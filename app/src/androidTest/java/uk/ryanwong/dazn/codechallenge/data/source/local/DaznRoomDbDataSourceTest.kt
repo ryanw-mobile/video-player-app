@@ -31,7 +31,7 @@ import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedu
 import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedule1Modified
 import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedule2
 import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedule3
-import util.parseTimeStamp
+import uk.ryanwong.dazn.codechallenge.util.parseTimeStamp
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
