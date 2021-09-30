@@ -20,6 +20,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedule1
+import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedule1Modified
+import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedule2
+import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedule3
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
 import util.parseTimeStamp
 
@@ -33,37 +37,39 @@ class ScheduleDaoTest {
 
     private lateinit var database: DaznApiDatabase
 
-    private val schedule1 = Schedule(
-        10,
-        "Pre-Match ITV: Jürgen Klopp",
-        "",
-        "2021-09-29T14:56:29.101Z".parseTimeStamp(),
-        "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/311354437259_image-header_pDach_1554838977000.jpeg?alt=media&token=8135fc30-3340-4449-9b45-daa9adc1bbc9"
-    )
+    object TestData {
+        val schedule1 = Schedule(
+            10,
+            "Pre-Match ITV: Jürgen Klopp",
+            "",
+            "2021-09-29T14:56:29.101Z".parseTimeStamp(),
+            "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/311354437259_image-header_pDach_1554838977000.jpeg?alt=media&token=8135fc30-3340-4449-9b45-daa9adc1bbc9"
+        )
 
-    private val schedule1Modified = Schedule(
-        10,
-        "CSKA Moskow v St Petersburg",
-        "KHL Ice Hockey",
-        "2021-09-29T14:56:29.101Z".parseTimeStamp(),
-        "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/311428677455_image-header_pDach_1554829417000.jpeg?alt=media&token=ea122c47-2a50-4cf2-a901-2be2ff94f3c4"
-    )
+        val schedule1Modified = Schedule(
+            10,
+            "CSKA Moskow v St Petersburg",
+            "KHL Ice Hockey",
+            "2021-09-29T14:56:29.101Z".parseTimeStamp(),
+            "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/311428677455_image-header_pDach_1554829417000.jpeg?alt=media&token=ea122c47-2a50-4cf2-a901-2be2ff94f3c4"
+        )
 
-    private val schedule2 = Schedule(
-        12,
-        "Rockets @ Thunder",
-        "NBA",
-        "2021-09-29T14:56:29.101Z".parseTimeStamp(),
-        "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/311471173073_image-header_pDach_1554571998000.jpeg?alt=media&token=a69da8e4-d2d1-45f0-a005-977311981d66"
-    )
+        val schedule2 = Schedule(
+            12,
+            "Rockets @ Thunder",
+            "NBA",
+            "2021-09-29T14:56:29.101Z".parseTimeStamp(),
+            "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/311471173073_image-header_pDach_1554571998000.jpeg?alt=media&token=a69da8e4-d2d1-45f0-a005-977311981d66"
+        )
 
-    private val schedule3 = Schedule(
-        13,
-        "PSG v Strasbourg",
-        "Ligue 1",
-        "2021-09-29T14:56:29.101Z".parseTimeStamp(),
-        "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/311953989300_image-header_pDach_1554750608000.jpeg?alt=media&token=56f3a7a8-2f10-436c-8069-c762b37594cd"
-    )
+        val schedule3 = Schedule(
+            13,
+            "PSG v Strasbourg",
+            "Ligue 1",
+            "2021-09-29T14:56:29.101Z".parseTimeStamp(),
+            "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/311953989300_image-header_pDach_1554750608000.jpeg?alt=media&token=56f3a7a8-2f10-436c-8069-c762b37594cd"
+        )
+    }
 
     @Before
     fun initDb() {
