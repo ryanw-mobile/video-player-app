@@ -42,6 +42,18 @@ class DefaultCachedRepository(
         }
     }
 
+    override suspend fun getEvents(): ApiResult<List<Event>> {
+        wrapEspressoIdlingResource {
+            return localDataSource.getEvents()
+        }
+    }
+
+    override suspend fun getSchedule(): ApiResult<List<Schedule>> {
+        wrapEspressoIdlingResource {
+            return localDataSource.getSchedules()
+        }
+    }
+
     /***
      * Fetch data from REST API and store to database
      */
