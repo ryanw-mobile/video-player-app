@@ -2,7 +2,6 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_events">
 
     <fragment
@@ -26,11 +25,6 @@
         android:label="@string/schedule"
         tools:layout="@layout/fragment_schedule" />
 
-    <fragment
-        android:id="@+id/navigation_nonetwork"
-        android:name="uk.ryanwong.dazn.codechallenge.ui.nonetwork.NoNetworkFragment"
-        android:label="@string/no_network"
-        tools:layout="@layout/fragment_nonetwork" />
     <activity
         android:id="@+id/exoplayerActivity"
         android:name="uk.ryanwong.dazn.codechallenge.ui.exoplayer.ExoplayerActivity"
