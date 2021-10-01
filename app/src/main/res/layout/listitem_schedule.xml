@@ -18,12 +18,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        android:layout_margin="@dimen/margin_mini">
 
         <ImageView
             android:id="@+id/thumbnail"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
             android:background="@color/dazn_divider"
             android:contentDescription="@{schedule.title}"
             app:layout_constraintBottom_toBottomOf="parent"
