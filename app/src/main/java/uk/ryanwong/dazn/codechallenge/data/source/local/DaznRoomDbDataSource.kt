@@ -68,20 +68,23 @@ class DaznRoomDbDataSource internal constructor(
     // We assume each dataset provided is complete, and we overwrite our local DB
     // Afterwards any cached data no longer in the new dataset will be deleted using the dirty bit approach
     override suspend fun syncEvents(events: List<Event>) = withContext(ioDispatcher) {
-        daznApiDaos.eventsDao.apply {
+        Timber.d("syncEvents() - processed ${events.size} items")
+        // Kotlin usage note
+        // apply: Object configuration. Returns Context object
+        // run: Object configuration and computing the result. Returns lambda result
+        daznApiDaos.eventsDao.run {
             markDirty()
             insertAll(events)
             deleteDirty()
         }
-        Timber.d("syncEvents() - processed ${events.size} items")
     }
 
     override suspend fun syncSchedule(schedules: List<Schedule>) = withContext(ioDispatcher) {
-        daznApiDaos.scheduleDao.apply {
+        Timber.d("syncSchedule() - processed ${schedules.size} items")
+        daznApiDaos.scheduleDao.run {
             markDirty()
             insertAll(schedules)
             deleteDirty()
         }
-        Timber.d("syncSchedule() - processed ${schedules.size} items")
     }
 }

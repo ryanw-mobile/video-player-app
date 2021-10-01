@@ -78,7 +78,10 @@ object ServiceLocator {
     @VisibleForTesting
     fun resetRepository() {
         synchronized(lock) {
-            daznApiDatabase?.apply {
+            // Kotlin usage note
+            // apply: Object configuration. Returns Context object
+            // run: Object configuration and computing the result. Returns lambda result
+            daznApiDatabase?.run {
                 clearAllTables()
                 close()
             }
