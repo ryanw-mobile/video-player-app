@@ -3,12 +3,12 @@
 
     <item
         android:id="@+id/navigation_events"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_baseline_local_activity_24"
         android:title="@string/events" />
 
     <item
         android:id="@+id/navigation_schedule"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/ic_baseline_calendar_today_24"
         android:title="@string/schedule" />
 
 </menu>
