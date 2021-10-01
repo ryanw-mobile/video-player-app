@@ -31,6 +31,7 @@ import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedu
 import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedule1Modified
 import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedule2
 import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedule3
+import uk.ryanwong.dazn.codechallenge.data.source.DaznApiDaos
 import uk.ryanwong.dazn.codechallenge.util.parseTimeStamp
 
 @ExperimentalCoroutinesApi
@@ -127,12 +128,8 @@ class DaznRoomDbDataSourceTest {
             .allowMainThreadQueries()
             .build()
 
-        localDataSource =
-            DaznRoomDbDataSource(
-                database.eventsDao,
-                database.scheduleDao,
-                Dispatchers.Main
-            )
+        val daznApiDaos = DaznApiDaos(database.eventsDao, database.scheduleDao)
+        localDataSource = DaznRoomDbDataSource(daznApiDaos, Dispatchers.Main)
     }
 
     // Test coverage: basic CRUD on both events and schedule
