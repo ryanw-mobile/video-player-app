@@ -37,15 +37,8 @@
 
         <TextView
             android:id="@+id/title"
-            style="@style/TextAppearance.AppCompat.Body1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:maxLines="2"
+            style="@style/listitem_title"
             android:text="@{schedule.title}"
-            android:textColor="@color/white"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toEndOf="@id/thumbnail"
@@ -54,12 +47,8 @@
 
         <TextView
             android:id="@+id/subtitle"
-            style="@style/TextAppearance.AppCompat.Caption"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:maxLines="2"
+            style="@style/listitem_subtitle"
             android:text="@{schedule.subtitle}"
-            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@id/title"
             app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toStartOf="@id/title"
@@ -68,12 +57,8 @@
 
         <TextView
             android:id="@+id/nice_date"
-            style="@style/TextAppearance.AppCompat.Caption"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:maxLines="2"
+            style="@style/listitem_nicedate"
             android:text="@{schedule.date.toLocaleString()}"
-            android:textColor="@color/dazn_accent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/title"
             app:layout_constraintHorizontal_weight="2"
