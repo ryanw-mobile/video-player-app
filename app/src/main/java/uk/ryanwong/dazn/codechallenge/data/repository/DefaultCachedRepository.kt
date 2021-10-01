@@ -59,12 +59,6 @@ class DefaultCachedRepository(
      */
     override suspend fun refreshEvents() {
         wrapEspressoIdlingResource {
-            updateEventsFromRemoteDataSource()
-        }
-    }
-
-    private suspend fun updateEventsFromRemoteDataSource() {
-        wrapEspressoIdlingResource {
             val remoteEvents = remoteDataSource.getEvents()
 
             if (remoteEvents is ApiResult.Success) {
@@ -77,12 +71,6 @@ class DefaultCachedRepository(
 
     override suspend fun refreshSchedule() {
         wrapEspressoIdlingResource {
-            updateScheduleFromRemoteDataSource()
-        }
-    }
-
-    private suspend fun updateScheduleFromRemoteDataSource() {
-        wrapEspressoIdlingResource {
             val remoteSchedules = remoteDataSource.getSchedules()
 
             if (remoteSchedules is ApiResult.Success) {
@@ -92,4 +80,5 @@ class DefaultCachedRepository(
             }
         }
     }
+
 }
