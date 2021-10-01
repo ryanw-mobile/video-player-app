@@ -9,7 +9,6 @@ import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import timber.log.Timber
 import uk.ryanwong.dazn.codechallenge.util.SingleLiveEvent
 
 /*****
@@ -38,7 +37,6 @@ abstract class BaseViewModel : ViewModel() {
      */
     fun invalidateShowNoData() {
         showLoading.postValue(false)
-        showNoData.value = _listContents.value == null || _listContents.value!!.isEmpty()
-        Timber.d("invalidateShowNoData - no date = {$showNoData.value}")
+        showNoData.postValue(_listContents.value == null || _listContents.value!!.isEmpty())
     }
 }
