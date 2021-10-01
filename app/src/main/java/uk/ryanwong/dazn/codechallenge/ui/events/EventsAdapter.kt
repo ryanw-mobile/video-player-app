@@ -58,16 +58,19 @@ class EventsAdapter(private val clickListener: EventClickListener) :
  *
  * Used by ListAdapter to calculate the minimum number of changes between and old list and a new
  * list that's been passed to `submitList`.
+ *
+ * Reference on Kotlin data class comparison:
+ * https://medium.com/analytics-vidhya/data-class-in-kotlin-32bf038729a1
  */
 class EventsDiffCallback : DiffUtil.ItemCallback<Event>() {
     override fun areItemsTheSame(oldItem: Event, newItem: Event): Boolean {
-        Timber.v("areItemsTheSame: ${oldItem == newItem}")
-        return oldItem == newItem
+        Timber.v("areItemsTheSame: ${oldItem === newItem}")
+        return oldItem === newItem
     }
 
     override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {
-        Timber.v("areContentsTheSame: ${oldItem.id} vs ${newItem.id}")
-        return oldItem.id == newItem.id
+        Timber.v("areContentsTheSame: ${oldItem == newItem}")
+        return oldItem == newItem
     }
 }
 

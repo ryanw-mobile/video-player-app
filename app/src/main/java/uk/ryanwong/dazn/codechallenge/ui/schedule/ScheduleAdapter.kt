@@ -56,15 +56,18 @@ class ScheduleAdapter : ListAdapter<Schedule, ViewHolder>(ScheduleDiffCallback()
  *
  * Used by ListAdapter to calculate the minimum number of changes between and old list and a new
  * list that's been passed to `submitList`.
+ *
+ * Reference on Kotlin data class comparison:
+ * https://medium.com/analytics-vidhya/data-class-in-kotlin-32bf038729a1
  */
 class ScheduleDiffCallback : DiffUtil.ItemCallback<Schedule>() {
     override fun areItemsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
-        Timber.v("areItemsTheSame: ${oldItem == newItem}")
-        return oldItem == newItem
+        Timber.v("areItemsTheSame: ${oldItem === newItem}")
+        return oldItem === newItem
     }
 
     override fun areContentsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
-        Timber.v("areContentsTheSame: ${oldItem.id} vs ${newItem.id}")
-        return oldItem.id == newItem.id
+        Timber.v("areContentsTheSame: ${oldItem == newItem}")
+        return oldItem == newItem
     }
 }
