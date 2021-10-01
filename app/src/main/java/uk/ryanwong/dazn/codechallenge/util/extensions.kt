@@ -5,9 +5,12 @@
 
 package uk.ryanwong.dazn.codechallenge.util
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import uk.ryanwong.dazn.codechallenge.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,16 +37,32 @@ fun String.parseTimeStamp(dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss"): Date {
  * limitations under the License.
  */
 fun Fragment.setupRefreshLayout(
-    refreshLayout: ScrollChildSwipeRefreshLayout,
-    scrollUpChild: View? = null
+    refreshLayout: SwipeRefreshLayout
 ) {
     refreshLayout.setColorSchemeColors(
         ContextCompat.getColor(requireActivity(), R.color.colorPrimary),
         ContextCompat.getColor(requireActivity(), R.color.colorAccent),
         ContextCompat.getColor(requireActivity(), R.color.colorPrimaryDark)
     )
-    // Set the scrolling view in the custom SwipeRefreshLayout.
-    scrollUpChild?.let {
-        refreshLayout.scrollUpChild = it
-    }
+}
+
+//animate changing the view visibility
+fun View.fadeIn() {
+    this.visibility = View.VISIBLE
+    this.alpha = 0f
+    this.animate().alpha(1f).setListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator) {
+            this@fadeIn.alpha = 1f
+        }
+    })
+}
+
+//animate changing the view visibility
+fun View.fadeOut() {
+    this.animate().alpha(0f).setListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator) {
+            this@fadeOut.alpha = 1f
+            this@fadeOut.visibility = View.GONE
+        }
+    })
 }
