@@ -1,5 +1,6 @@
 package uk.ryanwong.dazn.codechallenge.ui.schedule
 
+import android.os.CountDownTimer
 import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -26,6 +27,16 @@ class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : View
     val listState: Parcelable?
         get() = _listState
 
+    private val timer: CountDownTimer = object : CountDownTimer(COUNTDOWN_TIME, COUNTDOWN_TIME) {
+        override fun onTick(millisUntilFinished: kotlin.Long) {}
+
+        override fun onFinish() {
+            Timber.d("Timer triggered")
+            refreshSchedule()
+            autoRefresh()
+        }
+    }
+
     init {
         // Quietly load the cached contents from local DB before doing a refresh
         // Errors and no data handling can be ignored because refreshEvents() will take care of them
@@ -38,6 +49,19 @@ class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : View
             }
         }
         refreshSchedule()
+        autoRefresh()
+    }
+
+    override fun onCleared() {
+        timer.cancel()
+        Timber.d("Timer cancelled")
+        super.onCleared()
+    }
+
+    // This is to repeat the timer automatically
+    // it cannot be done within CountDownTimer's onFinish() as compiler said timer is not initialized
+    private fun autoRefresh() {
+        timer.start()
     }
 
     fun refreshSchedule() {
@@ -77,5 +101,10 @@ class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : View
         showLoading.postValue(false)
         showNoData.value = _scheduleList.value == null || _scheduleList.value!!.isEmpty()
         Timber.d("invalidateShowNoData - no date = {$showNoData.value}")
+    }
+
+    companion object {
+        // This is the auto refresh interval
+        const val COUNTDOWN_TIME = 30000L
     }
 }
