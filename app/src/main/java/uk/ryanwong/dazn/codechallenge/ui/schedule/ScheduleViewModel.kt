@@ -27,6 +27,16 @@ class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : View
         get() = _listState
 
     init {
+        // Quietly load the cached contents from local DB before doing a refresh
+        // Errors and no data handling can be ignored because refreshEvents() will take care of them
+        viewModelScope.launch {
+            when (val apiResult = daznApiRepository.getSchedule()) {
+                is ApiResult.Success<List<Schedule>> -> {
+                    _scheduleList.value =
+                        apiResult.data!!   // !! is redundant but added to avoid IDE error
+                }
+            }
+        }
         refreshSchedule()
     }
 
