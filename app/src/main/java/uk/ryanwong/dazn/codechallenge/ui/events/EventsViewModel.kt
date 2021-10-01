@@ -1,5 +1,6 @@
 package uk.ryanwong.dazn.codechallenge.ui.events
 
+import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,9 +19,13 @@ class EventsViewModel(private val daznApiRepository: DaznApiRepository) : ViewMo
     val showNoData: MutableLiveData<Boolean> = MutableLiveData()
     val openVideoPlayerUrl: SingleLiveEvent<String> = SingleLiveEvent()
 
-    private val _eventList = MutableLiveData<List<Event>>()
+    private var _eventList = MutableLiveData<List<Event>>()
     val eventList: LiveData<List<Event>>
         get() = _eventList
+
+    private var _listState: Parcelable? = null
+    val listState: Parcelable?
+        get() = _listState
 
     init {
         refreshEvents()
@@ -60,6 +65,10 @@ class EventsViewModel(private val daznApiRepository: DaznApiRepository) : ViewMo
 
     fun notifyVideoPlayerNavigationCompleted() {
         openVideoPlayerUrl.value = null
+    }
+
+    fun saveListState(listScrollingState: Parcelable?) {
+        _listState = listScrollingState
     }
 
     /**

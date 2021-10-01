@@ -14,4 +14,12 @@
     <style name="BottomNavigationViewStyle" parent="Theme.DaznCodeChallenge">
         <item name="android:textAllCaps">true</item>
     </style>
+
+    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:background">@color/dazn_background</item>
+        <item name="android:textColor">@null</item>
+        <item name="android:textSize">@null</item>
+    </style>
+
 </resources>
