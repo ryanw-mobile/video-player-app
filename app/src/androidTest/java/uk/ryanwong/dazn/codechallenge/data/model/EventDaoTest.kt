@@ -95,7 +95,7 @@ class EventDaoTest {
 
         // THEN - Get the event by id from the database. The loaded event contains the expected values
         val loaded = database.eventsDao.getEventById(event1.id)
-        MatcherAssert.assertThat<Event>(loaded as Event, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(loaded.id, `is`(event1.id))
         MatcherAssert.assertThat(loaded.title, `is`(event1.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(event1.subtitle))
@@ -128,7 +128,7 @@ class EventDaoTest {
 
         // THEN - When get the event by Id again, it should contain the new values
         val loaded = database.eventsDao.getEventById(event1Modified.id)
-        MatcherAssert.assertThat<Event>(loaded as Event, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(loaded.id, `is`(event1Modified.id))
         MatcherAssert.assertThat(loaded.title, `is`(event1Modified.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(event1Modified.subtitle))
@@ -147,7 +147,7 @@ class EventDaoTest {
 
         // THEN - When get the event by Id again, it should return null
         val loaded = database.eventsDao.getEventById(event1.id)
-        MatcherAssert.assertThat<Event>(loaded as Event, CoreMatchers.nullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.nullValue())
     }
 
     @Test
@@ -160,7 +160,7 @@ class EventDaoTest {
 
         // THEN - When get the events, the list should be empty
         val loaded = database.eventsDao.getEventById(event1.id)
-        MatcherAssert.assertThat<Event>(loaded as Event, CoreMatchers.nullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.nullValue())
     }
 
     @Test
@@ -188,7 +188,7 @@ class EventDaoTest {
 
         // THEN - Get the event by id from the database. The loaded event contains the expected values
         val loaded = database.eventsDao.getEventById(event1.id)
-        MatcherAssert.assertThat<Event>(loaded as Event, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(loaded.id, `is`(event1.id))
         MatcherAssert.assertThat(loaded.title, `is`(event1.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(event1.subtitle))
@@ -208,7 +208,7 @@ class EventDaoTest {
 
         // THEN - Get the event by id from the database. The loaded event contains the expected values
         val loaded = database.eventsDao.getEventById(event1.id)
-        MatcherAssert.assertThat<Event>(loaded as Event, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(loaded.id, `is`(event1.id))
         MatcherAssert.assertThat(loaded.title, `is`(event1.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(event1.subtitle))
@@ -229,7 +229,7 @@ class EventDaoTest {
 
         // THEN - Get the event by id from the database. The loaded event contains the expected values
         val loaded = database.eventsDao.getEventById(event1Modified.id)
-        MatcherAssert.assertThat<Event>(loaded as Event, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(loaded.id, `is`(event1Modified.id))
         MatcherAssert.assertThat(loaded.title, `is`(event1Modified.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(event1Modified.subtitle))
@@ -253,7 +253,7 @@ class EventDaoTest {
         val loaded = database.eventsDao.getEvents()
         MatcherAssert.assertThat(loaded.size, `is`(1))
         val loadedEvent = loaded[0]
-        MatcherAssert.assertThat<Event>(loadedEvent as Event, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(loadedEvent, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(loadedEvent.id, `is`(event2.id))
         MatcherAssert.assertThat(loadedEvent.title, `is`(event2.title))
         MatcherAssert.assertThat(loadedEvent.subtitle, `is`(event2.subtitle))

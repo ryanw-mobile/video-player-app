@@ -87,7 +87,7 @@ class DaznSandboxApiDataSource(private val ioDispatcher: CoroutineDispatcher = D
     // In this case, this data source keeps an internal data structure
     // to hold the results returned by the API, and currently without sorting.
     override suspend fun syncEvents(events: List<Event>) {
-        _events.value = getEvents()!!  // redundant !! added to avoid compiler error
+        _events.value = getEvents()!! // redundant !! added to avoid compiler error
     }
 
     override suspend fun syncSchedule(schedules: List<Schedule>) {

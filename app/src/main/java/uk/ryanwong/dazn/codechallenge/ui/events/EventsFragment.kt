@@ -50,7 +50,7 @@ class EventsFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentEventsBinding.inflate(inflater, container, false)
         return binding.root
     }

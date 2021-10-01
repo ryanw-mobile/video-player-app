@@ -20,8 +20,7 @@ class EventsViewModel(private val daznApiRepository: DaznApiRepository) : BaseVi
         viewModelScope.launch {
             when (val apiResult = daznApiRepository.getEvents()) {
                 is ApiResult.Success<List<Event>> -> {
-                    _listContents.value =
-                        apiResult.data!!   // !! is redundant but added to avoid IDE error
+                    _listContents.value = apiResult.data
                 }
             }
         }
@@ -42,8 +41,7 @@ class EventsViewModel(private val daznApiRepository: DaznApiRepository) : BaseVi
             // Even the previous sync might fail, we still try to fetch whatever we have locally
             when (val apiResult = daznApiRepository.getEvents()) {
                 is ApiResult.Success<List<Event>> -> {
-                    _listContents.value =
-                        apiResult.data!!   // !! is redundant but added to avoid IDE error
+                    _listContents.value = apiResult.data
                     Timber.d("refreshEvents - fetched ${apiResult.data.size} items to live data")
                 }
                 is ApiResult.Error -> showErrorMessage.postValue(apiResult.exception.toString())
@@ -55,7 +53,7 @@ class EventsViewModel(private val daznApiRepository: DaznApiRepository) : BaseVi
     }
 
     fun setEventClicked(event: Event) {
-        event.videoUrl?.let {
+        event.videoUrl.let {
             openVideoPlayerUrl.value = when (it.isEmpty()) {
                 false -> it
                 true -> null

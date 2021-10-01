@@ -12,7 +12,7 @@ import uk.ryanwong.dazn.codechallenge.data.repository.DaznApiRepository
 class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : BaseViewModel() {
 
     private val timer: CountDownTimer = object : CountDownTimer(COUNTDOWN_TIME, COUNTDOWN_TIME) {
-        override fun onTick(millisUntilFinished: kotlin.Long) {}
+        override fun onTick(millisUntilFinished: Long) {}
 
         override fun onFinish() {
             Timber.d("Timer triggered")
@@ -28,7 +28,7 @@ class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : Base
             when (val apiResult = daznApiRepository.getSchedule()) {
                 is ApiResult.Success<List<Schedule>> -> {
                     _listContents.value =
-                        apiResult.data!!   // !! is redundant but added to avoid IDE error
+                        apiResult.data
                 }
             }
         }
@@ -58,7 +58,7 @@ class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : Base
             when (val apiResult = daznApiRepository.getSchedule()) {
                 is ApiResult.Success<List<Schedule>> -> {
                     _listContents.value =
-                        apiResult.data!!   // !! is redundant but added to avoid IDE error
+                        apiResult.data
                     Timber.d("refreshSchedule - fetched ${apiResult.data.size} items to live data")
                 }
                 is ApiResult.Error -> showErrorMessage.postValue(apiResult.exception.toString())

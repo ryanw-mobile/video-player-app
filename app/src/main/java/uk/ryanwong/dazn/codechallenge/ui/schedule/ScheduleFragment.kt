@@ -42,7 +42,7 @@ class ScheduleFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentScheduleBinding.inflate(inflater, container, false)
         return binding.root
     }

@@ -91,7 +91,7 @@ class ScheduleDaoTest {
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
         val loaded = database.scheduleDao.getScheduleById(schedule1.id)
-        MatcherAssert.assertThat<Schedule>(loaded as Schedule, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(loaded.id, `is`(schedule1.id))
         MatcherAssert.assertThat(loaded.title, `is`(schedule1.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1.subtitle))
@@ -123,7 +123,7 @@ class ScheduleDaoTest {
 
         // THEN - When get the schedule by Id again, it should contain the new values
         val loaded = database.scheduleDao.getScheduleById(schedule1Modified.id)
-        MatcherAssert.assertThat<Schedule>(loaded as Schedule, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(loaded.id, `is`(schedule1Modified.id))
         MatcherAssert.assertThat(loaded.title, `is`(schedule1Modified.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1Modified.subtitle))
@@ -141,7 +141,7 @@ class ScheduleDaoTest {
 
         // THEN - When get the schedule by Id again, it should return null
         val loaded = database.scheduleDao.getScheduleById(schedule1.id)
-        MatcherAssert.assertThat<Schedule>(loaded as Schedule, CoreMatchers.nullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.nullValue())
     }
 
     @Test
@@ -154,7 +154,7 @@ class ScheduleDaoTest {
 
         // THEN - When get the schedules, the list should be empty
         val loaded = database.scheduleDao.getScheduleById(schedule1.id)
-        MatcherAssert.assertThat<Schedule>(loaded as Schedule, CoreMatchers.nullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.nullValue())
     }
 
     @Test
@@ -182,7 +182,7 @@ class ScheduleDaoTest {
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
         val loaded = database.scheduleDao.getScheduleById(schedule1.id)
-        MatcherAssert.assertThat<Schedule>(loaded as Schedule, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(loaded.id, `is`(schedule1.id))
         MatcherAssert.assertThat(loaded.title, `is`(schedule1.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1.subtitle))
@@ -201,7 +201,7 @@ class ScheduleDaoTest {
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
         val loaded = database.scheduleDao.getScheduleById(schedule1.id)
-        MatcherAssert.assertThat<Schedule>(loaded as Schedule, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(loaded.id, `is`(schedule1.id))
         MatcherAssert.assertThat(loaded.title, `is`(schedule1.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1.subtitle))
@@ -221,7 +221,7 @@ class ScheduleDaoTest {
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
         val loaded = database.scheduleDao.getScheduleById(schedule1Modified.id)
-        MatcherAssert.assertThat<Schedule>(loaded as Schedule, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(loaded.id, `is`(schedule1Modified.id))
         MatcherAssert.assertThat(loaded.title, `is`(schedule1Modified.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1Modified.subtitle))
@@ -244,7 +244,7 @@ class ScheduleDaoTest {
         val loaded = database.scheduleDao.getSchedules()
         MatcherAssert.assertThat(loaded.size, `is`(1))
         val loadedSchedule = loaded[0]
-        MatcherAssert.assertThat<Schedule>(loadedSchedule as Schedule, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(loadedSchedule, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(loadedSchedule.id, `is`(schedule2.id))
         MatcherAssert.assertThat(loadedSchedule.title, `is`(schedule2.title))
         MatcherAssert.assertThat(loadedSchedule.subtitle, `is`(schedule2.subtitle))
