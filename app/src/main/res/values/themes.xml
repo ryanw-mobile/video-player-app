@@ -13,6 +13,7 @@
 
     <style name="BottomNavigationViewStyle" parent="Theme.DaznCodeChallenge">
         <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
