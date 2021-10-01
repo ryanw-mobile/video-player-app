@@ -6,6 +6,8 @@
 * Android device or simulator running Android 5.0+ (API 21)
 
 ## Setting up the keystore
+* Android keystore is not being stored in this repository. You need your own keystore to generate the apk / App Bundle
+  
 * To ensure sensitive data are not being pushed to Git by accident, the keystore and its passwords are kept one level up of the project folder, so they are not managed by Git.
 
 * If your project folder is at `/app/dazn-code-challenge/`, the keystore file and `keystore.properties` should be placed at `/app/`
@@ -17,6 +19,12 @@
      pass=<alias password>
      storePass=<keystore password>
   ```
+## Unit tests
+
+* Tests can be executed on Android Studio, by choosing the tests to run
+* Command line options are: ` ./gradlew testDebugUnitTest` and `./gradlew testReleaseUnitTest`
+
+
 ## Building the App
 ### Build and install on the connected device
 
@@ -36,9 +44,13 @@
    ```
 
 * The generated apk(s) will be stored under `app/build/outputs/apk/`
+* Other usages can be listed using `./gradelew tasks`
 
-## Dependencies
+## (incomplete list of) Dependencies 
+* [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines) - [Kotlin](https://kotlinlang.org/) -  [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
 * [Glide](https://github.com/bumptech/glide) - [Bump Technologies](https://github.com/bumptech) - [BSD, part MIT and Apache 2.0](https://github.com/bumptech/glide/blob/master/LICENSE)
 * [Timber](https://github.com/JakeWharton/timber) - [Jake Wharton](https://github.com/JakeWharton) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
 * [Retrofit](https://square.github.io/retrofit/) - [Square, Inc.](https://squareup.com/) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
 * [Moshi](https://github.com/square/moshi) - [Square, Inc.](https://squareup.com/) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
+* [Hamcrest](http://hamcrest.org/JavaHamcrest/) - [hamcrest.org](http://hamcrest.org/) - [BSD 3-Clause Licence](https://opensource.org/licenses/BSD-3-Clause)
+* [ExoPlayer](https://github.com/google/ExoPlayer) - [Google Open Source](https://opensource.google/) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
