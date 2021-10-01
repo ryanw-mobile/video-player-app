@@ -16,7 +16,7 @@ class EventsViewModel(private val daznApiRepository: DaznApiRepository) : BaseVi
 
     init {
         // Quietly load the cached contents from local DB before doing a refresh
-        // Errors and no data handling can be ignored because refreshEvents() will take care of them
+        // Errors and no data handling can be ignored because refreshList() will take care of them
         viewModelScope.launch {
             when (val apiResult = daznApiRepository.getEvents()) {
                 is ApiResult.Success<List<Event>> -> {
