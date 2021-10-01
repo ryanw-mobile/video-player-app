@@ -1,5 +1,9 @@
 # DAZN Code Challenge - Android TV
 
+## Screenshots
+
+![Screenshot1](screenshots/screen0.png) ![Screenshot1](screenshots/screen1.png) ![Screenshot1](screenshots/screen2.png)
+
 ## Requirements
 
 * Android Studio Arctic Fox 2021.3.1 Patch 2
