@@ -1,11 +1,14 @@
 package uk.ryanwong.dazn.codechallenge.util
 
+import android.text.format.DateUtils
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import timber.log.Timber
+import java.util.*
 
 
 /**
@@ -42,5 +45,20 @@ fun fetchImage(view: ImageView, src: String?) {
     } ?: run {
         // src is null, we still have to show a placeholder
 //        view.setImageResource(R.drawable.ic_baseline_error_outline_24)
+    }
+}
+
+@BindingAdapter("niceDateString")
+fun toNiceString(view: TextView, src: Date?) {
+    src?.let {
+        Timber.v("toNiceString: date = ${it.time}")
+        // Data formatting similar but not exactly the same as the mockups.
+        // This is done without using any 3rd party library
+        view.text = DateUtils.getRelativeDateTimeString(
+            view.context,
+            it.time,
+            DateUtils.DAY_IN_MILLIS,
+            DateUtils.DAY_IN_MILLIS * 3, 0
+        ).toString()
     }
 }

@@ -62,11 +62,11 @@
         <TextView
             android:id="@+id/nice_date"
             style="@style/listitem_nicedate"
-            android:text="@{event.date.toLocaleString()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/title"
             app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toStartOf="@id/title"
+            app:niceDateString="@{event.date}"
             tools:text="In three days" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,7 +12,6 @@
         <variable
             name="schedule"
             type="uk.ryanwong.dazn.codechallenge.data.model.Schedule" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,11 +57,11 @@
         <TextView
             android:id="@+id/nice_date"
             style="@style/listitem_nicedate"
-            android:text="@{schedule.date.toLocaleString()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/title"
             app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toStartOf="@id/title"
+            app:niceDateString="@{schedule.date}"
             tools:text="In three days" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
