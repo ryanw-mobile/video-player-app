@@ -92,6 +92,16 @@ class EventsFragment : BaseFragment() {
             eventsAdapter.submitList(it as List<Event>)
         })
 
+        viewModel.openVideoPlayerUrl.observe(viewLifecycleOwner, { videoUrl ->
+            videoUrl?.let {
+                findNavController().navigate(
+                    EventsFragmentDirections.actionNavigationEventsToExoplayerActivity(
+                        videoUrl
+                    )
+                )
+                viewModel.notifyVideoPlayerNavigationCompleted()
+            }
         })
     }
+
 }

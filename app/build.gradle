@@ -182,4 +182,6 @@ dependencies {
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
     implementation 'androidx.test.espresso:espresso-idling-resource:3.4.0'
 
+    // ExoplayerActivity
+    implementation 'com.google.android.exoplayer:exoplayer:2.15.1'
 }
