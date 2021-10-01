@@ -28,6 +28,11 @@ class EventsAdapter(private val clickListener: EventClickListener) :
         return ViewHolder.from(parent)
     }
 
+    // This is needed for hasStableIds()
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     class ViewHolder private constructor(val binding: ListitemEventsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 

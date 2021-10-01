@@ -27,6 +27,11 @@ class ScheduleAdapter : ListAdapter<Schedule, ViewHolder>(ScheduleDiffCallback()
         return ViewHolder.from(parent)
     }
 
+    // This is needed for hasStableIds()
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     class ViewHolder private constructor(val binding: ListitemScheduleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
