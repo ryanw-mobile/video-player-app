@@ -27,7 +27,24 @@ class EventsFragment : Fragment() {
         )
     }
     private lateinit var binding: FragmentEventsBinding
-    private lateinit var eventsAdapter: EventsAdapter
+    private val eventsAdapter = EventsAdapter(EventClickListener {
+        eventsViewModel.setEventClicked(it)
+    }).apply {
+        stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
+        // This eliminates flickering
+        setHasStableIds(true)
+
+        // This overrides the adapter's intention to scroll back to the top
+        registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                eventsViewModel.listState?.let {
+                    // layoutManager.scrollToPositionWithOffset(position, 0)
+                    binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
+                }
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,30 +55,13 @@ class EventsFragment : Fragment() {
         val root: View = binding.root
 
         binding.refreshlayout.setOnRefreshListener { eventsViewModel.refreshEvents() }
-
-        eventsAdapter = EventsAdapter(EventClickListener {
-            eventsViewModel.setEventClicked(it)
-        })
-        eventsAdapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        eventsAdapter.setHasStableIds(true) // This eliminates flickering
-
-        // This overrides the adapter's intention to scroll back to the top
-        eventsAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                eventsViewModel.listState?.let {
-                    // layoutManager.scrollToPositionWithOffset(position, 0)
-                    binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
-                }
-            }
-        })
-
         binding.recyclerview.adapter = eventsAdapter
-
-        val dividerItemDecoration =
-            DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
-        binding.recyclerview.addItemDecoration(dividerItemDecoration)
-
+        binding.recyclerview.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                DividerItemDecoration.VERTICAL
+            )
+        )
         return root
     }
 
@@ -87,13 +87,13 @@ class EventsFragment : Fragment() {
         eventsViewModel.showErrorMessage.observe(viewLifecycleOwner, { errorMessage ->
             if (errorMessage.isNotBlank()) {
                 // Show an error dialog
-                AlertDialog.Builder(requireContext(),R.style.MyAlertDialogStyle)
-                    .setTitle(getString(R.string.something_went_wrong))
-                    .setMessage(errorMessage)
-                    .setPositiveButton(getString(R.string.ok)) { _, _ ->
+                AlertDialog.Builder(requireContext(), R.style.MyAlertDialogStyle).apply {
+                    setTitle(getString(R.string.something_went_wrong))
+                    setMessage(errorMessage)
+                    setPositiveButton(getString(R.string.ok)) { _, _ ->
                         // do nothing
                     }
-                    .show()
+                }.show()
             }
         })
 
