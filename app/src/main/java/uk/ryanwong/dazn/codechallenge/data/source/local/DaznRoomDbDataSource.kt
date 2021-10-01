@@ -16,25 +16,25 @@ import uk.ryanwong.dazn.codechallenge.data.ApiResult.Error
 import uk.ryanwong.dazn.codechallenge.data.ApiResult.Success
 import uk.ryanwong.dazn.codechallenge.data.model.Event
 import uk.ryanwong.dazn.codechallenge.data.model.Schedule
+import uk.ryanwong.dazn.codechallenge.data.source.DaznApiDaos
 import uk.ryanwong.dazn.codechallenge.data.source.DaznApiDataSource
 
 /**
  * Concrete implementation of a data source as a db.
  */
 class DaznRoomDbDataSource internal constructor(
-    private val eventsDao: EventsDao,
-    private val scheduleDao: ScheduleDao,
+    private val daznApiDaos: DaznApiDaos,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : DaznApiDataSource {
 
     override fun observeEvents(): LiveData<ApiResult<List<Event>>> {
-        return eventsDao.observeEvents().map {
+        return daznApiDaos.eventsDao.observeEvents().map {
             Success(it)
         }
     }
 
     override fun observeSchedule(): LiveData<ApiResult<List<Schedule>>> {
-        return scheduleDao.observeSchedules().map {
+        return daznApiDaos.scheduleDao.observeSchedules().map {
             Success(it)
         }
     }
@@ -45,7 +45,7 @@ class DaznRoomDbDataSource internal constructor(
      */
     override suspend fun getEvents(): ApiResult<List<Event>> = withContext(ioDispatcher) {
         return@withContext try {
-            Success(eventsDao.getEvents())
+            Success(daznApiDaos.eventsDao.getEvents())
         } catch (e: Exception) {
             Error(e)
         }
@@ -57,7 +57,7 @@ class DaznRoomDbDataSource internal constructor(
      */
     override suspend fun getSchedules(): ApiResult<List<Schedule>> = withContext(ioDispatcher) {
         return@withContext try {
-            Success(scheduleDao.getSchedules())
+            Success(daznApiDaos.scheduleDao.getSchedules())
         } catch (e: Exception) {
             Error(e)
         }
@@ -67,18 +67,21 @@ class DaznRoomDbDataSource internal constructor(
     // Since the provided RestAPIs have no paging design and no synchronization mechanism
     // We assume each dataset provided is complete, and we overwrite our local DB
     // Afterwards any cached data no longer in the new dataset will be deleted using the dirty bit approach
-
     override suspend fun syncEvents(events: List<Event>) = withContext(ioDispatcher) {
-        Timber.d("syncEvents() - received ${events.size}")
-        eventsDao.markDirty()
-        eventsDao.insertAll(events)
-        eventsDao.deleteDirty()
+        daznApiDaos.eventsDao.apply {
+            markDirty()
+            insertAll(events)
+            deleteDirty()
+        }
+        Timber.d("syncEvents() - processed ${events.size} items")
     }
 
     override suspend fun syncSchedule(schedules: List<Schedule>) = withContext(ioDispatcher) {
-        Timber.d("syncSchedule() - received ${schedules.size}")
-        scheduleDao.markDirty()
-        scheduleDao.insertAll(schedules)
-        scheduleDao.deleteDirty()
+        daznApiDaos.scheduleDao.apply {
+            markDirty()
+            insertAll(schedules)
+            deleteDirty()
+        }
+        Timber.d("syncSchedule() - processed ${schedules.size} items")
     }
 }

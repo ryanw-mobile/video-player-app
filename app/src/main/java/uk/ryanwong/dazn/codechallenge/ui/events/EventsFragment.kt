@@ -5,30 +5,30 @@
 
 package uk.ryanwong.dazn.codechallenge.ui.events
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import uk.ryanwong.dazn.codechallenge.DaznApp
-import uk.ryanwong.dazn.codechallenge.R
+import uk.ryanwong.dazn.codechallenge.base.BaseFragment
+import uk.ryanwong.dazn.codechallenge.data.model.Event
 import uk.ryanwong.dazn.codechallenge.databinding.FragmentEventsBinding
 import uk.ryanwong.dazn.codechallenge.util.setupRefreshLayout
 
-class EventsFragment : Fragment() {
+class EventsFragment : BaseFragment() {
 
-    private val eventsViewModel by viewModels<EventsViewModel> {
+    override val viewModel by viewModels<EventsViewModel> {
         EventsViewModelFactory(
             (requireContext().applicationContext as DaznApp).apiRepository
         )
     }
     private lateinit var binding: FragmentEventsBinding
     private val eventsAdapter = EventsAdapter(EventClickListener {
-        eventsViewModel.setEventClicked(it)
+        viewModel.setEventClicked(it)
     }).apply {
         stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
@@ -38,7 +38,7 @@ class EventsFragment : Fragment() {
         // This overrides the adapter's intention to scroll back to the top
         registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                eventsViewModel.listState?.let {
+                viewModel.listState?.let {
                     // layoutManager.scrollToPositionWithOffset(position, 0)
                     binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
                 }
@@ -52,54 +52,46 @@ class EventsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentEventsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        binding.refreshlayout.setOnRefreshListener { eventsViewModel.refreshEvents() }
-        binding.recyclerview.adapter = eventsAdapter
-        binding.recyclerview.addItemDecoration(
-            DividerItemDecoration(
-                requireContext(),
-                DividerItemDecoration.VERTICAL
-            )
-        )
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // The purpose of LifecycleObserver is to eliminate writing the boilerplate code
-        // to load and cleanup resources in onCreate() and onDestory()
+        // to load and cleanup resources in onCreate() and onDestroy()
         binding.lifecycleOwner = viewLifecycleOwner
-        this.setupRefreshLayout(binding.refreshlayout)
+        binding.recyclerview.apply {
+            adapter = eventsAdapter
+            addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+        }
+        this.setupRefreshLayout(binding.refreshlayout) { viewModel.refreshList() }
+    }
 
-        eventsViewModel.showLoading.observe(viewLifecycleOwner, { isRefreshing ->
+    override fun onStart() {
+        super.onStart()
+
+        viewModel.showLoading.observe(viewLifecycleOwner, { isRefreshing ->
             binding.refreshlayout.isRefreshing = isRefreshing
         })
 
-        eventsViewModel.showNoData.observe(viewLifecycleOwner, { isShowNoData ->
+        viewModel.showNoData.observe(viewLifecycleOwner, { isShowNoData ->
             binding.textviewNodata.visibility = when (isShowNoData) {
                 true -> View.VISIBLE
                 else -> View.GONE
             }
         })
 
-        eventsViewModel.showErrorMessage.observe(viewLifecycleOwner, { errorMessage ->
-            if (errorMessage.isNotBlank()) {
-                // Show an error dialog
-                AlertDialog.Builder(requireContext(), R.style.MyAlertDialogStyle).apply {
-                    setTitle(getString(R.string.something_went_wrong))
-                    setMessage(errorMessage)
-                    setPositiveButton(getString(R.string.ok)) { _, _ ->
-                        // do nothing
-                    }
-                }.show()
-            }
+        viewModel.listContents.observe(viewLifecycleOwner, {
+            viewModel.saveListState(binding.recyclerview.layoutManager?.onSaveInstanceState())
+            eventsAdapter.submitList(it as List<Event>)
         })
 
-        eventsViewModel.eventList.observe(viewLifecycleOwner, {
-            eventsViewModel.saveListState(binding.recyclerview.layoutManager?.onSaveInstanceState())
-            eventsAdapter.submitList(it)
         })
     }
 }

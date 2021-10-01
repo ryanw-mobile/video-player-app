@@ -1,38 +1,22 @@
 package uk.ryanwong.dazn.codechallenge.ui.schedule
 
 import android.os.CountDownTimer
-import android.os.Parcelable
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import uk.ryanwong.dazn.codechallenge.base.BaseViewModel
 import uk.ryanwong.dazn.codechallenge.data.ApiResult
 import uk.ryanwong.dazn.codechallenge.data.model.Schedule
 import uk.ryanwong.dazn.codechallenge.data.repository.DaznApiRepository
-import uk.ryanwong.dazn.codechallenge.util.SingleLiveEvent
 
-class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : ViewModel() {
-
-    val showLoading: SingleLiveEvent<Boolean> = SingleLiveEvent()
-    val showErrorMessage: SingleLiveEvent<String> = SingleLiveEvent()
-    val showNoData: MutableLiveData<Boolean> = MutableLiveData()
-
-    private var _scheduleList = MutableLiveData<List<Schedule>>()
-    val scheduleList: LiveData<List<Schedule>>
-        get() = _scheduleList
-
-    private var _listState: Parcelable? = null
-    val listState: Parcelable?
-        get() = _listState
+class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : BaseViewModel() {
 
     private val timer: CountDownTimer = object : CountDownTimer(COUNTDOWN_TIME, COUNTDOWN_TIME) {
         override fun onTick(millisUntilFinished: kotlin.Long) {}
 
         override fun onFinish() {
             Timber.d("Timer triggered")
-            refreshSchedule()
+            refreshList()
             autoRefresh()
         }
     }
@@ -43,28 +27,23 @@ class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : View
         viewModelScope.launch {
             when (val apiResult = daznApiRepository.getSchedule()) {
                 is ApiResult.Success<List<Schedule>> -> {
-                    _scheduleList.value =
+                    _listContents.value =
                         apiResult.data!!   // !! is redundant but added to avoid IDE error
                 }
             }
         }
-        refreshSchedule()
+        refreshList()
         autoRefresh()
     }
 
+    // Needs to cancel the timer when ViewModel is destroyed to prevent memory leak
     override fun onCleared() {
         timer.cancel()
         Timber.d("Timer cancelled")
         super.onCleared()
     }
 
-    // This is to repeat the timer automatically
-    // it cannot be done within CountDownTimer's onFinish() as compiler said timer is not initialized
-    private fun autoRefresh() {
-        timer.start()
-    }
-
-    fun refreshSchedule() {
+    override fun refreshList() {
         showLoading.value = true
         viewModelScope.launch {
             try {
@@ -78,7 +57,7 @@ class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : View
             // Even the previous sync might fail, we still try to fetch whatever we have locally
             when (val apiResult = daznApiRepository.getSchedule()) {
                 is ApiResult.Success<List<Schedule>> -> {
-                    _scheduleList.value =
+                    _listContents.value =
                         apiResult.data!!   // !! is redundant but added to avoid IDE error
                     Timber.d("refreshSchedule - fetched ${apiResult.data.size} items to live data")
                 }
@@ -90,17 +69,10 @@ class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : View
         }
     }
 
-    fun saveListState(listScrollingState: Parcelable?) {
-        _listState = listScrollingState
-    }
-
-    /**
-     * Inform the user that there's not any data if the list is empty
-     */
-    private fun invalidateShowNoData() {
-        showLoading.postValue(false)
-        showNoData.value = _scheduleList.value == null || _scheduleList.value!!.isEmpty()
-        Timber.d("invalidateShowNoData - no date = {$showNoData.value}")
+    // This is to repeat the timer automatically
+    // it cannot be done within CountDownTimer's onFinish() as compiler said timer is not initialized
+    private fun autoRefresh() {
+        timer.start()
     }
 
     companion object {

@@ -1,22 +1,21 @@
 package uk.ryanwong.dazn.codechallenge.ui.schedule
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import uk.ryanwong.dazn.codechallenge.DaznApp
-import uk.ryanwong.dazn.codechallenge.R
+import uk.ryanwong.dazn.codechallenge.base.BaseFragment
+import uk.ryanwong.dazn.codechallenge.data.model.Schedule
 import uk.ryanwong.dazn.codechallenge.databinding.FragmentScheduleBinding
 import uk.ryanwong.dazn.codechallenge.util.setupRefreshLayout
 
-class ScheduleFragment : Fragment() {
+class ScheduleFragment : BaseFragment() {
 
-    private val scheduleViewModel by viewModels<ScheduleViewModel> {
+    override val viewModel by viewModels<ScheduleViewModel> {
         ScheduleViewModelFactory(
             (requireContext().applicationContext as DaznApp).apiRepository
         )
@@ -31,7 +30,7 @@ class ScheduleFragment : Fragment() {
         // This overrides the adapter's intention to scroll back to the top
         registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                scheduleViewModel.listState?.let {
+                viewModel.listState?.let {
                     // layoutManager.scrollToPositionWithOffset(position, 0)
                     binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
                 }
@@ -45,55 +44,44 @@ class ScheduleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentScheduleBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        binding.refreshlayout.setOnRefreshListener { scheduleViewModel.refreshSchedule() }
-        binding.recyclerview.adapter = scheduleAdapter
-        binding.recyclerview.addItemDecoration(
-            DividerItemDecoration(
-                requireContext(),
-                DividerItemDecoration.VERTICAL
-            )
-        )
-
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // The purpose of LifecycleObserver is to eliminate writing the boilerplate code
-        // to load and cleanup resources in onCreate() and onDestory()
+        // to load and cleanup resources in onCreate() and onDestroy()
         binding.lifecycleOwner = viewLifecycleOwner
-        this.setupRefreshLayout(binding.refreshlayout)
+        binding.recyclerview.apply {
+            adapter = scheduleAdapter
+            addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+        }
+        this.setupRefreshLayout(binding.refreshlayout) { viewModel.refreshList() }
+    }
 
-        scheduleViewModel.showLoading.observe(viewLifecycleOwner, { isRefreshing ->
+    override fun onStart() {
+        super.onStart()
+
+        viewModel.showLoading.observe(viewLifecycleOwner, { isRefreshing ->
             binding.refreshlayout.isRefreshing = isRefreshing
         })
 
-        scheduleViewModel.showNoData.observe(viewLifecycleOwner, { isShowNoData ->
+        viewModel.showNoData.observe(viewLifecycleOwner, { isShowNoData ->
             binding.textviewNodata.visibility = when (isShowNoData) {
                 true -> View.VISIBLE
                 else -> View.GONE
             }
         })
 
-        scheduleViewModel.showErrorMessage.observe(viewLifecycleOwner, { errorMessage ->
-            if (errorMessage.isNotBlank()) {
-                // Show an error dialog
-                AlertDialog.Builder(requireContext(), R.style.MyAlertDialogStyle).apply {
-                    setTitle(getString(R.string.something_went_wrong))
-                    setMessage(errorMessage)
-                    setPositiveButton(getString(R.string.ok)) { _, _ ->
-                        // do nothing
-                    }
-                }.show()
-            }
-        })
-
-        scheduleViewModel.scheduleList.observe(viewLifecycleOwner, {
-            scheduleViewModel.saveListState(binding.recyclerview.layoutManager?.onSaveInstanceState())
-            scheduleAdapter.submitList(it)
+        viewModel.listContents.observe(viewLifecycleOwner, {
+            viewModel.saveListState(binding.recyclerview.layoutManager?.onSaveInstanceState())
+            scheduleAdapter.submitList(it as List<Schedule>)
         })
     }
 }

@@ -21,6 +21,18 @@ fun String.parseTimeStamp(dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss"): Date {
 }
 
 
+fun Fragment.setupRefreshLayout(
+    refreshLayout: SwipeRefreshLayout,
+    refreshListener: SwipeRefreshLayout.OnRefreshListener
+) {
+    refreshLayout.setColorSchemeColors(
+        ContextCompat.getColor(requireActivity(), R.color.colorPrimary),
+        ContextCompat.getColor(requireActivity(), R.color.colorAccent),
+        ContextCompat.getColor(requireActivity(), R.color.colorPrimaryDark)
+    )
+    refreshLayout.setOnRefreshListener(refreshListener)
+}
+
 /*
  * Copyright (C) 2019 The Android Open Source Project
  *
@@ -36,15 +48,6 @@ fun String.parseTimeStamp(dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss"): Date {
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-fun Fragment.setupRefreshLayout(
-    refreshLayout: SwipeRefreshLayout
-) {
-    refreshLayout.setColorSchemeColors(
-        ContextCompat.getColor(requireActivity(), R.color.colorPrimary),
-        ContextCompat.getColor(requireActivity(), R.color.colorAccent),
-        ContextCompat.getColor(requireActivity(), R.color.colorPrimaryDark)
-    )
-}
 
 //animate changing the view visibility
 fun View.fadeIn() {

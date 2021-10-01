@@ -10,6 +10,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.room.Room
 import uk.ryanwong.dazn.codechallenge.data.repository.DaznApiRepository
 import uk.ryanwong.dazn.codechallenge.data.repository.DefaultCachedRepository
+import uk.ryanwong.dazn.codechallenge.data.source.DaznApiDaos
 import uk.ryanwong.dazn.codechallenge.data.source.DaznApiDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznRoomDbDataSource
@@ -35,7 +36,8 @@ object ServiceLocator {
     // Data Sources
     private fun createRoomDBLocalDataSource(context: Context): DaznApiDataSource {
         val database = daznApiDatabase ?: createDataBase(context)
-        return DaznRoomDbDataSource(database.eventsDao, database.scheduleDao)
+        val daznApiDaos = DaznApiDaos(database.eventsDao, database.scheduleDao)
+        return DaznRoomDbDataSource(daznApiDaos)
     }
 
     private fun createDaznSandboxApiDataSource(): DaznApiDataSource {

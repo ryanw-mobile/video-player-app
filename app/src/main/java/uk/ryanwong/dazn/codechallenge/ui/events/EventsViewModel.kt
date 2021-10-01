@@ -1,31 +1,18 @@
 package uk.ryanwong.dazn.codechallenge.ui.events
 
-import android.os.Parcelable
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import uk.ryanwong.dazn.codechallenge.base.BaseViewModel
 import uk.ryanwong.dazn.codechallenge.data.ApiResult
 import uk.ryanwong.dazn.codechallenge.data.model.Event
 import uk.ryanwong.dazn.codechallenge.data.repository.DaznApiRepository
 import uk.ryanwong.dazn.codechallenge.util.SingleLiveEvent
 
-class EventsViewModel(private val daznApiRepository: DaznApiRepository) : ViewModel() {
 
-    val showLoading: SingleLiveEvent<Boolean> = SingleLiveEvent()
-    val showErrorMessage: SingleLiveEvent<String> = SingleLiveEvent()
-    val showNoData: MutableLiveData<Boolean> = MutableLiveData()
+class EventsViewModel(private val daznApiRepository: DaznApiRepository) : BaseViewModel() {
+
     val openVideoPlayerUrl: SingleLiveEvent<String> = SingleLiveEvent()
-
-    private var _eventList = MutableLiveData<List<Event>>()
-    val eventList: LiveData<List<Event>>
-        get() = _eventList
-
-    private var _listState: Parcelable? = null
-    val listState: Parcelable?
-        get() = _listState
 
     init {
         // Quietly load the cached contents from local DB before doing a refresh
@@ -33,15 +20,15 @@ class EventsViewModel(private val daznApiRepository: DaznApiRepository) : ViewMo
         viewModelScope.launch {
             when (val apiResult = daznApiRepository.getEvents()) {
                 is ApiResult.Success<List<Event>> -> {
-                    _eventList.value =
+                    _listContents.value =
                         apiResult.data!!   // !! is redundant but added to avoid IDE error
                 }
             }
         }
-        refreshEvents()
+        refreshList()
     }
 
-    fun refreshEvents() {
+    override fun refreshList() {
         showLoading.value = true
         viewModelScope.launch {
             try {
@@ -55,7 +42,7 @@ class EventsViewModel(private val daznApiRepository: DaznApiRepository) : ViewMo
             // Even the previous sync might fail, we still try to fetch whatever we have locally
             when (val apiResult = daznApiRepository.getEvents()) {
                 is ApiResult.Success<List<Event>> -> {
-                    _eventList.value =
+                    _listContents.value =
                         apiResult.data!!   // !! is redundant but added to avoid IDE error
                     Timber.d("refreshEvents - fetched ${apiResult.data.size} items to live data")
                 }
@@ -69,24 +56,14 @@ class EventsViewModel(private val daznApiRepository: DaznApiRepository) : ViewMo
 
     fun setEventClicked(event: Event) {
         event.videoUrl?.let {
-            openVideoPlayerUrl.value = it
+            openVideoPlayerUrl.value = when (it.isEmpty()) {
+                false -> it
+                true -> null
+            }
         }
     }
 
     fun notifyVideoPlayerNavigationCompleted() {
         openVideoPlayerUrl.value = null
-    }
-
-    fun saveListState(listScrollingState: Parcelable?) {
-        _listState = listScrollingState
-    }
-
-    /**
-     * Inform the user that there's not any data if the list is empty
-     */
-    private fun invalidateShowNoData() {
-        showLoading.postValue(false)
-        showNoData.value = _eventList.value == null || _eventList.value!!.isEmpty()
-        Timber.d("invalidateShowNoData - no date = {$showNoData.value}")
     }
 }
