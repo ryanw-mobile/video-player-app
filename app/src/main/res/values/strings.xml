@@ -5,4 +5,5 @@
     <string name="no_data">There are currently no events in our schedule.</string>
     <string name="ok">OK</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="generic_error_string">We encountered an error when communicating with the server. Please try again later.</string>
 </resources>

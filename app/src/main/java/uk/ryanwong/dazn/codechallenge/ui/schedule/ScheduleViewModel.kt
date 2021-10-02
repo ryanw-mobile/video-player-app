@@ -69,8 +69,20 @@ class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : Base
         }
     }
 
-    // This is to repeat the timer automatically
-    // it cannot be done within CountDownTimer's onFinish() as compiler said timer is not initialized
+    /**
+     * Repeat the timer automatically
+     * It cannot be done within CountDownTimer's onFinish() as compiler said timer is not initialized
+     *
+     * This approach is for meeting the requirement to run refresh every 30 seconds.
+     * If we want to do background refresh even when the App is not running,
+     * or not exactly every 30 seconds, we could consider migrating to use Android WorkManager.
+     * WorkManager fits the purpose when the refresh:
+     *   1. Does not need to run at a specific time
+     *   2. Can be deferred to be executed
+     *   3. Is guaranteed to run even after the app is killed or device is restarted
+     *   4. Has to meet constraints like battery supply or network availability before execution
+     *   Reference: https://flexiple.com/android/android-workmanager-tutorial-getting-started/
+     */
     private fun autoRefresh() {
         timer.start()
     }
