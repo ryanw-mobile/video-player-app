@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert
-import org.hamcrest.core.IsEqual
+import org.hamcrest.core.Is.`is`
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -116,14 +116,14 @@ class DefaultCachedRepositoryTest {
         // Given the localDataSource has event1
         // Given the remoteDataSource has event1, event2, event3
         val initEvents = defaultCachedRepository.getEvents()
-        MatcherAssert.assertThat(initEvents, IsEqual(localEvents))
+        MatcherAssert.assertThat(initEvents, `is`(localEvents))
 
         // When repository refreshEvents
         defaultCachedRepository.refreshEvents()
 
         // Then repository should now return 3 events
         val refreshedEvents = defaultCachedRepository.getEvents()
-        MatcherAssert.assertThat(refreshedEvents, IsEqual(remoteEvents))
+        MatcherAssert.assertThat(refreshedEvents, `is`(remoteEvents))
     }
 
     @Test
@@ -132,14 +132,14 @@ class DefaultCachedRepositoryTest {
         // Given the remoteDataSource is empty list
         remoteDataSource.setEvents(emptyList())
         val initEvents = defaultCachedRepository.getEvents()
-        MatcherAssert.assertThat(initEvents, IsEqual(localEvents))
+        MatcherAssert.assertThat(initEvents, `is`(localEvents))
 
         // When repository refreshEvents
         defaultCachedRepository.refreshEvents()
 
         // Then repository should now return 0 schedules
         val refreshedEvents = defaultCachedRepository.getEvents()
-        MatcherAssert.assertThat(refreshedEvents.size, IsEqual(0))
+        MatcherAssert.assertThat(refreshedEvents.size, `is`(0))
     }
 
     @Test
@@ -155,7 +155,7 @@ class DefaultCachedRepositoryTest {
 
             // Then repository should throw the exception
         } catch (ex: IOException) {
-            MatcherAssert.assertThat(exceptionMessage, IsEqual(exceptionMessage))
+            MatcherAssert.assertThat(exceptionMessage, `is`(exceptionMessage))
         }
     }
 
@@ -166,14 +166,16 @@ class DefaultCachedRepositoryTest {
         // Given the localDataSource has schedule1
         // Given the remoteDataSource has schedule1, schedule2, schedule3
         val initSchedules = defaultCachedRepository.getSchedule()
-        MatcherAssert.assertThat(initSchedules, IsEqual(localSchedules))
+        MatcherAssert.assertThat(initSchedules, `is`(localSchedules))
 
         // When repository refreshSchedule
         defaultCachedRepository.refreshSchedule()
 
         // Then repository should now return 3 schedules
         val refreshedSchedules = defaultCachedRepository.getSchedule()
-        MatcherAssert.assertThat(refreshedSchedules, IsEqual(remoteSchedules))
+        MatcherAssert.assertThat(
+            refreshedSchedules, `is`(remoteSchedules)
+        )
     }
 
     @Test
@@ -183,14 +185,14 @@ class DefaultCachedRepositoryTest {
             // Given the remoteDataSource has empty list
             remoteDataSource.setSchedule(emptyList())
             val initSchedules = defaultCachedRepository.getSchedule()
-            MatcherAssert.assertThat(initSchedules, IsEqual(localSchedules))
+            MatcherAssert.assertThat(initSchedules, `is`(localSchedules))
 
             // When repository refreshSchedule
             defaultCachedRepository.refreshSchedule()
 
             // Then repository should now return 0 schedules
             val refreshedSchedules = defaultCachedRepository.getSchedule()
-            MatcherAssert.assertThat(refreshedSchedules.size, IsEqual(0))
+            MatcherAssert.assertThat(refreshedSchedules.size, `is`(0))
         }
 
     @Test
@@ -206,7 +208,7 @@ class DefaultCachedRepositoryTest {
 
             // Then repository should throw the exception
         } catch (ex: IOException) {
-            MatcherAssert.assertThat(exceptionMessage, IsEqual(exceptionMessage))
+            MatcherAssert.assertThat(exceptionMessage, `is`(exceptionMessage))
         }
     }
 }
