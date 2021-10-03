@@ -12,7 +12,7 @@ import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
 import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
 import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 import uk.ryanwong.dazn.codechallenge.data.repository.DefaultCachedRepository
-import uk.ryanwong.dazn.codechallenge.data.source.DaznApiDaos
+import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDaos
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
 import uk.ryanwong.dazn.codechallenge.data.source.local.RoomDbDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.remote.SandBoxAPIDataSource

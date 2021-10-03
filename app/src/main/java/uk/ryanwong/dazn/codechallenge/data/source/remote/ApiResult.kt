@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.ryanwong.dazn.codechallenge.data
+package uk.ryanwong.dazn.codechallenge.data.source.remote
 
 /**
  * A generic class that holds a value with its loading status.

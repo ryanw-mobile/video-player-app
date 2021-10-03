@@ -1,6 +1,6 @@
 package uk.ryanwong.dazn.codechallenge.base
 
-import uk.ryanwong.dazn.codechallenge.data.ApiResult
+import uk.ryanwong.dazn.codechallenge.data.source.remote.ApiResult
 
 /**
  * Remote Data Source interface

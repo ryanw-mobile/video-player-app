@@ -13,7 +13,6 @@ import timber.log.Timber
 import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
 import uk.ryanwong.dazn.codechallenge.data.model.Event
 import uk.ryanwong.dazn.codechallenge.data.model.Schedule
-import uk.ryanwong.dazn.codechallenge.data.source.DaznApiDaos
 
 /**
  * Concrete implementation of a data source as a db.

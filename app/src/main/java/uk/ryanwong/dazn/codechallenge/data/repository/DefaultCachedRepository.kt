@@ -11,9 +11,9 @@ import kotlinx.coroutines.Dispatchers
 import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
 import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
 import uk.ryanwong.dazn.codechallenge.base.BaseRepository
-import uk.ryanwong.dazn.codechallenge.data.ApiResult
 import uk.ryanwong.dazn.codechallenge.data.model.Event
 import uk.ryanwong.dazn.codechallenge.data.model.Schedule
+import uk.ryanwong.dazn.codechallenge.data.source.remote.ApiResult
 import uk.ryanwong.dazn.codechallenge.util.wrapEspressoIdlingResource
 
 /**

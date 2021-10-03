@@ -3,7 +3,7 @@
  *
  */
 
-package uk.ryanwong.dazn.codechallenge.data.source
+package uk.ryanwong.dazn.codechallenge.data.source.local
 
 import uk.ryanwong.dazn.codechallenge.data.source.local.EventsDao
 import uk.ryanwong.dazn.codechallenge.data.source.local.ScheduleDao
