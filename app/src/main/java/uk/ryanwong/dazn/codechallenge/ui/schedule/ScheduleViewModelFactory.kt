@@ -7,13 +7,13 @@ package uk.ryanwong.dazn.codechallenge.ui.schedule
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import uk.ryanwong.dazn.codechallenge.data.repository.DaznApiRepository
+import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 
 @Suppress("UNCHECKED_CAST")
 class ScheduleViewModelFactory(
-    private val daznApiRepository: DaznApiRepository
+    private val baseRepository: BaseRepository
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>) =
-        (ScheduleViewModel(daznApiRepository) as T)
+        (ScheduleViewModel(baseRepository) as T)
 }
 

@@ -7,13 +7,13 @@ package uk.ryanwong.dazn.codechallenge.ui.events
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import uk.ryanwong.dazn.codechallenge.data.repository.DaznApiRepository
+import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 
 @Suppress("UNCHECKED_CAST")
 class EventsViewModelFactory(
-    private val daznApiRepository: DaznApiRepository
+    private val baseRepository: BaseRepository
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>) =
-        (EventsViewModel(daznApiRepository) as T)
+        (EventsViewModel(baseRepository) as T)
 }
 

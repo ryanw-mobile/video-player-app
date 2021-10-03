@@ -8,13 +8,14 @@ package uk.ryanwong.dazn.codechallenge
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.room.Room
-import uk.ryanwong.dazn.codechallenge.data.repository.DaznApiRepository
+import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
+import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
+import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 import uk.ryanwong.dazn.codechallenge.data.repository.DefaultCachedRepository
 import uk.ryanwong.dazn.codechallenge.data.source.DaznApiDaos
-import uk.ryanwong.dazn.codechallenge.data.source.DaznApiDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
-import uk.ryanwong.dazn.codechallenge.data.source.local.DaznRoomDbDataSource
-import uk.ryanwong.dazn.codechallenge.data.source.remote.DaznSandboxApiDataSource
+import uk.ryanwong.dazn.codechallenge.data.source.local.RoomDbDataSource
+import uk.ryanwong.dazn.codechallenge.data.source.remote.SandBoxAPIDataSource
 
 object ServiceLocator {
 
@@ -34,14 +35,14 @@ object ServiceLocator {
     }
 
     // Data Sources
-    private fun createRoomDBLocalDataSource(context: Context): DaznApiDataSource {
+    private fun createLocalDataSource(context: Context): BaseLocalDataSource {
         val database = daznApiDatabase ?: createDataBase(context)
         val daznApiDaos = DaznApiDaos(database.eventsDao, database.scheduleDao)
-        return DaznRoomDbDataSource(daznApiDaos)
+        return RoomDbDataSource(daznApiDaos)
     }
 
-    private fun createDaznSandboxApiDataSource(): DaznApiDataSource {
-        return DaznSandboxApiDataSource()
+    private fun createRemoteDataSource(): BaseRemoteDataSource {
+        return SandBoxAPIDataSource()
     }
 
     // Repository - singleton
@@ -49,22 +50,22 @@ object ServiceLocator {
     // Annotate the repository with @Volatile because it could get used by multiple threads
     // Only for testing we allow injecting another repository here
     @Volatile
-    var daznApiRepository: DaznApiRepository? = null
+    var baseRepository: BaseRepository? = null
         @VisibleForTesting set
 
-    fun provideApiRepository(context: Context): DaznApiRepository {
+    fun provideApiRepository(context: Context): BaseRepository {
         synchronized(this) {
-            return daznApiRepository ?: createApiRepository(context)
+            return baseRepository ?: createApiRepository(context)
         }
     }
 
-    private fun createApiRepository(context: Context): DaznApiRepository {
+    private fun createApiRepository(context: Context): BaseRepository {
         val newRepo =
             DefaultCachedRepository(
-                createDaznSandboxApiDataSource(),
-                createRoomDBLocalDataSource(context)
+                createRemoteDataSource(),
+                createLocalDataSource(context)
             )
-        daznApiRepository = newRepo
+        baseRepository = newRepo
         return newRepo
     }
 
@@ -86,7 +87,7 @@ object ServiceLocator {
                 close()
             }
             daznApiDatabase = null
-            daznApiRepository = null
+            baseRepository = null
         }
     }
 }

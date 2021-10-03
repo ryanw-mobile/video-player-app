@@ -2,15 +2,13 @@ package uk.ryanwong.dazn.codechallenge.ui.events
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
+import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 import uk.ryanwong.dazn.codechallenge.base.BaseViewModel
-import uk.ryanwong.dazn.codechallenge.data.ApiResult
 import uk.ryanwong.dazn.codechallenge.data.model.Event
-import uk.ryanwong.dazn.codechallenge.data.repository.DaznApiRepository
 import uk.ryanwong.dazn.codechallenge.util.SingleLiveEvent
 
 
-class EventsViewModel(private val daznApiRepository: DaznApiRepository) : BaseViewModel() {
+class EventsViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
 
     val openVideoPlayerUrl: SingleLiveEvent<String> = SingleLiveEvent()
 
@@ -18,11 +16,7 @@ class EventsViewModel(private val daznApiRepository: DaznApiRepository) : BaseVi
         // Quietly load the cached contents from local DB before doing a refresh
         // Errors and no data handling can be ignored because refreshList() will take care of them
         viewModelScope.launch {
-            when (val apiResult = daznApiRepository.getEvents()) {
-                is ApiResult.Success<List<Event>> -> {
-                    _listContents.value = apiResult.data
-                }
-            }
+            _listContents.value = baseRepository.getEvents()
         }
         refreshList()
     }
@@ -32,20 +26,14 @@ class EventsViewModel(private val daznApiRepository: DaznApiRepository) : BaseVi
         viewModelScope.launch {
             try {
                 // Expected exceptions
-                daznApiRepository.refreshEvents()
+                baseRepository.refreshEvents()
             } catch (ex: Exception) {
                 ex.printStackTrace()
                 showErrorMessage.postValue(ex.toString())
             }
 
             // Even the previous sync might fail, we still try to fetch whatever we have locally
-            when (val apiResult = daznApiRepository.getEvents()) {
-                is ApiResult.Success<List<Event>> -> {
-                    _listContents.value = apiResult.data
-                    Timber.d("refreshEvents - fetched ${apiResult.data.size} items to live data")
-                }
-                is ApiResult.Error -> showErrorMessage.postValue(apiResult.exception.toString())
-            }
+            _listContents.value = baseRepository.getEvents()
 
             //check if no data has to be shown
             invalidateShowNoData()

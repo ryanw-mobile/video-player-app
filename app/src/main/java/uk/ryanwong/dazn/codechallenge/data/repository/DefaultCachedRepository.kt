@@ -8,10 +8,12 @@ package uk.ryanwong.dazn.codechallenge.data.repository
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
+import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
+import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 import uk.ryanwong.dazn.codechallenge.data.ApiResult
 import uk.ryanwong.dazn.codechallenge.data.model.Event
 import uk.ryanwong.dazn.codechallenge.data.model.Schedule
-import uk.ryanwong.dazn.codechallenge.data.source.DaznApiDataSource
 import uk.ryanwong.dazn.codechallenge.util.wrapEspressoIdlingResource
 
 /**
@@ -25,30 +27,30 @@ import uk.ryanwong.dazn.codechallenge.util.wrapEspressoIdlingResource
  * before the new data arrives, or even without an Internet connection.
  */
 class DefaultCachedRepository(
-    private val remoteDataSource: DaznApiDataSource,
-    private val localDataSource: DaznApiDataSource,
+    private val remoteDataSource: BaseRemoteDataSource,
+    private val localDataSource: BaseLocalDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : DaznApiRepository {
+) : BaseRepository {
 
-    override fun observeEvents(): LiveData<ApiResult<List<Event>>> {
+    override fun observeEvents(): LiveData<List<Event>> {
         wrapEspressoIdlingResource {
             return localDataSource.observeEvents()
         }
     }
 
-    override fun observeSchedule(): LiveData<ApiResult<List<Schedule>>> {
+    override fun observeSchedule(): LiveData<List<Schedule>> {
         wrapEspressoIdlingResource {
             return localDataSource.observeSchedule()
         }
     }
 
-    override suspend fun getEvents(): ApiResult<List<Event>> {
+    override suspend fun getEvents(): List<Event> =
         wrapEspressoIdlingResource {
             return localDataSource.getEvents()
         }
-    }
 
-    override suspend fun getSchedule(): ApiResult<List<Schedule>> {
+
+    override suspend fun getSchedule(): List<Schedule> {
         wrapEspressoIdlingResource {
             return localDataSource.getSchedules()
         }
@@ -62,7 +64,7 @@ class DefaultCachedRepository(
             val remoteEvents = remoteDataSource.getEvents()
 
             if (remoteEvents is ApiResult.Success) {
-                localDataSource.syncEvents(remoteEvents.data)
+                localDataSource.submitEvents(remoteEvents.data as List<Event>)
             } else if (remoteEvents is ApiResult.Error) {
                 throw remoteEvents.exception
             }
@@ -74,7 +76,7 @@ class DefaultCachedRepository(
             val remoteSchedules = remoteDataSource.getSchedules()
 
             if (remoteSchedules is ApiResult.Success) {
-                localDataSource.syncSchedule(remoteSchedules.data)
+                localDataSource.submitSchedule(remoteSchedules.data as List<Schedule>)
             } else if (remoteSchedules is ApiResult.Error) {
                 throw remoteSchedules.exception
             }

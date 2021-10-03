@@ -4,12 +4,10 @@ import android.os.CountDownTimer
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 import uk.ryanwong.dazn.codechallenge.base.BaseViewModel
-import uk.ryanwong.dazn.codechallenge.data.ApiResult
-import uk.ryanwong.dazn.codechallenge.data.model.Schedule
-import uk.ryanwong.dazn.codechallenge.data.repository.DaznApiRepository
 
-class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : BaseViewModel() {
+class ScheduleViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
 
     private val timer: CountDownTimer = object : CountDownTimer(COUNTDOWN_TIME, COUNTDOWN_TIME) {
         override fun onTick(millisUntilFinished: Long) {}
@@ -25,12 +23,7 @@ class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : Base
         // Quietly load the cached contents from local DB before doing a refresh
         // Errors and no data handling can be ignored because refreshList() will take care of them
         viewModelScope.launch {
-            when (val apiResult = daznApiRepository.getSchedule()) {
-                is ApiResult.Success<List<Schedule>> -> {
-                    _listContents.value =
-                        apiResult.data
-                }
-            }
+            _listContents.value = baseRepository.getSchedule()
         }
         refreshList()
         autoRefresh()
@@ -48,21 +41,14 @@ class ScheduleViewModel(private val daznApiRepository: DaznApiRepository) : Base
         viewModelScope.launch {
             try {
                 // Expected exceptions
-                daznApiRepository.refreshSchedule()
+                baseRepository.refreshSchedule()
             } catch (ex: Exception) {
                 ex.printStackTrace()
                 showErrorMessage.postValue(ex.toString())
             }
 
             // Even the previous sync might fail, we still try to fetch whatever we have locally
-            when (val apiResult = daznApiRepository.getSchedule()) {
-                is ApiResult.Success<List<Schedule>> -> {
-                    _listContents.value =
-                        apiResult.data
-                    Timber.d("refreshSchedule - fetched ${apiResult.data.size} items to live data")
-                }
-                is ApiResult.Error -> showErrorMessage.postValue(apiResult.exception.toString())
-            }
+            _listContents.value = baseRepository.getSchedule()
 
             //check if no data has to be shown
             invalidateShowNoData()
