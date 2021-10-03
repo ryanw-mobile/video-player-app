@@ -14,13 +14,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert
-import org.hamcrest.core.Is
+import org.hamcrest.core.Is.`is`
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import uk.ryanwong.dazn.codechallenge.data.ApiResult
 import uk.ryanwong.dazn.codechallenge.data.model.Event
 import uk.ryanwong.dazn.codechallenge.data.model.EventDaoTest.TestData.event1
 import uk.ryanwong.dazn.codechallenge.data.model.EventDaoTest.TestData.event1Modified
@@ -31,19 +30,18 @@ import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedu
 import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedule1Modified
 import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedule2
 import uk.ryanwong.dazn.codechallenge.data.model.ScheduleDaoTest.TestData.schedule3
-import uk.ryanwong.dazn.codechallenge.data.source.DaznApiDaos
 import uk.ryanwong.dazn.codechallenge.util.parseTimeStamp
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 @MediumTest
-class DaznRoomDbDataSourceTest {
+class RoomDbDataSourceTest {
 
     // Executes each task synchronously using Architecture Components.
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var localDataSource: DaznRoomDbDataSource
+    private lateinit var localDataSource: RoomDbDataSource
     private lateinit var database: DaznApiDatabase
 
     // Test data set
@@ -129,7 +127,7 @@ class DaznRoomDbDataSourceTest {
             .build()
 
         val daznApiDaos = DaznApiDaos(database.eventsDao, database.scheduleDao)
-        localDataSource = DaznRoomDbDataSource(daznApiDaos, Dispatchers.Main)
+        localDataSource = RoomDbDataSource(daznApiDaos, Dispatchers.Main)
     }
 
     // Test coverage: basic CRUD on both events and schedule
@@ -139,117 +137,117 @@ class DaznRoomDbDataSourceTest {
     @Test
     fun emptyList_SyncOneEvent_ExpectsOneEvent() = runBlocking {
         // GIVEN - An empty list
-        val initialList = localDataSource.getEvents() as ApiResult.Success
-        MatcherAssert.assertThat(initialList.data.size, Is.`is`(0))
+        val initialList = localDataSource.getEvents()
+        MatcherAssert.assertThat(initialList.size, `is`(0))
 
         // WHEN  - Sync events by supplying one event
-        localDataSource.syncEvents(listOf(event1))
+        localDataSource.submitEvents(listOf(event1))
 
         // THEN - One event is returned
-        val resultList = localDataSource.getEvents() as ApiResult.Success
-        MatcherAssert.assertThat(resultList.data.size, Is.`is`(1))
+        val resultList = localDataSource.getEvents()
+        MatcherAssert.assertThat(resultList.size, `is`(1))
 
-        val event = resultList.data[0]
-        MatcherAssert.assertThat(event.id, Is.`is`(event1.id))
-        MatcherAssert.assertThat(event.title, Is.`is`(event1.title))
-        MatcherAssert.assertThat(event.subtitle, Is.`is`(event1.subtitle))
-        MatcherAssert.assertThat(event.date, Is.`is`(event1.date))
-        MatcherAssert.assertThat(event.imageUrl, Is.`is`(event1.imageUrl))
-        MatcherAssert.assertThat(event.videoUrl, Is.`is`(event1.videoUrl))
+        val event = resultList[0]
+        MatcherAssert.assertThat(event.id, `is`(event1.id))
+        MatcherAssert.assertThat(event.title, `is`(event1.title))
+        MatcherAssert.assertThat(event.subtitle, `is`(event1.subtitle))
+        MatcherAssert.assertThat(event.date, `is`(event1.date))
+        MatcherAssert.assertThat(event.imageUrl, `is`(event1.imageUrl))
+        MatcherAssert.assertThat(event.videoUrl, `is`(event1.videoUrl))
     }
 
     @Test
     fun oneEvent_UpsertOneEvent_ExpectsEventUpdated() = runBlocking {
         // GIVEN - An empty list
-        localDataSource.syncEvents(listOf(event1))
+        localDataSource.submitEvents(listOf(event1))
 
         // WHEN  - Sync events by supplying another event with same Id but different contents
-        localDataSource.syncEvents(listOf(event1Modified))
+        localDataSource.submitEvents(listOf(event1Modified))
 
         // THEN - One event is returned
-        val resultList = localDataSource.getEvents() as ApiResult.Success
-        MatcherAssert.assertThat(resultList.data.size, Is.`is`(1))
+        val resultList = localDataSource.getEvents()
+        MatcherAssert.assertThat(resultList.size, `is`(1))
 
         // and the returned item should be the new event
-        val event = resultList.data[0]
-        MatcherAssert.assertThat(event.id, Is.`is`(event1Modified.id))
-        MatcherAssert.assertThat(event.title, Is.`is`(event1Modified.title))
-        MatcherAssert.assertThat(event.subtitle, Is.`is`(event1Modified.subtitle))
-        MatcherAssert.assertThat(event.date, Is.`is`(event1Modified.date))
-        MatcherAssert.assertThat(event.imageUrl, Is.`is`(event1Modified.imageUrl))
-        MatcherAssert.assertThat(event.videoUrl, Is.`is`(event1Modified.videoUrl))
+        val event = resultList[0]
+        MatcherAssert.assertThat(event.id, `is`(event1Modified.id))
+        MatcherAssert.assertThat(event.title, `is`(event1Modified.title))
+        MatcherAssert.assertThat(event.subtitle, `is`(event1Modified.subtitle))
+        MatcherAssert.assertThat(event.date, `is`(event1Modified.date))
+        MatcherAssert.assertThat(event.imageUrl, `is`(event1Modified.imageUrl))
+        MatcherAssert.assertThat(event.videoUrl, `is`(event1Modified.videoUrl))
     }
 
     @Test
     fun threeEvents_SyncEmptyList_ExpectsNoEvents() = runBlocking {
         // GIVEN - An empty list
-        localDataSource.syncEvents(listOf(event1, event2, event3))
-        val initialList = localDataSource.getEvents() as ApiResult.Success
-        MatcherAssert.assertThat(initialList.data.size, Is.`is`(3))
+        localDataSource.submitEvents(listOf(event1, event2, event3))
+        val initialList = localDataSource.getEvents()
+        MatcherAssert.assertThat(initialList.size, `is`(3))
 
         // WHEN  - Sync events by supplying another event with same Id but different contents
-        localDataSource.syncEvents(listOf())
+        localDataSource.submitEvents(listOf())
 
         // THEN - One event is returned
-        val resultList = localDataSource.getEvents() as ApiResult.Success
-        MatcherAssert.assertThat(resultList.data.size, Is.`is`(0))
+        val resultList = localDataSource.getEvents()
+        MatcherAssert.assertThat(resultList.size, `is`(0))
     }
 
     @Test
     fun emptyList_SyncOneSchedule_ExpectsOneSchedule() = runBlocking {
         // GIVEN - An empty list
-        val initialList = localDataSource.getSchedules() as ApiResult.Success
-        MatcherAssert.assertThat(initialList.data.size, Is.`is`(0))
+        val initialList = localDataSource.getSchedules()
+        MatcherAssert.assertThat(initialList.size, `is`(0))
 
         // WHEN  - Sync schedules by supplying one schedule
-        localDataSource.syncSchedule(listOf(schedule1))
+        localDataSource.submitSchedule(listOf(schedule1))
 
         // THEN - One event is returned
-        val resultList = localDataSource.getSchedules() as ApiResult.Success
-        MatcherAssert.assertThat(resultList.data.size, Is.`is`(1))
+        val resultList = localDataSource.getSchedules()
+        MatcherAssert.assertThat(resultList.size, `is`(1))
 
-        val schedule = resultList.data[0]
-        MatcherAssert.assertThat(schedule.id, Is.`is`(schedule1.id))
-        MatcherAssert.assertThat(schedule.title, Is.`is`(schedule1.title))
-        MatcherAssert.assertThat(schedule.subtitle, Is.`is`(schedule1.subtitle))
-        MatcherAssert.assertThat(schedule.date, Is.`is`(schedule1.date))
-        MatcherAssert.assertThat(schedule.imageUrl, Is.`is`(schedule1.imageUrl))
+        val schedule = resultList[0]
+        MatcherAssert.assertThat(schedule.id, `is`(schedule1.id))
+        MatcherAssert.assertThat(schedule.title, `is`(schedule1.title))
+        MatcherAssert.assertThat(schedule.subtitle, `is`(schedule1.subtitle))
+        MatcherAssert.assertThat(schedule.date, `is`(schedule1.date))
+        MatcherAssert.assertThat(schedule.imageUrl, `is`(schedule1.imageUrl))
     }
 
     @Test
     fun oneSchedule_UpsertOneSchedule_ExpectsScheduleUpdated() = runBlocking {
         // GIVEN - An empty list
-        localDataSource.syncSchedule(listOf(schedule1))
+        localDataSource.submitSchedule(listOf(schedule1))
 
         // WHEN - Sync schedules by supplying another schedule with same Id but different contents
-        localDataSource.syncSchedule(listOf(schedule1Modified))
+        localDataSource.submitSchedule(listOf(schedule1Modified))
 
         // THEN - One schedule item is returned
-        val resultList = localDataSource.getSchedules() as ApiResult.Success
-        MatcherAssert.assertThat(resultList.data.size, Is.`is`(1))
+        val resultList = localDataSource.getSchedules()
+        MatcherAssert.assertThat(resultList.size, `is`(1))
 
         // and the returned item should be the new schedule
-        val schedule = resultList.data[0]
-        MatcherAssert.assertThat(schedule.id, Is.`is`(schedule1Modified.id))
-        MatcherAssert.assertThat(schedule.title, Is.`is`(schedule1Modified.title))
-        MatcherAssert.assertThat(schedule.subtitle, Is.`is`(schedule1Modified.subtitle))
-        MatcherAssert.assertThat(schedule.date, Is.`is`(schedule1Modified.date))
-        MatcherAssert.assertThat(schedule.imageUrl, Is.`is`(schedule1Modified.imageUrl))
+        val schedule = resultList[0]
+        MatcherAssert.assertThat(schedule.id, `is`(schedule1Modified.id))
+        MatcherAssert.assertThat(schedule.title, `is`(schedule1Modified.title))
+        MatcherAssert.assertThat(schedule.subtitle, `is`(schedule1Modified.subtitle))
+        MatcherAssert.assertThat(schedule.date, `is`(schedule1Modified.date))
+        MatcherAssert.assertThat(schedule.imageUrl, `is`(schedule1Modified.imageUrl))
     }
 
     @Test
     fun threeSchedules_SyncEmptyList_ExpectsNoSchedules() = runBlocking {
         // GIVEN - An empty list
-        localDataSource.syncSchedule(listOf(schedule1, schedule2, schedule3))
-        val initialList = localDataSource.getSchedules() as ApiResult.Success
-        MatcherAssert.assertThat(initialList.data.size, Is.`is`(3))
+        localDataSource.submitSchedule(listOf(schedule1, schedule2, schedule3))
+        val initialList = localDataSource.getSchedules()
+        MatcherAssert.assertThat(initialList.size, `is`(3))
 
         // WHEN  - Sync schedules by supplying another schedule with same Id but different contents
-        localDataSource.syncSchedule(listOf())
+        localDataSource.submitSchedule(listOf())
 
         // THEN - One schedule is returned
-        val resultList = localDataSource.getSchedules() as ApiResult.Success
-        MatcherAssert.assertThat(resultList.data.size, Is.`is`(0))
+        val resultList = localDataSource.getSchedules()
+        MatcherAssert.assertThat(resultList.size, `is`(0))
     }
 
     @After
