@@ -15,41 +15,41 @@ class FakeRemoteDataSource(
     events: MutableList<Event>? = mutableListOf(),
     schedules: MutableList<Schedule>? = mutableListOf()
 ) : BaseRemoteDataSource {
-    private var _events = events
-    private var _schedules = schedules
-    private var _shouldReturnError = false
-    private var _exceptionMessage = ""
+    private var events = events
+    private var schedules = schedules
+    private var shouldReturnError = false
+    private var exceptionMessage = ""
 
     fun setShouldReturnIOException(state: Boolean, exceptionMessage: String) {
-        _shouldReturnError = state
-        _exceptionMessage = exceptionMessage
+        shouldReturnError = state
+        this.exceptionMessage = exceptionMessage
     }
 
     override suspend fun getEvents(): ApiResult<List<Event>> {
-        if (_shouldReturnError) {
-            return ApiResult.Error(IOException(_exceptionMessage))
+        if (shouldReturnError) {
+            return ApiResult.Error(IOException(exceptionMessage))
         }
-        _events?.let { return ApiResult.Success(ArrayList(it)) }
+        events?.let { return ApiResult.Success(ArrayList(it)) }
         return ApiResult.Error(
             Exception("Events not found")
         )
     }
 
     override suspend fun getSchedules(): ApiResult<List<Schedule>> {
-        if (_shouldReturnError) {
-            return ApiResult.Error(IOException(_exceptionMessage))
+        if (shouldReturnError) {
+            return ApiResult.Error(IOException(exceptionMessage))
         }
-        _schedules?.let { return ApiResult.Success(ArrayList(it)) }
+        schedules?.let { return ApiResult.Success(ArrayList(it)) }
         return ApiResult.Error(
             Exception("Schedules not found")
         )
     }
 
     fun setEvents(events: List<Event>) {
-        _events = events.toMutableList()
+        this.events = events.toMutableList()
     }
 
     fun setSchedule(schedules: List<Schedule>) {
-        _schedules = schedules.toMutableList()
+        this.schedules = schedules.toMutableList()
     }
 }

@@ -14,8 +14,8 @@ class FakeLocalDataSource(
     events: MutableList<Event> = mutableListOf(),
     schedules: MutableList<Schedule> = mutableListOf()
 ) : BaseLocalDataSource {
-    private var _events = events
-    private var _schedules = schedules
+    private var events = events
+    private var schedules = schedules
     
     override fun observeEvents(): LiveData<List<Event>> {
         TODO("Not yet implemented")
@@ -25,15 +25,15 @@ class FakeLocalDataSource(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getEvents(): List<Event> = _events.toList()
+    override suspend fun getEvents(): List<Event> = events.toList()
 
-    override suspend fun getSchedules(): List<Schedule> = _schedules.toList()
+    override suspend fun getSchedules(): List<Schedule> = schedules.toList()
 
     override suspend fun submitEvents(events: List<Event>) {
-        _events = events.toMutableList()
+        this.events = events.toMutableList()
     }
 
     override suspend fun submitSchedule(schedules: List<Schedule>) {
-        _schedules = schedules.toMutableList()
+        this.schedules = schedules.toMutableList()
     }
 }
