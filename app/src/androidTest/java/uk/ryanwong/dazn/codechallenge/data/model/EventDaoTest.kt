@@ -20,12 +20,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import uk.ryanwong.dazn.codechallenge.data.model.EventDaoTest.TestData.event1
-import uk.ryanwong.dazn.codechallenge.data.model.EventDaoTest.TestData.event1Modified
-import uk.ryanwong.dazn.codechallenge.data.model.EventDaoTest.TestData.event2
-import uk.ryanwong.dazn.codechallenge.data.model.EventDaoTest.TestData.event3
+import uk.ryanwong.dazn.codechallenge.AndroidTestData.event1
+import uk.ryanwong.dazn.codechallenge.AndroidTestData.event1Modified
+import uk.ryanwong.dazn.codechallenge.AndroidTestData.event2
+import uk.ryanwong.dazn.codechallenge.AndroidTestData.event3
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
-import uk.ryanwong.dazn.codechallenge.util.parseTimeStamp
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -36,44 +35,6 @@ class EventDaoTest {
     var instantExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var database: DaznApiDatabase
-
-    object TestData {
-         val event1 = Event(
-            1,
-            "Liverpool v Porto",
-            "UEFA Champions League",
-            "2021-09-28T01:55:56.925Z".parseTimeStamp(),
-            "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/310176837169_image-header_pDach_1554579780000.jpeg?alt=media&token=1777d26b-d051-4b5f-87a8-7633d3d6dd20",
-            "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/promo.mp4?alt=media"
-        )
-
-         val event1Modified = Event(
-            1,
-            "Nîmes v Rennes",
-            "Ligue 1",
-            "2021-09-28T02:55:56.925Z".parseTimeStamp(),
-            "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/310381637057_image-header_pDach_1554664873000.jpeg?alt=media&token=53616931-55a8-476e-b1b7-d18fc22a2bf0",
-            "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/promo.mp4?alt=media"
-        )
-
-         val event2 = Event(
-            2,
-            "Nîmes v Rennes",
-            "Ligue 1",
-            "2021-09-28T02:55:56.925Z".parseTimeStamp(),
-            "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/310381637057_image-header_pDach_1554664873000.jpeg?alt=media&token=53616931-55a8-476e-b1b7-d18fc22a2bf0",
-            "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/promo.mp4?alt=media"
-        )
-
-         val event3 = Event(
-            3,
-            "Tottenham v Man City",
-            "UEFA Champions League",
-            "2021-09-28T03:55:56.925Z".parseTimeStamp(),
-            "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/310511685198_image-header_pDach_1554872450000.jpeg?alt=media&token=5524d719-261e-49e6-abf3-a74c30df3e27",
-            "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/promo.mp4?alt=media"
-        )
-    }
 
     @Before
     fun initDb() {
