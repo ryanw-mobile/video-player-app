@@ -20,14 +20,14 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import uk.ryanwong.dazn.codechallenge.AndroidTestData.event1
-import uk.ryanwong.dazn.codechallenge.AndroidTestData.event1Modified
-import uk.ryanwong.dazn.codechallenge.AndroidTestData.event2
-import uk.ryanwong.dazn.codechallenge.AndroidTestData.event3
-import uk.ryanwong.dazn.codechallenge.AndroidTestData.schedule1
-import uk.ryanwong.dazn.codechallenge.AndroidTestData.schedule1Modified
-import uk.ryanwong.dazn.codechallenge.AndroidTestData.schedule2
-import uk.ryanwong.dazn.codechallenge.AndroidTestData.schedule3
+import uk.ryanwong.dazn.codechallenge.TestData.event1
+import uk.ryanwong.dazn.codechallenge.TestData.event1Modified
+import uk.ryanwong.dazn.codechallenge.TestData.event2
+import uk.ryanwong.dazn.codechallenge.TestData.event3
+import uk.ryanwong.dazn.codechallenge.TestData.schedule1
+import uk.ryanwong.dazn.codechallenge.TestData.schedule1Modified
+import uk.ryanwong.dazn.codechallenge.TestData.schedule2
+import uk.ryanwong.dazn.codechallenge.TestData.schedule3
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)

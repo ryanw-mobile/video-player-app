@@ -20,10 +20,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import uk.ryanwong.dazn.codechallenge.AndroidTestData.event1
-import uk.ryanwong.dazn.codechallenge.AndroidTestData.event1Modified
-import uk.ryanwong.dazn.codechallenge.AndroidTestData.event2
-import uk.ryanwong.dazn.codechallenge.AndroidTestData.event3
+import uk.ryanwong.dazn.codechallenge.TestData.event1
+import uk.ryanwong.dazn.codechallenge.TestData.event1Modified
+import uk.ryanwong.dazn.codechallenge.TestData.event2
+import uk.ryanwong.dazn.codechallenge.TestData.event3
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
 
 @ExperimentalCoroutinesApi
