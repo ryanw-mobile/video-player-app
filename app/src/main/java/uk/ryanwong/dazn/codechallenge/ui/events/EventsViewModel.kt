@@ -29,7 +29,7 @@ class EventsViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                 baseRepository.refreshEvents()
             } catch (ex: Exception) {
                 ex.printStackTrace()
-                showErrorMessage.postValue(ex.toString())
+                showErrorMessage.postValue(ex.message)
             }
 
             // Even the previous sync might fail, we still try to fetch whatever we have locally
