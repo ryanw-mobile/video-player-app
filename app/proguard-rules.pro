@@ -20,3 +20,9 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -dontwarn com.google.android.exoplayer2.source.rtsp.RtspMessageChannel$MessageParser$ReadingState
+
+-keepclassmembers enum * {
+        @com.google.gson.annotations.SerializedName <fields>;
+    }
+
+-keep class uk.ryanwong.dazn.codechallenge.data.model.** { *; }
