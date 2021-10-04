@@ -16,8 +16,9 @@ import java.util.*
 data class Schedule(
 
     @Json(name = "id")
+    @ColumnInfo(name = "schedule_id")
     @PrimaryKey
-    val id: Int,
+    val scheduleId: Int,
 
     @Json(name = "title")
     @ColumnInfo(name = "title")

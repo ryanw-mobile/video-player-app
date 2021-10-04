@@ -16,8 +16,9 @@ import java.util.*
 data class Event(
 
     @Json(name = "id")
+    @ColumnInfo(name = "event_id")
     @PrimaryKey
-    val id: Int,
+    val eventId: Int,
 
     @Json(name = "title")
     @ColumnInfo(name = "title")

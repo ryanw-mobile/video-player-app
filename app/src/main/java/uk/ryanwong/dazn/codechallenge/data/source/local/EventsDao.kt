@@ -22,10 +22,10 @@ interface EventsDao {
     @Query("SELECT * FROM event_table ORDER BY date ASC")
     fun getEvents(): List<Event>
 
-    @Query("SELECT * FROM event_table WHERE id = :eventId")
+    @Query("SELECT * FROM event_table WHERE event_id = :eventId")
     fun observeEventById(eventId: Int): LiveData<Event>
 
-    @Query("SELECT * FROM event_table WHERE id = :eventId")
+    @Query("SELECT * FROM event_table WHERE event_id = :eventId")
     fun getEventById(eventId: Int): Event
 
     // For unit tests
@@ -37,7 +37,7 @@ interface EventsDao {
     @Query("UPDATE event_table SET dirty = 1")
     suspend fun markDirty()
 
-    @Query("DELETE FROM event_table WHERE id = :eventId")
+    @Query("DELETE FROM event_table WHERE event_id = :eventId")
     suspend fun delete(eventId: Int)
 
     @Query("DELETE FROM event_table WHERE dirty = 1")

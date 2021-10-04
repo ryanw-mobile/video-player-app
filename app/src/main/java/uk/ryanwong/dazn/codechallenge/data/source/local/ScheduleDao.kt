@@ -22,10 +22,10 @@ interface ScheduleDao {
     @Query("SELECT * FROM schedule_table ORDER BY date ASC")
     suspend fun getSchedules(): List<Schedule>
 
-    @Query("SELECT * FROM schedule_table WHERE id = :scheduleId")
+    @Query("SELECT * FROM schedule_table WHERE schedule_id = :scheduleId")
     fun observeScheduleById(scheduleId: Int): LiveData<Schedule>
 
-    @Query("SELECT * FROM schedule_table WHERE id = :scheduleId")
+    @Query("SELECT * FROM schedule_table WHERE schedule_id = :scheduleId")
     suspend fun getScheduleById(scheduleId: Int): Schedule
 
     // For unit tests
@@ -37,7 +37,7 @@ interface ScheduleDao {
     @Query("UPDATE schedule_table SET dirty = 1")
     suspend fun markDirty()
 
-    @Query("DELETE FROM schedule_table WHERE id = :scheduleId")
+    @Query("DELETE FROM schedule_table WHERE schedule_id = :scheduleId")
     suspend fun delete(scheduleId: Int)
 
     @Query("DELETE FROM schedule_table WHERE dirty = 1")
