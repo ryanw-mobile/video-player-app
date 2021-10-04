@@ -5,20 +5,20 @@
 
 package uk.ryanwong.dazn.codechallenge.data.repository
 
-import uk.ryanwong.dazn.codechallenge.TestData
-import uk.ryanwong.dazn.codechallenge.TestData.event1
-import uk.ryanwong.dazn.codechallenge.TestData.event2
-import uk.ryanwong.dazn.codechallenge.TestData.event3
-import junit.framework.Assert.fail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.Is.`is`
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import uk.ryanwong.dazn.codechallenge.MainCoroutineRule
+import uk.ryanwong.dazn.codechallenge.TestData
+import uk.ryanwong.dazn.codechallenge.TestData.event1
+import uk.ryanwong.dazn.codechallenge.TestData.event2
+import uk.ryanwong.dazn.codechallenge.TestData.event3
 import java.io.IOException
 
 
