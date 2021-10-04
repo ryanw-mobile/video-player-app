@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import uk.ryanwong.dazn.codechallenge.data.model.Event
 import uk.ryanwong.dazn.codechallenge.data.model.Schedule
 
-@Database(entities = [Event::class, Schedule::class], version = 1, exportSchema = false)
+@Database(entities = [Event::class, Schedule::class], version = 5, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class DaznApiDatabase : RoomDatabase() {
 
