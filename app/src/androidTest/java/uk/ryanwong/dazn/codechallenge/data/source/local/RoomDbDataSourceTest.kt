@@ -73,7 +73,7 @@ class RoomDbDataSourceTest {
         MatcherAssert.assertThat(resultList.size, `is`(1))
 
         val event = resultList[0]
-        MatcherAssert.assertThat(event.id, `is`(event1.id))
+        MatcherAssert.assertThat(event.eventId, `is`(event1.eventId))
         MatcherAssert.assertThat(event.title, `is`(event1.title))
         MatcherAssert.assertThat(event.subtitle, `is`(event1.subtitle))
         MatcherAssert.assertThat(event.date, `is`(event1.date))
@@ -95,7 +95,7 @@ class RoomDbDataSourceTest {
 
         // and the returned item should be the new event
         val event = resultList[0]
-        MatcherAssert.assertThat(event.id, `is`(event1Modified.id))
+        MatcherAssert.assertThat(event.eventId, `is`(event1Modified.eventId))
         MatcherAssert.assertThat(event.title, `is`(event1Modified.title))
         MatcherAssert.assertThat(event.subtitle, `is`(event1Modified.subtitle))
         MatcherAssert.assertThat(event.date, `is`(event1Modified.date))
@@ -132,7 +132,7 @@ class RoomDbDataSourceTest {
         MatcherAssert.assertThat(resultList.size, `is`(1))
 
         val schedule = resultList[0]
-        MatcherAssert.assertThat(schedule.id, `is`(schedule1.id))
+        MatcherAssert.assertThat(schedule.scheduleId, `is`(schedule1.scheduleId))
         MatcherAssert.assertThat(schedule.title, `is`(schedule1.title))
         MatcherAssert.assertThat(schedule.subtitle, `is`(schedule1.subtitle))
         MatcherAssert.assertThat(schedule.date, `is`(schedule1.date))
@@ -153,7 +153,7 @@ class RoomDbDataSourceTest {
 
         // and the returned item should be the new schedule
         val schedule = resultList[0]
-        MatcherAssert.assertThat(schedule.id, `is`(schedule1Modified.id))
+        MatcherAssert.assertThat(schedule.scheduleId, `is`(schedule1Modified.scheduleId))
         MatcherAssert.assertThat(schedule.title, `is`(schedule1Modified.title))
         MatcherAssert.assertThat(schedule.subtitle, `is`(schedule1Modified.subtitle))
         MatcherAssert.assertThat(schedule.date, `is`(schedule1Modified.date))

@@ -55,9 +55,9 @@ class EventDaoTest {
         database.eventsDao.insert(event1)
 
         // THEN - Get the event by id from the database. The loaded event contains the expected values
-        val loaded = database.eventsDao.getEventById(event1.id)
+        val loaded = database.eventsDao.getEventById(event1.eventId)
         MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.id, `is`(event1.id))
+        MatcherAssert.assertThat(loaded.eventId, `is`(event1.eventId))
         MatcherAssert.assertThat(loaded.title, `is`(event1.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(event1.subtitle))
         MatcherAssert.assertThat(loaded.date, `is`(event1.date))
@@ -88,9 +88,9 @@ class EventDaoTest {
         database.eventsDao.insert(event1Modified)
 
         // THEN - When get the event by Id again, it should contain the new values
-        val loaded = database.eventsDao.getEventById(event1Modified.id)
+        val loaded = database.eventsDao.getEventById(event1Modified.eventId)
         MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.id, `is`(event1Modified.id))
+        MatcherAssert.assertThat(loaded.eventId, `is`(event1Modified.eventId))
         MatcherAssert.assertThat(loaded.title, `is`(event1Modified.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(event1Modified.subtitle))
         MatcherAssert.assertThat(loaded.date, `is`(event1Modified.date))
@@ -104,10 +104,10 @@ class EventDaoTest {
         database.eventsDao.insert(event1)
 
         // WHEN - delete the event by Id
-        database.eventsDao.delete(event1.id)
+        database.eventsDao.delete(event1.eventId)
 
         // THEN - When get the event by Id again, it should return null
-        val loaded = database.eventsDao.getEventById(event1.id)
+        val loaded = database.eventsDao.getEventById(event1.eventId)
         MatcherAssert.assertThat(loaded, CoreMatchers.nullValue())
     }
 
@@ -117,10 +117,10 @@ class EventDaoTest {
         database.eventsDao.insertAll(listOf(event1, event2, event3))
 
         // WHEN - clear the database
-        database.eventsDao.delete(event1.id)
+        database.eventsDao.delete(event1.eventId)
 
         // THEN - When get the events, the list should be empty
-        val loaded = database.eventsDao.getEventById(event1.id)
+        val loaded = database.eventsDao.getEventById(event1.eventId)
         MatcherAssert.assertThat(loaded, CoreMatchers.nullValue())
     }
 
@@ -148,9 +148,9 @@ class EventDaoTest {
         database.eventsDao.insert(event1)
 
         // THEN - Get the event by id from the database. The loaded event contains the expected values
-        val loaded = database.eventsDao.getEventById(event1.id)
+        val loaded = database.eventsDao.getEventById(event1.eventId)
         MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.id, `is`(event1.id))
+        MatcherAssert.assertThat(loaded.eventId, `is`(event1.eventId))
         MatcherAssert.assertThat(loaded.title, `is`(event1.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(event1.subtitle))
         MatcherAssert.assertThat(loaded.date, `is`(event1.date))
@@ -168,9 +168,9 @@ class EventDaoTest {
         database.eventsDao.markDirty()
 
         // THEN - Get the event by id from the database. The loaded event contains the expected values
-        val loaded = database.eventsDao.getEventById(event1.id)
+        val loaded = database.eventsDao.getEventById(event1.eventId)
         MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.id, `is`(event1.id))
+        MatcherAssert.assertThat(loaded.eventId, `is`(event1.eventId))
         MatcherAssert.assertThat(loaded.title, `is`(event1.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(event1.subtitle))
         MatcherAssert.assertThat(loaded.date, `is`(event1.date))
@@ -189,9 +189,9 @@ class EventDaoTest {
         database.eventsDao.insert(event1Modified)
 
         // THEN - Get the event by id from the database. The loaded event contains the expected values
-        val loaded = database.eventsDao.getEventById(event1Modified.id)
+        val loaded = database.eventsDao.getEventById(event1Modified.eventId)
         MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.id, `is`(event1Modified.id))
+        MatcherAssert.assertThat(loaded.eventId, `is`(event1Modified.eventId))
         MatcherAssert.assertThat(loaded.title, `is`(event1Modified.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(event1Modified.subtitle))
         MatcherAssert.assertThat(loaded.date, `is`(event1Modified.date))
@@ -215,7 +215,7 @@ class EventDaoTest {
         MatcherAssert.assertThat(loaded.size, `is`(1))
         val loadedEvent = loaded[0]
         MatcherAssert.assertThat(loadedEvent, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loadedEvent.id, `is`(event2.id))
+        MatcherAssert.assertThat(loadedEvent.eventId, `is`(event2.eventId))
         MatcherAssert.assertThat(loadedEvent.title, `is`(event2.title))
         MatcherAssert.assertThat(loadedEvent.subtitle, `is`(event2.subtitle))
         MatcherAssert.assertThat(loadedEvent.date, `is`(event2.date))

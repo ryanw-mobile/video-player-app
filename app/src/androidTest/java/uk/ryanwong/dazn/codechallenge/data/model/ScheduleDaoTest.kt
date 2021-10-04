@@ -55,9 +55,9 @@ class ScheduleDaoTest {
         database.scheduleDao.insert(schedule1)
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
-        val loaded = database.scheduleDao.getScheduleById(schedule1.id)
+        val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
         MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.id, `is`(schedule1.id))
+        MatcherAssert.assertThat(loaded.scheduleId, `is`(schedule1.scheduleId))
         MatcherAssert.assertThat(loaded.title, `is`(schedule1.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1.subtitle))
         MatcherAssert.assertThat(loaded.date, `is`(schedule1.date))
@@ -87,9 +87,9 @@ class ScheduleDaoTest {
         database.scheduleDao.insert(schedule1Modified)
 
         // THEN - When get the schedule by Id again, it should contain the new values
-        val loaded = database.scheduleDao.getScheduleById(schedule1Modified.id)
+        val loaded = database.scheduleDao.getScheduleById(schedule1Modified.scheduleId)
         MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.id, `is`(schedule1Modified.id))
+        MatcherAssert.assertThat(loaded.scheduleId, `is`(schedule1Modified.scheduleId))
         MatcherAssert.assertThat(loaded.title, `is`(schedule1Modified.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1Modified.subtitle))
         MatcherAssert.assertThat(loaded.date, `is`(schedule1Modified.date))
@@ -102,10 +102,10 @@ class ScheduleDaoTest {
         database.scheduleDao.insert(schedule1)
 
         // WHEN - delete the schedule by Id
-        database.scheduleDao.delete(schedule1.id)
+        database.scheduleDao.delete(schedule1.scheduleId)
 
         // THEN - When get the schedule by Id again, it should return null
-        val loaded = database.scheduleDao.getScheduleById(schedule1.id)
+        val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
         MatcherAssert.assertThat(loaded, CoreMatchers.nullValue())
     }
 
@@ -115,10 +115,10 @@ class ScheduleDaoTest {
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
 
         // WHEN - clear the database
-        database.scheduleDao.delete(schedule1.id)
+        database.scheduleDao.delete(schedule1.scheduleId)
 
         // THEN - When get the schedules, the list should be empty
-        val loaded = database.scheduleDao.getScheduleById(schedule1.id)
+        val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
         MatcherAssert.assertThat(loaded, CoreMatchers.nullValue())
     }
 
@@ -146,9 +146,9 @@ class ScheduleDaoTest {
         database.scheduleDao.insert(schedule1)
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
-        val loaded = database.scheduleDao.getScheduleById(schedule1.id)
+        val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
         MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.id, `is`(schedule1.id))
+        MatcherAssert.assertThat(loaded.scheduleId, `is`(schedule1.scheduleId))
         MatcherAssert.assertThat(loaded.title, `is`(schedule1.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1.subtitle))
         MatcherAssert.assertThat(loaded.date, `is`(schedule1.date))
@@ -165,9 +165,9 @@ class ScheduleDaoTest {
         database.scheduleDao.markDirty()
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
-        val loaded = database.scheduleDao.getScheduleById(schedule1.id)
+        val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
         MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.id, `is`(schedule1.id))
+        MatcherAssert.assertThat(loaded.scheduleId, `is`(schedule1.scheduleId))
         MatcherAssert.assertThat(loaded.title, `is`(schedule1.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1.subtitle))
         MatcherAssert.assertThat(loaded.date, `is`(schedule1.date))
@@ -185,9 +185,9 @@ class ScheduleDaoTest {
         database.scheduleDao.insert(schedule1Modified)
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
-        val loaded = database.scheduleDao.getScheduleById(schedule1Modified.id)
+        val loaded = database.scheduleDao.getScheduleById(schedule1Modified.scheduleId)
         MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.id, `is`(schedule1Modified.id))
+        MatcherAssert.assertThat(loaded.scheduleId, `is`(schedule1Modified.scheduleId))
         MatcherAssert.assertThat(loaded.title, `is`(schedule1Modified.title))
         MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1Modified.subtitle))
         MatcherAssert.assertThat(loaded.date, `is`(schedule1Modified.date))
@@ -210,7 +210,7 @@ class ScheduleDaoTest {
         MatcherAssert.assertThat(loaded.size, `is`(1))
         val loadedSchedule = loaded[0]
         MatcherAssert.assertThat(loadedSchedule, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loadedSchedule.id, `is`(schedule2.id))
+        MatcherAssert.assertThat(loadedSchedule.scheduleId, `is`(schedule2.scheduleId))
         MatcherAssert.assertThat(loadedSchedule.title, `is`(schedule2.title))
         MatcherAssert.assertThat(loadedSchedule.subtitle, `is`(schedule2.subtitle))
         MatcherAssert.assertThat(loadedSchedule.date, `is`(schedule2.date))
