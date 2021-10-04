@@ -187,7 +187,6 @@ dependencies {
     // Dependencies for Android instrumented unit tests
     androidTestImplementation 'org.mockito:mockito-core:3.12.4'
     androidTestImplementation 'com.linkedin.dexmaker:dexmaker-mockito:2.28.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
     implementation 'androidx.test.espresso:espresso-idling-resource:3.4.0'
 
