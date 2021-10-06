@@ -8,6 +8,8 @@ import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import timber.log.Timber
+import uk.ryanwong.dazn.codechallenge.util.extensions.fadeIn
+import uk.ryanwong.dazn.codechallenge.util.extensions.fadeOut
 import java.util.*
 
 

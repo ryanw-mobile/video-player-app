@@ -11,7 +11,7 @@ import uk.ryanwong.dazn.codechallenge.DaznApp
 import uk.ryanwong.dazn.codechallenge.base.BaseFragment
 import uk.ryanwong.dazn.codechallenge.data.model.Schedule
 import uk.ryanwong.dazn.codechallenge.databinding.FragmentScheduleBinding
-import uk.ryanwong.dazn.codechallenge.util.setupRefreshLayout
+import uk.ryanwong.dazn.codechallenge.util.extensions.setupRefreshLayout
 
 class ScheduleFragment : BaseFragment() {
 
