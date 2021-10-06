@@ -38,6 +38,8 @@ class ExoplayerActivity : AppCompatActivity() {
         // Safe-args helped ensure the videoUrl is available
         val args: ExoplayerActivityArgs by navArgs()
         videoUrl = args.videoUrl
+        
+        binding.lifecycleOwner = this
     }
 
     public override fun onStart() {
