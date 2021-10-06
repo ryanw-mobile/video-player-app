@@ -3,7 +3,7 @@ package uk.ryanwong.dazn.codechallenge.base
 import android.app.AlertDialog
 import androidx.fragment.app.Fragment
 import uk.ryanwong.dazn.codechallenge.R
-import uk.ryanwong.dazn.codechallenge.util.ErrorMessageFilter.Companion.filterErrorMessage
+import uk.ryanwong.dazn.codechallenge.util.filterErrorMessage
 
 /**
  * Base Fragment to observe on the common LiveData objects.
