@@ -21,8 +21,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_mini"
-        android:onClick="@{() -> clickListener.onClick(event)}">
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{() -> clickListener.onClick(event)}"
+        android:padding="@dimen/margin_mini">
 
         <ImageView
             android:id="@+id/thumbnail"
