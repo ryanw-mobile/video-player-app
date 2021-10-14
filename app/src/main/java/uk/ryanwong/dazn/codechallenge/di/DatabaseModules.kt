@@ -13,18 +13,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
-import uk.ryanwong.dazn.codechallenge.data.source.local.daos.DaznApiDaos
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 object DatabaseModule {
-
-    @Provides
-    @Singleton
-    fun provideLogDaos(database: DaznApiDatabase): DaznApiDaos {
-        return DaznApiDaos(database.eventsDao, database.scheduleDao)
-    }
 
     @Provides
     @Singleton

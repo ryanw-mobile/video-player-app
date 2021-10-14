@@ -11,6 +11,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
 import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
+import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
 import uk.ryanwong.dazn.codechallenge.data.source.local.RoomDbDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.local.daos.DaznApiDaos
 import uk.ryanwong.dazn.codechallenge.data.source.remote.SandBoxAPIDataSource
@@ -19,6 +20,12 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object DataSourceModules {
+
+    @Provides
+    @Singleton
+    fun provideDaznApiDaos(database: DaznApiDatabase): DaznApiDaos {
+        return DaznApiDaos(database.eventsDao, database.scheduleDao)
+    }
 
     @Provides
     @Singleton
