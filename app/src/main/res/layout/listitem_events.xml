@@ -11,7 +11,7 @@
 
         <variable
             name="event"
-            type="uk.ryanwong.dazn.codechallenge.data.model.Event" />
+            type="uk.ryanwong.dazn.codechallenge.domain.models.Event" />
 
         <variable
             name="clickListener"

@@ -7,8 +7,8 @@ package uk.ryanwong.dazn.codechallenge.data.repository
 
 import androidx.lifecycle.LiveData
 import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
-import uk.ryanwong.dazn.codechallenge.data.model.Event
-import uk.ryanwong.dazn.codechallenge.data.model.Schedule
+import uk.ryanwong.dazn.codechallenge.domain.models.Event
+import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 
 class FakeLocalDataSource(
     events: MutableList<Event> = mutableListOf(),
@@ -16,7 +16,7 @@ class FakeLocalDataSource(
 ) : BaseLocalDataSource {
     private var events = events
     private var schedules = schedules
-    
+
     override fun observeEvents(): LiveData<List<Event>> {
         TODO("Not yet implemented")
     }

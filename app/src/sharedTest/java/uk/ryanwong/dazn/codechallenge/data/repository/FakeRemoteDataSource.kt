@@ -6,9 +6,9 @@
 package uk.ryanwong.dazn.codechallenge.data.repository
 
 import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
-import uk.ryanwong.dazn.codechallenge.data.model.Event
-import uk.ryanwong.dazn.codechallenge.data.model.Schedule
 import uk.ryanwong.dazn.codechallenge.data.source.remote.ApiResult
+import uk.ryanwong.dazn.codechallenge.domain.models.Event
+import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import java.io.IOException
 
 class FakeRemoteDataSource(

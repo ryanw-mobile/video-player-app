@@ -1,36 +1,45 @@
-package uk.ryanwong.dazn.codechallenge.data.source.local
+/*
+ * Copyright (c) 2021. Ryan Wong (hello@ryanwong.co.uk)
+ *
+ */
+
+package uk.ryanwong.dazn.codechallenge.data.source.local.daos
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import uk.ryanwong.dazn.codechallenge.data.model.Schedule
+import uk.ryanwong.dazn.codechallenge.data.source.local.entities.ScheduleDbEntity
 
 @Dao
 interface ScheduleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(schedule: Schedule)
+    suspend fun insert(scheduleDbEntity: ScheduleDbEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(schedules: List<Schedule>)
+    suspend fun insertAll(scheduleDBEntities: List<ScheduleDbEntity>)
+
+    // suspend not needed
+    // Room generates all the necessary code to update the LiveData object when a database is updated.
+    // The generated code runs the query asynchronously on a background thread when needed.
+    // This pattern is useful for keeping the data displayed in a UI in sync with the data stored in a database.
+    @Query("SELECT * FROM schedule_table ORDER BY date ASC")
+    fun observeSchedules(): LiveData<List<ScheduleDbEntity>>
 
     @Query("SELECT * FROM schedule_table ORDER BY date ASC")
-    fun observeSchedules(): LiveData<List<Schedule>>
-
-    @Query("SELECT * FROM schedule_table ORDER BY date ASC")
-    suspend fun getSchedules(): List<Schedule>
+    suspend fun getSchedules(): List<ScheduleDbEntity>
 
     @Query("SELECT * FROM schedule_table WHERE schedule_id = :scheduleId")
-    fun observeScheduleById(scheduleId: Int): LiveData<Schedule>
+    fun observeScheduleById(scheduleId: Int): LiveData<ScheduleDbEntity>
 
     @Query("SELECT * FROM schedule_table WHERE schedule_id = :scheduleId")
-    suspend fun getScheduleById(scheduleId: Int): Schedule
+    suspend fun getScheduleById(scheduleId: Int): ScheduleDbEntity
 
     // For unit tests
     @Query("SELECT * FROM schedule_table WHERE dirty = 1")
-    suspend fun getDirtySchedules(): List<Schedule>
+    suspend fun getDirtySchedules(): List<ScheduleDbEntity>
 
     // SQLite does not have a boolean data type.
     // Room maps it to an INTEGER column, mapping true to 1 and false to 0.

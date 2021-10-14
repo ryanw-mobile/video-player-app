@@ -18,8 +18,8 @@ import uk.ryanwong.dazn.codechallenge.TestData.schedule1
 import uk.ryanwong.dazn.codechallenge.TestData.schedule1Modified
 import uk.ryanwong.dazn.codechallenge.TestData.schedule2
 import uk.ryanwong.dazn.codechallenge.TestData.schedule3
-import uk.ryanwong.dazn.codechallenge.data.model.Schedule
 import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
+import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.getOrAwaitValue
 
 @ExperimentalCoroutinesApi

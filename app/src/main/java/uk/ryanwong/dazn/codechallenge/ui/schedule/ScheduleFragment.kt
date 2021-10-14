@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import uk.ryanwong.dazn.codechallenge.DaznApp
 import uk.ryanwong.dazn.codechallenge.base.BaseFragment
-import uk.ryanwong.dazn.codechallenge.data.model.Schedule
+import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.databinding.FragmentScheduleBinding
 import uk.ryanwong.dazn.codechallenge.util.extensions.setupRefreshLayout
 

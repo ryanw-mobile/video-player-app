@@ -6,13 +6,13 @@
 package uk.ryanwong.dazn.codechallenge.data.source.remote
 
 import retrofit2.http.GET
-import uk.ryanwong.dazn.codechallenge.data.model.Event
-import uk.ryanwong.dazn.codechallenge.data.model.Schedule
+import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.EventNetworkEntity
+import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.ScheduleNetworkEntity
 
 interface DaznApiService {
     @GET("getEvents")
-    suspend fun getEvents(): List<Event>
+    suspend fun getEvents(): List<EventNetworkEntity>
 
     @GET("getSchedule")
-    suspend fun getSchedule(): List<Schedule>
+    suspend fun getSchedule(): List<ScheduleNetworkEntity>
 }

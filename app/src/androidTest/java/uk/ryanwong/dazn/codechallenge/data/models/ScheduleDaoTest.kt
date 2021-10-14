@@ -3,7 +3,7 @@
  *
  */
 
-package uk.ryanwong.dazn.codechallenge.data.model
+package uk.ryanwong.dazn.codechallenge.data.models
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
@@ -25,6 +25,7 @@ import uk.ryanwong.dazn.codechallenge.TestData.schedule1Modified
 import uk.ryanwong.dazn.codechallenge.TestData.schedule2
 import uk.ryanwong.dazn.codechallenge.TestData.schedule3
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
+import uk.ryanwong.dazn.codechallenge.data.source.local.entities.asDatabaseModel
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -52,7 +53,7 @@ class ScheduleDaoTest {
         // Do Nothing
 
         // WHEN - Insert an schedule
-        database.scheduleDao.insert(schedule1)
+        database.scheduleDao.insert(schedule1.asDatabaseModel())
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
         val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
@@ -70,7 +71,7 @@ class ScheduleDaoTest {
         // do nothing
 
         // WHEN - use insertAll to insert three schedules
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
+        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
 
         // THEN - When get the schedules, the list size should be 3
         val loaded = database.scheduleDao.getSchedules()
@@ -80,11 +81,11 @@ class ScheduleDaoTest {
     @Test
     fun upsertSchedule_GetById_ExpectsUpdatedSchedule() = runBlockingTest {
         // GIVEN - Insert an schedule
-        database.scheduleDao.insert(schedule1)
+        database.scheduleDao.insert(schedule1.asDatabaseModel())
 
         // WHEN - Update the schedule with a same Id, but with different data
         // get the schedule by id from the database
-        database.scheduleDao.insert(schedule1Modified)
+        database.scheduleDao.insert(schedule1Modified.asDatabaseModel())
 
         // THEN - When get the schedule by Id again, it should contain the new values
         val loaded = database.scheduleDao.getScheduleById(schedule1Modified.scheduleId)
@@ -99,7 +100,7 @@ class ScheduleDaoTest {
     @Test
     fun deleteSchedule_GetById_ExpectsNull() = runBlockingTest {
         // GIVEN - Insert an schedule
-        database.scheduleDao.insert(schedule1)
+        database.scheduleDao.insert(schedule1.asDatabaseModel())
 
         // WHEN - delete the schedule by Id
         database.scheduleDao.delete(schedule1.scheduleId)
@@ -112,7 +113,7 @@ class ScheduleDaoTest {
     @Test
     fun insertAll_DeleteOneAndGetById_ExpectsNull() = runBlockingTest {
         // GIVEN - Insert 3 schedules in a list
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
+        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
 
         // WHEN - clear the database
         database.scheduleDao.delete(schedule1.scheduleId)
@@ -125,7 +126,7 @@ class ScheduleDaoTest {
     @Test
     fun insertAll_Clear_ExpectsEmptyList() = runBlockingTest {
         // GIVEN - Insert 3 schedules in a list
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
+        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
 
         // WHEN - clear the database
         database.scheduleDao.clear()
@@ -143,7 +144,7 @@ class ScheduleDaoTest {
         // Do Nothing
 
         // WHEN - Insert an schedule
-        database.scheduleDao.insert(schedule1)
+        database.scheduleDao.insert(schedule1.asDatabaseModel())
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
         val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
@@ -159,7 +160,7 @@ class ScheduleDaoTest {
     @Test
     fun markDirty_GetById_ExpectsDirtyTrue() = runBlockingTest {
         // GIVEN - multiple schedules
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
+        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
 
         // WHEN - Insert an schedule and mark it as dirty
         database.scheduleDao.markDirty()
@@ -178,11 +179,11 @@ class ScheduleDaoTest {
     @Test
     fun dirtySchedules_UpdateSchedule_ExpectsDirtyFalse() = runBlockingTest {
         // GIVEN - multiple schedules and marked dirty
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
+        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
         database.scheduleDao.markDirty()
 
         // WHEN - Upsert schedule 1
-        database.scheduleDao.insert(schedule1Modified)
+        database.scheduleDao.insert(schedule1Modified.asDatabaseModel())
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
         val loaded = database.scheduleDao.getScheduleById(schedule1Modified.scheduleId)
@@ -198,11 +199,11 @@ class ScheduleDaoTest {
     @Test
     fun dirtySchedules_InsertOneAndDeleteDirty_ExpectsOneSchedule() = runBlockingTest {
         // GIVEN - multiple schedules and marked dirty
-        database.scheduleDao.insertAll(listOf(schedule1, schedule3))
+        database.scheduleDao.insertAll(listOf(schedule1, schedule3).asDatabaseModel())
         database.scheduleDao.markDirty()
 
         // WHEN - Insert schedule 2
-        database.scheduleDao.insert(schedule2)
+        database.scheduleDao.insert(schedule2.asDatabaseModel())
         database.scheduleDao.deleteDirty()
 
         // THEN - Get all schedules. Expect only schedule 2 is returned

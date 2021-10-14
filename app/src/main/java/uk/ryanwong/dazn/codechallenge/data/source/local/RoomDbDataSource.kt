@@ -6,13 +6,17 @@
 package uk.ryanwong.dazn.codechallenge.data.source.local
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
-import uk.ryanwong.dazn.codechallenge.data.model.Event
-import uk.ryanwong.dazn.codechallenge.data.model.Schedule
+import uk.ryanwong.dazn.codechallenge.data.source.local.daos.DaznApiDaos
+import uk.ryanwong.dazn.codechallenge.data.source.local.entities.asDatabaseModel
+import uk.ryanwong.dazn.codechallenge.data.source.local.entities.asDomainModel
+import uk.ryanwong.dazn.codechallenge.domain.models.Event
+import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 
 /**
  * Concrete implementation of a data source as a db.
@@ -22,16 +26,41 @@ class RoomDbDataSource internal constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : BaseLocalDataSource {
 
-    override fun observeEvents(): LiveData<List<Event>> = daznApiDaos.eventsDao.observeEvents()
-    override fun observeSchedule(): LiveData<List<Schedule>> =
-        daznApiDaos.scheduleDao.observeSchedules()
+    override fun observeEvents(): LiveData<List<Event>> {
+        return Transformations.map(daznApiDaos.eventsDao.observeEvents()) {
+            it.map { item ->
+                Event(
+                    item.eventId,
+                    item.title,
+                    item.subtitle,
+                    item.date,
+                    item.imageUrl,
+                    item.videoUrl
+                )
+            }
+        }
+    }
+
+    override fun observeSchedule(): LiveData<List<Schedule>> {
+        return Transformations.map(daznApiDaos.scheduleDao.observeSchedules()) {
+            it.map { item ->
+                Schedule(
+                    item.scheduleId,
+                    item.title,
+                    item.subtitle,
+                    item.date,
+                    item.imageUrl
+                )
+            }
+        }
+    }
 
     /**
      * Returns the events cached in the local database.
      * Data can be cached using syncEvents(...)
      */
     override suspend fun getEvents(): List<Event> = withContext(ioDispatcher) {
-        daznApiDaos.eventsDao.getEvents()
+        daznApiDaos.eventsDao.getEvents().asDomainModel()
     }
 
     /**
@@ -39,7 +68,7 @@ class RoomDbDataSource internal constructor(
      * Data can be cached using syncSchedules(...)
      */
     override suspend fun getSchedules(): List<Schedule> = withContext(ioDispatcher) {
-        daznApiDaos.scheduleDao.getSchedules()
+        daznApiDaos.scheduleDao.getSchedules().asDomainModel()
     }
 
     // Implementation note:
@@ -53,7 +82,7 @@ class RoomDbDataSource internal constructor(
         // run: Object configuration and computing the result. Returns lambda result
         daznApiDaos.eventsDao.run {
             markDirty()
-            insertAll(events)
+            insertAll(events.asDatabaseModel())
             deleteDirty()
         }
     }
@@ -62,7 +91,7 @@ class RoomDbDataSource internal constructor(
         Timber.d("syncSchedule() - processed ${schedules.size} items")
         daznApiDaos.scheduleDao.run {
             markDirty()
-            insertAll(schedules)
+            insertAll(schedules.asDatabaseModel())
             deleteDirty()
         }
     }

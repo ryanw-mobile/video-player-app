@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import uk.ryanwong.dazn.codechallenge.DaznApp
 import uk.ryanwong.dazn.codechallenge.base.BaseFragment
-import uk.ryanwong.dazn.codechallenge.data.model.Event
 import uk.ryanwong.dazn.codechallenge.databinding.FragmentEventsBinding
+import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.util.extensions.setupRefreshLayout
 
 class EventsFragment : BaseFragment() {

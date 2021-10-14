@@ -32,7 +32,7 @@ import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
 @ExperimentalCoroutinesApi
 class SchedulesFragmentTest {
     private lateinit var repository: FakeRepository
-
+    
     @Before
     fun initRepository() {
         // For testing we inject a fake repository at the ServiceLocator for test doubles

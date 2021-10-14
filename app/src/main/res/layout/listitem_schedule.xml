@@ -11,7 +11,7 @@
 
         <variable
             name="schedule"
-            type="uk.ryanwong.dazn.codechallenge.data.model.Schedule" />
+            type="uk.ryanwong.dazn.codechallenge.domain.models.Schedule" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

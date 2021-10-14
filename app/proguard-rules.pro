@@ -25,4 +25,4 @@
         @com.google.gson.annotations.SerializedName <fields>;
     }
 
--keep class uk.ryanwong.dazn.codechallenge.data.model.** { *; }
+-keep class uk.ryanwong.dazn.codechallenge.data.source.remote.entities.** { *; }

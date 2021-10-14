@@ -3,10 +3,10 @@
  *
  */
 
-package uk.ryanwong.dazn.codechallenge.data.source.local
+package uk.ryanwong.dazn.codechallenge.data.source.local.daos
 
-import uk.ryanwong.dazn.codechallenge.data.source.local.EventsDao
-import uk.ryanwong.dazn.codechallenge.data.source.local.ScheduleDao
+import uk.ryanwong.dazn.codechallenge.data.source.local.daos.EventsDao
+import uk.ryanwong.dazn.codechallenge.data.source.local.daos.ScheduleDao
 
 /***
  * This data class is designed to make a balance between splitting Daos for easier maintenance

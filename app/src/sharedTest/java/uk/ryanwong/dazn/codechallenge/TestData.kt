@@ -5,8 +5,8 @@
 
 package uk.ryanwong.dazn.codechallenge
 
-import uk.ryanwong.dazn.codechallenge.data.model.Event
-import uk.ryanwong.dazn.codechallenge.data.model.Schedule
+import uk.ryanwong.dazn.codechallenge.domain.models.Event
+import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.util.parseTimeStamp
 
 /*
@@ -23,7 +23,7 @@ object TestData {
         "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/310176837169_image-header_pDach_1554579780000.jpeg?alt=media&token=1777d26b-d051-4b5f-87a8-7633d3d6dd20",
         "https://firebasestorage.googleapis.com/v0/b/dazn-recruitment/o/promo.mp4?alt=media"
     )
-    
+
     val event1Modified = Event(
         1,
         "Nîmes v Rennes",

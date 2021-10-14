@@ -6,8 +6,8 @@
 package uk.ryanwong.dazn.codechallenge.base
 
 import androidx.lifecycle.LiveData
-import uk.ryanwong.dazn.codechallenge.data.model.Event
-import uk.ryanwong.dazn.codechallenge.data.model.Schedule
+import uk.ryanwong.dazn.codechallenge.domain.models.Event
+import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 
 interface BaseRepository {
 

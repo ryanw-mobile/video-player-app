@@ -8,8 +8,8 @@ package uk.ryanwong.dazn.codechallenge.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import uk.ryanwong.dazn.codechallenge.base.BaseRepository
-import uk.ryanwong.dazn.codechallenge.data.model.Event
-import uk.ryanwong.dazn.codechallenge.data.model.Schedule
+import uk.ryanwong.dazn.codechallenge.domain.models.Event
+import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.util.wrapEspressoIdlingResource
 import java.io.IOException
 
