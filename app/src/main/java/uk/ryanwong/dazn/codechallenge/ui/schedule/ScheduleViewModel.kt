@@ -2,12 +2,17 @@ package uk.ryanwong.dazn.codechallenge.ui.schedule
 
 import android.os.CountDownTimer
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 import uk.ryanwong.dazn.codechallenge.base.BaseViewModel
+import javax.inject.Inject
 
-class ScheduleViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
+@HiltViewModel
+class ScheduleViewModel @Inject constructor(private val baseRepository: BaseRepository) :
+    BaseViewModel() {
 
     private val timer: CountDownTimer = object : CountDownTimer(COUNTDOWN_TIME, COUNTDOWN_TIME) {
         override fun onTick(millisUntilFinished: Long) {}

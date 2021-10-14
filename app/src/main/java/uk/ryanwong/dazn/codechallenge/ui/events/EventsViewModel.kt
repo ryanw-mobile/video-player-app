@@ -1,14 +1,17 @@
 package uk.ryanwong.dazn.codechallenge.ui.events
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 import uk.ryanwong.dazn.codechallenge.base.BaseViewModel
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.util.SingleLiveEvent
+import javax.inject.Inject
 
-
-class EventsViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
+@HiltViewModel
+class EventsViewModel @Inject constructor(private val baseRepository: BaseRepository) :
+    BaseViewModel() {
 
     val openVideoPlayerUrl: SingleLiveEvent<String> = SingleLiveEvent()
 

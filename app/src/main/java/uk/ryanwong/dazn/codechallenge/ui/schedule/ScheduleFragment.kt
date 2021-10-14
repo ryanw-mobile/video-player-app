@@ -7,19 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import uk.ryanwong.dazn.codechallenge.DaznApp
+import dagger.hilt.android.AndroidEntryPoint
 import uk.ryanwong.dazn.codechallenge.base.BaseFragment
-import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.databinding.FragmentScheduleBinding
+import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.util.extensions.setupRefreshLayout
+import javax.inject.Inject
 
-class ScheduleFragment : BaseFragment() {
+@AndroidEntryPoint
+class ScheduleFragment @Inject constructor() : BaseFragment() {
 
-    override val viewModel by viewModels<ScheduleViewModel> {
-        ScheduleViewModelFactory(
-            (requireContext().applicationContext as DaznApp).apiRepository
-        )
-    }
+    override val viewModel: ScheduleViewModel by viewModels()
     private lateinit var binding: FragmentScheduleBinding
     private val scheduleAdapter = ScheduleAdapter().apply {
         stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY

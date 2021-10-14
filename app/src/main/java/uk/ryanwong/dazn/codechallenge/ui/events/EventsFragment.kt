@@ -13,19 +13,16 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import uk.ryanwong.dazn.codechallenge.DaznApp
+import dagger.hilt.android.AndroidEntryPoint
 import uk.ryanwong.dazn.codechallenge.base.BaseFragment
 import uk.ryanwong.dazn.codechallenge.databinding.FragmentEventsBinding
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.util.extensions.setupRefreshLayout
 
+@AndroidEntryPoint
 class EventsFragment : BaseFragment() {
 
-    override val viewModel by viewModels<EventsViewModel> {
-        EventsViewModelFactory(
-            (requireContext().applicationContext as DaznApp).apiRepository
-        )
-    }
+    override val viewModel : EventsViewModel by viewModels()
     private lateinit var binding: FragmentEventsBinding
     private val eventsAdapter = EventsAdapter(EventClickListener {
         viewModel.setEventClicked(it)

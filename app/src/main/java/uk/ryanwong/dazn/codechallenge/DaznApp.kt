@@ -8,15 +8,14 @@ package uk.ryanwong.dazn.codechallenge
 import android.app.Application
 import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import timber.log.Timber.Forest.plant
 import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 
+@HiltAndroidApp
 class DaznApp : Application() {
-
-    val apiRepository: BaseRepository
-        get() = ServiceLocator.provideApiRepository(this)
-
+    
     override fun onCreate() {
         super.onCreate()
 

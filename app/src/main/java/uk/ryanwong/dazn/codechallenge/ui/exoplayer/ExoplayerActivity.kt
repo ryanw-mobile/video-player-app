@@ -11,6 +11,7 @@ import androidx.navigation.navArgs
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
+import dagger.hilt.android.AndroidEntryPoint
 import uk.ryanwong.dazn.codechallenge.databinding.ActivityExoplayerBinding
 
 /****
@@ -20,6 +21,7 @@ import uk.ryanwong.dazn.codechallenge.databinding.ActivityExoplayerBinding
  * Rotation / instance state handling has not been handled intentionally in this project,
  * but this could be done.
  */
+@AndroidEntryPoint
 class ExoplayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityExoplayerBinding
