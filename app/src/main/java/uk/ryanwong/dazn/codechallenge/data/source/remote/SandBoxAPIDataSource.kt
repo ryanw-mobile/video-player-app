@@ -14,8 +14,9 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
-import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.EventNetworkEntity
-import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.ScheduleNetworkEntity
+import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.asDomainModel
+import uk.ryanwong.dazn.codechallenge.domain.models.Event
+import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import java.util.*
 
 private const val BASE_URL = "https://us-central1-dazn-sandbox.cloudfunctions.net/"
@@ -47,10 +48,10 @@ class SandBoxAPIDataSource(private val ioDispatcher: CoroutineDispatcher = Dispa
     /***
      * Retrieve events from network
      */
-    override suspend fun getEvents(): ApiResult<List<EventNetworkEntity>> = withContext(ioDispatcher) {
+    override suspend fun getEvents(): ApiResult<List<Event>> = withContext(ioDispatcher) {
         return@withContext try {
             // We could add sorting here, but it is redundant as our local data source will handle that
-            ApiResult.Success(retrofitService.getEvents())  // .sortedBy { it.date }
+            ApiResult.Success(retrofitService.getEvents().asDomainModel())  // .sortedBy { it.date }
         } catch (e: Exception) {
             ApiResult.Error(e)
         }
@@ -59,10 +60,12 @@ class SandBoxAPIDataSource(private val ioDispatcher: CoroutineDispatcher = Dispa
     /***
      * Retrieve events from network
      */
-    override suspend fun getSchedules(): ApiResult<List<ScheduleNetworkEntity>> = withContext(ioDispatcher) {
+    override suspend fun getSchedules(): ApiResult<List<Schedule>> = withContext(ioDispatcher) {
         return@withContext try {
             // We could add sorting here, but it is redundant as our local data source will handle that
-            ApiResult.Success(retrofitService.getSchedule())  // .sortedBy { it.date }
+            ApiResult.Success(
+                retrofitService.getSchedule().asDomainModel()
+            )  // .sortedBy { it.date }
         } catch (e: Exception) {
             ApiResult.Error(e)
         }

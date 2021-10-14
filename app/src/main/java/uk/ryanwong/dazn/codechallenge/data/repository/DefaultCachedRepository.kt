@@ -12,9 +12,6 @@ import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
 import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
 import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 import uk.ryanwong.dazn.codechallenge.data.source.remote.ApiResult
-import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.EventNetworkEntity
-import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.ScheduleNetworkEntity
-import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.asDomainModel
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.util.wrapEspressoIdlingResource
@@ -67,7 +64,7 @@ class DefaultCachedRepository(
             val remoteEvents = remoteDataSource.getEvents()
 
             if (remoteEvents is ApiResult.Success) {
-                localDataSource.submitEvents((remoteEvents.data as List<EventNetworkEntity>).asDomainModel())
+                localDataSource.submitEvents(remoteEvents.data as List<Event>)
             } else if (remoteEvents is ApiResult.Error) {
                 throw remoteEvents.exception
             }
@@ -79,7 +76,7 @@ class DefaultCachedRepository(
             val remoteSchedules = remoteDataSource.getSchedules()
 
             if (remoteSchedules is ApiResult.Success) {
-                localDataSource.submitSchedule((remoteSchedules.data as List<ScheduleNetworkEntity>).asDomainModel())
+                localDataSource.submitSchedule(remoteSchedules.data as List<Schedule>)
             } else if (remoteSchedules is ApiResult.Error) {
                 throw remoteSchedules.exception
             }
