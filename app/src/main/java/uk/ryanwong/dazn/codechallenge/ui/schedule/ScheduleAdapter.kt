@@ -11,11 +11,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import timber.log.Timber
-import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.databinding.ListitemScheduleBinding
+import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.ui.schedule.ScheduleAdapter.ViewHolder
+import javax.inject.Inject
 
-class ScheduleAdapter : ListAdapter<Schedule, ViewHolder>(ScheduleDiffCallback()) {
+class ScheduleAdapter @Inject constructor() :
+    ListAdapter<Schedule, ViewHolder>(ScheduleDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)

@@ -19,22 +19,8 @@ class ScheduleFragment @Inject constructor() : BaseFragment() {
 
     override val viewModel: ScheduleViewModel by viewModels()
     private lateinit var binding: FragmentScheduleBinding
-    private val scheduleAdapter = ScheduleAdapter().apply {
-        stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-
-        // This eliminates flickering
-        setHasStableIds(true)
-
-        // This overrides the adapter's intention to scroll back to the top
-        registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                viewModel.listState?.let {
-                    // layoutManager.scrollToPositionWithOffset(position, 0)
-                    binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
-                }
-            }
-        })
-    }
+    @Inject
+    lateinit var scheduleAdapter: ScheduleAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +33,23 @@ class ScheduleFragment @Inject constructor() : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        scheduleAdapter.apply {
+            stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
+            // This eliminates flickering
+            setHasStableIds(true)
+
+            // This overrides the adapter's intention to scroll back to the top
+            registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                    viewModel.listState?.let {
+                        // layoutManager.scrollToPositionWithOffset(position, 0)
+                        binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
+                    }
+                }
+            })
+        }
 
         // The purpose of LifecycleObserver is to eliminate writing the boilerplate code
         // to load and cleanup resources in onCreate() and onDestroy()
