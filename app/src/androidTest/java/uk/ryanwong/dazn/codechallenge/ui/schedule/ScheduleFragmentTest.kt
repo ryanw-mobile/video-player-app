@@ -14,30 +14,36 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.Matchers
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import uk.ryanwong.dazn.codechallenge.R
-import uk.ryanwong.dazn.codechallenge.ServiceLocator
 import uk.ryanwong.dazn.codechallenge.TestData.schedule1
 import uk.ryanwong.dazn.codechallenge.TestData.schedule2
 import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
+import uk.ryanwong.dazn.codechallenge.launchFragmentInHiltContainer
+import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 @MediumTest
+@HiltAndroidTest
 @ExperimentalCoroutinesApi
 class SchedulesFragmentTest {
-    private lateinit var repository: FakeRepository
-    
+    @Inject
+    lateinit var repository: FakeRepository
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
     @Before
-    fun initRepository() {
-        // For testing we inject a fake repository at the ServiceLocator for test doubles
-        repository = FakeRepository()
-        ServiceLocator.baseRepository = repository
+    fun init() {
+        hiltRule.inject()
     }
 
     @Test
@@ -47,7 +53,10 @@ class SchedulesFragmentTest {
         repository.refreshSchedule()
 
         // WHEN - Launching the fragment
-        launchFragmentInContainer<ScheduleFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
+        // Note: Originally we use launchFragmentInContainer
+        // But due to library bugs, we use launchFragmentInHiltContainer
+        // See HiltExt.kt for details
+        launchFragmentInHiltContainer<ScheduleFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
 
         // THEN - noDataTextView is shown
         Espresso.onView(withId(R.id.textview_nodata))
@@ -100,10 +109,5 @@ class SchedulesFragmentTest {
 
         // THEN - RecyclerView should show schedule2
         Espresso.onView(withText(schedule2.title)).check(matches(isDisplayed()))
-    }
-
-    @After
-    fun cleanupDb() = runBlockingTest {
-        ServiceLocator.resetRepository()
     }
 }

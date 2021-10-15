@@ -19,32 +19,38 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.Matchers.not
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import uk.ryanwong.dazn.codechallenge.R
-import uk.ryanwong.dazn.codechallenge.ServiceLocator
 import uk.ryanwong.dazn.codechallenge.TestData.event1
 import uk.ryanwong.dazn.codechallenge.TestData.event2
 import uk.ryanwong.dazn.codechallenge.TestData.event3
 import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
+import uk.ryanwong.dazn.codechallenge.launchFragmentInHiltContainer
+import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 @MediumTest
+@HiltAndroidTest
 @ExperimentalCoroutinesApi
 class EventsFragmentTest {
-    private lateinit var repository: FakeRepository
+    @Inject
+    lateinit var repository: FakeRepository
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
 
     @Before
-    fun initRepository() {
-        // For testing we inject a fake repository at the ServiceLocator for test doubles
-        repository = FakeRepository()
-        ServiceLocator.baseRepository = repository
+    fun init() {
+        hiltRule.inject()
     }
 
     @Test
@@ -52,8 +58,12 @@ class EventsFragmentTest {
         // GIVEN - Load the Events Fragment with three events
         repository.submitEventList(listOf(event1, event2, event3))
         repository.refreshEvents()
-        val scenario =
-            launchFragmentInContainer<EventsFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
+
+        // Note: Originally we use launchFragmentInContainer
+        // But due to library bugs, we use launchFragmentInHiltContainer
+        // See HiltExt.kt for details
+
+        val scenario = launchFragmentInContainer<EventsFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
 
         val navController = Mockito.mock(NavController::class.java)
         scenario.onFragment {
@@ -117,10 +127,5 @@ class EventsFragmentTest {
         // Expects reminder to be saved successfully
         Espresso.onView(withText(R.string.something_went_wrong))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-    }
-
-    @After
-    fun cleanupDb() = runBlockingTest {
-        ServiceLocator.resetRepository()
     }
 }

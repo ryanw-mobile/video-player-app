@@ -6,11 +6,9 @@
 package uk.ryanwong.dazn.codechallenge.data.source.local
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.testing.HiltAndroidRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert
@@ -28,32 +26,32 @@ import uk.ryanwong.dazn.codechallenge.TestData.schedule1
 import uk.ryanwong.dazn.codechallenge.TestData.schedule1Modified
 import uk.ryanwong.dazn.codechallenge.TestData.schedule2
 import uk.ryanwong.dazn.codechallenge.TestData.schedule3
-import uk.ryanwong.dazn.codechallenge.data.source.local.daos.DaznApiDaos
+import uk.ryanwong.dazn.codechallenge.di.ProvideRoomDbDataSource
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 @MediumTest
 class RoomDbDataSourceTest {
 
+    // Use the real data source
+    @Inject
+    @ProvideRoomDbDataSource
+    lateinit var localDataSource: RoomDbDataSource
+
+    @Inject
+    lateinit var database: DaznApiDatabase
+
     // Executes each task synchronously using Architecture Components.
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var localDataSource: RoomDbDataSource
-    private lateinit var database: DaznApiDatabase
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
 
     @Before
-    fun setup() {
-        // Using an in-memory database for testing, because it doesn't survive killing the process.
-        database = Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            DaznApiDatabase::class.java
-        )
-            .allowMainThreadQueries()
-            .build()
-
-        val daznApiDaos = DaznApiDaos(database.eventsDao, database.scheduleDao)
-        localDataSource = RoomDbDataSource(daznApiDaos, Dispatchers.Main)
+    fun init() {
+        hiltRule.inject()
     }
 
     // Test coverage: basic CRUD on both events and schedule
