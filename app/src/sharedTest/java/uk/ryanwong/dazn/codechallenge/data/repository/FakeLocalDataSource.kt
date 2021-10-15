@@ -7,6 +7,8 @@ package uk.ryanwong.dazn.codechallenge.data.repository
 
 import androidx.lifecycle.LiveData
 import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
+import uk.ryanwong.dazn.codechallenge.data.source.local.entities.EventDbEntity
+import uk.ryanwong.dazn.codechallenge.data.source.local.entities.ScheduleDbEntity
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 

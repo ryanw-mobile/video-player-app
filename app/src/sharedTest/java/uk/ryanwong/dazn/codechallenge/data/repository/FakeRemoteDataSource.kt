@@ -7,16 +7,18 @@ package uk.ryanwong.dazn.codechallenge.data.repository
 
 import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.remote.ApiResult
+import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.asDomainModel
+import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.asNetworkModel
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import java.io.IOException
 
 class FakeRemoteDataSource(
-    events: MutableList<Event>? = mutableListOf(),
-    schedules: MutableList<Schedule>? = mutableListOf()
+    eventDomain: MutableList<Event> = mutableListOf(),
+    scheduleDomain: MutableList<Schedule> = mutableListOf()
 ) : BaseRemoteDataSource {
-    private var events = events
-    private var schedules = schedules
+    private var events = eventDomain.asNetworkModel()
+    private var schedules = scheduleDomain.asNetworkModel()
     private var shouldReturnError = false
     private var exceptionMessage = ""
 
@@ -29,7 +31,7 @@ class FakeRemoteDataSource(
         if (shouldReturnError) {
             return ApiResult.Error(IOException(exceptionMessage))
         }
-        events?.let { return ApiResult.Success(ArrayList(it)) }
+        events?.let { return ApiResult.Success(ArrayList(it.asDomainModel())) }
         return ApiResult.Error(
             Exception("Events not found")
         )
@@ -39,17 +41,17 @@ class FakeRemoteDataSource(
         if (shouldReturnError) {
             return ApiResult.Error(IOException(exceptionMessage))
         }
-        schedules?.let { return ApiResult.Success(ArrayList(it)) }
+        schedules?.let { return ApiResult.Success(ArrayList(it.asDomainModel())) }
         return ApiResult.Error(
             Exception("Schedules not found")
         )
     }
 
     fun setEvents(events: List<Event>) {
-        this.events = events.toMutableList()
+        this.events = events.toMutableList().asNetworkModel()
     }
 
     fun setSchedule(schedules: List<Schedule>) {
-        this.schedules = schedules.toMutableList()
+        this.schedules = schedules.toMutableList().asNetworkModel()
     }
 }
