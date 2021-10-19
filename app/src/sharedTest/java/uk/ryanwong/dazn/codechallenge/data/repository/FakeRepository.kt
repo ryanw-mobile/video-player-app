@@ -16,20 +16,15 @@ import java.io.IOException
 class FakeRepository : BaseRepository {
 
     // Use simple data structures to provide a controlled set of data for testing ViewModel
-    private val observableEvents = MutableLiveData<List<Event>>()
-    private val observableSchedules = MutableLiveData<List<Schedule>>()
+    private val observableEvents = MutableLiveData<List<Event>>(listOf())
+    private val observableSchedules = MutableLiveData<List<Schedule>>(listOf())
 
     private var shouldReturnError = false
     private var exceptionMessage = ""
 
     // Faked remote data
-    private var remoteEventList = listOf<Event>()
-    private var remoteScheduleList = listOf<Schedule>()
-
-    init {
-        observableEvents.postValue(listOf())
-        observableSchedules.postValue(listOf())
-    }
+    private var remoteEventList = mutableListOf<Event>()
+    private var remoteScheduleList = mutableListOf<Schedule>()
 
     override fun observeEvents(): LiveData<List<Event>> {
         wrapEspressoIdlingResource {
@@ -83,15 +78,15 @@ class FakeRepository : BaseRepository {
      * When refreshEvents() is called, the list will be loaded to the ViewModel
      */
     fun submitEventList(events: List<Event>) {
-        remoteEventList = events
+        remoteEventList = events.toMutableList()
     }
 
     /***
      * Submit a list of events as a faked remote data source.
      * When refreshEvents() is called, the list will be loaded to the ViewModel
      */
-    fun submitScheduleList(schedules: List<Schedule>) {
-        remoteScheduleList = schedules
+    suspend fun submitScheduleList(schedules: List<Schedule>) {
+        remoteScheduleList = schedules.toMutableList()
     }
 
 }
