@@ -6,8 +6,6 @@
 package uk.ryanwong.dazn.codechallenge.data.repository
 
 import androidx.lifecycle.LiveData
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
 import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
 import uk.ryanwong.dazn.codechallenge.base.BaseRepository
@@ -28,8 +26,7 @@ import uk.ryanwong.dazn.codechallenge.util.wrapEspressoIdlingResource
  */
 class DefaultCachedRepository(
     private val remoteDataSource: BaseRemoteDataSource,
-    private val localDataSource: BaseLocalDataSource,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val localDataSource: BaseLocalDataSource
 ) : BaseRepository {
 
     override fun observeEvents(): LiveData<List<Event>> {
