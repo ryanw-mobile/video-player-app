@@ -52,6 +52,7 @@
 
 ## (incomplete list of) Dependencies 
 * [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines) - [Kotlin](https://kotlinlang.org/) -  [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
+* [Dagger Hilt](https://dagger.dev/hilt/) - [The Dagger Authors](https://dagger.dev/hilt/) -  [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
 * [Glide](https://github.com/bumptech/glide) - [Bump Technologies](https://github.com/bumptech) - [BSD, part MIT and Apache 2.0](https://github.com/bumptech/glide/blob/master/LICENSE)
 * [Timber](https://github.com/JakeWharton/timber) - [Jake Wharton](https://github.com/JakeWharton) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
 * [Retrofit](https://square.github.io/retrofit/) - [Square, Inc.](https://squareup.com/) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
