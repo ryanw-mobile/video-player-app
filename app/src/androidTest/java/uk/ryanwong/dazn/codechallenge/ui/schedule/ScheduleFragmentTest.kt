@@ -6,7 +6,6 @@
 package uk.ryanwong.dazn.codechallenge.ui.schedule
 
 import android.os.Bundle
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -23,9 +22,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import uk.ryanwong.dazn.codechallenge.MainCoroutineRule
 import uk.ryanwong.dazn.codechallenge.R
 import uk.ryanwong.dazn.codechallenge.TestData.schedule1
 import uk.ryanwong.dazn.codechallenge.TestData.schedule2
+import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
 import uk.ryanwong.dazn.codechallenge.launchFragmentInHiltContainer
 import javax.inject.Inject
@@ -36,10 +37,13 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class SchedulesFragmentTest {
     @Inject
-    lateinit var repository: FakeRepository
+    lateinit var repository: BaseRepository
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
+
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     @Before
     fun init() {
@@ -47,9 +51,9 @@ class SchedulesFragmentTest {
     }
 
     @Test
-    fun repositoryEmpty_showNoData() = runBlockingTest {
+    fun repositoryEmpty_showNoData() = mainCoroutineRule.runBlockingTest {
         // GIVEN - Repository has no events to supply
-        repository.submitScheduleList(emptyList())
+        (repository as FakeRepository).submitScheduleList(emptyList())
         repository.refreshSchedule()
 
         // WHEN - Launching the fragment
@@ -64,13 +68,16 @@ class SchedulesFragmentTest {
     }
 
     @Test
-    fun repositoryNonEmpty_HiddenNoData() = runBlockingTest {
+    fun repositoryNonEmpty_HiddenNoData() = mainCoroutineRule.runBlockingTest {
         // GIVEN - Repository has 1 schedule to supply
-        repository.submitScheduleList(listOf(schedule1))
+        (repository as FakeRepository).submitScheduleList(listOf(schedule1))
         repository.refreshSchedule()
 
         // WHEN - Launching the fragment
-        launchFragmentInContainer<ScheduleFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
+        // Note: Originally we use launchFragmentInHiltContainer
+        // But due to library bugs, we use launchFragmentInHiltContainer
+        // See HiltExt.kt for details
+        launchFragmentInHiltContainer<ScheduleFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
 
         // THEN - noDataTextView is NOT shown
         Espresso.onView(withId(R.id.textview_nodata))
@@ -78,13 +85,13 @@ class SchedulesFragmentTest {
     }
 
     @Test
-    fun repositoryError_ShowErrorDialog() = runBlockingTest {
+    fun repositoryError_ShowErrorDialog() = mainCoroutineRule.runBlockingTest {
         // GIVEN - the repository is set to always return error
         val errorMessage = "Instrumentation test error"
-        repository.setReturnError(true, errorMessage)
+        (repository as FakeRepository).setReturnError(true, errorMessage)
 
         // WHEN - Launching the fragment
-        launchFragmentInContainer<ScheduleFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
+        launchFragmentInHiltContainer<ScheduleFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
 
         // THEN - error dialog is shown
         // Expects reminder to be saved successfully
@@ -94,16 +101,16 @@ class SchedulesFragmentTest {
 
 
     @Test
-    fun wait31Seconds_ScheudleRefreshed() = runBlockingTest {
-        repository.submitScheduleList(listOf(schedule1))
+    fun wait31Seconds_ScheudleRefreshed() = mainCoroutineRule.runBlockingTest {
+        (repository as FakeRepository).submitScheduleList(listOf(schedule1))
         repository.refreshSchedule()
 
         // GIVEN - On the Schedule List screen we have schedule1
-        launchFragmentInContainer<ScheduleFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
+        launchFragmentInHiltContainer<ScheduleFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
         Espresso.onView(withText(schedule1.title)).check(matches(isDisplayed()))
 
         // WHEN - Repository returns a new schedule list after 31 seconds
-        repository.submitScheduleList(listOf(schedule2))
+        (repository as FakeRepository).submitScheduleList(listOf(schedule2))
         repository.refreshSchedule()
         Thread.sleep(31000)
 
