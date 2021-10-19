@@ -6,7 +6,6 @@
 package uk.ryanwong.dazn.codechallenge.ui.events
 
 import android.os.Bundle
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
@@ -29,10 +28,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
+import uk.ryanwong.dazn.codechallenge.MainCoroutineRule
 import uk.ryanwong.dazn.codechallenge.R
 import uk.ryanwong.dazn.codechallenge.TestData.event1
 import uk.ryanwong.dazn.codechallenge.TestData.event2
 import uk.ryanwong.dazn.codechallenge.TestData.event3
+import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
 import uk.ryanwong.dazn.codechallenge.launchFragmentInHiltContainer
 import javax.inject.Inject
@@ -43,10 +44,13 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class EventsFragmentTest {
     @Inject
-    lateinit var repository: FakeRepository
+    lateinit var repository: BaseRepository
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
+
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     @Before
     fun init() {
@@ -54,21 +58,22 @@ class EventsFragmentTest {
     }
 
     @Test
-    fun clickEvent_NavigateToExoplayerActivity() = runBlockingTest {
+    fun clickEvent_NavigateToExoplayerActivity() = mainCoroutineRule.runBlockingTest {
         // GIVEN - Load the Events Fragment with three events
-        repository.submitEventList(listOf(event1, event2, event3))
+        (repository as FakeRepository).submitEventList(listOf(event1, event2, event3))
         repository.refreshEvents()
 
         // Note: Originally we use launchFragmentInContainer
         // But due to library bugs, we use launchFragmentInHiltContainer
         // See HiltExt.kt for details
 
-        val scenario = launchFragmentInContainer<EventsFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
+        val scenario =
+            launchFragmentInHiltContainer<EventsFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
 
         val navController = Mockito.mock(NavController::class.java)
-        scenario.onFragment {
-            Navigation.setViewNavController(it.view!!, navController)
-        }
+//        scenario.onFragment {
+//            Navigation.setViewNavController(it.view!!, navController)
+//        }
 
         // WHEN - Click on the event1
         Espresso.onView(withId(R.id.recyclerview))
@@ -87,13 +92,13 @@ class EventsFragmentTest {
     }
 
     @Test
-    fun repositoryEmpty_ShowNoData() = runBlockingTest {
+    fun repositoryEmpty_ShowNoData() = mainCoroutineRule.runBlockingTest {
         // GIVEN - Repository has no events to supply
-        repository.submitEventList(emptyList())
+        (repository as FakeRepository).submitEventList(emptyList())
         repository.refreshEvents()
 
         // WHEN - Launching the fragment
-        launchFragmentInContainer<EventsFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
+        launchFragmentInHiltContainer<EventsFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
 
         // THEN - noDataTextView is shown
         Espresso.onView(withId(R.id.textview_nodata))
@@ -101,13 +106,13 @@ class EventsFragmentTest {
     }
 
     @Test
-    fun repositoryNonEmpty_HiddenNoData() = runBlockingTest {
+    fun repositoryNonEmpty_HiddenNoData() = mainCoroutineRule.runBlockingTest {
         // GIVEN - Repository has 1 event
-        repository.submitEventList(listOf(event1))
+        (repository as FakeRepository).submitEventList(listOf(event1))
         repository.refreshEvents()
 
         // WHEN - Launching the fragment
-        launchFragmentInContainer<EventsFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
+        launchFragmentInHiltContainer<EventsFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
 
         // THEN - noDataTextView is NOT shown
         Espresso.onView(withId(R.id.textview_nodata))
@@ -115,13 +120,13 @@ class EventsFragmentTest {
     }
 
     @Test
-    fun repositoryError_ShowErrorDialog() = runBlockingTest {
+    fun repositoryError_ShowErrorDialog() = mainCoroutineRule.runBlockingTest {
         // GIVEN - the repository is set to always return error
         val errorMessage = "Instrumentation test error"
-        repository.setReturnError(true, errorMessage)
+        (repository as FakeRepository).setReturnError(true, errorMessage)
 
         // WHEN - Launching the fragment
-        launchFragmentInContainer<EventsFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
+        launchFragmentInHiltContainer<EventsFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
 
         // THEN - error dialog is shown
         // Expects reminder to be saved successfully
