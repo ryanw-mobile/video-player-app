@@ -9,6 +9,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert
@@ -26,18 +27,20 @@ import uk.ryanwong.dazn.codechallenge.TestData.schedule1
 import uk.ryanwong.dazn.codechallenge.TestData.schedule1Modified
 import uk.ryanwong.dazn.codechallenge.TestData.schedule2
 import uk.ryanwong.dazn.codechallenge.TestData.schedule3
+import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
 import uk.ryanwong.dazn.codechallenge.di.ProvideRoomDbDataSource
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 @MediumTest
 class RoomDbDataSourceTest {
 
     // Use the real data source
     @Inject
     @ProvideRoomDbDataSource
-    lateinit var localDataSource: RoomDbDataSource
+    lateinit var localDataSource: BaseLocalDataSource
 
     @Inject
     lateinit var database: DaznApiDatabase
