@@ -7,6 +7,8 @@ package uk.ryanwong.dazn.codechallenge.data.repository
 
 import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.remote.ApiResult
+import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.EventNetworkEntity
+import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.ScheduleNetworkEntity
 import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.asDomainModel
 import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.asNetworkModel
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
@@ -14,16 +16,20 @@ import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import java.io.IOException
 
 class FakeRemoteDataSource(
-    eventDomain: MutableList<Event> = mutableListOf(),
-    scheduleDomain: MutableList<Schedule> = mutableListOf()
+    eventDomain: List<Event> = listOf(),
+    scheduleDomain: List<Schedule> = listOf()
 ) : BaseRemoteDataSource {
-    private var events = eventDomain.asNetworkModel()
-    private var schedules = scheduleDomain.asNetworkModel()
+    private val events = mutableListOf<EventNetworkEntity>().apply {
+        addAll(eventDomain.asNetworkModel())
+    }
+    private val schedule = mutableListOf<ScheduleNetworkEntity>().apply {
+        addAll(scheduleDomain.asNetworkModel())
+    }
     private var shouldReturnError = false
     private var exceptionMessage = ""
 
-    fun setShouldReturnIOException(state: Boolean, exceptionMessage: String) {
-        shouldReturnError = state
+    fun setShouldReturnIOException(shouldReturnError: Boolean, exceptionMessage: String) {
+        this.shouldReturnError = shouldReturnError
         this.exceptionMessage = exceptionMessage
     }
 
@@ -31,27 +37,28 @@ class FakeRemoteDataSource(
         if (shouldReturnError) {
             return ApiResult.Error(IOException(exceptionMessage))
         }
-        events?.let { return ApiResult.Success(ArrayList(it.asDomainModel())) }
-        return ApiResult.Error(
-            Exception("Events not found")
-        )
+        return ApiResult.Success(events.asDomainModel())
     }
 
     override suspend fun getSchedules(): ApiResult<List<Schedule>> {
         if (shouldReturnError) {
             return ApiResult.Error(IOException(exceptionMessage))
         }
-        schedules?.let { return ApiResult.Success(ArrayList(it.asDomainModel())) }
-        return ApiResult.Error(
-            Exception("Schedules not found")
-        )
+        return ApiResult.Success(schedule.asDomainModel())
     }
 
     fun setEvents(events: List<Event>) {
-        this.events = events.toMutableList().asNetworkModel()
+        this.events.apply {
+            clear()
+            addAll(events.asNetworkModel())
+        }
     }
 
-    fun setSchedule(schedules: List<Schedule>) {
-        this.schedules = schedules.toMutableList().asNetworkModel()
+    fun setSchedule(schedule: List<Schedule>) {
+        this.schedule.apply {
+            clear()
+            addAll(schedule.asNetworkModel())
+        }
     }
 }
+

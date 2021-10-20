@@ -5,7 +5,6 @@
 
 package uk.ryanwong.dazn.codechallenge.data.repository
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert
@@ -25,12 +24,16 @@ import java.io.IOException
 @ExperimentalCoroutinesApi
 class DefaultCachedRepositoryTest {
 
-    private val remoteEvents = listOf(event1, event2, event3).sortedBy { it.date }
-    private val localEvents = listOf(event1)
+    private val remoteEvents = mutableListOf(event1, event2, event3).apply { sortBy { it.date } }
 
-    private val remoteSchedules =
-        listOf(TestData.schedule1, TestData.schedule2, TestData.schedule3).sortedBy { it.date }
-    private val localSchedules = listOf(TestData.schedule1)
+    private val localEvents = mutableListOf(event1)
+
+    private val remoteSchedules = mutableListOf(
+        TestData.schedule1, TestData.schedule2, TestData.schedule3
+    ).apply {
+        sortBy { it.date }
+    }
+    private val localSchedules = mutableListOf(TestData.schedule1)
 
     private lateinit var remoteDataSource: FakeRemoteDataSource
     private lateinit var localDataSource: FakeLocalDataSource
@@ -46,14 +49,12 @@ class DefaultCachedRepositoryTest {
     @Before
     fun createRepository() {
         remoteDataSource =
-            FakeRemoteDataSource(remoteEvents.toMutableList(), remoteSchedules.toMutableList())
+            FakeRemoteDataSource(remoteEvents, remoteSchedules)
         localDataSource =
-            FakeLocalDataSource(localEvents.toMutableList(), localSchedules.toMutableList())
+            FakeLocalDataSource(localEvents, localSchedules)
 
         // Get a reference to the class under test
-        defaultCachedRepository = DefaultCachedRepository(
-            remoteDataSource, localDataSource, Dispatchers.Main
-        )
+        defaultCachedRepository = DefaultCachedRepository(remoteDataSource, localDataSource)
     }
 
     @Test

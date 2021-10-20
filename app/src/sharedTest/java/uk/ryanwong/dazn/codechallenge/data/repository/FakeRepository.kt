@@ -23,8 +23,8 @@ class FakeRepository : BaseRepository {
     private var exceptionMessage = ""
 
     // Faked remote data
-    private var remoteEventList = mutableListOf<Event>()
-    private var remoteScheduleList = mutableListOf<Schedule>()
+    private val remoteEventList = mutableListOf<Event>()
+    private val remoteScheduleList = mutableListOf<Schedule>()
 
     override fun observeEvents(): LiveData<List<Event>> {
         wrapEspressoIdlingResource {
@@ -68,9 +68,9 @@ class FakeRepository : BaseRepository {
         }
     }
 
-    fun setReturnError(value: Boolean, errorMessage: String) {
-        shouldReturnError = value
-        exceptionMessage = errorMessage
+    fun setReturnError(shouldReturnError: Boolean, exceptionMessage: String) {
+        this.shouldReturnError = shouldReturnError
+        this.exceptionMessage = exceptionMessage
     }
 
     /***
@@ -78,15 +78,20 @@ class FakeRepository : BaseRepository {
      * When refreshEvents() is called, the list will be loaded to the ViewModel
      */
     fun submitEventList(events: List<Event>) {
-        remoteEventList = events.toMutableList()
+        remoteEventList.apply {
+            clear()
+            addAll(events)
+        }
     }
 
     /***
      * Submit a list of events as a faked remote data source.
      * When refreshEvents() is called, the list will be loaded to the ViewModel
      */
-    suspend fun submitScheduleList(schedules: List<Schedule>) {
-        remoteScheduleList = schedules.toMutableList()
+    fun submitScheduleList(schedule: List<Schedule>) {
+        remoteScheduleList.apply {
+            clear()
+            addAll(schedule)
+        }
     }
-
 }
