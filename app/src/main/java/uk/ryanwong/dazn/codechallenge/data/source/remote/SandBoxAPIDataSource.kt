@@ -22,7 +22,7 @@ import java.util.*
 private const val BASE_URL = "https://us-central1-dazn-sandbox.cloudfunctions.net/"
 
 class SandBoxAPIDataSource(private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) :
-    BaseRemoteDataSource {
+    BaseRemoteDataSource() {
     /**
      * Moshi's composition mechanism tries to find the best adapter for each type.
      * It starts with the first adapter or factory registered with Moshi.Builder.add(),

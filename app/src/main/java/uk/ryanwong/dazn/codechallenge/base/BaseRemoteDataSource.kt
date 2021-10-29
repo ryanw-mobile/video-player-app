@@ -11,9 +11,9 @@ import uk.ryanwong.dazn.codechallenge.data.source.remote.ApiResult
  * - Has its own choices to/not to cache any data
  * - Can only provide static copies of data (i.e. no LiveData)
  */
-interface BaseRemoteDataSource {
+abstract class BaseRemoteDataSource {
 
     // Return static data
-    suspend fun getEvents(): ApiResult<Any>
-    suspend fun getSchedules(): ApiResult<Any>
+    abstract suspend fun getEvents(): ApiResult<Any>
+    abstract suspend fun getSchedules(): ApiResult<Any>
 }

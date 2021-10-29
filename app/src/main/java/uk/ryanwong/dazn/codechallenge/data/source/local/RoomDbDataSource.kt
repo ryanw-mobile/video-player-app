@@ -24,7 +24,7 @@ import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 class RoomDbDataSource internal constructor(
     private val daznApiDaos: DaznApiDaos,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : BaseLocalDataSource {
+) : BaseLocalDataSource() {
 
     override fun observeEvents(): LiveData<List<Event>> {
         return Transformations.map(daznApiDaos.eventsDao.observeEvents()) {

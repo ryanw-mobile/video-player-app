@@ -27,7 +27,7 @@ import uk.ryanwong.dazn.codechallenge.util.wrapEspressoIdlingResource
 class DefaultCachedRepository(
     private val remoteDataSource: BaseRemoteDataSource,
     private val localDataSource: BaseLocalDataSource
-) : BaseRepository {
+) : BaseRepository() {
 
     override fun observeEvents(): LiveData<List<Event>> {
         wrapEspressoIdlingResource {

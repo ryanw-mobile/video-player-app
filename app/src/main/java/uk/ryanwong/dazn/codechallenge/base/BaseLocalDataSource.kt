@@ -17,16 +17,16 @@ import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
  * - Has its own infrastructure to store data (can be in-memory or disk based)
  * - Can provide live data or a data snapshot
  */
-interface BaseLocalDataSource {
+abstract class BaseLocalDataSource {
 
     // Return LiveData
-    fun observeEvents(): LiveData<List<Event>>
-    fun observeSchedule(): LiveData<List<Schedule>>
+    abstract fun observeEvents(): LiveData<List<Event>>
+    abstract fun observeSchedule(): LiveData<List<Schedule>>
 
     // Return static data
-    suspend fun getEvents(): List<Event>
-    suspend fun getSchedules(): List<Schedule>
+    abstract suspend fun getEvents(): List<Event>
+    abstract suspend fun getSchedules(): List<Schedule>
 
-    suspend fun submitEvents(events: List<Event>)
-    suspend fun submitSchedule(schedules: List<Schedule>)
+    abstract suspend fun submitEvents(events: List<Event>)
+    abstract suspend fun submitSchedule(schedules: List<Schedule>)
 }
