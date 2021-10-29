@@ -60,8 +60,8 @@ class DefaultCachedRepository(
         wrapEspressoIdlingResource {
             val remoteEvents = remoteDataSource.getEvents()
 
-            if (remoteEvents is ApiResult.Success) {
-                localDataSource.submitEvents(remoteEvents.data as List<Event>)
+            if (remoteEvents is ApiResult.Success && remoteEvents.data is List<*>) {
+                localDataSource.submitEvents(remoteEvents.data.filterIsInstance<Event>())
             } else if (remoteEvents is ApiResult.Error) {
                 throw remoteEvents.exception
             }
@@ -72,8 +72,8 @@ class DefaultCachedRepository(
         wrapEspressoIdlingResource {
             val remoteSchedules = remoteDataSource.getSchedules()
 
-            if (remoteSchedules is ApiResult.Success) {
-                localDataSource.submitSchedule(remoteSchedules.data as List<Schedule>)
+            if (remoteSchedules is ApiResult.Success && remoteSchedules.data is List<*>) {
+                localDataSource.submitSchedule(remoteSchedules.data.filterIsInstance<Schedule>())
             } else if (remoteSchedules is ApiResult.Error) {
                 throw remoteSchedules.exception
             }
