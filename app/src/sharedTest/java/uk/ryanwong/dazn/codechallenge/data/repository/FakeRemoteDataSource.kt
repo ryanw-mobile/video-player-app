@@ -18,7 +18,7 @@ import java.io.IOException
 class FakeRemoteDataSource(
     eventDomain: List<Event> = listOf(),
     scheduleDomain: List<Schedule> = listOf()
-) : BaseRemoteDataSource {
+) : BaseRemoteDataSource() {
     private val events = mutableListOf<EventNetworkEntity>().apply {
         addAll(eventDomain.asNetworkModel())
     }

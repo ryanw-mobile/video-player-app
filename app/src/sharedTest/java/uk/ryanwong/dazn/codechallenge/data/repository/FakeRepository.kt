@@ -13,7 +13,7 @@ import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.util.wrapEspressoIdlingResource
 import java.io.IOException
 
-class FakeRepository : BaseRepository {
+class FakeRepository : BaseRepository() {
 
     // Use simple data structures to provide a controlled set of data for testing ViewModel
     private val observableEvents = MutableLiveData<List<Event>>(listOf())
