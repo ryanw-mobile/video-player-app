@@ -1,18 +1,33 @@
 package uk.ryanwong.dazn.codechallenge.ui.schedule
 
 import android.os.CountDownTimer
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 import uk.ryanwong.dazn.codechallenge.base.BaseViewModel
+import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import javax.inject.Inject
 
 @HiltViewModel
 class ScheduleViewModel @Inject constructor(private val baseRepository: BaseRepository) :
     BaseViewModel() {
+
+    // directly expose the list contents from the repository
+    val listContents: LiveData<List<Schedule>>
+        get() = baseRepository.observeSchedule()
+
+    private val _showLoading = MutableLiveData(false)
+    val showLoading: LiveData<Boolean>
+        get() = _showLoading
+
+    val showNoData = Transformations.map(listContents) { list ->
+        !_showLoading.value!! && list.isEmpty()
+    }
 
     private val timer: CountDownTimer = object : CountDownTimer(COUNTDOWN_TIME, COUNTDOWN_TIME) {
         override fun onTick(millisUntilFinished: Long) {}
@@ -25,11 +40,6 @@ class ScheduleViewModel @Inject constructor(private val baseRepository: BaseRepo
     }
 
     init {
-        // Quietly load the cached contents from local DB before doing a refresh
-        // Errors and no data handling can be ignored because refreshList() will take care of them
-        viewModelScope.launch {
-            _listContents.value = baseRepository.getSchedule()
-        }
         refreshList()
         autoRefresh()
     }
@@ -42,7 +52,7 @@ class ScheduleViewModel @Inject constructor(private val baseRepository: BaseRepo
     }
 
     override fun refreshList() {
-        showLoading.value = true
+        _showLoading.value = true
         viewModelScope.launch {
             try {
                 // Expected exceptions
@@ -52,11 +62,7 @@ class ScheduleViewModel @Inject constructor(private val baseRepository: BaseRepo
                 showErrorMessage.postValue(ex.message)
             }
 
-            // Even the previous sync might fail, we still try to fetch whatever we have locally
-            _listContents.value = baseRepository.getSchedule()
-
-            //check if no data has to be shown
-            invalidateShowNoData()
+            _showLoading.postValue(false)
         }
     }
 

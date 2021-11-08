@@ -1,32 +1,42 @@
 package uk.ryanwong.dazn.codechallenge.ui.events
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 import uk.ryanwong.dazn.codechallenge.base.BaseViewModel
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
-import uk.ryanwong.dazn.codechallenge.util.SingleLiveEvent
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class EventsViewModel @Inject constructor(private val baseRepository: BaseRepository) :
     BaseViewModel() {
 
-    val openVideoPlayerUrl: SingleLiveEvent<String> = SingleLiveEvent()
+    // directly expose the list contents from the repository
+    val listContents: LiveData<List<Event>>
+        get() = baseRepository.observeEvents()
+
+    private val _showLoading = MutableLiveData(false)
+    val showLoading: LiveData<Boolean>
+        get() = _showLoading
+
+    val showNoData = Transformations.map(listContents) { list ->
+        !_showLoading.value!! && list.isEmpty()
+    }
+
+    private val _openVideoPlayerUrl = MutableLiveData<String?>(null)
+    val openVideoPlayerUrl: LiveData<String?>
+        get() = _openVideoPlayerUrl
 
     init {
-        // Quietly load the cached contents from local DB before doing a refresh
-        // Errors and no data handling can be ignored because refreshList() will take care of them
-        viewModelScope.launch {
-            _listContents.value = baseRepository.getEvents()
-        }
         refreshList()
     }
 
     override fun refreshList() {
-        showLoading.value = true
+        _showLoading.value = true
         viewModelScope.launch {
             try {
                 // Expected exceptions
@@ -35,18 +45,13 @@ class EventsViewModel @Inject constructor(private val baseRepository: BaseReposi
                 ex.printStackTrace()
                 showErrorMessage.postValue(ex.message)
             }
-
-            // Even the previous sync might fail, we still try to fetch whatever we have locally
-            _listContents.value = baseRepository.getEvents()
-
-            //check if no data has to be shown
-            invalidateShowNoData()
+            _showLoading.postValue(false)
         }
     }
 
     fun setEventClicked(event: Event) {
         event.videoUrl.let {
-            openVideoPlayerUrl.value = when (it.isEmpty()) {
+            _openVideoPlayerUrl.value = when (it.isEmpty()) {
                 false -> it
                 true -> null
             }
@@ -54,6 +59,6 @@ class EventsViewModel @Inject constructor(private val baseRepository: BaseReposi
     }
 
     fun notifyVideoPlayerNavigationCompleted() {
-        openVideoPlayerUrl.value = null
+        _openVideoPlayerUrl.value = null
     }
 }
