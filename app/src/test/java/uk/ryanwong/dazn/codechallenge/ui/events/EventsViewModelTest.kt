@@ -65,15 +65,13 @@ class EventsViewModelTest {
 
     @Test
     fun emptyViewModel_RefreshList_ExpectsListUpdated() = mainCoroutineRule.runBlockingTest {
-        // GIVEN the viewModel is empty, but the fake remote data set has something waiting to be loaded
-        val fakedRemoteData = listOf(event1, event2, event3)
-        fakeRepository.submitEventList(fakedRemoteData)
-
-        // Make sure the ViewModel is currently empty
+        // GIVEN the viewModel is empty
         val initialEventsList = eventsViewModel.listContents.getOrAwaitValue()
         MatcherAssert.assertThat(initialEventsList.size, `is`(0))
 
         // WHEN adding a new task
+        val fakedRemoteData = listOf(event1, event2, event3)
+        fakeRepository.submitEventList(fakedRemoteData)
         eventsViewModel.refreshList()
 
         // THEN  The LiveData is updated with the expected list
@@ -164,7 +162,7 @@ class EventsViewModelTest {
     @Test
     fun emptyViewModel_RefreshEmptyList_ExpectsShowNoDataTrue() =
         mainCoroutineRule.runBlockingTest {
-            // GIVEN a ViewModel has nothing in in
+            // GIVEN a ViewModel has nothing in it
             val initialContents = eventsViewModel.listContents.getOrAwaitValue()
             MatcherAssert.assertThat(initialContents.size, `is`(0))
 

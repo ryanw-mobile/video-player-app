@@ -65,15 +65,13 @@ class ScheduleViewModelTest {
 
     @Test
     fun emptyViewModel_RefreshList_ExpectsListUpdated() = mainCoroutineRule.runBlockingTest {
-        // GIVEN the viewModel is empty, but the fake remote data set has something waiting to be loaded
-        val fakedRemoteData = listOf(schedule1, schedule2, schedule3)
-        fakeRepository.submitScheduleList(fakedRemoteData)
-
-        // Make sure the ViewModel is currently empty
+        // GIVEN the viewModel is empty
         val initialScheduleList = scheduleViewModel.listContents.getOrAwaitValue()
         MatcherAssert.assertThat(initialScheduleList.size, `is`(0))
 
         // WHEN adding a new task
+        val fakedRemoteData = listOf(schedule1, schedule2, schedule3)
+        fakeRepository.submitScheduleList(fakedRemoteData)
         scheduleViewModel.refreshList()
 
         // THEN  The LiveData is updated with the expected list
