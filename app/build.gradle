@@ -25,6 +25,10 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "uk.ryanwong.dazn.codechallenge.CustomTestRunner"
+
+        // Bundle output filename
+        setProperty("archivesBaseName", "dazn-" + versionName + "-" + new Date().format('yyyyMMdd-HHmmss'))
+
     }
 
     signingConfigs {
@@ -54,6 +58,7 @@ android {
         }
 
         release {
+            shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
