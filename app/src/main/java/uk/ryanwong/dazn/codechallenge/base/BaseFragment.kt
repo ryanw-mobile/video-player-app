@@ -34,7 +34,7 @@ abstract class BaseFragment : Fragment() {
                             // do nothing
                         }
                     }.create()
-                errorDialog!!.show()
+                errorDialog?.show()
             }
         })
     }
