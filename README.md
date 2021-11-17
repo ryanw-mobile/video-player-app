@@ -1,29 +1,49 @@
-# DAZN Code Challenge - Android TV
+# DAZN Code Challenge - Android TV [![Build Status](https://app.travis-ci.com/ryanwong-uk/dazn-code-challenge.svg?branch=main)](https://app.travis-ci.com/ryanwong-uk/dazn-code-challenge) [![codecov](https://codecov.io/gh/ryanwong-uk/dazn-code-challenge/branch/main/graph/badge.svg?token=YK2DNKYBRO)](https://codecov.io/gh/ryanwong-uk/dazn-code-challenge)
 
 This is a code test project I have previously submitted as a part of the interview process. The
 project covers common RESTApi, SQLite, RecyclerView, Constraint Layout, MVVm, plus dependency
 injection and testings.
 
 Although the title carries "Android TV", it has nothing to do with that - this is an Android mobile
-App as required by the specifications. Unless indicated above the code snippets, this project was
-completed by myself alone.
+App as required by the specifications. Except for a portion of open-source codes attributed inline,
+this project was completed by myself alone.
 
 Under the commit history, you will see how I have built everything from scratch - with rounds of
-refactoring and bug fixes. The interview process was concluded in October, 2021, but I am still
-keep on improving the codes for demonstration purpose.
-
-As for my technical background:
-I have casually used Kotlin by converting Java codes on Android Studio. I have completed Udacity
-Kotlin courses in August and September 2021. This project demonstrates what I am able to code
-immediately by applying the best up-to-date practices I have just learnt.
+refactoring and bug fixes. The interview process was concluded in October, 2021, but I am still keep
+on improving the codes for demonstration purpose.
 
 Please note that the APIs are supplied by DAZN for recruitment purpose. They may not work at any
 time, as we have already concluded the interview process.
 
-
 ## Screenshots
 
 ![Screenshot1](screenshots/screen0.png) ![Screenshot1](screenshots/screen1.png) ![Screenshot1](screenshots/screen2.png)
+
+## High level architecture
+
+* Kotlin
+* MVVM architecture
+* [Jetpack Databinding](https://developer.android.com/jetpack/androidx/releases/databinding)
+* Live Data
+* Bottom Navigation
+* [Travis-CI](https://travis-ci.org/) - CI
+* [codecov](https://codecov.io/) - Code coverage
+
+## Key Dependencies
+
+* [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+* [Jetpack ConstraintLayout](https://developer.android.com/jetpack/androidx/releases/constraintlayout)
+* [Jetpack Navigation](https://developer.android.com/jetpack/androidx/releases/navigation)
+* [Jetpack Lifecycle](https://developer.android.com/jetpack/androidx/releases/lifecycle)
+* [Jetpack Room](https://developer.android.com/jetpack/androidx/releases/room) - Database
+
+* [Retrofit](https://square.github.io/retrofit/) - RESTAPI
+* [Moshi](https://github.com/square/moshi) - RESTAPI
+* [Glide](https://github.com/bumptech/glide) - Network Image
+* [ExoPlayer](https://github.com/google/ExoPlayer) - Media Player
+* [Dagger Hilt](https://dagger.dev/hilt/) - Dependency Injection
+* [Hamcrest](http://hamcrest.org/JavaHamcrest/) - Testing
+* [Timber](https://github.com/JakeWharton/timber) - Logging
 
 ## Requirements
 
@@ -68,7 +88,9 @@ time, as we have already concluded the interview process.
 * Debug builds will have an App package name suffix `.debug`
 
 ### Build and sign a bundle for distribution
-After August 2021, all new apps and games will be required to publish with the Android App Bundle format.
+
+After August 2021, all new apps and games will be required to publish with the Android App Bundle
+format.
 
    ```
    ./gradlew clean && ./gradlew bundleRelease
@@ -83,13 +105,3 @@ After August 2021, all new apps and games will be required to publish with the A
 * The generated apk(s) will be stored under `app/build/outputs/apk/`
 * Other usages can be listed using `./gradelew tasks`
 
-## (incomplete list of) Dependencies
-
-* [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines) - [Kotlin](https://kotlinlang.org/) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
-* [Dagger Hilt](https://dagger.dev/hilt/) - [The Dagger Authors](https://dagger.dev/hilt/) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
-* [Glide](https://github.com/bumptech/glide) - [Bump Technologies](https://github.com/bumptech) - [BSD, part MIT and Apache 2.0](https://github.com/bumptech/glide/blob/master/LICENSE)
-* [Timber](https://github.com/JakeWharton/timber) - [Jake Wharton](https://github.com/JakeWharton) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
-* [Retrofit](https://square.github.io/retrofit/) - [Square, Inc.](https://squareup.com/) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
-* [Moshi](https://github.com/square/moshi) - [Square, Inc.](https://squareup.com/) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
-* [Hamcrest](http://hamcrest.org/JavaHamcrest/) - [hamcrest.org](http://hamcrest.org/) - [BSD 3-Clause Licence](https://opensource.org/licenses/BSD-3-Clause)
-* [ExoPlayer](https://github.com/google/ExoPlayer) - [Google Open Source](https://opensource.google/) - [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
