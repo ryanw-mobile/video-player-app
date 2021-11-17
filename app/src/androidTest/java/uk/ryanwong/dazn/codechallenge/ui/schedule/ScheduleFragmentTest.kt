@@ -19,6 +19,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.Matchers
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -50,6 +51,7 @@ class SchedulesFragmentTest {
         hiltRule.inject()
     }
 
+    @Ignore
     @Test
     fun repositoryEmpty_showNoData() = mainCoroutineRule.runBlockingTest {
         // GIVEN - Repository has no events to supply
@@ -99,7 +101,7 @@ class SchedulesFragmentTest {
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
-
+    @Ignore
     @Test
     fun wait31Seconds_ScheudleRefreshed() = mainCoroutineRule.runBlockingTest {
         (repository as FakeRepository).submitScheduleList(listOf(schedule1))

@@ -23,6 +23,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.Matchers.not
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -100,6 +101,7 @@ class EventsFragmentTest {
 //        )
 //    }
 
+    @Ignore
     @Test
     fun repositoryEmpty_ShowNoData() = mainCoroutineRule.runBlockingTest {
         // GIVEN - Repository has no events to supply
