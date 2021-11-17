@@ -13,7 +13,26 @@ plugins {
 android {
     compileSdk 31
 
-    flavorDimensions "tier"
+    signingConfigs {
+        release
+    }
+
+    def isRunningOnTravis = System.getenv("CI") == "true"
+    if (isRunningOnTravis) {
+        // configure keystore
+        signingConfigs.release.storeFile = file("../secure.keystore")
+        signingConfigs.release.storePassword = System.getenv("storePass")
+        signingConfigs.release.keyAlias = System.getenv("alias")
+        signingConfigs.release.keyPassword = System.getenv("pass")
+
+    } else {
+        Properties keyProps = new Properties()
+        keyProps.load(new FileInputStream(file('../../keystore.properties')))
+        signingConfigs.release.storeFile = file(keyProps["store"])
+        signingConfigs.release.keyAlias = keyProps["alias"]
+        signingConfigs.release.storePassword = keyProps["storePass"]
+        signingConfigs.release.keyPassword = keyProps["pass"]
+    }
 
     defaultConfig {
         applicationId "uk.ryanwong.dazn.codechallenge"
@@ -30,17 +49,6 @@ android {
         // Bundle output filename
         setProperty("archivesBaseName", "dazn-" + versionName + "-" + new Date().format('yyyyMMdd-HHmmss'))
 
-    }
-
-    signingConfigs {
-        release {
-            Properties keyProps = new Properties()
-            keyProps.load(new FileInputStream(file('../../keystore.properties')))
-            storeFile file(keyProps["store"])
-            keyAlias keyProps["alias"]
-            storePassword keyProps["storePass"]
-            keyPassword keyProps["pass"]
-        }
     }
 
     buildTypes {
