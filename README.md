@@ -1,4 +1,4 @@
-# DAZN Code Challenge - Android TV [![Build Status](https://app.travis-ci.com/ryanwong-uk/dazn-code-challenge.svg?branch=main)](https://app.travis-ci.com/ryanwong-uk/dazn-code-challenge)
+# DAZN Code Challenge - Android TV [![Build Status](https://app.travis-ci.com/ryanwong-uk/dazn-code-challenge.svg?branch=master)](https://app.travis-ci.com/ryanwong-uk/dazn-code-challenge)
 
 This is a code test project I have previously submitted as a part of the interview process. The
 project covers common RESTApi, SQLite, RecyclerView, Constraint Layout, MVVm, plus dependency
