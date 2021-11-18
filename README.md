@@ -43,6 +43,7 @@ time, as we have already concluded the interview process.
 * [Dagger Hilt](https://dagger.dev/hilt/) - Dependency Injection
 * [Hamcrest](http://hamcrest.org/JavaHamcrest/) - Testing
 * [Timber](https://github.com/JakeWharton/timber) - Logging
+* [LeakCanary](https://github.com/square/leakcanary) - Leak detection
 
 ## Requirements
 
