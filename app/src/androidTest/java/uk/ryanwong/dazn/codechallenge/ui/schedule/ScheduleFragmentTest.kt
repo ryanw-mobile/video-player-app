@@ -17,9 +17,10 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -51,12 +52,12 @@ class SchedulesFragmentTest {
         hiltRule.inject()
     }
 
-    @Ignore
     @Test
     fun repositoryEmpty_showNoData() = mainCoroutineRule.runBlockingTest {
         // GIVEN - Repository has no events to supply
         (repository as FakeRepository).submitScheduleList(emptyList())
         repository.refreshSchedule()
+        MatcherAssert.assertThat(repository.getSchedule().size, `is`(0))
 
         // WHEN - Launching the fragment
         // Note: Originally we use launchFragmentInContainer
@@ -101,11 +102,10 @@ class SchedulesFragmentTest {
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
-    @Ignore
     @Test
-    fun wait31Seconds_ScheudleRefreshed() = mainCoroutineRule.runBlockingTest {
+    fun wait31Seconds_ScheduleRefreshed() = mainCoroutineRule.runBlockingTest {
         (repository as FakeRepository).submitScheduleList(listOf(schedule1))
-        repository.refreshSchedule()
+        // repository.refreshSchedule()
 
         // GIVEN - On the Schedule List screen we have schedule1
         launchFragmentInHiltContainer<ScheduleFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
@@ -113,8 +113,8 @@ class SchedulesFragmentTest {
 
         // WHEN - Repository returns a new schedule list after 31 seconds
         (repository as FakeRepository).submitScheduleList(listOf(schedule2))
-        repository.refreshSchedule()
-        Thread.sleep(31000)
+        // repository.refreshSchedule()
+        Thread.sleep(35000)
 
         // THEN - RecyclerView should show schedule2
         Espresso.onView(withText(schedule2.title)).check(matches(isDisplayed()))
