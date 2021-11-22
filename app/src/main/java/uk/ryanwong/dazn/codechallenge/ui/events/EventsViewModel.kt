@@ -24,7 +24,7 @@ class EventsViewModel @Inject constructor(private val baseRepository: BaseReposi
         get() = _showLoading
 
     val showNoData = Transformations.map(listContents) { list ->
-        !_showLoading.value!! && list.isEmpty()
+        list.isEmpty()
     }
 
     private val _openVideoPlayerUrl = MutableLiveData<String?>(null)

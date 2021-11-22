@@ -26,7 +26,7 @@ class ScheduleViewModel @Inject constructor(private val baseRepository: BaseRepo
         get() = _showLoading
 
     val showNoData = Transformations.map(listContents) { list ->
-        !_showLoading.value!! && list.isEmpty()
+        list.isEmpty()
     }
 
     private val timer: CountDownTimer = object : CountDownTimer(COUNTDOWN_TIME, COUNTDOWN_TIME) {
