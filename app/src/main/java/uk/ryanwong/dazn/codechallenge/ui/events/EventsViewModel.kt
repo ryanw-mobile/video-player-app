@@ -16,8 +16,7 @@ class EventsViewModel @Inject constructor(private val baseRepository: BaseReposi
     BaseViewModel() {
 
     // directly expose the list contents from the repository
-    val listContents: LiveData<List<Event>>
-        get() = baseRepository.observeEvents()
+    val listContents = baseRepository.observeEvents()
 
     private val _showLoading = MutableLiveData(false)
     val showLoading: LiveData<Boolean>

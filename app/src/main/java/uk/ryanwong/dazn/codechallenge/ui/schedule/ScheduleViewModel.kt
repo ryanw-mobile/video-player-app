@@ -18,8 +18,7 @@ class ScheduleViewModel @Inject constructor(private val baseRepository: BaseRepo
     BaseViewModel() {
 
     // directly expose the list contents from the repository
-    val listContents: LiveData<List<Schedule>>
-        get() = baseRepository.observeSchedule()
+    val listContents = baseRepository.observeSchedule()
 
     private val _showLoading = MutableLiveData(false)
     val showLoading: LiveData<Boolean>
