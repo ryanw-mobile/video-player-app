@@ -55,7 +55,7 @@ class FakeRepository : BaseRepository() {
             if (shouldReturnError) {
                 throw IOException(exceptionMessage)
             }
-            observableEvents.postValue(remoteEventList)
+            observableEvents.postValue(remoteEventList.toList())
         }
     }
 
@@ -64,7 +64,7 @@ class FakeRepository : BaseRepository() {
             if (shouldReturnError) {
                 throw IOException(exceptionMessage)
             }
-            observableSchedules.postValue(remoteScheduleList)
+            observableSchedules.postValue(remoteScheduleList.toList())
         }
     }
 
