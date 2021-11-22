@@ -15,6 +15,7 @@
  */
 
 package uk.ryanwong.dazn.codechallenge
+
 import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
@@ -23,6 +24,7 @@ import androidx.core.util.Preconditions
 import androidx.fragment.app.Fragment
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
  * launchFragmentInContainer from the androidx.fragment:fragment-testing library
@@ -33,6 +35,7 @@ import androidx.test.core.app.ApplicationProvider
  * [HiltTestActivity] in the debug folder and include it in the debug AndroidManifest.xml file
  * as can be found in this project.
  */
+@ExperimentalCoroutinesApi
 inline fun <reified T : Fragment> launchFragmentInHiltContainer(
     fragmentArgs: Bundle? = null,
     @StyleRes themeResId: Int = R.style.FragmentScenarioEmptyFragmentActivityTheme,
