@@ -30,7 +30,7 @@ class EventsAdapter(private val clickListener: EventClickListener) :
 
     // This is needed for hasStableIds()
     override fun getItemId(position: Int): Long {
-        return position.toLong()
+        return getItem(position).hashCode().toLong()
     }
 
     class ViewHolder private constructor(val binding: ListitemEventsBinding) :
