@@ -41,10 +41,11 @@ class SchedulesFragmentTest {
     @Inject
     lateinit var repository: BaseRepository
 
-    @get:Rule
+    // HiltAndroidRule executes first - https://developer.android.com/training/dependency-injection/hilt-testing#multiple-testrules
+    @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    @get:Rule
+    @get:Rule(order = 1)
     var mainCoroutineRule = MainCoroutineRule()
 
     @Before

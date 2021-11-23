@@ -22,6 +22,8 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.CoreMatchers
+import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Ignore
@@ -47,10 +49,11 @@ class EventsFragmentTest {
     @Inject
     lateinit var repository: BaseRepository
 
-    @get:Rule
+    // HiltAndroidRule executes first - https://developer.android.com/training/dependency-injection/hilt-testing#multiple-testrules
+    @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    @get:Rule
+    @get:Rule(order = 1)
     var mainCoroutineRule = MainCoroutineRule()
 
     @Before
@@ -97,14 +100,17 @@ class EventsFragmentTest {
         )
     }
 
-    @Ignore
     @Test
     fun repositoryEmpty_ShowNoData() = mainCoroutineRule.runBlockingTest {
         // GIVEN - Repository has no events to supply
         (repository as FakeRepository).submitEventList(emptyList())
         repository.refreshEvents()
+        MatcherAssert.assertThat(repository.getSchedule().size, CoreMatchers.`is`(0))
 
         // WHEN - Launching the fragment
+        // Note: Originally we use launchFragmentInContainer
+        // But due to library bugs, we use launchFragmentInHiltContainer
+        // See HiltExt.kt for details
         launchFragmentInHiltContainer<EventsFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
 
         // THEN - noDataTextView is shown
