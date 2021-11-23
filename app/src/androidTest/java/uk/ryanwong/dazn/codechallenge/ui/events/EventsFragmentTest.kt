@@ -26,7 +26,6 @@ import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers.not
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -59,45 +58,6 @@ class EventsFragmentTest {
     @Before
     fun init() {
         hiltRule.inject()
-    }
-
-    /***
-     * Note: Further effort to make this work under Hilt is required.
-     * This test is now removed temporarily.
-     */
-    @Test
-    fun clickEvent_NavigateToExoplayerActivity() = mainCoroutineRule.runBlockingTest {
-        // GIVEN - Load the Events Fragment with three events
-        (repository as FakeRepository).submitEventList(listOf(event1, event2, event3))
-        repository.refreshEvents()
-
-        // Note: Originally we use launchFragmentInContainer
-        // But due to library bugs, we use launchFragmentInHiltContainer
-        // See HiltExt.kt for details
-        val navController = Mockito.mock(NavController::class.java)
-        /***
-         * Warning: Hilt does not currently support FragmentScenario because there is no way to
-         * specify an activity class, and Hilt requires a Hilt fragment to be contained in a Hilt
-         * activity. One workaround for this is to launch a Hilt activity and then attach your fragment.
-         */
-        launchFragmentInHiltContainer<EventsFragment>(Bundle(), R.style.Theme_DaznCodeChallenge) {
-            Navigation.setViewNavController(requireView(), navController)
-        }
-
-        // WHEN - Click on the event1
-        Espresso.onView(withId(R.id.recyclerview))
-            // Using ViewMatchers to locate the item with event1.title on the RecyclerView
-            .perform(
-                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                    ViewMatchers.hasDescendant(ViewMatchers.withText(event1.title)),
-                    ViewActions.click()
-                )
-            )
-
-        // THEN - Verify that we navigate to the player screen
-        Mockito.verify(navController).navigate(
-            EventsFragmentDirections.actionNavigationEventsToExoplayerActivity(event1.videoUrl)
-        )
     }
 
     @Test
@@ -145,5 +105,40 @@ class EventsFragmentTest {
         // Expects reminder to be saved successfully
         Espresso.onView(withText(R.string.something_went_wrong))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    }
+
+    @Test
+    fun clickEvent_NavigateToExoplayerActivity() = mainCoroutineRule.runBlockingTest {
+        // GIVEN - Load the Events Fragment with three events
+        (repository as FakeRepository).submitEventList(listOf(event1, event2, event3))
+        repository.refreshEvents()
+
+        // Note: Originally we use launchFragmentInContainer
+        // But due to library bugs, we use launchFragmentInHiltContainer
+        // See HiltExt.kt for details
+        val navController = Mockito.mock(NavController::class.java)
+        /***
+         * Warning: Hilt does not currently support FragmentScenario because there is no way to
+         * specify an activity class, and Hilt requires a Hilt fragment to be contained in a Hilt
+         * activity. One workaround for this is to launch a Hilt activity and then attach your fragment.
+         */
+        launchFragmentInHiltContainer<EventsFragment>(Bundle(), R.style.Theme_DaznCodeChallenge) {
+            Navigation.setViewNavController(requireView(), navController)
+        }
+
+        // WHEN - Click on the event1
+        Espresso.onView(withId(R.id.recyclerview))
+            // Using ViewMatchers to locate the item with event1.title on the RecyclerView
+            .perform(
+                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                    ViewMatchers.hasDescendant(ViewMatchers.withText(event1.title)),
+                    ViewActions.click()
+                )
+            )
+
+        // THEN - Verify that we navigate to the player screen
+        Mockito.verify(navController).navigate(
+            EventsFragmentDirections.actionNavigationEventsToExoplayerActivity(event1.videoUrl)
+        )
     }
 }
