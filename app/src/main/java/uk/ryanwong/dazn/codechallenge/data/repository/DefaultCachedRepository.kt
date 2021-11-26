@@ -13,6 +13,7 @@ import uk.ryanwong.dazn.codechallenge.data.source.remote.ApiResult
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.util.wrapEspressoIdlingResource
+import javax.inject.Inject
 
 /**
  * Default user-facing Repository
@@ -24,7 +25,7 @@ import uk.ryanwong.dazn.codechallenge.util.wrapEspressoIdlingResource
  * So after the first App launch, we are able to always show something,
  * before the new data arrives, or even without an Internet connection.
  */
-class DefaultCachedRepository(
+class DefaultCachedRepository @Inject constructor(
     private val remoteDataSource: BaseRemoteDataSource,
     private val localDataSource: BaseLocalDataSource
 ) : BaseRepository() {
