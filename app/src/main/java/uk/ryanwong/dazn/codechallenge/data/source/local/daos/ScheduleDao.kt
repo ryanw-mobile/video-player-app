@@ -13,7 +13,7 @@ import androidx.room.Query
 import uk.ryanwong.dazn.codechallenge.data.source.local.entities.ScheduleDbEntity
 
 @Dao
-interface ScheduleDao {
+sealed interface ScheduleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(scheduleDbEntity: ScheduleDbEntity)

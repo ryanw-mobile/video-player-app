@@ -9,7 +9,7 @@ import retrofit2.http.GET
 import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.EventNetworkEntity
 import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.ScheduleNetworkEntity
 
-interface DaznApiService {
+sealed interface DaznApiService {
     @GET("getEvents")
     suspend fun getEvents(): List<EventNetworkEntity>
 

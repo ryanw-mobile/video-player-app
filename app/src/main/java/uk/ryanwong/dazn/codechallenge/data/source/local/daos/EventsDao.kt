@@ -13,7 +13,7 @@ import androidx.room.Query
 import uk.ryanwong.dazn.codechallenge.data.source.local.entities.EventDbEntity
 
 @Dao
-interface EventsDao {
+sealed interface EventsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(eventDbEntity: EventDbEntity)
