@@ -28,7 +28,6 @@ import uk.ryanwong.dazn.codechallenge.TestData.schedule1Modified
 import uk.ryanwong.dazn.codechallenge.TestData.schedule2
 import uk.ryanwong.dazn.codechallenge.TestData.schedule3
 import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
-import uk.ryanwong.dazn.codechallenge.di.ProvideRoomDbDataSource
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -37,11 +36,11 @@ import javax.inject.Inject
 @MediumTest
 class RoomDbDataSourceTest {
 
-    // Use the real data source
+    // We test the data source, so we are using a REAL data source, not the fake one!
     @Inject
-    @ProvideRoomDbDataSource
     lateinit var localDataSource: BaseLocalDataSource
 
+    // However we have silently replaced the database with an in-memory database
     @Inject
     lateinit var database: DaznApiDatabase
 
