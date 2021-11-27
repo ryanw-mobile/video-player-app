@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import uk.ryanwong.dazn.codechallenge.base.BaseFragment
 import uk.ryanwong.dazn.codechallenge.databinding.FragmentScheduleBinding
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
@@ -18,7 +19,18 @@ import javax.inject.Inject
 class ScheduleFragment @Inject constructor() : BaseFragment() {
 
     override val viewModel: ScheduleViewModel by viewModels()
-    private lateinit var binding: FragmentScheduleBinding
+    private var _binding: FragmentScheduleBinding? = null
+    private val binding get() = _binding!!
+
+    private val adapterDataObserver = object : RecyclerView.AdapterDataObserver() {
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+            viewModel.listState?.let {
+                // layoutManager.scrollToPositionWithOffset(position, 0)
+                binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
+            }
+        }
+    }
+
     @Inject
     lateinit var scheduleAdapter: ScheduleAdapter
 
@@ -27,7 +39,7 @@ class ScheduleFragment @Inject constructor() : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentScheduleBinding.inflate(inflater, container, false)
+        _binding = FragmentScheduleBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -41,14 +53,7 @@ class ScheduleFragment @Inject constructor() : BaseFragment() {
             setHasStableIds(true)
 
             // This overrides the adapter's intention to scroll back to the top
-            registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                    viewModel.listState?.let {
-                        // layoutManager.scrollToPositionWithOffset(position, 0)
-                        binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
-                    }
-                }
-            })
+            registerAdapterDataObserver(adapterDataObserver)
         }
 
         // The purpose of LifecycleObserver is to eliminate writing the boilerplate code
@@ -82,7 +87,19 @@ class ScheduleFragment @Inject constructor() : BaseFragment() {
 
         viewModel.listContents.observe(viewLifecycleOwner, {
             viewModel.saveListState(binding.recyclerview.layoutManager?.onSaveInstanceState())
+            Timber.d("!!! List size = ${it.size}")
             scheduleAdapter.submitList(it as List<Schedule>)
         })
+    }
+
+    override fun onDestroyView() {
+        scheduleAdapter.apply {
+            unregisterAdapterDataObserver(adapterDataObserver)
+        }
+        binding.recyclerview.apply {
+            adapter = null
+        }
+        _binding = null
+        super.onDestroyView()
     }
 }

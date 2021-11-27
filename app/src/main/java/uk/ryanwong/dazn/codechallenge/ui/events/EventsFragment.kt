@@ -23,7 +23,18 @@ import uk.ryanwong.dazn.codechallenge.util.extensions.setupRefreshLayout
 class EventsFragment : BaseFragment() {
 
     override val viewModel : EventsViewModel by viewModels()
-    private lateinit var binding: FragmentEventsBinding
+    private var _binding: FragmentEventsBinding? = null
+    private val binding get() = _binding!!
+
+    private val adapterDataObserver = object : RecyclerView.AdapterDataObserver() {
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+            viewModel.listState?.let {
+                // layoutManager.scrollToPositionWithOffset(position, 0)
+                binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
+            }
+        }
+    }
+
     private val eventsAdapter = EventsAdapter(EventClickListener {
         viewModel.setEventClicked(it)
     }).apply {
@@ -33,14 +44,7 @@ class EventsFragment : BaseFragment() {
         setHasStableIds(true)
 
         // This overrides the adapter's intention to scroll back to the top
-        registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                viewModel.listState?.let {
-                    // layoutManager.scrollToPositionWithOffset(position, 0)
-                    binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
-                }
-            }
-        })
+        registerAdapterDataObserver(adapterDataObserver)
     }
 
     override fun onCreateView(
@@ -48,7 +52,7 @@ class EventsFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentEventsBinding.inflate(inflater, container, false)
+        _binding = FragmentEventsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -101,4 +105,14 @@ class EventsFragment : BaseFragment() {
         })
     }
 
+    override fun onDestroyView() {
+        eventsAdapter.apply {
+            unregisterAdapterDataObserver(adapterDataObserver)
+        }
+        binding.recyclerview.apply {
+            adapter = null
+        }
+        _binding = null
+        super.onDestroyView()
+    }
 }
