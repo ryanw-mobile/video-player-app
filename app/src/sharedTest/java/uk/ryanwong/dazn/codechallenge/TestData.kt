@@ -7,7 +7,7 @@ package uk.ryanwong.dazn.codechallenge
 
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
-import uk.ryanwong.dazn.codechallenge.util.parseTimeStamp
+import uk.ryanwong.dazn.codechallenge.util.extensions.parseTimeStamp
 
 /*
  * Copyright (c) 2021. Ryan Wong (hello@ryanwong.co.uk)

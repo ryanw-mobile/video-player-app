@@ -3,7 +3,7 @@
  *
  */
 
-package uk.ryanwong.dazn.codechallenge.util
+package uk.ryanwong.dazn.codechallenge.util.extensions
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
