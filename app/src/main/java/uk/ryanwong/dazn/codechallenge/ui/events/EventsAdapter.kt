@@ -30,7 +30,8 @@ class EventsAdapter(private val clickListener: EventClickListener) :
 
     // This is needed for hasStableIds()
     override fun getItemId(position: Int): Long {
-        return getItem(position).hashCode().toLong()
+        // The API returns slightly timestamp for the same object every time, we can't use hashcode
+        return position.toLong()
     }
 
     class ViewHolder private constructor(val binding: ListitemEventsBinding) :
@@ -64,8 +65,8 @@ class EventsAdapter(private val clickListener: EventClickListener) :
  */
 class EventsDiffCallback : DiffUtil.ItemCallback<Event>() {
     override fun areItemsTheSame(oldItem: Event, newItem: Event): Boolean {
-        Timber.v("areItemsTheSame: ${oldItem === newItem}")
-        return oldItem === newItem
+        Timber.v("areItemsTheSame: ${oldItem.eventId == newItem.eventId}")
+        return oldItem.eventId == newItem.eventId
     }
 
     override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {

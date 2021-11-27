@@ -31,10 +31,11 @@ class ScheduleAdapter @Inject constructor() :
 
     // This is needed for hasStableIds()
     override fun getItemId(position: Int): Long {
-        return getItem(position).hashCode().toLong()
+        // The API returns slightly timestamp for the same object every time, we can't use hashcode
+        return position.toLong()
     }
 
-    class ViewHolder private constructor(val binding: ListitemScheduleBinding) :
+    class ViewHolder private constructor(private val binding: ListitemScheduleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Schedule) {
@@ -64,8 +65,8 @@ class ScheduleAdapter @Inject constructor() :
  */
 class ScheduleDiffCallback : DiffUtil.ItemCallback<Schedule>() {
     override fun areItemsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
-        Timber.v("areItemsTheSame: ${oldItem === newItem}")
-        return oldItem === newItem
+        Timber.v("areItemsTheSame: ${oldItem.scheduleId == newItem.scheduleId}")
+        return oldItem.scheduleId == newItem.scheduleId
     }
 
     override fun areContentsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
