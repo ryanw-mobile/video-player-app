@@ -5,10 +5,13 @@
 
 package uk.ryanwong.dazn.codechallenge.di
 
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
 import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
@@ -23,23 +26,27 @@ object DataSourceModules {
 
     @Provides
     @Singleton
+    fun provideCoroutineDispatcher(): CoroutineDispatcher {
+        return Dispatchers.IO
+    }
+
+    @Provides
+    @Singleton
     fun provideDaznApiDaos(database: DaznApiDatabase): DaznApiDaos {
         return DaznApiDaos(database.eventsDao, database.scheduleDao)
     }
+}
 
-    @Provides
-    @Singleton
-    fun provideLocalDataSource(
-        daznApiDaos: DaznApiDaos
-    ): BaseLocalDataSource {
-        return RoomDbDataSource(daznApiDaos)
-    }
+@InstallIn(SingletonComponent::class)
+@Module
+abstract class LocalDataSourceModule {
+    @Binds
+    abstract fun bindLocalDataSource(impl: RoomDbDataSource): BaseLocalDataSource
+}
 
-    @Provides
-    @Singleton
-    fun provideRemoteDataSource(): BaseRemoteDataSource {
-        return SandBoxAPIDataSource()
-    }
-
-
+@InstallIn(SingletonComponent::class)
+@Module
+abstract class RemoteDataSourceModule {
+    @Binds
+    abstract fun bindRemoteDataSource(impl: SandBoxAPIDataSource): BaseRemoteDataSource
 }

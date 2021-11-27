@@ -8,7 +8,6 @@ package uk.ryanwong.dazn.codechallenge.data.source.local
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
@@ -17,14 +16,14 @@ import uk.ryanwong.dazn.codechallenge.data.source.local.entities.asDatabaseModel
 import uk.ryanwong.dazn.codechallenge.data.source.local.entities.asDomainModel
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
+import javax.inject.Inject
 
 /**
  * Concrete implementation of a data source as a db.
  */
-class RoomDbDataSource internal constructor(
+class RoomDbDataSource @Inject constructor(
     private val daznApiDaos: DaznApiDaos,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : BaseLocalDataSource() {
+    private val ioDispatcher: CoroutineDispatcher) : BaseLocalDataSource() {
 
     override fun observeEvents(): LiveData<List<Event>> {
         return Transformations.map(daznApiDaos.eventsDao.observeEvents()) {
