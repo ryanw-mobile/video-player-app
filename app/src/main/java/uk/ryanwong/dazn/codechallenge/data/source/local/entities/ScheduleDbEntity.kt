@@ -34,13 +34,7 @@ data class ScheduleDbEntity(
 
 fun List<ScheduleDbEntity>.asDomainModel(): List<Schedule> {
     return map {
-        Schedule(
-            scheduleId = it.scheduleId,
-            title = it.title,
-            subtitle = it.subtitle,
-            date = it.date,
-            imageUrl = it.imageUrl
-        )
+        it.asDomainModel()
     }
 }
 
@@ -56,14 +50,7 @@ fun ScheduleDbEntity.asDomainModel(): Schedule {
 
 fun List<Schedule>.asDatabaseModel(): List<ScheduleDbEntity> {
     return map {
-        ScheduleDbEntity(
-            scheduleId = it.scheduleId,
-            title = it.title,
-            subtitle = it.subtitle,
-            date = it.date,
-            imageUrl = it.imageUrl,
-            dirty = false
-        )
+        it.asDatabaseModel()
     }
 }
 

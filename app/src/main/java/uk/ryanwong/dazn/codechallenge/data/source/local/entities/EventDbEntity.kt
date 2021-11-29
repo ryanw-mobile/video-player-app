@@ -37,14 +37,7 @@ data class EventDbEntity(
 
 fun List<EventDbEntity>.asDomainModel(): List<Event> {
     return map {
-        Event(
-            eventId = it.eventId,
-            title = it.title,
-            subtitle = it.subtitle,
-            date = it.date,
-            imageUrl = it.imageUrl,
-            videoUrl = it.videoUrl
-        )
+        it.asDomainModel()
     }
 }
 
@@ -61,15 +54,7 @@ fun EventDbEntity.asDomainModel(): Event {
 
 fun List<Event>.asDatabaseModel(): List<EventDbEntity> {
     return map {
-        EventDbEntity(
-            eventId = it.eventId,
-            title = it.title,
-            subtitle = it.subtitle,
-            date = it.date,
-            imageUrl = it.imageUrl,
-            videoUrl = it.videoUrl,
-            dirty = false
-        )
+        it.asDatabaseModel()
     }
 }
 
