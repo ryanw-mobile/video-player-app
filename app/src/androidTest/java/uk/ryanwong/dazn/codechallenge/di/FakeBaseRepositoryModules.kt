@@ -9,7 +9,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import uk.ryanwong.dazn.codechallenge.base.BaseRepository
+import uk.ryanwong.dazn.codechallenge.data.repository.BaseRepository
 import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
 import javax.inject.Singleton
 

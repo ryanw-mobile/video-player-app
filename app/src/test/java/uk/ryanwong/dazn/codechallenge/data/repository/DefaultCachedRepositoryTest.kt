@@ -18,6 +18,8 @@ import uk.ryanwong.dazn.codechallenge.TestData
 import uk.ryanwong.dazn.codechallenge.TestData.event1
 import uk.ryanwong.dazn.codechallenge.TestData.event2
 import uk.ryanwong.dazn.codechallenge.TestData.event3
+import uk.ryanwong.dazn.codechallenge.data.source.local.FakeLocalDataSource
+import uk.ryanwong.dazn.codechallenge.data.source.remote.FakeRemoteDataSource
 import java.io.IOException
 
 

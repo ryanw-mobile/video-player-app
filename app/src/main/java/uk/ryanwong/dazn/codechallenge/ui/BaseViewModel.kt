@@ -3,7 +3,7 @@
  *
  */
 
-package uk.ryanwong.dazn.codechallenge.base
+package uk.ryanwong.dazn.codechallenge.ui
 
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel

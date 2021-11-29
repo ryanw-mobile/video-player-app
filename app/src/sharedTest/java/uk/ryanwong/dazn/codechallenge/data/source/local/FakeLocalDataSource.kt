@@ -3,10 +3,10 @@
  *
  */
 
-package uk.ryanwong.dazn.codechallenge.data.repository
+package uk.ryanwong.dazn.codechallenge.data.source.local
 
 import androidx.lifecycle.LiveData
-import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
+import uk.ryanwong.dazn.codechallenge.data.source.local.BaseLocalDataSource
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 

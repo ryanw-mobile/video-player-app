@@ -3,7 +3,7 @@
  *
  */
 
-package uk.ryanwong.dazn.codechallenge.base
+package uk.ryanwong.dazn.codechallenge.data.repository
 
 import androidx.lifecycle.LiveData
 import uk.ryanwong.dazn.codechallenge.domain.models.Event

@@ -1,4 +1,9 @@
-package uk.ryanwong.dazn.codechallenge.base
+/*
+ * Copyright (c) 2021. Ryan Wong (hello@ryanwong.co.uk)
+ *
+ */
+
+package uk.ryanwong.dazn.codechallenge.ui
 
 import android.app.AlertDialog
 import androidx.fragment.app.Fragment

@@ -9,9 +9,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
-import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
-import uk.ryanwong.dazn.codechallenge.base.BaseRepository
+import uk.ryanwong.dazn.codechallenge.data.source.local.BaseLocalDataSource
+import uk.ryanwong.dazn.codechallenge.data.source.remote.BaseRemoteDataSource
+import uk.ryanwong.dazn.codechallenge.data.repository.BaseRepository
 import uk.ryanwong.dazn.codechallenge.data.repository.DefaultCachedRepository
 import javax.inject.Singleton
 

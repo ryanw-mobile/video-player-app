@@ -9,7 +9,7 @@ import uk.ryanwong.dazn.codechallenge.data.source.local.entities.EventDbEntity
 import uk.ryanwong.dazn.codechallenge.data.source.local.entities.ScheduleDbEntity
 
 @Database(entities = [EventDbEntity::class, ScheduleDbEntity::class], version = 5, exportSchema = false)
-@TypeConverters(Converters::class)
+@TypeConverters(RoomDbConverters::class)
 abstract class DaznApiDatabase : RoomDatabase() {
 
     // DAOs

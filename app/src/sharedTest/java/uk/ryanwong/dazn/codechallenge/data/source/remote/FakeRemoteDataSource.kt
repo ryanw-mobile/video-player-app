@@ -3,9 +3,9 @@
  *
  */
 
-package uk.ryanwong.dazn.codechallenge.data.repository
+package uk.ryanwong.dazn.codechallenge.data.source.remote
 
-import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
+import uk.ryanwong.dazn.codechallenge.data.source.remote.BaseRemoteDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.remote.ApiResult
 import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.EventNetworkEntity
 import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.ScheduleNetworkEntity

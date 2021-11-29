@@ -8,9 +8,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import uk.ryanwong.dazn.codechallenge.base.BaseRepository
-import uk.ryanwong.dazn.codechallenge.base.BaseViewModel
-import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
+import uk.ryanwong.dazn.codechallenge.data.repository.BaseRepository
+import uk.ryanwong.dazn.codechallenge.ui.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel

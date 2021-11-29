@@ -35,7 +35,7 @@ import uk.ryanwong.dazn.codechallenge.R
 import uk.ryanwong.dazn.codechallenge.TestData.event1
 import uk.ryanwong.dazn.codechallenge.TestData.event2
 import uk.ryanwong.dazn.codechallenge.TestData.event3
-import uk.ryanwong.dazn.codechallenge.base.BaseRepository
+import uk.ryanwong.dazn.codechallenge.data.repository.BaseRepository
 import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
 import uk.ryanwong.dazn.codechallenge.launchFragmentInHiltContainer
 import javax.inject.Inject

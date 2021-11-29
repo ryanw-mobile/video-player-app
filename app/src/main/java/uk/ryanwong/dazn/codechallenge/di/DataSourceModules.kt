@@ -12,8 +12,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
-import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
+import uk.ryanwong.dazn.codechallenge.data.source.local.BaseLocalDataSource
+import uk.ryanwong.dazn.codechallenge.data.source.remote.BaseRemoteDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
 import uk.ryanwong.dazn.codechallenge.data.source.local.RoomDbDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.local.daos.DaznApiDaos

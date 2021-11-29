@@ -11,7 +11,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import timber.log.Timber.Forest.plant
-import uk.ryanwong.dazn.codechallenge.base.BaseRepository
 
 @HiltAndroidApp
 class DaznApp : Application() {

@@ -7,7 +7,6 @@ package uk.ryanwong.dazn.codechallenge.data.source.remote
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import uk.ryanwong.dazn.codechallenge.base.BaseRemoteDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.asDomainModel
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule

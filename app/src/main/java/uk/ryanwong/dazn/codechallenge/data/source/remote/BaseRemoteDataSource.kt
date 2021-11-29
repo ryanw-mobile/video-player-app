@@ -1,6 +1,9 @@
-package uk.ryanwong.dazn.codechallenge.base
+/*
+ * Copyright (c) 2021. Ryan Wong (hello@ryanwong.co.uk)
+ *
+ */
 
-import uk.ryanwong.dazn.codechallenge.data.source.remote.ApiResult
+package uk.ryanwong.dazn.codechallenge.data.source.remote
 
 /**
  * Remote Data Source interface

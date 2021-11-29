@@ -6,8 +6,8 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import uk.ryanwong.dazn.codechallenge.base.BaseRepository
-import uk.ryanwong.dazn.codechallenge.base.BaseViewModel
+import uk.ryanwong.dazn.codechallenge.data.repository.BaseRepository
+import uk.ryanwong.dazn.codechallenge.ui.BaseViewModel
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import javax.inject.Inject
 

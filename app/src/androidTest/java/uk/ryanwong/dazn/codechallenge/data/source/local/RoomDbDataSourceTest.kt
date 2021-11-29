@@ -27,7 +27,6 @@ import uk.ryanwong.dazn.codechallenge.TestData.schedule1
 import uk.ryanwong.dazn.codechallenge.TestData.schedule1Modified
 import uk.ryanwong.dazn.codechallenge.TestData.schedule2
 import uk.ryanwong.dazn.codechallenge.TestData.schedule3
-import uk.ryanwong.dazn.codechallenge.base.BaseLocalDataSource
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi

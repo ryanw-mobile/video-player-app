@@ -28,7 +28,7 @@ import uk.ryanwong.dazn.codechallenge.MainCoroutineRule
 import uk.ryanwong.dazn.codechallenge.R
 import uk.ryanwong.dazn.codechallenge.TestData.schedule1
 import uk.ryanwong.dazn.codechallenge.TestData.schedule2
-import uk.ryanwong.dazn.codechallenge.base.BaseRepository
+import uk.ryanwong.dazn.codechallenge.data.repository.BaseRepository
 import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
 import uk.ryanwong.dazn.codechallenge.launchFragmentInHiltContainer
 import javax.inject.Inject
