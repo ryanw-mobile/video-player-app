@@ -2,10 +2,7 @@ language: android
 jdk: openjdk11
 os: linux
 sudo: false
-
-# require the branch name to be master (note for PRs this is the base branch name)
 if: branch = master OR tag IS present
-
 android:
   licenses:
     - android-sdk-license-.+
@@ -14,10 +11,10 @@ android:
   components:
     - build-tools-31.0.0
     - android-31
-    - android-22
-    - extra
-    - addon
-    - sys-img-armeabi-v7a-android-22
+    - android-24
+    - extra-android-m2repository
+    - extra-google-m2repository
+    - sys-img-armeabi-v7a-android-24
 env:
   global:
     - TARGET_VERSION=31
@@ -28,9 +25,11 @@ before_install:
   - openssl aes-256-cbc -K $encrypted_554001b6719d_key -iv $encrypted_554001b6719d_iv
     -in secure.keystore.enc -out secure.keystore -d
   - touch $HOME/.android/repositories.cfg
-  - wget "https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip" -O commandlinetools.zip
+  - wget "https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip"
+    -O commandlinetools.zip
   - unzip commandlinetools.zip -d $ANDROID_HOME/
-  - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platforms;android-${TARGET_VERSION}" --sdk_root=$ANDROID_HOME
+  - yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platforms;android-${TARGET_VERSION}"
+    --sdk_root=$ANDROID_HOME
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -40,14 +39,15 @@ cache:
     - "$HOME/.gradle/wrapper/"
     - "$HOME/.android/build-cache"
 before_script:
-  - chmod +x gradlew
-  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
-  - emulator -avd test -no-audio -no-window &
+  - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
+  - emulator -avd test -no-skin -no-window &
   - bash android-wait-for-emulator
   - adb shell input keyevent 82 &
+  - chmod +x gradlew
 script:
-  - ./gradlew clean
-  - ./gradlew build
-  - ./gradlew connectedAndroidTest -PdisablePreDex
-#after_success:
-#  - bash <(curl -s https://codecov.io/bash)
+  - "./gradlew clean"
+  - "./gradlew test"
+  - "./gradlew connectedAndroidTest -PdisablePreDex"
+  - "./gradlew assembleDebug assembleRelease"
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
