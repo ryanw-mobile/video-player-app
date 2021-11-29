@@ -183,7 +183,7 @@ dependencies {
 
     // AndroidX Test - JVM testing
     testImplementation "androidx.test:core-ktx:$test_core_version"
-    testImplementation 'org.robolectric:robolectric:4.7'
+    testImplementation 'org.robolectric:robolectric:4.7.2'
     testImplementation "androidx.test.ext:junit-ktx:$test_ext_version"
     testImplementation "androidx.arch.core:core-testing:$arch_core_testing_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
@@ -200,7 +200,7 @@ dependencies {
     implementation "androidx.test:core-ktx:$test_core_version"
 
     // Dependencies for Android instrumented unit tests
-    androidTestImplementation 'org.mockito:mockito-core:4.0.0'
+    androidTestImplementation 'org.mockito:mockito-core:4.1.0'
     androidTestImplementation 'com.linkedin.dexmaker:dexmaker-mockito:2.28.1'
     androidTestImplementation "androidx.arch.core:core-testing:$arch_core_testing_version"
     implementation "androidx.test.espresso:espresso-idling-resource:$espresso_version"
