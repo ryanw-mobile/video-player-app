@@ -17,8 +17,8 @@ class SandBoxAPIDataSource @Inject constructor(
     private val retrofitService: DaznApiService,
     private val ioDispatcher: CoroutineDispatcher
 ) :
-    BaseRemoteDataSource() {
-    
+    BaseRemoteDataSource {
+
     /***
      * Retrieve events from network
      */

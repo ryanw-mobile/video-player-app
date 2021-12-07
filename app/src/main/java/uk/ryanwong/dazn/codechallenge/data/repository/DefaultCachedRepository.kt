@@ -7,8 +7,8 @@ package uk.ryanwong.dazn.codechallenge.data.repository
 
 import androidx.lifecycle.LiveData
 import uk.ryanwong.dazn.codechallenge.data.source.local.BaseLocalDataSource
-import uk.ryanwong.dazn.codechallenge.data.source.remote.BaseRemoteDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.remote.ApiResult
+import uk.ryanwong.dazn.codechallenge.data.source.remote.BaseRemoteDataSource
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.util.wrapEspressoIdlingResource
@@ -27,7 +27,7 @@ import javax.inject.Inject
 class DefaultCachedRepository @Inject constructor(
     private val remoteDataSource: BaseRemoteDataSource,
     private val localDataSource: BaseLocalDataSource
-) : BaseRepository() {
+) : BaseRepository {
 
     override fun observeEvents(): LiveData<List<Event>> {
         wrapEspressoIdlingResource {
