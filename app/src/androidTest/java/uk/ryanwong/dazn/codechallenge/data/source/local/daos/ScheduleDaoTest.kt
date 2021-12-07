@@ -8,13 +8,11 @@ package uk.ryanwong.dazn.codechallenge.data.source.local.daos
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.CoreMatchers
-import org.hamcrest.MatcherAssert
-import org.hamcrest.core.Is.`is`
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -26,6 +24,7 @@ import uk.ryanwong.dazn.codechallenge.TestData.schedule2
 import uk.ryanwong.dazn.codechallenge.TestData.schedule3
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
 import uk.ryanwong.dazn.codechallenge.data.source.local.entities.asDatabaseModel
+import uk.ryanwong.dazn.codechallenge.data.source.local.entities.asDomainModel
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -50,7 +49,7 @@ class ScheduleDaoTest {
     }
 
     @Test
-    fun insertSchedule_GetById_ExpectsSameSchedule() = runBlockingTest {
+    fun insertSchedule_GetById_ReturnSameSchedule() = runTest {
         // GIVEN - empty database
         // Do Nothing
 
@@ -59,16 +58,11 @@ class ScheduleDaoTest {
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
         val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.scheduleId, `is`(schedule1.scheduleId))
-        MatcherAssert.assertThat(loaded.title, `is`(schedule1.title))
-        MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1.subtitle))
-        MatcherAssert.assertThat(loaded.date, `is`(schedule1.date))
-        MatcherAssert.assertThat(loaded.imageUrl, `is`(schedule1.imageUrl))
+        assertThat(loaded.asDomainModel()).isEqualTo(schedule1)
     }
 
     @Test
-    fun insertAll_GetSchedules_ExpectsCorrectListSize() = runBlockingTest {
+    fun insertAll_GetSchedules_ReturnCorrectListSize() = runTest {
         // GIVEN - Empty database
         // do nothing
 
@@ -77,11 +71,11 @@ class ScheduleDaoTest {
 
         // THEN - When get the schedules, the list size should be 3
         val loaded = database.scheduleDao.getSchedules()
-        MatcherAssert.assertThat(loaded.size, `is`(3))
+        assertThat(loaded).hasSize(3)
     }
 
     @Test
-    fun upsertSchedule_GetById_ExpectsUpdatedSchedule() = runBlockingTest {
+    fun upsertSchedule_GetById_ReturnUpdatedSchedule() = runTest {
         // GIVEN - Insert an schedule
         database.scheduleDao.insert(schedule1.asDatabaseModel())
 
@@ -90,17 +84,12 @@ class ScheduleDaoTest {
         database.scheduleDao.insert(schedule1Modified.asDatabaseModel())
 
         // THEN - When get the schedule by Id again, it should contain the new values
-        val loaded = database.scheduleDao.getScheduleById(schedule1Modified.scheduleId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.scheduleId, `is`(schedule1Modified.scheduleId))
-        MatcherAssert.assertThat(loaded.title, `is`(schedule1Modified.title))
-        MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1Modified.subtitle))
-        MatcherAssert.assertThat(loaded.date, `is`(schedule1Modified.date))
-        MatcherAssert.assertThat(loaded.imageUrl, `is`(schedule1Modified.imageUrl))
+        val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
+        assertThat(loaded.asDomainModel()).isEqualTo(schedule1Modified)
     }
 
     @Test
-    fun deleteSchedule_GetById_ExpectsNull() = runBlockingTest {
+    fun deleteSchedule_GetById_ReturnNull() = runTest {
         // GIVEN - Insert an schedule
         database.scheduleDao.insert(schedule1.asDatabaseModel())
 
@@ -109,11 +98,11 @@ class ScheduleDaoTest {
 
         // THEN - When get the schedule by Id again, it should return null
         val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.nullValue())
+        assertThat(loaded).isNull()
     }
 
     @Test
-    fun insertAll_DeleteOneAndGetById_ExpectsNull() = runBlockingTest {
+    fun insertAll_DeleteOneAndGetById_ReturnNull() = runTest {
         // GIVEN - Insert 3 schedules in a list
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
 
@@ -122,11 +111,11 @@ class ScheduleDaoTest {
 
         // THEN - When get the schedules, the list should be empty
         val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.nullValue())
+        assertThat(loaded).isNull()
     }
 
     @Test
-    fun insertAll_Clear_ExpectsEmptyList() = runBlockingTest {
+    fun insertAll_Clear_ReturnEmptyList() = runTest {
         // GIVEN - Insert 3 schedules in a list
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
 
@@ -135,13 +124,13 @@ class ScheduleDaoTest {
 
         // THEN - When get the schedules, the list should be empty
         val loaded = database.scheduleDao.getSchedules()
-        MatcherAssert.assertThat(loaded.size, `is`(0))
+        assertThat(loaded).isEmpty()
     }
 
     // Dirty bit testing
 
     @Test
-    fun insertNewSchedule_GetById_ExpectsDirtyFalse() = runBlockingTest {
+    fun insertNewSchedule_GetById_ReturnDirtyFalse() = runTest {
         // GIVEN - empty database
         // Do Nothing
 
@@ -150,17 +139,11 @@ class ScheduleDaoTest {
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
         val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.scheduleId, `is`(schedule1.scheduleId))
-        MatcherAssert.assertThat(loaded.title, `is`(schedule1.title))
-        MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1.subtitle))
-        MatcherAssert.assertThat(loaded.date, `is`(schedule1.date))
-        MatcherAssert.assertThat(loaded.imageUrl, `is`(schedule1.imageUrl))
-        MatcherAssert.assertThat(loaded.dirty, `is`(false))
+        assertThat(loaded.dirty).isFalse()
     }
 
     @Test
-    fun markDirty_GetById_ExpectsDirtyTrue() = runBlockingTest {
+    fun markDirty_GetById_ReturnDirtyTrue() = runTest {
         // GIVEN - multiple schedules
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
 
@@ -169,17 +152,11 @@ class ScheduleDaoTest {
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
         val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.scheduleId, `is`(schedule1.scheduleId))
-        MatcherAssert.assertThat(loaded.title, `is`(schedule1.title))
-        MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1.subtitle))
-        MatcherAssert.assertThat(loaded.date, `is`(schedule1.date))
-        MatcherAssert.assertThat(loaded.imageUrl, `is`(schedule1.imageUrl))
-        MatcherAssert.assertThat(loaded.dirty, `is`(true))
+        assertThat(loaded.dirty).isTrue()
     }
 
     @Test
-    fun dirtySchedules_UpdateSchedule_ExpectsDirtyFalse() = runBlockingTest {
+    fun dirtySchedules_UpdateSchedule_ReturnDirtyFalse() = runTest {
         // GIVEN - multiple schedules and marked dirty
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
         database.scheduleDao.markDirty()
@@ -189,17 +166,11 @@ class ScheduleDaoTest {
 
         // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
         val loaded = database.scheduleDao.getScheduleById(schedule1Modified.scheduleId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.scheduleId, `is`(schedule1Modified.scheduleId))
-        MatcherAssert.assertThat(loaded.title, `is`(schedule1Modified.title))
-        MatcherAssert.assertThat(loaded.subtitle, `is`(schedule1Modified.subtitle))
-        MatcherAssert.assertThat(loaded.date, `is`(schedule1Modified.date))
-        MatcherAssert.assertThat(loaded.imageUrl, `is`(schedule1Modified.imageUrl))
-        MatcherAssert.assertThat(loaded.dirty, `is`(false))
+        assertThat(loaded.dirty).isFalse()
     }
 
     @Test
-    fun dirtySchedules_InsertOneAndDeleteDirty_ExpectsOneSchedule() = runBlockingTest {
+    fun dirtySchedules_InsertOneAndDeleteDirty_ReturnOneSchedule() = runTest {
         // GIVEN - multiple schedules and marked dirty
         database.scheduleDao.insertAll(listOf(schedule1, schedule3).asDatabaseModel())
         database.scheduleDao.markDirty()
@@ -210,15 +181,7 @@ class ScheduleDaoTest {
 
         // THEN - Get all schedules. Expect only schedule 2 is returned
         val loaded = database.scheduleDao.getSchedules()
-        MatcherAssert.assertThat(loaded.size, `is`(1))
-        val loadedSchedule = loaded[0]
-        MatcherAssert.assertThat(loadedSchedule, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loadedSchedule.scheduleId, `is`(schedule2.scheduleId))
-        MatcherAssert.assertThat(loadedSchedule.title, `is`(schedule2.title))
-        MatcherAssert.assertThat(loadedSchedule.subtitle, `is`(schedule2.subtitle))
-        MatcherAssert.assertThat(loadedSchedule.date, `is`(schedule2.date))
-        MatcherAssert.assertThat(loadedSchedule.imageUrl, `is`(schedule2.imageUrl))
-        MatcherAssert.assertThat(loadedSchedule.dirty, `is`(false))
+        assertThat(loaded.asDomainModel()).containsExactly(schedule2)
     }
 
     @After

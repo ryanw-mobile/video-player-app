@@ -6,14 +6,12 @@
 package uk.ryanwong.dazn.codechallenge.ui.events
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.MatcherAssert
-import org.hamcrest.core.Is.`is`
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import uk.ryanwong.dazn.codechallenge.MainCoroutineRule
 import uk.ryanwong.dazn.codechallenge.TestData.event1
 import uk.ryanwong.dazn.codechallenge.TestData.event1Modified
 import uk.ryanwong.dazn.codechallenge.TestData.event2
@@ -22,24 +20,20 @@ import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.getOrAwaitValue
 
-@ExperimentalCoroutinesApi
 /***
  *  Provide testing to the EventsViewModel and its live data objects
  */
+@ExperimentalCoroutinesApi
 class EventsViewModelTest {
 
     // Subject under test
     private lateinit var eventsViewModel: EventsViewModel
 
-    // Use a fake repository to be injected into the viewmodel
+    // Use a fake repository to be injected into the viewModel
     private lateinit var fakeRepository: FakeRepository
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
-
-    @ExperimentalCoroutinesApi
-    @get:Rule
-    var mainCoroutineRule = MainCoroutineRule()
 
     @Before
     fun setupViewModel() {
@@ -52,22 +46,19 @@ class EventsViewModelTest {
     }
 
     @Test
-    fun emptyViewModel_ObserveEvents_ExpectsEmptyList() = mainCoroutineRule.runBlockingTest {
-        // GIVEN the viewModel is empty
-        // nothing to do
+    fun emptyViewModel_ObserveEvents_ReturnEmptyList() = runTest {
+        // GIVEN the viewModel is empty -- nothing to do
 
         // WHEN the ViewModel observes the LiveData list during initialization
         val observedEventsList = eventsViewModel.listContents.getOrAwaitValue()
 
         // THEN LiveData observed should have an initial empty state without error
-        MatcherAssert.assertThat(observedEventsList.size, `is`(0))
+        assertThat(observedEventsList).isEmpty()
     }
 
     @Test
-    fun emptyViewModel_RefreshList_ExpectsListUpdated() = mainCoroutineRule.runBlockingTest {
-        // GIVEN the viewModel is empty
-        val initialEventsList = eventsViewModel.listContents.getOrAwaitValue()
-        MatcherAssert.assertThat(initialEventsList.size, `is`(0))
+    fun emptyViewModel_RefreshList_ReturnListUpdated() = runTest {
+        // GIVEN the viewModel is empty -- nothing to do
 
         // WHEN adding a new task
         val fakedRemoteData = listOf(event1, event2, event3)
@@ -76,12 +67,11 @@ class EventsViewModelTest {
 
         // THEN  The LiveData is updated with the expected list
         val refreshedEventsList = eventsViewModel.listContents.getOrAwaitValue()
-        MatcherAssert.assertThat(refreshedEventsList.containsAll(fakedRemoteData), `is`(true))
-        MatcherAssert.assertThat(fakedRemoteData.containsAll(refreshedEventsList), `is`(true))
+        assertThat(refreshedEventsList).containsExactlyElementsIn(fakedRemoteData)
     }
 
     @Test
-    fun nonEmptyViewModel_RefreshList_ExpectsListUpdated() = mainCoroutineRule.runBlockingTest {
+    fun nonEmptyViewModel_RefreshList_ReturnListUpdated() = runTest {
         // GIVEN the ViewModel holds something
         // The repository has loaded only event1
         val fakedInitialRemoteData = listOf(event1)
@@ -89,9 +79,6 @@ class EventsViewModelTest {
 
         // Refresh the ViewModel and make sure the repository has event1 loaded
         eventsViewModel.refreshList()
-        val initialEventsList = eventsViewModel.listContents.getOrAwaitValue()
-        MatcherAssert.assertThat(initialEventsList.containsAll(fakedInitialRemoteData), `is`(true))
-        MatcherAssert.assertThat(fakedInitialRemoteData.containsAll(initialEventsList), `is`(true))
 
         // WHEN the remote data has changed and the ViewModel refresh() is called.
         val fakedChangedRemoteData = listOf(event1Modified, event3)
@@ -100,125 +87,91 @@ class EventsViewModelTest {
 
         // THEN The LiveData is updated with the expected list
         val refreshedEventsList = eventsViewModel.listContents.getOrAwaitValue()
-        MatcherAssert.assertThat(
-            refreshedEventsList.containsAll(fakedChangedRemoteData),
-            `is`(true)
-        )
-        MatcherAssert.assertThat(
-            fakedChangedRemoteData.containsAll(refreshedEventsList),
-            `is`(true)
-        )
+        assertThat(refreshedEventsList).containsExactlyElementsIn(fakedChangedRemoteData)
     }
 
     // Show No Data live data value tests
     // This is for fragment to determine if the no data alert should be shown
     @Test
-    fun emptyViewModel_RefreshNonEmptyList_ExpectsShowNoDataFalse() =
-        mainCoroutineRule.runBlockingTest {
-            // GIVEN a ViewModel has nothing in in
-            val initialContents = eventsViewModel.listContents.getOrAwaitValue()
-            MatcherAssert.assertThat(initialContents.size, `is`(0))
+    fun emptyViewModel_RefreshNonEmptyList_ReturnShowNoDataFalse() = runTest {
+        // GIVEN a ViewModel has nothing in it -- nothing to do
 
-            // WHEN the remote data has changed and the ViewModel refresh() is called.
-            val fakedChangedRemoteData = listOf(event1Modified, event3)
-            fakeRepository.submitEventList(fakedChangedRemoteData)
-            eventsViewModel.refreshList()
+        // WHEN the remote data has changed and the ViewModel refresh() is called.
+        val fakedChangedRemoteData = listOf(event1Modified, event3)
+        fakeRepository.submitEventList(fakedChangedRemoteData)
+        eventsViewModel.refreshList()
 
-            // THEN The LiveData value for showNoData should be false
-            val showNoData = eventsViewModel.showNoData.getOrAwaitValue()
-            MatcherAssert.assertThat(showNoData, `is`(false))
-        }
+        // THEN The LiveData value for showNoData should be false
+        val showNoData = eventsViewModel.showNoData.getOrAwaitValue()
+        assertThat(showNoData).isFalse()
+    }
 
     @Test
-    fun nonEmptyViewModel_RefreshNonEmptyList_ExpectsShowNoDataFalse() =
-        mainCoroutineRule.runBlockingTest {
-            // GIVEN - The ViewModel holds something
-            // The repository has loaded only event1
-            val fakedInitialRemoteData = listOf(event1)
-            fakeRepository.submitEventList(fakedInitialRemoteData)
+    fun nonEmptyViewModel_RefreshNonEmptyList_ReturnShowNoDataFalse() = runTest {
+        // GIVEN - The ViewModel holds something
+        // The repository has loaded only event1
+        val fakedInitialRemoteData = listOf(event1)
+        fakeRepository.submitEventList(fakedInitialRemoteData)
 
-            // Refresh the ViewModel and make sure the repository has event1 loaded
-            eventsViewModel.refreshList()
-            val initialEventsList = eventsViewModel.listContents.getOrAwaitValue()
-            MatcherAssert.assertThat(
-                initialEventsList.containsAll(fakedInitialRemoteData),
-                `is`(true)
-            )
-            MatcherAssert.assertThat(
-                fakedInitialRemoteData.containsAll(initialEventsList),
-                `is`(true)
-            )
+        // Refresh the ViewModel and make sure the repository has event1 loaded
+        eventsViewModel.refreshList()
 
-            // WHEN the remote data has changed and the ViewModel refresh() is called.
-            val fakedChangedRemoteData = listOf(event1Modified, event3)
-            fakeRepository.submitEventList(fakedChangedRemoteData)
-            eventsViewModel.refreshList()
+        // WHEN the remote data has changed and the ViewModel refresh() is called.
+        val fakedChangedRemoteData = listOf(event1Modified, event3)
+        fakeRepository.submitEventList(fakedChangedRemoteData)
+        eventsViewModel.refreshList()
 
-            // THEN The LiveData value for showNoData should be false
-            val showNoData = eventsViewModel.showNoData.getOrAwaitValue()
-            MatcherAssert.assertThat(showNoData, `is`(false))
-        }
+        // THEN The LiveData value for showNoData should be false
+        val showNoData = eventsViewModel.showNoData.getOrAwaitValue()
+        assertThat(showNoData).isFalse()
+    }
 
     @Test
-    fun emptyViewModel_RefreshEmptyList_ExpectsShowNoDataTrue() =
-        mainCoroutineRule.runBlockingTest {
-            // GIVEN a ViewModel has nothing in it
-            val initialContents = eventsViewModel.listContents.getOrAwaitValue()
-            MatcherAssert.assertThat(initialContents.size, `is`(0))
+    fun emptyViewModel_RefreshEmptyList_ReturnShowNoDataTrue() = runTest {
+        // GIVEN a ViewModel has nothing in it - nothing to do
 
-            // WHEN the remote data has changed and the ViewModel refresh() is called.
-            val fakedChangedRemoteData = emptyList<Event>()
-            fakeRepository.submitEventList(fakedChangedRemoteData)
-            eventsViewModel.refreshList()
+        // WHEN the remote data has changed and the ViewModel refresh() is called.
+        val fakedChangedRemoteData = emptyList<Event>()
+        fakeRepository.submitEventList(fakedChangedRemoteData)
+        eventsViewModel.refreshList()
 
-            // THEN The LiveData value for showNoData should be false
-            val showNoData = eventsViewModel.showNoData.getOrAwaitValue()
-            MatcherAssert.assertThat(showNoData, `is`(true))
-        }
+        // THEN The LiveData value for showNoData should be false
+        val showNoData = eventsViewModel.showNoData.getOrAwaitValue()
+        assertThat(showNoData).isTrue()
+    }
 
     @Test
-    fun nonEmptyViewModel_RefreshEmptyList_ExpectsShowNoDataTrue() =
-        mainCoroutineRule.runBlockingTest {
-            // GIVEN - The ViewModel holds something
-            // The repository has loaded only event1
-            val fakedInitialRemoteData = listOf(event1)
-            fakeRepository.submitEventList(fakedInitialRemoteData)
+    fun nonEmptyViewModel_RefreshEmptyList_ReturnShowNoDataTrue() = runTest {
+        // GIVEN - The ViewModel holds something
+        // The repository has loaded only event1
+        val fakedInitialRemoteData = listOf(event1)
+        fakeRepository.submitEventList(fakedInitialRemoteData)
 
-            // Refresh the ViewModel and make sure the repository has event1 loaded
-            eventsViewModel.refreshList()
-            val initialEventsList = eventsViewModel.listContents.getOrAwaitValue()
-            MatcherAssert.assertThat(
-                initialEventsList.containsAll(fakedInitialRemoteData),
-                `is`(true)
-            )
-            MatcherAssert.assertThat(
-                fakedInitialRemoteData.containsAll(initialEventsList),
-                `is`(true)
-            )
+        // Refresh the ViewModel and make sure the repository has event1 loaded
+        eventsViewModel.refreshList()
 
-            // WHEN the remote data has changed and the ViewModel refresh() is called.
-            val fakedChangedRemoteData = emptyList<Event>()
-            fakeRepository.submitEventList(fakedChangedRemoteData)
-            eventsViewModel.refreshList()
+        // WHEN the remote data has changed and the ViewModel refresh() is called.
+        val fakedChangedRemoteData = emptyList<Event>()
+        fakeRepository.submitEventList(fakedChangedRemoteData)
+        eventsViewModel.refreshList()
 
-            // THEN The LiveData value for showNoData should be false
-            val showNoData = eventsViewModel.showNoData.getOrAwaitValue()
-            MatcherAssert.assertThat(showNoData, `is`(true))
-        }
+        // THEN The LiveData value for showNoData should be false
+        val showNoData = eventsViewModel.showNoData.getOrAwaitValue()
+        assertThat(showNoData).isTrue()
+    }
 
     // Negative cases tests - set remote data source to return error
     @Test
-    fun repositoryError_RefreshList_ExpectsErrorMessage() =
-        mainCoroutineRule.runBlockingTest {
-            // GIVEN - The the repository is set to always return error
-            val errorMessage = "test error message"
-            fakeRepository.setReturnError(true, errorMessage)
+    fun repositoryError_RefreshList_ReturnErrorMessage() = runTest {
+        // GIVEN - The the repository is set to always return error
+        val errorMessage = "test error message"
+        fakeRepository.setReturnError(true, errorMessage)
 
-            // WHEN ViewModel refreshList() is called
-            eventsViewModel.refreshList()
+        // WHEN ViewModel refreshList() is called
+        eventsViewModel.refreshList()
 
-            // THEN The ViewModel should propagate the error message passed from the repository
-            val showErrorMessage = eventsViewModel.showErrorMessage.getOrAwaitValue()
-            MatcherAssert.assertThat(showErrorMessage, `is`(errorMessage))
-        }
+        // THEN The ViewModel should propagate the error message passed from the repository
+        val showErrorMessage = eventsViewModel.showErrorMessage.getOrAwaitValue()
+        assertThat(showErrorMessage).isEqualTo(errorMessage)
+    }
 }

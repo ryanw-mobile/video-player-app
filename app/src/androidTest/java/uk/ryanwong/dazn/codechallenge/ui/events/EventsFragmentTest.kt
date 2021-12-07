@@ -21,22 +21,19 @@ import androidx.test.filters.MediumTest
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.CoreMatchers
-import org.hamcrest.MatcherAssert
-import org.hamcrest.Matchers.not
+import kotlinx.coroutines.test.runTest
+import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
-import uk.ryanwong.dazn.codechallenge.MainCoroutineRule
 import uk.ryanwong.dazn.codechallenge.R
 import uk.ryanwong.dazn.codechallenge.TestData.event1
 import uk.ryanwong.dazn.codechallenge.TestData.event2
 import uk.ryanwong.dazn.codechallenge.TestData.event3
-import uk.ryanwong.dazn.codechallenge.data.repository.Repository
 import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
+import uk.ryanwong.dazn.codechallenge.data.repository.Repository
 import uk.ryanwong.dazn.codechallenge.launchFragmentInHiltContainer
 import javax.inject.Inject
 
@@ -52,20 +49,16 @@ class EventsFragmentTest {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    @get:Rule(order = 1)
-    var mainCoroutineRule = MainCoroutineRule()
-
     @Before
     fun init() {
         hiltRule.inject()
     }
 
     @Test
-    fun repositoryEmpty_ShowNoData() = mainCoroutineRule.runBlockingTest {
+    fun repositoryEmpty_ShowNoData() = runTest {
         // GIVEN - Repository has no events to supply
         (repository as FakeRepository).submitEventList(emptyList())
         repository.refreshEvents()
-        MatcherAssert.assertThat(repository.getSchedule().size, CoreMatchers.`is`(0))
 
         // WHEN - Launching the fragment
         // Note: Originally we use launchFragmentInContainer
@@ -79,7 +72,7 @@ class EventsFragmentTest {
     }
 
     @Test
-    fun repositoryNonEmpty_HiddenNoData() = mainCoroutineRule.runBlockingTest {
+    fun repositoryNonEmpty_HiddenNoData() = runTest {
         // GIVEN - Repository has 1 event
         (repository as FakeRepository).submitEventList(listOf(event1))
         repository.refreshEvents()
@@ -93,7 +86,7 @@ class EventsFragmentTest {
     }
 
     @Test
-    fun repositoryError_ShowErrorDialog() = mainCoroutineRule.runBlockingTest {
+    fun repositoryError_ShowErrorDialog() = runTest {
         // GIVEN - the repository is set to always return error
         val errorMessage = "Instrumentation test error"
         (repository as FakeRepository).setReturnError(true, errorMessage)
@@ -108,7 +101,7 @@ class EventsFragmentTest {
     }
 
     @Test
-    fun clickEvent_NavigateToExoplayerActivity() = mainCoroutineRule.runBlockingTest {
+    fun clickEvent_NavigateToExoplayerActivity() = runTest {
         // GIVEN - Load the Events Fragment with three events
         (repository as FakeRepository).submitEventList(listOf(event1, event2, event3))
         repository.refreshEvents()

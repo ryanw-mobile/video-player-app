@@ -6,17 +6,13 @@
 package uk.ryanwong.dazn.codechallenge.data.source.local.daos
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.CoreMatchers
-import org.hamcrest.MatcherAssert
-import org.hamcrest.core.Is.`is`
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -28,6 +24,7 @@ import uk.ryanwong.dazn.codechallenge.TestData.event2
 import uk.ryanwong.dazn.codechallenge.TestData.event3
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
 import uk.ryanwong.dazn.codechallenge.data.source.local.entities.asDatabaseModel
+import uk.ryanwong.dazn.codechallenge.data.source.local.entities.asDomainModel
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -52,7 +49,7 @@ class EventDaoTest {
     lateinit var database: DaznApiDatabase
 
     @Test
-    fun insertEvent_GetById_ExpectsSameEvent() = runBlockingTest {
+    fun insertEvent_GetById_ReturnSameEvent() = runTest {
         // GIVEN - empty database
         // Do Nothing
 
@@ -61,17 +58,11 @@ class EventDaoTest {
 
         // THEN - Get the event by id from the database. The loaded event contains the expected values
         val loaded = database.eventsDao.getEventById(event1.eventId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.eventId, `is`(event1.eventId))
-        MatcherAssert.assertThat(loaded.title, `is`(event1.title))
-        MatcherAssert.assertThat(loaded.subtitle, `is`(event1.subtitle))
-        MatcherAssert.assertThat(loaded.date, `is`(event1.date))
-        MatcherAssert.assertThat(loaded.imageUrl, `is`(event1.imageUrl))
-        MatcherAssert.assertThat(loaded.videoUrl, `is`(event1.videoUrl))
+        assertThat(loaded.asDomainModel()).isEqualTo(event1)
     }
 
     @Test
-    fun insertAll_GetEvents_ExpectsCorrectListSize() = runBlockingTest {
+    fun insertAll_GetEvents_ReturnCorrectListSize() = runTest {
         // GIVEN - Empty database
         // do nothing
 
@@ -80,11 +71,11 @@ class EventDaoTest {
 
         // THEN - When get the events, the list size should be 3
         val loaded = database.eventsDao.getEvents()
-        MatcherAssert.assertThat(loaded.size, `is`(3))
+        assertThat(loaded).hasSize(3)
     }
 
     @Test
-    fun upsertEvent_GetById_ExpectsUpdatedEvent() = runBlockingTest {
+    fun upsertEvent_GetById_ReturnUpdatedEvent() = runTest {
         // GIVEN - Insert an event
         database.eventsDao.insert(event1.asDatabaseModel())
 
@@ -94,17 +85,11 @@ class EventDaoTest {
 
         // THEN - When get the event by Id again, it should contain the new values
         val loaded = database.eventsDao.getEventById(event1Modified.eventId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.eventId, `is`(event1Modified.eventId))
-        MatcherAssert.assertThat(loaded.title, `is`(event1Modified.title))
-        MatcherAssert.assertThat(loaded.subtitle, `is`(event1Modified.subtitle))
-        MatcherAssert.assertThat(loaded.date, `is`(event1Modified.date))
-        MatcherAssert.assertThat(loaded.imageUrl, `is`(event1Modified.imageUrl))
-        MatcherAssert.assertThat(loaded.videoUrl, `is`(event1Modified.videoUrl))
+        assertThat(loaded.asDomainModel()).isEqualTo(event1Modified)
     }
 
     @Test
-    fun deleteEvent_GetById_ExpectsNull() = runBlockingTest {
+    fun deleteEvent_GetById_ReturnNull() = runTest {
         // GIVEN - Insert an event
         database.eventsDao.insert(event1.asDatabaseModel())
 
@@ -113,11 +98,11 @@ class EventDaoTest {
 
         // THEN - When get the event by Id again, it should return null
         val loaded = database.eventsDao.getEventById(event1.eventId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.nullValue())
+        assertThat(loaded).isNull()
     }
 
     @Test
-    fun insertAll_DeleteOneAndGetById_ExpectsNull() = runBlockingTest {
+    fun insertAll_DeleteOneAndGetById_ReturnNull() = runTest {
         // GIVEN - Insert 3 events in a list
         database.eventsDao.insertAll(
             listOf(event1, event2, event3).asDatabaseModel()
@@ -128,11 +113,11 @@ class EventDaoTest {
 
         // THEN - When get the events, the list should be empty
         val loaded = database.eventsDao.getEventById(event1.eventId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.nullValue())
+        assertThat(loaded).isNull()
     }
 
     @Test
-    fun insertAll_Clear_ExpectsEmptyList() = runBlockingTest {
+    fun insertAll_Clear_ReturnEmptyList() = runTest {
         // GIVEN - Insert 3 events in a list
         database.eventsDao.insertAll(listOf(event1, event2, event3).asDatabaseModel())
 
@@ -141,12 +126,12 @@ class EventDaoTest {
 
         // THEN - When get the events, the list should be empty
         val loaded = database.eventsDao.getEvents()
-        MatcherAssert.assertThat(loaded.size, `is`(0))
+        assertThat(loaded).isEmpty()
     }
 
     // Dirty bit testing
     @Test
-    fun insertNewEvent_GetById_ExpectsDirtyFalse() = runBlockingTest {
+    fun insertNewEvent_GetById_ReturnDirtyFalse() = runTest {
         // GIVEN - empty database
         // Do Nothing
 
@@ -155,18 +140,11 @@ class EventDaoTest {
 
         // THEN - Get the event by id from the database. The loaded event contains the expected values
         val loaded = database.eventsDao.getEventById(event1.eventId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.eventId, `is`(event1.eventId))
-        MatcherAssert.assertThat(loaded.title, `is`(event1.title))
-        MatcherAssert.assertThat(loaded.subtitle, `is`(event1.subtitle))
-        MatcherAssert.assertThat(loaded.date, `is`(event1.date))
-        MatcherAssert.assertThat(loaded.imageUrl, `is`(event1.imageUrl))
-        MatcherAssert.assertThat(loaded.videoUrl, `is`(event1.videoUrl))
-        MatcherAssert.assertThat(loaded.dirty, `is`(false))
+        assertThat(loaded.asDomainModel()).isEqualTo(event1)
     }
 
     @Test
-    fun markDirty_GetById_ExpectsDirtyTrue() = runBlockingTest {
+    fun markDirty_GetById_ReturnDirtyTrue() = runTest {
         // GIVEN - multiple events
         database.eventsDao.insertAll(listOf(event1, event2, event3).asDatabaseModel())
 
@@ -175,18 +153,11 @@ class EventDaoTest {
 
         // THEN - Get the event by id from the database. The loaded event contains the expected values
         val loaded = database.eventsDao.getEventById(event1.eventId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.eventId, `is`(event1.eventId))
-        MatcherAssert.assertThat(loaded.title, `is`(event1.title))
-        MatcherAssert.assertThat(loaded.subtitle, `is`(event1.subtitle))
-        MatcherAssert.assertThat(loaded.date, `is`(event1.date))
-        MatcherAssert.assertThat(loaded.imageUrl, `is`(event1.imageUrl))
-        MatcherAssert.assertThat(loaded.videoUrl, `is`(event1.videoUrl))
-        MatcherAssert.assertThat(loaded.dirty, `is`(true))
+        assertThat(loaded.dirty).isTrue()
     }
 
     @Test
-    fun dirtyEvents_UpdateEvent_ExpectsDirtyFalse() = runBlockingTest {
+    fun dirtyEvents_UpdateEvent_ReturnDirtyFalse() = runTest {
         // GIVEN - multiple events and marked dirty
         database.eventsDao.insertAll(listOf(event1, event2, event3).asDatabaseModel())
         database.eventsDao.markDirty()
@@ -196,18 +167,11 @@ class EventDaoTest {
 
         // THEN - Get the event by id from the database. The loaded event contains the expected values
         val loaded = database.eventsDao.getEventById(event1Modified.eventId)
-        MatcherAssert.assertThat(loaded, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loaded.eventId, `is`(event1Modified.eventId))
-        MatcherAssert.assertThat(loaded.title, `is`(event1Modified.title))
-        MatcherAssert.assertThat(loaded.subtitle, `is`(event1Modified.subtitle))
-        MatcherAssert.assertThat(loaded.date, `is`(event1Modified.date))
-        MatcherAssert.assertThat(loaded.imageUrl, `is`(event1Modified.imageUrl))
-        MatcherAssert.assertThat(loaded.videoUrl, `is`(event1Modified.videoUrl))
-        MatcherAssert.assertThat(loaded.dirty, `is`(false))
+        assertThat(loaded.dirty).isFalse()
     }
 
     @Test
-    fun dirtyEvents_InsertOneAndDeleteDirty_ExpectsOneEvent() = runBlockingTest {
+    fun dirtyEvents_InsertOneAndDeleteDirty_ReturnOneEvent() = runTest {
         // GIVEN - multiple events and marked dirty
         database.eventsDao.insertAll(listOf(event1, event3).asDatabaseModel())
         database.eventsDao.markDirty()
@@ -218,16 +182,7 @@ class EventDaoTest {
 
         // THEN - Get all events. Expect only event 2 is returned
         val loaded = database.eventsDao.getEvents()
-        MatcherAssert.assertThat(loaded.size, `is`(1))
-        val loadedEvent = loaded[0]
-        MatcherAssert.assertThat(loadedEvent, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(loadedEvent.eventId, `is`(event2.eventId))
-        MatcherAssert.assertThat(loadedEvent.title, `is`(event2.title))
-        MatcherAssert.assertThat(loadedEvent.subtitle, `is`(event2.subtitle))
-        MatcherAssert.assertThat(loadedEvent.date, `is`(event2.date))
-        MatcherAssert.assertThat(loadedEvent.imageUrl, `is`(event2.imageUrl))
-        MatcherAssert.assertThat(loadedEvent.videoUrl, `is`(event2.videoUrl))
-        MatcherAssert.assertThat(loadedEvent.dirty, `is`(false))
+        assertThat(loaded.asDomainModel()).containsExactly(event2)
     }
 
     @After

@@ -1,7 +1,7 @@
 # DAZN Code Challenge - Android TV [![Build Status](https://app.travis-ci.com/ryanwong-uk/dazn-code-challenge.svg?branch=master)](https://app.travis-ci.com/ryanwong-uk/dazn-code-challenge)
 
 This is a code test project I have previously submitted as a part of the interview process. The
-project covers common RESTApi, SQLite, RecyclerView, Constraint Layout, MVVm, plus dependency
+project covers common RESTApi, SQLite, RecyclerView, Constraint Layout, MVVM, plus dependency
 injection and testings.
 
 Although the title carries "Android TV", it has nothing to do with that - this is an Android mobile
@@ -41,7 +41,7 @@ time, as we have already concluded the interview process.
 * [Glide](https://github.com/bumptech/glide) - Network Image
 * [ExoPlayer](https://github.com/google/ExoPlayer) - Media Player
 * [Dagger Hilt](https://dagger.dev/hilt/) - Dependency Injection
-* [Hamcrest](http://hamcrest.org/JavaHamcrest/) - Testing
+* [Truth](https://truth.dev/) - Assertion Library for Testing
 * [Timber](https://github.com/JakeWharton/timber) - Logging
 * [LeakCanary](https://github.com/square/leakcanary) - Leak detection
 

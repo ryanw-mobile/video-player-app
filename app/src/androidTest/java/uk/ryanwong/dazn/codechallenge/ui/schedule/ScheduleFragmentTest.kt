@@ -7,29 +7,24 @@ package uk.ryanwong.dazn.codechallenge.ui.schedule
 
 import android.os.Bundle
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert
+import kotlinx.coroutines.test.runTest
 import org.hamcrest.Matchers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import uk.ryanwong.dazn.codechallenge.MainCoroutineRule
 import uk.ryanwong.dazn.codechallenge.R
 import uk.ryanwong.dazn.codechallenge.TestData.schedule1
 import uk.ryanwong.dazn.codechallenge.TestData.schedule2
-import uk.ryanwong.dazn.codechallenge.data.repository.Repository
 import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
+import uk.ryanwong.dazn.codechallenge.data.repository.Repository
 import uk.ryanwong.dazn.codechallenge.launchFragmentInHiltContainer
 import javax.inject.Inject
 
@@ -45,20 +40,16 @@ class SchedulesFragmentTest {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
-    @get:Rule(order = 1)
-    var mainCoroutineRule = MainCoroutineRule()
-
     @Before
     fun init() {
         hiltRule.inject()
     }
 
     @Test
-    fun repositoryEmpty_showNoData() = mainCoroutineRule.runBlockingTest {
+    fun repositoryEmpty_showNoData() = runTest {
         // GIVEN - Repository has no events to supply
         (repository as FakeRepository).submitScheduleList(emptyList())
         repository.refreshSchedule()
-        MatcherAssert.assertThat(repository.getSchedule().size, `is`(0))
 
         // WHEN - Launching the fragment
         // Note: Originally we use launchFragmentInContainer
@@ -68,11 +59,11 @@ class SchedulesFragmentTest {
 
         // THEN - noDataTextView is shown
         Espresso.onView(withId(R.id.textview_nodata))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+            .check(matches(isDisplayed()))
     }
 
     @Test
-    fun repositoryNonEmpty_HiddenNoData() = mainCoroutineRule.runBlockingTest {
+    fun repositoryNonEmpty_HiddenNoData() = runTest {
         // GIVEN - Repository has 1 schedule to supply
         (repository as FakeRepository).submitScheduleList(listOf(schedule1))
         repository.refreshSchedule()
@@ -89,7 +80,7 @@ class SchedulesFragmentTest {
     }
 
     @Test
-    fun repositoryError_ShowErrorDialog() = mainCoroutineRule.runBlockingTest {
+    fun repositoryError_ShowErrorDialog() = runTest {
         // GIVEN - the repository is set to always return error
         val errorMessage = "Instrumentation test error"
         (repository as FakeRepository).setReturnError(true, errorMessage)
@@ -99,12 +90,12 @@ class SchedulesFragmentTest {
 
         // THEN - error dialog is shown
         // Expects reminder to be saved successfully
-        Espresso.onView(ViewMatchers.withText(R.string.something_went_wrong))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withText(R.string.something_went_wrong))
+            .check(matches(isDisplayed()))
     }
 
     @Test
-    fun wait31Seconds_ScheduleRefreshed() = mainCoroutineRule.runBlockingTest {
+    fun wait31Seconds_ScheduleRefreshed() = runTest {
         (repository as FakeRepository).submitScheduleList(listOf(schedule1))
         // repository.refreshSchedule()
 
