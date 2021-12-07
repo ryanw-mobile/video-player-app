@@ -8,16 +8,16 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import uk.ryanwong.dazn.codechallenge.data.repository.BaseRepository
+import uk.ryanwong.dazn.codechallenge.data.repository.Repository
 import uk.ryanwong.dazn.codechallenge.ui.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ScheduleViewModel @Inject constructor(private val baseRepository: BaseRepository) :
+class ScheduleViewModel @Inject constructor(private val repository: Repository) :
     BaseViewModel() {
 
     // directly expose the list contents from the repository
-    val listContents = baseRepository.observeSchedule()
+    val listContents = repository.observeSchedule()
 
     private val _showLoading = MutableLiveData(false)
     val showLoading: LiveData<Boolean>
@@ -54,7 +54,7 @@ class ScheduleViewModel @Inject constructor(private val baseRepository: BaseRepo
         viewModelScope.launch {
             try {
                 // Expected exceptions
-                baseRepository.refreshSchedule()
+                repository.refreshSchedule()
             } catch (ex: Exception) {
                 ex.printStackTrace()
                 showErrorMessage.postValue(ex.message)

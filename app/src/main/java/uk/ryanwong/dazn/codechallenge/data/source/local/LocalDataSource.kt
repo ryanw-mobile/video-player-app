@@ -17,7 +17,7 @@ import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
  * - Has its own infrastructure to store data (can be in-memory or disk based)
  * - Can provide live data or a data snapshot
  */
-interface BaseLocalDataSource {
+interface LocalDataSource {
 
     // Return LiveData
     fun observeEvents(): LiveData<List<Event>>

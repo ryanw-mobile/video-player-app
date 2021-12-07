@@ -6,17 +6,17 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import uk.ryanwong.dazn.codechallenge.data.repository.BaseRepository
+import uk.ryanwong.dazn.codechallenge.data.repository.Repository
 import uk.ryanwong.dazn.codechallenge.ui.BaseViewModel
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import javax.inject.Inject
 
 @HiltViewModel
-class EventsViewModel @Inject constructor(private val baseRepository: BaseRepository) :
+class EventsViewModel @Inject constructor(private val repository: Repository) :
     BaseViewModel() {
 
     // directly expose the list contents from the repository
-    val listContents = baseRepository.observeEvents()
+    val listContents = repository.observeEvents()
 
     private val _showLoading = MutableLiveData(false)
     val showLoading: LiveData<Boolean>
@@ -39,7 +39,7 @@ class EventsViewModel @Inject constructor(private val baseRepository: BaseReposi
         viewModelScope.launch {
             try {
                 // Expected exceptions
-                baseRepository.refreshEvents()
+                repository.refreshEvents()
             } catch (ex: Exception) {
                 ex.printStackTrace()
                 showErrorMessage.postValue(ex.message)

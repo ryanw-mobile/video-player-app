@@ -9,20 +9,20 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import uk.ryanwong.dazn.codechallenge.data.repository.BaseRepository
+import uk.ryanwong.dazn.codechallenge.data.repository.Repository
 import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
 import javax.inject.Singleton
 
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [BaseRepositoryModules::class]
+    replaces = [RepositoryModules::class]
 )
 object FakeBaseRepositoryModules {
 
     @Provides
     @Singleton
-    fun provideFakeRepository(): BaseRepository {
+    fun provideFakeRepository(): Repository {
         synchronized(this) {
             return FakeRepository()
         }

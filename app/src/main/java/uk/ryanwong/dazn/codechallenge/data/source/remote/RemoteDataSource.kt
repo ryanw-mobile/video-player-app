@@ -14,7 +14,7 @@ package uk.ryanwong.dazn.codechallenge.data.source.remote
  * - Has its own choices to/not to cache any data
  * - Can only provide static copies of data (i.e. no LiveData)
  */
-interface BaseRemoteDataSource {
+interface RemoteDataSource {
 
     // Return static data
     suspend fun getEvents(): ApiResult<Any>

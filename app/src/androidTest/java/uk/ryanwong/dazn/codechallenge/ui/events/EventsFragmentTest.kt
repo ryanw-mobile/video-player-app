@@ -35,7 +35,7 @@ import uk.ryanwong.dazn.codechallenge.R
 import uk.ryanwong.dazn.codechallenge.TestData.event1
 import uk.ryanwong.dazn.codechallenge.TestData.event2
 import uk.ryanwong.dazn.codechallenge.TestData.event3
-import uk.ryanwong.dazn.codechallenge.data.repository.BaseRepository
+import uk.ryanwong.dazn.codechallenge.data.repository.Repository
 import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
 import uk.ryanwong.dazn.codechallenge.launchFragmentInHiltContainer
 import javax.inject.Inject
@@ -46,7 +46,7 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class EventsFragmentTest {
     @Inject
-    lateinit var repository: BaseRepository
+    lateinit var repository: Repository
 
     // HiltAndroidRule executes first - https://developer.android.com/training/dependency-injection/hilt-testing#multiple-testrules
     @get:Rule(order = 0)

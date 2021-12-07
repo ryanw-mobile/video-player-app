@@ -24,7 +24,7 @@ import java.io.IOException
 
 
 @ExperimentalCoroutinesApi
-class DefaultCachedRepositoryTest {
+class LocalCacheRepositoryTest {
 
     private val remoteEvents = mutableListOf(event1, event2, event3).apply { sortBy { it.date } }
 
@@ -41,7 +41,7 @@ class DefaultCachedRepositoryTest {
     private lateinit var localDataSource: FakeLocalDataSource
 
     // Class under test
-    private lateinit var defaultCachedRepository: DefaultCachedRepository
+    private lateinit var localCacheRepository: LocalCacheRepository
 
     // Set the main coroutines dispatcher for unit testing.
     @ExperimentalCoroutinesApi
@@ -56,21 +56,21 @@ class DefaultCachedRepositoryTest {
             FakeLocalDataSource(localEvents, localSchedules)
 
         // Get a reference to the class under test
-        defaultCachedRepository = DefaultCachedRepository(remoteDataSource, localDataSource)
+        localCacheRepository = LocalCacheRepository(remoteDataSource, localDataSource)
     }
 
     @Test
     fun nonEmptyLocal_syncEvents_updatedEvents() = mainCoroutineRule.runBlockingTest {
         // Given the localDataSource has event1
         // Given the remoteDataSource has event1, event2, event3
-        val initEvents = defaultCachedRepository.getEvents()
+        val initEvents = localCacheRepository.getEvents()
         MatcherAssert.assertThat(initEvents, `is`(localEvents))
 
         // When repository refreshEvents
-        defaultCachedRepository.refreshEvents()
+        localCacheRepository.refreshEvents()
 
         // Then repository should now return 3 events
-        val refreshedEvents = defaultCachedRepository.getEvents()
+        val refreshedEvents = localCacheRepository.getEvents()
         MatcherAssert.assertThat(refreshedEvents, `is`(remoteEvents))
     }
 
@@ -79,14 +79,14 @@ class DefaultCachedRepositoryTest {
         // Given the localDataSource has event1
         // Given the remoteDataSource is empty list
         remoteDataSource.setEvents(emptyList())
-        val initEvents = defaultCachedRepository.getEvents()
+        val initEvents = localCacheRepository.getEvents()
         MatcherAssert.assertThat(initEvents, `is`(localEvents))
 
         // When repository refreshEvents
-        defaultCachedRepository.refreshEvents()
+        localCacheRepository.refreshEvents()
 
         // Then repository should now return 0 schedules
-        val refreshedEvents = defaultCachedRepository.getEvents()
+        val refreshedEvents = localCacheRepository.getEvents()
         MatcherAssert.assertThat(refreshedEvents.size, `is`(0))
     }
 
@@ -98,7 +98,7 @@ class DefaultCachedRepositoryTest {
 
         // When repository refreshEvents
         try {
-            defaultCachedRepository.refreshEvents()
+            localCacheRepository.refreshEvents()
             fail();
 
             // Then repository should throw the exception
@@ -113,14 +113,14 @@ class DefaultCachedRepositoryTest {
     fun nonEmptyLocal_syncSchedules_updatedSchedules() = mainCoroutineRule.runBlockingTest {
         // Given the localDataSource has schedule1
         // Given the remoteDataSource has schedule1, schedule2, schedule3
-        val initSchedules = defaultCachedRepository.getSchedule()
+        val initSchedules = localCacheRepository.getSchedule()
         MatcherAssert.assertThat(initSchedules, `is`(localSchedules))
 
         // When repository refreshSchedule
-        defaultCachedRepository.refreshSchedule()
+        localCacheRepository.refreshSchedule()
 
         // Then repository should now return 3 schedules
-        val refreshedSchedules = defaultCachedRepository.getSchedule()
+        val refreshedSchedules = localCacheRepository.getSchedule()
         MatcherAssert.assertThat(
             refreshedSchedules, `is`(remoteSchedules)
         )
@@ -132,14 +132,14 @@ class DefaultCachedRepositoryTest {
             // Given the localDataSource has schedule1
             // Given the remoteDataSource has empty list
             remoteDataSource.setSchedule(emptyList())
-            val initSchedules = defaultCachedRepository.getSchedule()
+            val initSchedules = localCacheRepository.getSchedule()
             MatcherAssert.assertThat(initSchedules, `is`(localSchedules))
 
             // When repository refreshSchedule
-            defaultCachedRepository.refreshSchedule()
+            localCacheRepository.refreshSchedule()
 
             // Then repository should now return 0 schedules
-            val refreshedSchedules = defaultCachedRepository.getSchedule()
+            val refreshedSchedules = localCacheRepository.getSchedule()
             MatcherAssert.assertThat(refreshedSchedules.size, `is`(0))
         }
 
@@ -151,7 +151,7 @@ class DefaultCachedRepositoryTest {
 
         // When repository refreshSchedule
         try {
-            defaultCachedRepository.refreshSchedule()
+            localCacheRepository.refreshSchedule()
             fail();
 
             // Then repository should throw the exception

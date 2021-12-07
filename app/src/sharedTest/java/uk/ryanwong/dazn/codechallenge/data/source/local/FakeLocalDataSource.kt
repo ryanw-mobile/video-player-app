@@ -6,14 +6,13 @@
 package uk.ryanwong.dazn.codechallenge.data.source.local
 
 import androidx.lifecycle.LiveData
-import uk.ryanwong.dazn.codechallenge.data.source.local.BaseLocalDataSource
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 
 class FakeLocalDataSource(
     private val events: MutableList<Event> = mutableListOf(),
     private val schedules: MutableList<Schedule> = mutableListOf()
-) : BaseLocalDataSource {
+) : LocalDataSource {
 
     override fun observeEvents(): LiveData<List<Event>> {
         TODO("Not yet implemented")

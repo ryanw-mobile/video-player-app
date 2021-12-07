@@ -23,7 +23,7 @@ import javax.inject.Inject
 class RoomDbDataSource @Inject constructor(
     private val daznApiDaos: DaznApiDaos,
     private val ioDispatcher: CoroutineDispatcher
-) : BaseLocalDataSource {
+) : LocalDataSource {
 
     override fun observeEvents(): LiveData<List<Event>> {
         return Transformations.map(daznApiDaos.eventsDao.observeEvents()) {

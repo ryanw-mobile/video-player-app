@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 
-interface BaseRepository {
+interface Repository {
 
     // The LiveData implementations are designed to be used by ViewModels
     fun observeEvents(): LiveData<List<Event>>

@@ -5,8 +5,6 @@
 
 package uk.ryanwong.dazn.codechallenge.data.source.remote
 
-import uk.ryanwong.dazn.codechallenge.data.source.remote.BaseRemoteDataSource
-import uk.ryanwong.dazn.codechallenge.data.source.remote.ApiResult
 import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.EventNetworkEntity
 import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.ScheduleNetworkEntity
 import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.asDomainModel
@@ -18,7 +16,7 @@ import java.io.IOException
 class FakeRemoteDataSource(
     eventDomain: List<Event> = listOf(),
     scheduleDomain: List<Schedule> = listOf()
-) : BaseRemoteDataSource {
+) : RemoteDataSource {
     private val events = mutableListOf<EventNetworkEntity>().apply {
         addAll(eventDomain.asNetworkModel())
     }

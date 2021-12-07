@@ -37,7 +37,7 @@ class RoomDbDataSourceTest {
 
     // We test the data source, so we are using a REAL data source, not the fake one!
     @Inject
-    lateinit var localDataSource: BaseLocalDataSource
+    lateinit var localDataSource: LocalDataSource
 
     // However we have silently replaced the database with an in-memory database
     @Inject

@@ -12,8 +12,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import uk.ryanwong.dazn.codechallenge.data.source.local.BaseLocalDataSource
-import uk.ryanwong.dazn.codechallenge.data.source.remote.BaseRemoteDataSource
+import uk.ryanwong.dazn.codechallenge.data.source.local.LocalDataSource
+import uk.ryanwong.dazn.codechallenge.data.source.remote.RemoteDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
 import uk.ryanwong.dazn.codechallenge.data.source.local.RoomDbDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.local.daos.DaznApiDaos
@@ -41,12 +41,12 @@ object DataSourceModules {
 @Module
 abstract class LocalDataSourceModule {
     @Binds
-    abstract fun bindLocalDataSource(impl: RoomDbDataSource): BaseLocalDataSource
+    abstract fun bindLocalDataSource(impl: RoomDbDataSource): LocalDataSource
 }
 
 @InstallIn(SingletonComponent::class)
 @Module
 abstract class RemoteDataSourceModule {
     @Binds
-    abstract fun bindRemoteDataSource(impl: SandBoxAPIDataSource): BaseRemoteDataSource
+    abstract fun bindRemoteDataSource(impl: SandBoxAPIDataSource): RemoteDataSource
 }
