@@ -1,19 +1,26 @@
 package uk.ryanwong.dazn.codechallenge.ui.events
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.viewModelScope
+import android.os.Parcelable
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import uk.ryanwong.dazn.codechallenge.data.repository.Repository
-import uk.ryanwong.dazn.codechallenge.ui.BaseViewModel
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
+import uk.ryanwong.dazn.codechallenge.util.SingleLiveEvent
 import javax.inject.Inject
 
 @HiltViewModel
-class EventsViewModel @Inject constructor(private val repository: Repository) :
-    BaseViewModel() {
+class EventsViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+    val showErrorMessage: SingleLiveEvent<String> = SingleLiveEvent()
+
+    // This is to maintain the recyclerview scrolling state during list refresh
+    private var _listState: Parcelable? = null
+    val listState: Parcelable?
+        get() = _listState
+
+    fun saveListState(listScrollingState: Parcelable?) {
+        _listState = listScrollingState
+    }
 
     // directly expose the list contents from the repository
     val listContents = repository.observeEvents()
@@ -34,7 +41,7 @@ class EventsViewModel @Inject constructor(private val repository: Repository) :
         refreshList()
     }
 
-    override fun refreshList() {
+    fun refreshList() {
         _showLoading.value = true
         viewModelScope.launch {
             try {

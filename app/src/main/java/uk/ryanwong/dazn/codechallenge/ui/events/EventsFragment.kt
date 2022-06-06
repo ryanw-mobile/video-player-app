@@ -5,24 +5,27 @@
 
 package uk.ryanwong.dazn.codechallenge.ui.events
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import uk.ryanwong.dazn.codechallenge.ui.BaseFragment
+import uk.ryanwong.dazn.codechallenge.R
 import uk.ryanwong.dazn.codechallenge.databinding.FragmentEventsBinding
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.util.extensions.setupRefreshLayout
+import uk.ryanwong.dazn.codechallenge.util.filterErrorMessage
 
 @AndroidEntryPoint
-class EventsFragment : BaseFragment() {
+class EventsFragment : Fragment() {
 
-    override val viewModel : EventsViewModel by viewModels()
+    private val viewModel: EventsViewModel by viewModels()
     private var _binding: FragmentEventsBinding? = null
     private val binding get() = _binding!!
 
@@ -74,26 +77,45 @@ class EventsFragment : BaseFragment() {
         this.setupRefreshLayout(binding.refreshlayout) { viewModel.refreshList() }
     }
 
+    private var errorDialog: AlertDialog? = null
     override fun onStart() {
         super.onStart()
 
-        viewModel.showLoading.observe(viewLifecycleOwner, { isRefreshing ->
-            binding.refreshlayout.isRefreshing = isRefreshing
-        })
+        viewModel.showErrorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage.isNotBlank()) {
+                // make sure we only show one latest dialog to users for better UX:
+                errorDialog?.dismiss()
 
-        viewModel.showNoData.observe(viewLifecycleOwner, { isShowNoData ->
+                // Show an error dialog
+                errorDialog =
+                    AlertDialog.Builder(requireContext(), R.style.MyAlertDialogStyle).apply {
+                        setTitle(getString(R.string.something_went_wrong))
+                        setMessage(filterErrorMessage(requireContext(), errorMessage))
+                        setPositiveButton(getString(R.string.ok)) { _, _ ->
+                            // do nothing
+                        }
+                    }.create()
+                errorDialog?.show()
+            }
+        }
+
+        viewModel.showLoading.observe(viewLifecycleOwner) { isRefreshing ->
+            binding.refreshlayout.isRefreshing = isRefreshing
+        }
+
+        viewModel.showNoData.observe(viewLifecycleOwner) { isShowNoData ->
             binding.textviewNodata.visibility = when (isShowNoData) {
                 true -> View.VISIBLE
                 else -> View.GONE
             }
-        })
+        }
 
-        viewModel.listContents.observe(viewLifecycleOwner, {
+        viewModel.listContents.observe(viewLifecycleOwner) {
             viewModel.saveListState(binding.recyclerview.layoutManager?.onSaveInstanceState())
             eventsAdapter.submitList(it as List<Event>)
-        })
+        }
 
-        viewModel.openVideoPlayerUrl.observe(viewLifecycleOwner, { videoUrl ->
+        viewModel.openVideoPlayerUrl.observe(viewLifecycleOwner) { videoUrl ->
             videoUrl?.let {
                 findNavController().navigate(
                     EventsFragmentDirections.actionNavigationEventsToExoplayerActivity(
@@ -102,7 +124,7 @@ class EventsFragment : BaseFragment() {
                 )
                 viewModel.notifyVideoPlayerNavigationCompleted()
             }
-        })
+        }
     }
 
     override fun onDestroyView() {

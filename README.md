@@ -47,7 +47,7 @@ time, as we have already concluded the interview process.
 
 ## Requirements
 
-* Android Studio Arctic Fox 2021.3.1 Patch 2
+* Android Studio Chipmunk | 2021.2.1 Patch 1
 * Android device or simulator running Android 5.0+ (API 21)
 
 ## Setting up the keystore

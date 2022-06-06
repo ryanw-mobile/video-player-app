@@ -1,24 +1,27 @@
 package uk.ryanwong.dazn.codechallenge.ui.schedule
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import uk.ryanwong.dazn.codechallenge.ui.BaseFragment
+import uk.ryanwong.dazn.codechallenge.R
 import uk.ryanwong.dazn.codechallenge.databinding.FragmentScheduleBinding
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.util.extensions.setupRefreshLayout
+import uk.ryanwong.dazn.codechallenge.util.filterErrorMessage
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ScheduleFragment @Inject constructor() : BaseFragment() {
+class ScheduleFragment @Inject constructor() : Fragment() {
 
-    override val viewModel: ScheduleViewModel by viewModels()
+    private val viewModel: ScheduleViewModel by viewModels()
     private var _binding: FragmentScheduleBinding? = null
     private val binding get() = _binding!!
 
@@ -71,25 +74,44 @@ class ScheduleFragment @Inject constructor() : BaseFragment() {
         this.setupRefreshLayout(binding.refreshlayout) { viewModel.refreshList() }
     }
 
+    private var errorDialog: AlertDialog? = null
     override fun onStart() {
         super.onStart()
 
-        viewModel.showLoading.observe(viewLifecycleOwner, { isRefreshing ->
-            binding.refreshlayout.isRefreshing = isRefreshing
-        })
+        viewModel.showErrorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage.isNotBlank()) {
+                // make sure we only show one latest dialog to users for better UX:
+                errorDialog?.dismiss()
 
-        viewModel.showNoData.observe(viewLifecycleOwner, { isShowNoData ->
+                // Show an error dialog
+                errorDialog =
+                    AlertDialog.Builder(requireContext(), R.style.MyAlertDialogStyle).apply {
+                        setTitle(getString(R.string.something_went_wrong))
+                        setMessage(filterErrorMessage(requireContext(), errorMessage))
+                        setPositiveButton(getString(R.string.ok)) { _, _ ->
+                            // do nothing
+                        }
+                    }.create()
+                errorDialog?.show()
+            }
+        }
+
+        viewModel.showLoading.observe(viewLifecycleOwner) { isRefreshing ->
+            binding.refreshlayout.isRefreshing = isRefreshing
+        }
+
+        viewModel.showNoData.observe(viewLifecycleOwner) { isShowNoData ->
             binding.textviewNodata.visibility = when (isShowNoData) {
                 true -> View.VISIBLE
                 else -> View.GONE
             }
-        })
+        }
 
-        viewModel.listContents.observe(viewLifecycleOwner, {
+        viewModel.listContents.observe(viewLifecycleOwner) {
             viewModel.saveListState(binding.recyclerview.layoutManager?.onSaveInstanceState())
             Timber.d("!!! List size = ${it.size}")
             scheduleAdapter.submitList(it as List<Schedule>)
-        })
+        }
     }
 
     override fun onDestroyView() {
