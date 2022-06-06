@@ -14,7 +14,7 @@ buildscript {
         test_core_version = '1.4.0'
         test_ext_version = '1.1.3'
         arch_core_testing_version = '2.1.0'
-        espresso_version = '3.4.0'
+        espresso_version = '3.3.0'
     }
 
     repositories {
