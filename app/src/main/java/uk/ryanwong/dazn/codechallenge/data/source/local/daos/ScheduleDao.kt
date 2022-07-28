@@ -31,10 +31,10 @@ sealed interface ScheduleDao {
     @Query("SELECT * FROM schedule_table ORDER BY date ASC")
     suspend fun getSchedules(): List<ScheduleDbEntity>
 
-    @Query("SELECT * FROM schedule_table WHERE schedule_id = :scheduleId")
+    @Query("SELECT * FROM schedule_table WHERE schedule_id = :scheduleId LIMIT 1")
     fun observeScheduleById(scheduleId: Int): LiveData<ScheduleDbEntity>
 
-    @Query("SELECT * FROM schedule_table WHERE schedule_id = :scheduleId")
+    @Query("SELECT * FROM schedule_table WHERE schedule_id = :scheduleId LIMIT 1")
     suspend fun getScheduleById(scheduleId: Int): ScheduleDbEntity
 
     // For unit tests
