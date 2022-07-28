@@ -31,7 +31,6 @@ object DataSourceModules {
     }
 
     @Provides
-    @Singleton
     fun provideDaznApiDaos(database: DaznApiDatabase): DaznApiDaos {
         return DaznApiDaos(database.eventsDao, database.scheduleDao)
     }
