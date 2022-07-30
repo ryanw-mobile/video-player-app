@@ -1,4 +1,4 @@
-# DAZN Code Challenge - Android TV [![Build Status](https://app.travis-ci.com/ryanwong-uk/dazn-code-challenge.svg?branch=master)](https://app.travis-ci.com/ryanwong-uk/dazn-code-challenge)
+# DAZN Code Challenge - Android TV [![Build Status](https://app.bitrise.io/app/ffa2644c1a3901cd/status.svg?token=1YZ6d6jhKr9DeByxHN-aQA&branch=master)](https://app.bitrise.io/app/ffa2644c1a3901cd)
 
 This is a code test project I have previously submitted as a part of the interview process. The
 project covers common RESTApi, SQLite, RecyclerView, Constraint Layout, MVVM, plus dependency
@@ -19,6 +19,15 @@ time, as we have already concluded the interview process.
 
 ![Screenshot1](screenshots/screen0.png) ![Screenshot1](screenshots/screen1.png) ![Screenshot1](screenshots/screen2.png)
 
+## Status
+
+This project is already getting outdated as at July 2022. Future changes, if I still have time, would be:
+* Live Data to Kotlin Flow migration
+* Better Coroutines dispatchers handling
+* Jetpack Compose UI & new UI tests (major rework)
+* ExoPlayer upgrade
+* Truth to Kotest migration
+
 ## High level architecture
 
 * Kotlin
@@ -26,7 +35,8 @@ time, as we have already concluded the interview process.
 * [Jetpack Databinding](https://developer.android.com/jetpack/androidx/releases/databinding)
 * Live Data
 * Bottom Navigation
-* [Travis-CI](https://travis-ci.org/) - CI
+* [Bitrise](https://https://app.bitrise.io/) - CI (current)
+* [Travis-CI](https://travis-ci.org/) - CI (previously)
 
 ## Key Dependencies
 
