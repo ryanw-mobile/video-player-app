@@ -2,8 +2,14 @@ package uk.ryanwong.dazn.codechallenge.ui.schedule
 
 import android.os.CountDownTimer
 import android.os.Parcelable
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import uk.ryanwong.dazn.codechallenge.data.repository.Repository
@@ -11,7 +17,11 @@ import uk.ryanwong.dazn.codechallenge.util.SingleLiveEvent
 import javax.inject.Inject
 
 @HiltViewModel
-class ScheduleViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class ScheduleViewModel @Inject constructor(
+    private val repository: Repository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Main
+) : ViewModel() {
+
     val showErrorMessage: SingleLiveEvent<String> = SingleLiveEvent()
 
     // This is to maintain the recyclerview scrolling state during list refresh
@@ -58,7 +68,7 @@ class ScheduleViewModel @Inject constructor(private val repository: Repository) 
 
     fun refreshList() {
         _showLoading.value = true
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             try {
                 // Expected exceptions
                 repository.refreshSchedule()
