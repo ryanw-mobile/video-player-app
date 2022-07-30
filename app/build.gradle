@@ -18,7 +18,17 @@ android {
     }
 
     def isRunningOnTravis = System.getenv("CI") == "true"
-    if (isRunningOnTravis) {
+    def isRunningOnBitrise = System.getenv("BITRISE") == "true"
+
+    if (isRunningOnBitrise) {
+        // configure keystore
+        // File Downloaderで指定したパス
+        signingConfigs.release.storeFile = file(System.getenv("HOME") + "/keystores/release.jks")
+        signingConfigs.release.storePassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
+        signingConfigs.release.keyAlias = System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
+        signingConfigs.release.keyPassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+
+    } else if (isRunningOnTravis) {
         // configure keystore
         signingConfigs.release.storeFile = file("../secure.keystore")
         signingConfigs.release.storePassword = System.getenv("storePass")
