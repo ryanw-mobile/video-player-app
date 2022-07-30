@@ -8,6 +8,7 @@ package uk.ryanwong.dazn.codechallenge.ui.schedule
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -29,7 +30,6 @@ class ScheduleViewModelTest {
     // Subject under test
     private lateinit var scheduleViewModel: ScheduleViewModel
 
-    // Use a fake repository to be injected into the viewModel
     private lateinit var fakeRepository: FakeRepository
 
     @get:Rule
@@ -41,12 +41,14 @@ class ScheduleViewModelTest {
         // That is the state before the first API call happens to download something from the server
         fakeRepository = FakeRepository()
 
-        // Given a fresh ViewModel
-        scheduleViewModel = ScheduleViewModel(fakeRepository)
+        scheduleViewModel = ScheduleViewModel(
+            repository = fakeRepository,
+            dispatcher = UnconfinedTestDispatcher()
+        )
     }
 
     @Test
-    fun emptyViewModel_ObserveSchedule_ReturnEmptyList() = runTest {
+    fun emptyViewModel_ObserveSchedule_ReturnEmptyList() {
         // GIVEN the viewModel is empty - nothing to do
 
         // WHEN the ViewModel observes the LiveData list during initialization
@@ -57,7 +59,7 @@ class ScheduleViewModelTest {
     }
 
     @Test
-    fun emptyViewModel_RefreshList_ReturnListUpdated() = runTest {
+    fun emptyViewModel_RefreshList_ReturnListUpdated() {
         // GIVEN the viewModel is empty
         scheduleViewModel.listContents.getOrAwaitValue()
 
@@ -72,7 +74,7 @@ class ScheduleViewModelTest {
     }
 
     @Test
-    fun nonEmptyViewModel_RefreshList_ReturnListUpdated() = runTest {
+    fun nonEmptyViewModel_RefreshList_ReturnListUpdated() {
         // GIVEN the ViewModel holds something
         // The repository has loaded only schedule1
         val fakedInitialRemoteData = listOf(schedule1)

@@ -8,7 +8,7 @@ package uk.ryanwong.dazn.codechallenge.ui.events
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -29,7 +29,6 @@ class EventsViewModelTest {
     // Subject under test
     private lateinit var eventsViewModel: EventsViewModel
 
-    // Use a fake repository to be injected into the viewModel
     private lateinit var fakeRepository: FakeRepository
 
     @get:Rule
@@ -42,11 +41,14 @@ class EventsViewModelTest {
         fakeRepository = FakeRepository()
 
         // Given a fresh ViewModel
-        eventsViewModel = EventsViewModel(fakeRepository)
+        eventsViewModel = EventsViewModel(
+            repository = fakeRepository,
+            dispatcher = UnconfinedTestDispatcher()
+        )
     }
 
     @Test
-    fun emptyViewModel_ObserveEvents_ReturnEmptyList() = runTest {
+    fun emptyViewModel_ObserveEvents_ReturnEmptyList() {
         // GIVEN the viewModel is empty -- nothing to do
 
         // WHEN the ViewModel observes the LiveData list during initialization
@@ -57,7 +59,7 @@ class EventsViewModelTest {
     }
 
     @Test
-    fun emptyViewModel_RefreshList_ReturnListUpdated() = runTest {
+    fun emptyViewModel_RefreshList_ReturnListUpdated() {
         // GIVEN the viewModel is empty -- nothing to do
 
         // WHEN adding a new task
@@ -71,7 +73,7 @@ class EventsViewModelTest {
     }
 
     @Test
-    fun nonEmptyViewModel_RefreshList_ReturnListUpdated() = runTest {
+    fun nonEmptyViewModel_RefreshList_ReturnListUpdated() {
         // GIVEN the ViewModel holds something
         // The repository has loaded only event1
         val fakedInitialRemoteData = listOf(event1)
@@ -93,7 +95,7 @@ class EventsViewModelTest {
     // Show No Data live data value tests
     // This is for fragment to determine if the no data alert should be shown
     @Test
-    fun emptyViewModel_RefreshNonEmptyList_ReturnShowNoDataFalse() = runTest {
+    fun emptyViewModel_RefreshNonEmptyList_ReturnShowNoDataFalse() {
         // GIVEN a ViewModel has nothing in it -- nothing to do
 
         // WHEN the remote data has changed and the ViewModel refresh() is called.
@@ -107,7 +109,7 @@ class EventsViewModelTest {
     }
 
     @Test
-    fun nonEmptyViewModel_RefreshNonEmptyList_ReturnShowNoDataFalse() = runTest {
+    fun nonEmptyViewModel_RefreshNonEmptyList_ReturnShowNoDataFalse() {
         // GIVEN - The ViewModel holds something
         // The repository has loaded only event1
         val fakedInitialRemoteData = listOf(event1)
@@ -127,7 +129,7 @@ class EventsViewModelTest {
     }
 
     @Test
-    fun emptyViewModel_RefreshEmptyList_ReturnShowNoDataTrue() = runTest {
+    fun emptyViewModel_RefreshEmptyList_ReturnShowNoDataTrue() {
         // GIVEN a ViewModel has nothing in it - nothing to do
 
         // WHEN the remote data has changed and the ViewModel refresh() is called.
@@ -141,7 +143,7 @@ class EventsViewModelTest {
     }
 
     @Test
-    fun nonEmptyViewModel_RefreshEmptyList_ReturnShowNoDataTrue() = runTest {
+    fun nonEmptyViewModel_RefreshEmptyList_ReturnShowNoDataTrue() {
         // GIVEN - The ViewModel holds something
         // The repository has loaded only event1
         val fakedInitialRemoteData = listOf(event1)
@@ -162,7 +164,7 @@ class EventsViewModelTest {
 
     // Negative cases tests - set remote data source to return error
     @Test
-    fun repositoryError_RefreshList_ReturnErrorMessage() = runTest {
+    fun repositoryError_RefreshList_ReturnErrorMessage() {
         // GIVEN - The the repository is set to always return error
         val errorMessage = "test error message"
         fakeRepository.setReturnError(true, errorMessage)
