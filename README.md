@@ -1,6 +1,6 @@
 # DAZN Code Challenge - Android TV [![Build Status](https://app.bitrise.io/app/ffa2644c1a3901cd/status.svg?token=1YZ6d6jhKr9DeByxHN-aQA&branch=master)](https://app.bitrise.io/app/ffa2644c1a3901cd)
 
-This is a code test project I have previously submitted as a part of the interview process. The
+This was a code test project I have submitted as a part of the interview process. The
 project covers common RESTApi, SQLite, RecyclerView, Constraint Layout, MVVM, plus dependency
 injection and testings.
 
@@ -11,6 +11,8 @@ this project was completed by myself alone.
 Under the commit history, you will see how I have built everything from scratch - with rounds of
 refactoring and bug fixes. The interview process was concluded in October, 2021, but I am still keep
 on improving the codes for demonstration purpose.
+
+Even just for the submission, I have written many tests (the commit history can be the proof), that during the interview I have been asked several times why I had to write so many tests. That honestly made me feel a bit guilty for submitting so many tests - until I met Greg, _my honorable best teammate in my life_, at another workplace I knew it was not my fault.
 
 Please note that the APIs are supplied by DAZN for recruitment purpose. They may not work at any
 time, as we have already concluded the interview process.
