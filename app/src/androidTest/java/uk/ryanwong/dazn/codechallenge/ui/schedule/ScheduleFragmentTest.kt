@@ -32,7 +32,7 @@ import javax.inject.Inject
 @MediumTest
 @HiltAndroidTest
 @ExperimentalCoroutinesApi
-class SchedulesFragmentTest {
+internal class SchedulesFragmentTest {
     @Inject
     lateinit var repository: Repository
 

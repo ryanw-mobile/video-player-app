@@ -20,7 +20,7 @@ import uk.ryanwong.dazn.codechallenge.data.source.remote.FakeRemoteDataSource
 import java.io.IOException
 
 @ExperimentalCoroutinesApi
-class LocalCacheRepositoryTest {
+internal class LocalCacheRepositoryTest {
 
     private val remoteEvents = mutableListOf(event1, event2, event3).apply { sortBy { it.date } }
 

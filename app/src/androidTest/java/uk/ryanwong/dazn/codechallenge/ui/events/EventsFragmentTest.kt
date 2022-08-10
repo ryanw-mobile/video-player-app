@@ -41,7 +41,7 @@ import javax.inject.Inject
 @MediumTest
 @HiltAndroidTest
 @ExperimentalCoroutinesApi
-class EventsFragmentTest {
+internal class EventsFragmentTest {
     @Inject
     lateinit var repository: Repository
 

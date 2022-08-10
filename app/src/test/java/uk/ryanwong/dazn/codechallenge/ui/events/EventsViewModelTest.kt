@@ -24,7 +24,7 @@ import uk.ryanwong.dazn.codechallenge.getOrAwaitValue
  *  Provide testing to the EventsViewModel and its live data objects
  */
 @ExperimentalCoroutinesApi
-class EventsViewModelTest {
+internal class EventsViewModelTest {
 
     // Subject under test
     private lateinit var eventsViewModel: EventsViewModel

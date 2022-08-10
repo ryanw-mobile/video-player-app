@@ -25,7 +25,7 @@ import uk.ryanwong.dazn.codechallenge.getOrAwaitValue
  *  Provide testing to the ScheduleViewModel and its live data objects
  */
 @ExperimentalCoroutinesApi
-class ScheduleViewModelTest {
+internal class ScheduleViewModelTest {
     // provide testing to the ScheduleViewModel and its live data objects
     // Subject under test
     private lateinit var scheduleViewModel: ScheduleViewModel

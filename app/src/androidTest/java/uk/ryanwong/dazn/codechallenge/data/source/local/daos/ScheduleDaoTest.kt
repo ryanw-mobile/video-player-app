@@ -31,7 +31,7 @@ import javax.inject.Inject
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 @SmallTest
-class ScheduleDaoTest {
+internal class ScheduleDaoTest {
     // Executes each task synchronously using Architecture Components.
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()

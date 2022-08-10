@@ -32,7 +32,7 @@ import javax.inject.Inject
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 @MediumTest
-class RoomDbDataSourceTest {
+internal class RoomDbDataSourceTest {
 
     // We test the data source, so we are using a REAL data source, not the fake one!
     @Inject
