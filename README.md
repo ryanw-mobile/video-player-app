@@ -24,11 +24,13 @@ time, as we have already concluded the interview process.
 ## Status
 
 This project is already getting outdated as at July 2022. Future changes, if I still have time, would be:
-* Live Data to Kotlin Flow migration
+* LiveData to Kotlin Flow migration (now it's a bad practice to use LiveData in data layers)
 * Better Coroutines dispatchers handling
 * Jetpack Compose UI & new UI tests (major rework)
 * ExoPlayer upgrade
 * Truth to Kotest migration
+* Retrofit to Ktor migration
+Basically it is a complete rewrite. However I guess I won't be offered a role at DAZN even I keep on improving this project. Therefore currently this is a low priority work.
 
 ## High level architecture
 
