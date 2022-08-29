@@ -1,8 +1,8 @@
 # DAZN Code Challenge - Android TV [![Build Status](https://app.bitrise.io/app/ffa2644c1a3901cd/status.svg?token=1YZ6d6jhKr9DeByxHN-aQA&branch=master)](https://app.bitrise.io/app/ffa2644c1a3901cd)
 
-This was a code test project I have submitted as a part of the interview process. The
-project covers common RESTApi, SQLite, RecyclerView, Constraint Layout, MVVM, plus dependency
-injection and testings.
+This was a code test project I have submitted as a part of the interview process. The project covers
+common RESTApi, SQLite, RecyclerView, Constraint Layout, MVVM, plus dependency injection and
+testings.
 
 Although the title carries "Android TV", it has nothing to do with that - this is an Android mobile
 App as required by the specifications. Except for a portion of open-source codes attributed inline,
@@ -12,7 +12,10 @@ Under the commit history, you will see how I have built everything from scratch 
 refactoring and bug fixes. The interview process was concluded in October, 2021, but I am still keep
 on improving the codes for demonstration purpose.
 
-Even just for the submission, I have written many tests (the commit history can be the proof), that during the interview I have been asked several times why I had to write so many tests. That honestly made me feel a bit guilty for submitting so many tests - until I met Greg, _my honorable best teammate in my life_, at another workplace I knew it was not my fault.
+Even just for the submission, I have written many tests (the commit history can be the proof), that
+during the interview I have been asked several times why I had to write so many tests. That honestly
+made me feel a bit guilty for submitting so many tests - until I met Greg, _my honorable best
+teammate in my life_, at another workplace I knew it was not my fault.
 
 Please note that the APIs are supplied by DAZN for recruitment purpose. They may not work at any
 time, as we have already concluded the interview process.
@@ -23,14 +26,17 @@ time, as we have already concluded the interview process.
 
 ## Status
 
-This project is already getting outdated as at July 2022. Future changes, if I still have time, would be:
+This project is already getting outdated as at July 2022. Future changes, if I still have time,
+would be:
+
 * LiveData to Kotlin Flow migration (now it's a bad practice to use LiveData in data layers)
 * Better Coroutines dispatchers handling
 * Jetpack Compose UI & new UI tests (major rework)
 * ExoPlayer upgrade
 * Truth to Kotest migration
-* Retrofit to Ktor migration
-Basically it is a complete rewrite. However I guess I won't be offered a role at DAZN even I keep on improving this project. Therefore currently this is a low priority work.
+* Retrofit to Ktor migration Basically it is a complete rewrite. However I guess I won't be offered
+  a role at DAZN even I keep on improving this project. Therefore currently this is a low priority
+  work.
 
 ## High level architecture
 
@@ -58,6 +64,8 @@ Basically it is a complete rewrite. However I guess I won't be offered a role at
 * [Truth](https://truth.dev/) - Assertion Library for Testing
 * [Timber](https://github.com/JakeWharton/timber) - Logging
 * [LeakCanary](https://github.com/square/leakcanary) - Leak detection
+* [Ktlint Gradle](https://github.com/jlleitschuh/ktlint-gradle) - ktlint plugin to check and apply
+  code autoformat
 
 ## Requirements
 
