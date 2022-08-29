@@ -10,7 +10,6 @@ import kotlinx.coroutines.withContext
 import uk.ryanwong.dazn.codechallenge.data.source.remote.entities.asDomainModel
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
-import java.util.*
 import javax.inject.Inject
 
 class SandBoxAPIDataSource @Inject constructor(
@@ -25,7 +24,7 @@ class SandBoxAPIDataSource @Inject constructor(
     override suspend fun getEvents(): ApiResult<List<Event>> = withContext(ioDispatcher) {
         return@withContext try {
             // We could add sorting here, but it is redundant as our local data source will handle that
-            ApiResult.Success(retrofitService.getEvents().asDomainModel())  // .sortedBy { it.date }
+            ApiResult.Success(retrofitService.getEvents().asDomainModel()) // .sortedBy { it.date }
         } catch (e: Exception) {
             ApiResult.Error(e)
         }
@@ -39,7 +38,7 @@ class SandBoxAPIDataSource @Inject constructor(
             // We could add sorting here, but it is redundant as our local data source will handle that
             ApiResult.Success(
                 retrofitService.getSchedule().asDomainModel()
-            )  // .sortedBy { it.date }
+            ) // .sortedBy { it.date }
         } catch (e: Exception) {
             ApiResult.Error(e)
         }

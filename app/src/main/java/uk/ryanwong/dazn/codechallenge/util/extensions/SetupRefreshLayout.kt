@@ -21,4 +21,3 @@ fun Fragment.setupRefreshLayout(
     )
     refreshLayout.setOnRefreshListener(refreshListener)
 }
-

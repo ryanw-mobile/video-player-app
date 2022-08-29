@@ -10,8 +10,7 @@ import com.bumptech.glide.Glide
 import timber.log.Timber
 import uk.ryanwong.dazn.codechallenge.util.extensions.fadeIn
 import uk.ryanwong.dazn.codechallenge.util.extensions.fadeOut
-import java.util.*
-
+import java.util.Date
 
 /**
  * Use this binding adapter to show and hide the views using boolean variables

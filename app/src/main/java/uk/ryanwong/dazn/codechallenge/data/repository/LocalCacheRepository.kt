@@ -46,7 +46,6 @@ class LocalCacheRepository @Inject constructor(
             return localDataSource.getEvents()
         }
 
-
     override suspend fun getSchedule(): List<Schedule> {
         wrapEspressoIdlingResource {
             return localDataSource.getSchedules()
@@ -79,5 +78,4 @@ class LocalCacheRepository @Inject constructor(
             }
         }
     }
-
 }

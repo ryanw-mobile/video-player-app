@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
-import java.util.*
+import java.util.Date
 
 @Entity(tableName = "schedule_table")
 data class ScheduleDbEntity(

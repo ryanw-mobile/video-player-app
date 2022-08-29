@@ -70,7 +70,6 @@ internal class RoomDbDataSourceTest {
         assertThat(resultList).containsExactly(event1)
     }
 
-
     @Test
     fun oneEvent_UpsertOneEvent_ReturnEventUpdated() = runTest {
         // GIVEN - An empty list

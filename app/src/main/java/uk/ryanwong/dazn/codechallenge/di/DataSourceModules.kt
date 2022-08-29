@@ -12,11 +12,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import uk.ryanwong.dazn.codechallenge.data.source.local.LocalDataSource
-import uk.ryanwong.dazn.codechallenge.data.source.remote.RemoteDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
+import uk.ryanwong.dazn.codechallenge.data.source.local.LocalDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.local.RoomDbDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.local.daos.DaznApiDaos
+import uk.ryanwong.dazn.codechallenge.data.source.remote.RemoteDataSource
 import uk.ryanwong.dazn.codechallenge.data.source.remote.SandBoxAPIDataSource
 import javax.inject.Singleton
 

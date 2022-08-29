@@ -8,7 +8,9 @@ package uk.ryanwong.dazn.codechallenge.ui.schedule
 import android.os.Bundle
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -32,7 +34,7 @@ import javax.inject.Inject
 @MediumTest
 @HiltAndroidTest
 @ExperimentalCoroutinesApi
-internal class SchedulesFragmentTest {
+internal class ScheduleFragmentTest {
     @Inject
     lateinit var repository: Repository
 

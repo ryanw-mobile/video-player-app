@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
-import java.util.*
+import java.util.Date
 
 @Entity(tableName = "event_table")
 data class EventDbEntity(

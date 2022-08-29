@@ -5,15 +5,9 @@
 
 package uk.ryanwong.dazn.codechallenge.util.extensions
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.view.View
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import uk.ryanwong.dazn.codechallenge.R
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 fun String.parseTimeStamp(dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss"): Date {
     val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())

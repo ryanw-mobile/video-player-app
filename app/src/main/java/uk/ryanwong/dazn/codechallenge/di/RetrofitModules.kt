@@ -15,7 +15,7 @@ import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import uk.ryanwong.dazn.codechallenge.data.source.remote.DaznApiService
-import java.util.*
+import java.util.Date
 import javax.inject.Singleton
 
 private const val BASE_URL = "https://us-central1-dazn-sandbox.cloudfunctions.net/"

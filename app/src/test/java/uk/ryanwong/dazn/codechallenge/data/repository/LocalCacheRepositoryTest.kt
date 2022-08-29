@@ -88,7 +88,7 @@ internal class LocalCacheRepositoryTest {
         // When repository refreshEvents
         try {
             localCacheRepository.refreshEvents()
-            fail();
+            fail()
 
             // Then repository should throw the exception
         } catch (ex: IOException) {
@@ -137,7 +137,7 @@ internal class LocalCacheRepositoryTest {
         // When repository refreshSchedule
         try {
             localCacheRepository.refreshSchedule()
-            fail();
+            fail()
 
             // Then repository should throw the exception
         } catch (ex: IOException) {

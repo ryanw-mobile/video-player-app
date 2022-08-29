@@ -38,9 +38,11 @@ class EventsFragment : Fragment() {
         }
     }
 
-    private val eventsAdapter = EventsAdapter(EventClickListener {
-        viewModel.setEventClicked(it)
-    }).apply {
+    private val eventsAdapter = EventsAdapter(
+        EventClickListener {
+            viewModel.setEventClicked(it)
+        }
+    ).apply {
         stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
         // This eliminates flickering

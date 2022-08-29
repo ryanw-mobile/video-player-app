@@ -65,7 +65,6 @@ class ExoplayerActivity : AppCompatActivity() {
         }
     }
 
-
     public override fun onStop() {
         super.onStop()
         if (Util.SDK_INT >= 24) {
@@ -84,7 +83,6 @@ class ExoplayerActivity : AppCompatActivity() {
                 exoPlayer.seekTo(currentWindow, playbackPosition)
                 exoPlayer.prepare()
             }
-
     }
 
     private fun releasePlayer() {
@@ -97,4 +95,3 @@ class ExoplayerActivity : AppCompatActivity() {
         player = null
     }
 }
-

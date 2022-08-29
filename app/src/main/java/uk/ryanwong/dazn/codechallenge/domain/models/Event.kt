@@ -1,6 +1,6 @@
 package uk.ryanwong.dazn.codechallenge.domain.models
 
-import java.util.*
+import java.util.Date
 
 data class Event(
     val eventId: Int,

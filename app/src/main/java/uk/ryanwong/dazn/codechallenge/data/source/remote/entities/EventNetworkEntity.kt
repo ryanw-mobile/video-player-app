@@ -3,7 +3,7 @@ package uk.ryanwong.dazn.codechallenge.data.source.remote.entities
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import uk.ryanwong.dazn.codechallenge.domain.models.Event
-import java.util.*
+import java.util.Date
 
 @JsonClass(generateAdapter = true)
 data class EventNetworkEntity(
