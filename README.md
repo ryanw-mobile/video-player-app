@@ -12,7 +12,7 @@ Under the commit history, you will see how I have built everything from scratch 
 refactoring and bug fixes. The interview process was concluded in October, 2021, but I am still keep
 on improving the codes for demonstration purpose.
 
-I still have plan to further rewrite this App using Jetpack Compose. Howwever, since it is not likely that I will work for DAZN in the future, this may not happen so soon as I will give priority to other projects.
+I still have a plan to further rewrite this App using Jetpack Compose. However, since it is not likely that I will work for DAZN in the future, this may not happen so soon as I give priority to other projects.
 
 Please note that the APIs are supplied by DAZN for recruitment purpose. They may not work at any
 time, as we have already concluded the interview process.
