@@ -42,8 +42,7 @@ would be:
 * [Jetpack Databinding](https://developer.android.com/jetpack/androidx/releases/databinding)
 * Live Data
 * Bottom Navigation
-* [Bitrise](https://https://app.bitrise.io/) - CI (current)
-* [Travis-CI](https://travis-ci.org/) - CI (previously)
+* [Bitrise](https://https://app.bitrise.io/) - CI
 
 ## Key Dependencies
 
