@@ -18,10 +18,10 @@ android {
         release
     }
 
-    def isRunningOnTravis = System.getenv("CI") == "true"
     def isRunningOnBitrise = System.getenv("BITRISE") == "true"
+    def keystorePropertiesFile = file('../../keystore.properties')
 
-    if (isRunningOnBitrise) {
+    if (isRunningOnBitrise || !keystorePropertiesFile.exists()) {
         // configure keystore
         // File Downloaderで指定したパス
         signingConfigs.release.storeFile = file(System.getenv("HOME") + "/keystores/release.jks")
@@ -29,16 +29,9 @@ android {
         signingConfigs.release.keyAlias = System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
         signingConfigs.release.keyPassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
 
-    } else if (isRunningOnTravis) {
-        // configure keystore
-        signingConfigs.release.storeFile = file("../secure.keystore")
-        signingConfigs.release.storePassword = System.getenv("storePass")
-        signingConfigs.release.keyAlias = System.getenv("alias")
-        signingConfigs.release.keyPassword = System.getenv("pass")
-
     } else {
         Properties keyProps = new Properties()
-        keyProps.load(new FileInputStream(file('../../keystore.properties')))
+        keyProps.load(new FileInputStream(keystorePropertiesFile))
         signingConfigs.release.storeFile = file(keyProps["store"])
         signingConfigs.release.keyAlias = keyProps["alias"]
         signingConfigs.release.storePassword = keyProps["storePass"]
@@ -67,7 +60,6 @@ android {
             applicationIdSuffix '.debug'
             minifyEnabled false
 
-            signingConfig signingConfigs.release
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
                     def date = new Date()

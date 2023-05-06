@@ -42,8 +42,7 @@ would be:
 * [Jetpack Databinding](https://developer.android.com/jetpack/androidx/releases/databinding)
 * Live Data
 * Bottom Navigation
-* [Bitrise](https://https://app.bitrise.io/) - CI (current)
-* [Travis-CI](https://travis-ci.org/) - CI (previously)
+* [Bitrise](https://https://app.bitrise.io/) - CI
 
 ## Key Dependencies
 
@@ -70,6 +69,8 @@ would be:
 * Android device or simulator running Android 5.0+ (API 21)
 
 ## Setting up the keystore
+
+* You don't need to setup a keystore to run the debug build. The following instructions are required only if you want to produce the release build.
 
 * Android keystore is not being stored in this repository. You need your own keystore to generate
   the apk / App Bundle
