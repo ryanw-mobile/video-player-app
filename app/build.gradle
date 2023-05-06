@@ -19,8 +19,9 @@ android {
     }
 
     def isRunningOnBitrise = System.getenv("BITRISE") == "true"
+    def keystorePropertiesFile = file('../../keystore.properties')
 
-    if (isRunningOnBitrise) {
+    if (isRunningOnBitrise || !keystorePropertiesFile.exists()) {
         // configure keystore
         // File Downloaderで指定したパス
         signingConfigs.release.storeFile = file(System.getenv("HOME") + "/keystores/release.jks")
@@ -30,7 +31,7 @@ android {
 
     } else {
         Properties keyProps = new Properties()
-        keyProps.load(new FileInputStream(file('../../keystore.properties')))
+        keyProps.load(new FileInputStream(keystorePropertiesFile))
         signingConfigs.release.storeFile = file(keyProps["store"])
         signingConfigs.release.keyAlias = keyProps["alias"]
         signingConfigs.release.storePassword = keyProps["storePass"]
@@ -59,7 +60,6 @@ android {
             applicationIdSuffix '.debug'
             minifyEnabled false
 
-            signingConfig signingConfigs.release
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
                     def date = new Date()

@@ -70,6 +70,8 @@ would be:
 
 ## Setting up the keystore
 
+* You don't need to setup a keystore to run the debug build. The following instructions are required only if you want to produce the release build.
+
 * Android keystore is not being stored in this repository. You need your own keystore to generate
   the apk / App Bundle
 
