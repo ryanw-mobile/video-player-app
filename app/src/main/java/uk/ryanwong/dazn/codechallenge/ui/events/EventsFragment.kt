@@ -131,7 +131,12 @@ class EventsFragment : Fragment() {
 
     override fun onDestroyView() {
         eventsAdapter.apply {
-            unregisterAdapterDataObserver(adapterDataObserver)
+            try {
+                unregisterAdapterDataObserver(adapterDataObserver)
+            } catch (ex: IllegalStateException) {
+                // If the observer is not registered
+                ex.printStackTrace()
+            }
         }
         binding.recyclerview.apply {
             adapter = null
