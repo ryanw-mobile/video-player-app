@@ -113,13 +113,13 @@ After August 2021, all new apps and games will be required to publish with the A
 format.
 
    ```
-   ./gradlew clean && ./gradlew bundleRelease
+   ./gradlew clean bundleRelease
    ```
 
 ### Build and sign an apk for distribution
 
    ```
-   ./gradlew clean && ./gradlew assembleRelease
+   ./gradlew clean assembleRelease
    ```
 
 * The generated apk(s) will be stored under `app/build/outputs/apk/`
