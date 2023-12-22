@@ -25,16 +25,15 @@ buildscript {
         classpath 'com.android.tools.build:gradle:8.2.0'
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21'
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
-        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.5.0'
-        classpath 'com.google.gms:google-services:4.3.10'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.0'
+        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.7.6'
+        classpath 'com.google.gms:google-services:4.4.0'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
-
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
