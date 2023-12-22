@@ -3,8 +3,8 @@ package uk.ryanwong.dazn.codechallenge.ui.events
 import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -38,7 +38,7 @@ class EventsViewModel @Inject constructor(
     val showLoading: LiveData<Boolean>
         get() = _showLoading
 
-    val showNoData = Transformations.map(listContents) { list ->
+    val showNoData: LiveData<Boolean> = listContents.map { list ->
         list.isEmpty()
     }
 

@@ -6,7 +6,7 @@
 package uk.ryanwong.dazn.codechallenge.data.source.local
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -26,7 +26,7 @@ class RoomDbDataSource @Inject constructor(
 ) : LocalDataSource {
 
     override fun observeEvents(): LiveData<List<Event>> {
-        return Transformations.map(daznApiDaos.eventsDao.observeEvents()) {
+        return (daznApiDaos.eventsDao.observeEvents()).map {
             it.map { item ->
                 Event(
                     item.eventId,
@@ -41,7 +41,7 @@ class RoomDbDataSource @Inject constructor(
     }
 
     override fun observeSchedule(): LiveData<List<Schedule>> {
-        return Transformations.map(daznApiDaos.scheduleDao.observeSchedules()) {
+        return (daznApiDaos.scheduleDao.observeSchedules()).map {
             it.map { item ->
                 Schedule(
                     item.scheduleId,
