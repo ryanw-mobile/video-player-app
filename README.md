@@ -1,4 +1,4 @@
-# DAZN Code Challenge - Android TV [![Build Status](https://app.bitrise.io/app/ffa2644c1a3901cd/status.svg?token=1YZ6d6jhKr9DeByxHN-aQA&branch=master)](https://app.bitrise.io/app/ffa2644c1a3901cd)
+# DAZN Code Challenge - Android TV ![Gradle Check on Main](https://github.com/ryanw-mobile/dazn-code-challenge/workflows/main_build.yml/badge.svg)
 
 This was a code test project I have submitted as a part of the interview process. The project covers
 common RESTApi, SQLite, RecyclerView, Constraint Layout, MVVM, plus dependency injection and
@@ -42,7 +42,8 @@ would be:
 * [Jetpack Databinding](https://developer.android.com/jetpack/androidx/releases/databinding)
 * Live Data
 * Bottom Navigation
-* [Bitrise](https://https://app.bitrise.io/) - CI
+* [Github Actions](https://github.com/features/actions) - CI (current)
+* [Bitrise](https://https://app.bitrise.io/) - CI (previously)
 
 ## Key Dependencies
 
@@ -65,8 +66,8 @@ would be:
 
 ## Requirements
 
-* Android Studio Chipmunk | 2021.2.1 Patch 1
-* Android device or simulator running Android 5.0+ (API 21)
+* Android Studio Iguana | 2023.2.1 Canary 18
+* Android device or simulator running Android 9.0+ (API 28)
 
 ## Setting up the keystore
 
@@ -124,4 +125,3 @@ format.
 
 * The generated apk(s) will be stored under `app/build/outputs/apk/`
 * Other usages can be listed using `./gradelew tasks`
-
