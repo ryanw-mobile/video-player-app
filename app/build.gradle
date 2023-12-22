@@ -15,27 +15,24 @@ android {
     compileSdk 34
 
     signingConfigs {
-        release
-    }
+        release {
+            def isRunningOnBitrise = System.getenv("BITRISE") == "true"
+            def keystorePropertiesFile = file('../../keystore.properties')
 
-    def isRunningOnBitrise = System.getenv("BITRISE") == "true"
-    def keystorePropertiesFile = file('../../keystore.properties')
-
-    if (isRunningOnBitrise || !keystorePropertiesFile.exists()) {
-        // configure keystore
-        // File Downloaderで指定したパス
-        signingConfigs.release.storeFile = file(System.getenv("KEYSTORE_LOCATION"))
-        signingConfigs.release.storePassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
-        signingConfigs.release.keyAlias = System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
-        signingConfigs.release.keyPassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
-
-    } else {
-        Properties keyProps = new Properties()
-        keyProps.load(new FileInputStream(keystorePropertiesFile))
-        signingConfigs.release.storeFile = file(keyProps["store"])
-        signingConfigs.release.keyAlias = keyProps["alias"]
-        signingConfigs.release.storePassword = keyProps["storePass"]
-        signingConfigs.release.keyPassword = keyProps["pass"]
+            if (isRunningOnBitrise || !keystorePropertiesFile.exists()) {
+                storeFile = file(System.getenv("KEYSTORE_LOCATION"))
+                storePassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
+                keyPassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+            } else {
+                Properties keyProps = new Properties()
+                keyProps.load(new FileInputStream(keystorePropertiesFile))
+                storeFile = file(keyProps["store"])
+                keyAlias = keyProps["alias"]
+                storePassword = keyProps["storePass"]
+                keyPassword = keyProps["pass"]
+            }
+        }
     }
 
     defaultConfig {
