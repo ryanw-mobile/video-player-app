@@ -40,7 +40,7 @@ android {
 
     defaultConfig {
         applicationId "uk.ryanwong.dazn.codechallenge"
-        minSdk 21
+        minSdk 28
         targetSdk 31
         versionCode 4
         versionName "1.1.2"
@@ -116,6 +116,7 @@ android {
             pickFirsts += ['win32-x86-64/attach_hotspot_windows.dll', 'win32-x86/attach_hotspot_windows.dll']
         }
     }
+    namespace 'uk.ryanwong.dazn.codechallenge'
 
 
     testOptions.unitTests {
