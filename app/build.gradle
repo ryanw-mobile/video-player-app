@@ -49,7 +49,6 @@ android {
 
         // Bundle output filename
         setProperty("archivesBaseName", "dazn-" + versionName + "-" + new Date().format('yyyyMMdd-HHmmss'))
-
     }
 
     buildTypes {
