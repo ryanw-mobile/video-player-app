@@ -24,7 +24,7 @@ android {
     if (isRunningOnBitrise || !keystorePropertiesFile.exists()) {
         // configure keystore
         // File Downloaderで指定したパス
-        signingConfigs.release.storeFile = file(System.getenv("HOME") + "/keystores/release.jks")
+        signingConfigs.release.storeFile = file(System.getenv("KEYSTORE_LOCATION"))
         signingConfigs.release.storePassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
         signingConfigs.release.keyAlias = System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
         signingConfigs.release.keyPassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
