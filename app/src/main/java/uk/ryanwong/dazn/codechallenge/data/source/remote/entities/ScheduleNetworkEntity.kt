@@ -21,7 +21,7 @@ data class ScheduleNetworkEntity(
     val date: Date,
 
     @Json(name = "imageUrl")
-    val imageUrl: String,
+    val imageUrl: String
 )
 
 fun List<ScheduleNetworkEntity>.asDomainModel(): List<Schedule> {

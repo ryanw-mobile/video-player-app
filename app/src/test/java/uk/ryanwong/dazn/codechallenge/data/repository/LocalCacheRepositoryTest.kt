@@ -27,7 +27,9 @@ internal class LocalCacheRepositoryTest {
     private val localEvents = mutableListOf(event1)
 
     private val remoteSchedules = mutableListOf(
-        TestData.schedule1, TestData.schedule2, TestData.schedule3
+        TestData.schedule1,
+        TestData.schedule2,
+        TestData.schedule3
     ).apply {
         sortBy { it.date }
     }

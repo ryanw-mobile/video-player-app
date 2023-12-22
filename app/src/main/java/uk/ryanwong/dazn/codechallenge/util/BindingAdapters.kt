@@ -23,11 +23,13 @@ fun setFadeVisible(view: View, visible: Boolean? = true) {
     } else {
         view.animate().cancel()
         if (visible == true) {
-            if (view.visibility == View.GONE)
+            if (view.visibility == View.GONE) {
                 view.fadeIn()
+            }
         } else {
-            if (view.visibility == View.VISIBLE)
+            if (view.visibility == View.VISIBLE) {
                 view.fadeOut()
+            }
         }
     }
 }
@@ -59,7 +61,8 @@ fun toNiceString(view: TextView, src: Date?) {
             view.context,
             it.time,
             DateUtils.DAY_IN_MILLIS,
-            DateUtils.DAY_IN_MILLIS * 3, 0
+            DateUtils.DAY_IN_MILLIS * 3,
+            0
         ).toString()
     }
 }
