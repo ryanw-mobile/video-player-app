@@ -1,4 +1,4 @@
-# DAZN Code Challenge - Android TV ![Gradle Check on Main](https://github.com/ryanw-mobile/dazn-code-challenge/workflows/main_build.yml/badge.svg)
+# DAZN Code Challenge - Android TV ![Gradle Check on Main](https://github.com/ryanw-mobile/dazn-code-challenge/actions/workflows/main_build.yml/badge.svg)
 
 This was a code test project I have submitted as a part of the interview process. The project covers
 common RESTApi, SQLite, RecyclerView, Constraint Layout, MVVM, plus dependency injection and
