@@ -24,11 +24,12 @@ import javax.inject.Inject
  * So after the first App launch, we are able to always show something,
  * before the new data arrives, or even without an Internet connection.
  */
-class LocalCacheRepository @Inject constructor(
+class LocalCacheRepository
+@Inject
+constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource
+    private val localDataSource: LocalDataSource,
 ) : Repository {
-
     override fun observeEvents(): LiveData<List<Event>> {
         wrapEspressoIdlingResource {
             return localDataSource.observeEvents()

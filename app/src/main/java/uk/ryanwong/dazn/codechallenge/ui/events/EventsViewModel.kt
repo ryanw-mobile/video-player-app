@@ -16,9 +16,11 @@ import uk.ryanwong.dazn.codechallenge.util.SingleLiveEvent
 import javax.inject.Inject
 
 @HiltViewModel
-class EventsViewModel @Inject constructor(
+class EventsViewModel
+@Inject
+constructor(
     private val repository: Repository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel() {
     val showErrorMessage: SingleLiveEvent<String> = SingleLiveEvent()
 
@@ -38,9 +40,10 @@ class EventsViewModel @Inject constructor(
     val showLoading: LiveData<Boolean>
         get() = _showLoading
 
-    val showNoData: LiveData<Boolean> = listContents.map { list ->
-        list.isEmpty()
-    }
+    val showNoData: LiveData<Boolean> =
+        listContents.map { list ->
+            list.isEmpty()
+        }
 
     private val _openVideoPlayerUrl = MutableLiveData<String?>(null)
     val openVideoPlayerUrl: LiveData<String?>
@@ -66,10 +69,11 @@ class EventsViewModel @Inject constructor(
 
     fun setEventClicked(event: Event) {
         event.videoUrl.let {
-            _openVideoPlayerUrl.value = when (it.isEmpty()) {
-                false -> it
-                true -> null
-            }
+            _openVideoPlayerUrl.value =
+                when (it.isEmpty()) {
+                    false -> it
+                    true -> null
+                }
         }
     }
 

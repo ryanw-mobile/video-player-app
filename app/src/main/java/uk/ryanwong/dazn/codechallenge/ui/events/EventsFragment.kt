@@ -24,44 +24,51 @@ import uk.ryanwong.dazn.codechallenge.util.filterErrorMessage
 
 @AndroidEntryPoint
 class EventsFragment : Fragment() {
-
     private val viewModel: EventsViewModel by viewModels()
     private var _binding: FragmentEventsBinding? = null
     private val binding get() = _binding!!
 
-    private val adapterDataObserver = object : RecyclerView.AdapterDataObserver() {
-        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-            viewModel.listState?.let {
-                // layoutManager.scrollToPositionWithOffset(position, 0)
-                binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
+    private val adapterDataObserver =
+        object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(
+                positionStart: Int,
+                itemCount: Int,
+            ) {
+                viewModel.listState?.let {
+                    // layoutManager.scrollToPositionWithOffset(position, 0)
+                    binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
+                }
             }
         }
-    }
 
-    private val eventsAdapter = EventsAdapter(
-        EventClickListener {
-            viewModel.setEventClicked(it)
+    private val eventsAdapter =
+        EventsAdapter(
+            EventClickListener {
+                viewModel.setEventClicked(it)
+            },
+        ).apply {
+            stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
+            // This eliminates flickering
+            setHasStableIds(true)
+
+            // This overrides the adapter's intention to scroll back to the top
+            registerAdapterDataObserver(adapterDataObserver)
         }
-    ).apply {
-        stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-
-        // This eliminates flickering
-        setHasStableIds(true)
-
-        // This overrides the adapter's intention to scroll back to the top
-        registerAdapterDataObserver(adapterDataObserver)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentEventsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         // The purpose of LifecycleObserver is to eliminate writing the boilerplate code
@@ -72,14 +79,15 @@ class EventsFragment : Fragment() {
             addItemDecoration(
                 DividerItemDecoration(
                     requireContext(),
-                    DividerItemDecoration.VERTICAL
-                )
+                    DividerItemDecoration.VERTICAL,
+                ),
             )
         }
         this.setupRefreshLayout(binding.refreshlayout) { viewModel.refreshList() }
     }
 
     private var errorDialog: AlertDialog? = null
+
     override fun onStart() {
         super.onStart()
 
@@ -106,10 +114,11 @@ class EventsFragment : Fragment() {
         }
 
         viewModel.showNoData.observe(viewLifecycleOwner) { isShowNoData ->
-            binding.textviewNodata.visibility = when (isShowNoData) {
-                true -> View.VISIBLE
-                else -> View.GONE
-            }
+            binding.textviewNodata.visibility =
+                when (isShowNoData) {
+                    true -> View.VISIBLE
+                    else -> View.GONE
+                }
         }
 
         viewModel.listContents.observe(viewLifecycleOwner) {
@@ -121,8 +130,8 @@ class EventsFragment : Fragment() {
             videoUrl?.let {
                 findNavController().navigate(
                     EventsFragmentDirections.actionNavigationEventsToExoplayerActivity(
-                        videoUrl
-                    )
+                        videoUrl,
+                    ),
                 )
                 viewModel.notifyVideoPlayerNavigationCompleted()
             }

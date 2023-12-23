@@ -25,7 +25,6 @@ import uk.ryanwong.dazn.codechallenge.getOrAwaitValue
  */
 @ExperimentalCoroutinesApi
 internal class EventsViewModelTest {
-
     // Subject under test
     private lateinit var eventsViewModel: EventsViewModel
 
@@ -41,10 +40,11 @@ internal class EventsViewModelTest {
         fakeRepository = FakeRepository()
 
         // Given a fresh ViewModel
-        eventsViewModel = EventsViewModel(
-            repository = fakeRepository,
-            dispatcher = UnconfinedTestDispatcher()
-        )
+        eventsViewModel =
+            EventsViewModel(
+                repository = fakeRepository,
+                dispatcher = UnconfinedTestDispatcher(),
+            )
     }
 
     @Test

@@ -33,7 +33,6 @@ import javax.inject.Inject
 @HiltAndroidTest
 @MediumTest
 internal class RoomDbDataSourceTest {
-
     // We test the data source, so we are using a REAL data source, not the fake one!
     @Inject
     lateinit var localDataSource: LocalDataSource
@@ -59,83 +58,89 @@ internal class RoomDbDataSourceTest {
     // runTest has replaced runBlockingTest
     // see: https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test#runtest
     @Test
-    fun emptyList_SyncOneEvent_ReturnOneEvent() = runTest {
-        // GIVEN - An empty list -- nothing to do
+    fun emptyList_SyncOneEvent_ReturnOneEvent() =
+        runTest {
+            // GIVEN - An empty list -- nothing to do
 
-        // WHEN  - Sync events by supplying one event
-        localDataSource.submitEvents(listOf(event1))
+            // WHEN  - Sync events by supplying one event
+            localDataSource.submitEvents(listOf(event1))
 
-        // THEN - One event is returned
-        val resultList = localDataSource.getEvents()
-        assertThat(resultList).containsExactly(event1)
-    }
-
-    @Test
-    fun oneEvent_UpsertOneEvent_ReturnEventUpdated() = runTest {
-        // GIVEN - An empty list
-        localDataSource.submitEvents(listOf(event1))
-
-        // WHEN  - Sync events by supplying another event with same Id but different contents
-        localDataSource.submitEvents(listOf(event1Modified))
-
-        // THEN - One event is returned, and the returned item should be the new event
-        val resultList = localDataSource.getEvents()
-        assertThat(resultList).containsExactly(event1Modified)
-    }
+            // THEN - One event is returned
+            val resultList = localDataSource.getEvents()
+            assertThat(resultList).containsExactly(event1)
+        }
 
     @Test
-    fun threeEvents_SyncEmptyList_ReturnNoEvents() = runTest {
-        // GIVEN - An empty list
-        localDataSource.submitEvents(listOf(event1, event2, event3))
-        val initialList = localDataSource.getEvents()
+    fun oneEvent_UpsertOneEvent_ReturnEventUpdated() =
+        runTest {
+            // GIVEN - An empty list
+            localDataSource.submitEvents(listOf(event1))
 
-        // WHEN  - Sync events by supplying another event with same Id but different contents
-        localDataSource.submitEvents(listOf())
+            // WHEN  - Sync events by supplying another event with same Id but different contents
+            localDataSource.submitEvents(listOf(event1Modified))
 
-        // THEN - One event is returned
-        val resultList = localDataSource.getEvents()
-        assertThat(resultList).hasSize(0)
-    }
-
-    @Test
-    fun emptyList_SyncOneSchedule_ReturnOneSchedule() = runTest {
-        // GIVEN - An empty list
-        val initialList = localDataSource.getSchedules()
-
-        // WHEN  - Sync schedules by supplying one schedule
-        localDataSource.submitSchedule(listOf(schedule1))
-
-        // THEN - One event is returned
-        val resultList = localDataSource.getSchedules()
-        assertThat(resultList).containsExactly(schedule1)
-    }
+            // THEN - One event is returned, and the returned item should be the new event
+            val resultList = localDataSource.getEvents()
+            assertThat(resultList).containsExactly(event1Modified)
+        }
 
     @Test
-    fun oneSchedule_UpsertOneSchedule_ReturnScheduleUpdated() = runTest {
-        // GIVEN - An empty list
-        localDataSource.submitSchedule(listOf(schedule1))
+    fun threeEvents_SyncEmptyList_ReturnNoEvents() =
+        runTest {
+            // GIVEN - An empty list
+            localDataSource.submitEvents(listOf(event1, event2, event3))
+            val initialList = localDataSource.getEvents()
 
-        // WHEN - Sync schedules by supplying another schedule with same Id but different contents
-        localDataSource.submitSchedule(listOf(schedule1Modified))
+            // WHEN  - Sync events by supplying another event with same Id but different contents
+            localDataSource.submitEvents(listOf())
 
-        // THEN - One schedule item is returned, and the returned item should be the new schedule
-        val resultList = localDataSource.getSchedules()
-        assertThat(resultList).containsExactly(schedule1Modified)
-    }
+            // THEN - One event is returned
+            val resultList = localDataSource.getEvents()
+            assertThat(resultList).hasSize(0)
+        }
 
     @Test
-    fun threeSchedules_SyncEmptyList_ReturnNoSchedules() = runTest {
-        // GIVEN - An empty list
-        localDataSource.submitSchedule(listOf(schedule1, schedule2, schedule3))
-        val initialList = localDataSource.getSchedules()
+    fun emptyList_SyncOneSchedule_ReturnOneSchedule() =
+        runTest {
+            // GIVEN - An empty list
+            val initialList = localDataSource.getSchedules()
 
-        // WHEN - Sync schedules by supplying another schedule with same Id but different contents
-        localDataSource.submitSchedule(listOf())
+            // WHEN  - Sync schedules by supplying one schedule
+            localDataSource.submitSchedule(listOf(schedule1))
 
-        // THEN - schedule list is empty
-        val resultList = localDataSource.getSchedules()
-        assertThat(resultList).hasSize(0)
-    }
+            // THEN - One event is returned
+            val resultList = localDataSource.getSchedules()
+            assertThat(resultList).containsExactly(schedule1)
+        }
+
+    @Test
+    fun oneSchedule_UpsertOneSchedule_ReturnScheduleUpdated() =
+        runTest {
+            // GIVEN - An empty list
+            localDataSource.submitSchedule(listOf(schedule1))
+
+            // WHEN - Sync schedules by supplying another schedule with same Id but different contents
+            localDataSource.submitSchedule(listOf(schedule1Modified))
+
+            // THEN - One schedule item is returned, and the returned item should be the new schedule
+            val resultList = localDataSource.getSchedules()
+            assertThat(resultList).containsExactly(schedule1Modified)
+        }
+
+    @Test
+    fun threeSchedules_SyncEmptyList_ReturnNoSchedules() =
+        runTest {
+            // GIVEN - An empty list
+            localDataSource.submitSchedule(listOf(schedule1, schedule2, schedule3))
+            val initialList = localDataSource.getSchedules()
+
+            // WHEN - Sync schedules by supplying another schedule with same Id but different contents
+            localDataSource.submitSchedule(listOf())
+
+            // THEN - schedule list is empty
+            val resultList = localDataSource.getSchedules()
+            assertThat(resultList).hasSize(0)
+        }
 
     @After
     fun cleanUp() {

@@ -41,10 +41,11 @@ internal class ScheduleViewModelTest {
         // That is the state before the first API call happens to download something from the server
         fakeRepository = FakeRepository()
 
-        scheduleViewModel = ScheduleViewModel(
-            repository = fakeRepository,
-            dispatcher = UnconfinedTestDispatcher()
-        )
+        scheduleViewModel =
+            ScheduleViewModel(
+                repository = fakeRepository,
+                dispatcher = UnconfinedTestDispatcher(),
+            )
     }
 
     @Test

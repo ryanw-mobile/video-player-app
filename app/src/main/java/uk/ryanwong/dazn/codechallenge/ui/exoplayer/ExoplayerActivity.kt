@@ -23,7 +23,6 @@ import uk.ryanwong.dazn.codechallenge.databinding.ActivityExoplayerBinding
  */
 @AndroidEntryPoint
 class ExoplayerActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityExoplayerBinding
     private lateinit var videoUrl: String
     private var player: SimpleExoPlayer? = null
@@ -73,16 +72,17 @@ class ExoplayerActivity : AppCompatActivity() {
     }
 
     private fun initializePlayer() {
-        player = SimpleExoPlayer.Builder(this)
-            .build()
-            .also { exoPlayer ->
-                binding.playerView.player = exoPlayer
-                val mediaItem = MediaItem.fromUri(videoUrl)
-                exoPlayer.setMediaItem(mediaItem)
-                exoPlayer.playWhenReady = playWhenReady
-                exoPlayer.seekTo(currentWindow, playbackPosition)
-                exoPlayer.prepare()
-            }
+        player =
+            SimpleExoPlayer.Builder(this)
+                .build()
+                .also { exoPlayer ->
+                    binding.playerView.player = exoPlayer
+                    val mediaItem = MediaItem.fromUri(videoUrl)
+                    exoPlayer.setMediaItem(mediaItem)
+                    exoPlayer.playWhenReady = playWhenReady
+                    exoPlayer.seekTo(currentWindow, playbackPosition)
+                    exoPlayer.prepare()
+                }
     }
 
     private fun releasePlayer() {

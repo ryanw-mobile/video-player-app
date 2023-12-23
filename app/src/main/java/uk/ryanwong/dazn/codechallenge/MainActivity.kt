@@ -9,7 +9,6 @@ import uk.ryanwong.dazn.codechallenge.databinding.ActivityMainBinding
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -17,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.navView.setupWithNavController(
-            findNavController(R.id.nav_host_fragment_activity_main)
+            findNavController(R.id.nav_host_fragment_activity_main),
         )
     }
 }

@@ -14,7 +14,6 @@ import uk.ryanwong.dazn.codechallenge.data.source.local.entities.ScheduleDbEntit
 
 @Dao
 sealed interface ScheduleDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(scheduleDbEntity: ScheduleDbEntity)
 

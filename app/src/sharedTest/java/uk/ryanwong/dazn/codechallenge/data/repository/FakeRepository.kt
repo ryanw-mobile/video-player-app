@@ -13,7 +13,6 @@ import uk.ryanwong.dazn.codechallenge.util.wrapEspressoIdlingResource
 import java.io.IOException
 
 class FakeRepository : Repository {
-
     // Use simple data structures to provide a controlled set of data for testing ViewModel
     private val observableEvents = MutableLiveData<List<Event>>(listOf())
     private val observableSchedules = MutableLiveData<List<Schedule>>(listOf())
@@ -67,7 +66,10 @@ class FakeRepository : Repository {
         }
     }
 
-    fun setReturnError(shouldReturnError: Boolean, exceptionMessage: String) {
+    fun setReturnError(
+        shouldReturnError: Boolean,
+        exceptionMessage: String,
+    ) {
         this.shouldReturnError = shouldReturnError
         this.exceptionMessage = exceptionMessage
     }

@@ -8,28 +8,22 @@ import java.util.Date
 
 @Entity(tableName = "schedule_table")
 data class ScheduleDbEntity(
-
     @ColumnInfo(name = "schedule_id")
     @PrimaryKey
     val scheduleId: Int,
-
     @ColumnInfo(name = "title")
     val title: String,
-
     @ColumnInfo(name = "subtitle")
     val subtitle: String,
-
     @ColumnInfo(name = "date")
     val date: Date,
-
     @ColumnInfo(name = "image_url")
     val imageUrl: String,
-
     // This field is not from the RestAPI
     // Every time we overwrite the DB with API data. To remove outdated data in the FB,
     // we use this extra dirty bit approach to simulate synchronization.
     @ColumnInfo(name = "dirty")
-    val dirty: Boolean = false
+    val dirty: Boolean = false,
 )
 
 fun List<ScheduleDbEntity>.asDomainModel(): List<Schedule> {
@@ -44,7 +38,7 @@ fun ScheduleDbEntity.asDomainModel(): Schedule {
         title = this.title,
         subtitle = this.subtitle,
         date = this.date,
-        imageUrl = this.imageUrl
+        imageUrl = this.imageUrl,
     )
 }
 
@@ -61,6 +55,6 @@ fun Schedule.asDatabaseModel(): ScheduleDbEntity {
         subtitle = this.subtitle,
         date = this.date,
         imageUrl = this.imageUrl,
-        dirty = false
+        dirty = false,
     )
 }

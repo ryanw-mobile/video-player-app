@@ -17,11 +17,12 @@ import uk.ryanwong.dazn.codechallenge.util.SingleLiveEvent
 import javax.inject.Inject
 
 @HiltViewModel
-class ScheduleViewModel @Inject constructor(
+class ScheduleViewModel
+@Inject
+constructor(
     private val repository: Repository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel() {
-
     val showErrorMessage: SingleLiveEvent<String> = SingleLiveEvent()
 
     // This is to maintain the recyclerview scrolling state during list refresh
@@ -40,19 +41,21 @@ class ScheduleViewModel @Inject constructor(
     val showLoading: LiveData<Boolean>
         get() = _showLoading
 
-    val showNoData: LiveData<Boolean> = listContents.map { list ->
-        list.isEmpty()
-    }
-
-    private val timer: CountDownTimer = object : CountDownTimer(COUNTDOWN_TIME, COUNTDOWN_TIME) {
-        override fun onTick(millisUntilFinished: Long) {}
-
-        override fun onFinish() {
-            Timber.d("Timer triggered")
-            refreshList()
-            autoRefresh()
+    val showNoData: LiveData<Boolean> =
+        listContents.map { list ->
+            list.isEmpty()
         }
-    }
+
+    private val timer: CountDownTimer =
+        object : CountDownTimer(COUNTDOWN_TIME, COUNTDOWN_TIME) {
+            override fun onTick(millisUntilFinished: Long) {}
+
+            override fun onFinish() {
+                Timber.d("Timer triggered")
+                refreshList()
+                autoRefresh()
+            }
+        }
 
     init {
         refreshList()

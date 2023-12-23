@@ -14,7 +14,6 @@ import uk.ryanwong.dazn.codechallenge.data.source.local.entities.EventDbEntity
 
 @Dao
 sealed interface EventsDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(eventDbEntity: EventDbEntity)
 

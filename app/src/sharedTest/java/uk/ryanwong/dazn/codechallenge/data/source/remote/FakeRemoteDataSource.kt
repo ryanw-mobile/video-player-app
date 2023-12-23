@@ -15,18 +15,23 @@ import java.io.IOException
 
 class FakeRemoteDataSource(
     eventDomain: List<Event> = listOf(),
-    scheduleDomain: List<Schedule> = listOf()
+    scheduleDomain: List<Schedule> = listOf(),
 ) : RemoteDataSource {
-    private val events = mutableListOf<EventNetworkEntity>().apply {
-        addAll(eventDomain.asNetworkModel())
-    }
-    private val schedule = mutableListOf<ScheduleNetworkEntity>().apply {
-        addAll(scheduleDomain.asNetworkModel())
-    }
+    private val events =
+        mutableListOf<EventNetworkEntity>().apply {
+            addAll(eventDomain.asNetworkModel())
+        }
+    private val schedule =
+        mutableListOf<ScheduleNetworkEntity>().apply {
+            addAll(scheduleDomain.asNetworkModel())
+        }
     private var shouldReturnError = false
     private var exceptionMessage = ""
 
-    fun setShouldReturnIOException(shouldReturnError: Boolean, exceptionMessage: String) {
+    fun setShouldReturnIOException(
+        shouldReturnError: Boolean,
+        exceptionMessage: String,
+    ) {
         this.shouldReturnError = shouldReturnError
         this.exceptionMessage = exceptionMessage
     }

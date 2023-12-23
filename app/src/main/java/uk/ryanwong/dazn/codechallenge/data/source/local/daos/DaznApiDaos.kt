@@ -11,5 +11,5 @@ package uk.ryanwong.dazn.codechallenge.data.source.local.daos
  */
 data class DaznApiDaos(
     val eventsDao: EventsDao,
-    val scheduleDao: ScheduleDao
+    val scheduleDao: ScheduleDao,
 )

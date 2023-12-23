@@ -17,14 +17,19 @@ import uk.ryanwong.dazn.codechallenge.ui.events.EventsAdapter.ViewHolder
 
 class EventsAdapter(private val clickListener: EventClickListener) :
     ListAdapter<Event, ViewHolder>(EventsDiffCallback()) {
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+    ) {
         val item = getItem(position)
 
         holder.bind(item, clickListener)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewHolder {
         return ViewHolder.from(parent)
     }
 
@@ -36,8 +41,10 @@ class EventsAdapter(private val clickListener: EventClickListener) :
 
     class ViewHolder private constructor(val binding: ListitemEventsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Event, clickListener: EventClickListener) {
+        fun bind(
+            item: Event,
+            clickListener: EventClickListener,
+        ) {
             binding.event = item
             binding.clickListener = clickListener
             binding.executePendingBindings()
@@ -64,12 +71,18 @@ class EventsAdapter(private val clickListener: EventClickListener) :
  * https://medium.com/analytics-vidhya/data-class-in-kotlin-32bf038729a1
  */
 class EventsDiffCallback : DiffUtil.ItemCallback<Event>() {
-    override fun areItemsTheSame(oldItem: Event, newItem: Event): Boolean {
+    override fun areItemsTheSame(
+        oldItem: Event,
+        newItem: Event,
+    ): Boolean {
         Timber.v("areItemsTheSame: ${oldItem.eventId == newItem.eventId}")
         return oldItem.eventId == newItem.eventId
     }
 
-    override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {
+    override fun areContentsTheSame(
+        oldItem: Event,
+        newItem: Event,
+    ): Boolean {
         Timber.v("areContentsTheSame: ${oldItem == newItem}")
         return oldItem == newItem
     }

@@ -49,140 +49,150 @@ internal class ScheduleDaoTest {
     }
 
     @Test
-    fun insertSchedule_GetById_ReturnSameSchedule() = runTest {
-        // GIVEN - empty database
-        // Do Nothing
+    fun insertSchedule_GetById_ReturnSameSchedule() =
+        runTest {
+            // GIVEN - empty database
+            // Do Nothing
 
-        // WHEN - Insert an schedule
-        database.scheduleDao.insert(schedule1.asDatabaseModel())
+            // WHEN - Insert an schedule
+            database.scheduleDao.insert(schedule1.asDatabaseModel())
 
-        // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
-        val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        assertThat(loaded.asDomainModel()).isEqualTo(schedule1)
-    }
-
-    @Test
-    fun insertAll_GetSchedules_ReturnCorrectListSize() = runTest {
-        // GIVEN - Empty database
-        // do nothing
-
-        // WHEN - use insertAll to insert three schedules
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
-
-        // THEN - When get the schedules, the list size should be 3
-        val loaded = database.scheduleDao.getSchedules()
-        assertThat(loaded).hasSize(3)
-    }
+            // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
+            val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
+            assertThat(loaded.asDomainModel()).isEqualTo(schedule1)
+        }
 
     @Test
-    fun upsertSchedule_GetById_ReturnUpdatedSchedule() = runTest {
-        // GIVEN - Insert an schedule
-        database.scheduleDao.insert(schedule1.asDatabaseModel())
+    fun insertAll_GetSchedules_ReturnCorrectListSize() =
+        runTest {
+            // GIVEN - Empty database
+            // do nothing
 
-        // WHEN - Update the schedule with a same Id, but with different data
-        // get the schedule by id from the database
-        database.scheduleDao.insert(schedule1Modified.asDatabaseModel())
+            // WHEN - use insertAll to insert three schedules
+            database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
 
-        // THEN - When get the schedule by Id again, it should contain the new values
-        val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        assertThat(loaded.asDomainModel()).isEqualTo(schedule1Modified)
-    }
-
-    @Test
-    fun deleteSchedule_GetById_ReturnNull() = runTest {
-        // GIVEN - Insert an schedule
-        database.scheduleDao.insert(schedule1.asDatabaseModel())
-
-        // WHEN - delete the schedule by Id
-        database.scheduleDao.delete(schedule1.scheduleId)
-
-        // THEN - When get the schedule by Id again, it should return null
-        val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        assertThat(loaded).isNull()
-    }
+            // THEN - When get the schedules, the list size should be 3
+            val loaded = database.scheduleDao.getSchedules()
+            assertThat(loaded).hasSize(3)
+        }
 
     @Test
-    fun insertAll_DeleteOneAndGetById_ReturnNull() = runTest {
-        // GIVEN - Insert 3 schedules in a list
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
+    fun upsertSchedule_GetById_ReturnUpdatedSchedule() =
+        runTest {
+            // GIVEN - Insert an schedule
+            database.scheduleDao.insert(schedule1.asDatabaseModel())
 
-        // WHEN - clear the database
-        database.scheduleDao.delete(schedule1.scheduleId)
+            // WHEN - Update the schedule with a same Id, but with different data
+            // get the schedule by id from the database
+            database.scheduleDao.insert(schedule1Modified.asDatabaseModel())
 
-        // THEN - When get the schedules, the list should be empty
-        val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        assertThat(loaded).isNull()
-    }
+            // THEN - When get the schedule by Id again, it should contain the new values
+            val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
+            assertThat(loaded.asDomainModel()).isEqualTo(schedule1Modified)
+        }
 
     @Test
-    fun insertAll_Clear_ReturnEmptyList() = runTest {
-        // GIVEN - Insert 3 schedules in a list
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
+    fun deleteSchedule_GetById_ReturnNull() =
+        runTest {
+            // GIVEN - Insert an schedule
+            database.scheduleDao.insert(schedule1.asDatabaseModel())
 
-        // WHEN - clear the database
-        database.scheduleDao.clear()
+            // WHEN - delete the schedule by Id
+            database.scheduleDao.delete(schedule1.scheduleId)
 
-        // THEN - When get the schedules, the list should be empty
-        val loaded = database.scheduleDao.getSchedules()
-        assertThat(loaded).isEmpty()
-    }
+            // THEN - When get the schedule by Id again, it should return null
+            val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
+            assertThat(loaded).isNull()
+        }
+
+    @Test
+    fun insertAll_DeleteOneAndGetById_ReturnNull() =
+        runTest {
+            // GIVEN - Insert 3 schedules in a list
+            database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
+
+            // WHEN - clear the database
+            database.scheduleDao.delete(schedule1.scheduleId)
+
+            // THEN - When get the schedules, the list should be empty
+            val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
+            assertThat(loaded).isNull()
+        }
+
+    @Test
+    fun insertAll_Clear_ReturnEmptyList() =
+        runTest {
+            // GIVEN - Insert 3 schedules in a list
+            database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
+
+            // WHEN - clear the database
+            database.scheduleDao.clear()
+
+            // THEN - When get the schedules, the list should be empty
+            val loaded = database.scheduleDao.getSchedules()
+            assertThat(loaded).isEmpty()
+        }
 
     // Dirty bit testing
 
     @Test
-    fun insertNewSchedule_GetById_ReturnDirtyFalse() = runTest {
-        // GIVEN - empty database
-        // Do Nothing
+    fun insertNewSchedule_GetById_ReturnDirtyFalse() =
+        runTest {
+            // GIVEN - empty database
+            // Do Nothing
 
-        // WHEN - Insert an schedule
-        database.scheduleDao.insert(schedule1.asDatabaseModel())
+            // WHEN - Insert an schedule
+            database.scheduleDao.insert(schedule1.asDatabaseModel())
 
-        // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
-        val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        assertThat(loaded.dirty).isFalse()
-    }
-
-    @Test
-    fun markDirty_GetById_ReturnDirtyTrue() = runTest {
-        // GIVEN - multiple schedules
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
-
-        // WHEN - Insert an schedule and mark it as dirty
-        database.scheduleDao.markDirty()
-
-        // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
-        val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        assertThat(loaded.dirty).isTrue()
-    }
+            // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
+            val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
+            assertThat(loaded.dirty).isFalse()
+        }
 
     @Test
-    fun dirtySchedules_UpdateSchedule_ReturnDirtyFalse() = runTest {
-        // GIVEN - multiple schedules and marked dirty
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
-        database.scheduleDao.markDirty()
+    fun markDirty_GetById_ReturnDirtyTrue() =
+        runTest {
+            // GIVEN - multiple schedules
+            database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
 
-        // WHEN - Upsert schedule 1
-        database.scheduleDao.insert(schedule1Modified.asDatabaseModel())
+            // WHEN - Insert an schedule and mark it as dirty
+            database.scheduleDao.markDirty()
 
-        // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
-        val loaded = database.scheduleDao.getScheduleById(schedule1Modified.scheduleId)
-        assertThat(loaded.dirty).isFalse()
-    }
+            // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
+            val loaded = database.scheduleDao.getScheduleById(schedule1.scheduleId)
+            assertThat(loaded.dirty).isTrue()
+        }
 
     @Test
-    fun dirtySchedules_InsertOneAndDeleteDirty_ReturnOneSchedule() = runTest {
-        // GIVEN - multiple schedules and marked dirty
-        database.scheduleDao.insertAll(listOf(schedule1, schedule3).asDatabaseModel())
-        database.scheduleDao.markDirty()
+    fun dirtySchedules_UpdateSchedule_ReturnDirtyFalse() =
+        runTest {
+            // GIVEN - multiple schedules and marked dirty
+            database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asDatabaseModel())
+            database.scheduleDao.markDirty()
 
-        // WHEN - Insert schedule 2
-        database.scheduleDao.insert(schedule2.asDatabaseModel())
-        database.scheduleDao.deleteDirty()
+            // WHEN - Upsert schedule 1
+            database.scheduleDao.insert(schedule1Modified.asDatabaseModel())
 
-        // THEN - Get all schedules. Expect only schedule 2 is returned
-        val loaded = database.scheduleDao.getSchedules()
-        assertThat(loaded.asDomainModel()).containsExactly(schedule2)
-    }
+            // THEN - Get the schedule by id from the database. The loaded schedule contains the expected values
+            val loaded = database.scheduleDao.getScheduleById(schedule1Modified.scheduleId)
+            assertThat(loaded.dirty).isFalse()
+        }
+
+    @Test
+    fun dirtySchedules_InsertOneAndDeleteDirty_ReturnOneSchedule() =
+        runTest {
+            // GIVEN - multiple schedules and marked dirty
+            database.scheduleDao.insertAll(listOf(schedule1, schedule3).asDatabaseModel())
+            database.scheduleDao.markDirty()
+
+            // WHEN - Insert schedule 2
+            database.scheduleDao.insert(schedule2.asDatabaseModel())
+            database.scheduleDao.deleteDirty()
+
+            // THEN - Get all schedules. Expect only schedule 2 is returned
+            val loaded = database.scheduleDao.getSchedules()
+            assertThat(loaded.asDomainModel()).containsExactly(schedule2)
+        }
 
     @After
     fun closeDb() = database.close()

@@ -18,14 +18,15 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object DatabaseModules {
-
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext appContext: Context): DaznApiDatabase {
+    fun provideDatabase(
+        @ApplicationContext appContext: Context,
+    ): DaznApiDatabase {
         return Room.databaseBuilder(
             appContext.applicationContext,
             DaznApiDatabase::class.java,
-            "dazn_api_database"
+            "dazn_api_database",
         )
             .fallbackToDestructiveMigration()
             .build()

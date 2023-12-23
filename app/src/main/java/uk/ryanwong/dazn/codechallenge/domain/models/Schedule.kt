@@ -7,5 +7,5 @@ data class Schedule(
     val title: String,
     val subtitle: String,
     val date: Date,
-    val imageUrl: String
+    val imageUrl: String,
 )
