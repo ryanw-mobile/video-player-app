@@ -16,10 +16,10 @@ android {
 
     signingConfigs {
         release {
-            def isRunningOnBitrise = System.getenv("BITRISE") == "true"
+            def isRunningOnCI = System.getenv("BITRISE") == "true"
             def keystorePropertiesFile = file('../../keystore.properties')
 
-            if (isRunningOnBitrise || !keystorePropertiesFile.exists()) {
+            if (isRunningOnCI || !keystorePropertiesFile.exists()) {
                 storeFile = file(System.getenv("KEYSTORE_LOCATION"))
                 storePassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
                 keyAlias = System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
