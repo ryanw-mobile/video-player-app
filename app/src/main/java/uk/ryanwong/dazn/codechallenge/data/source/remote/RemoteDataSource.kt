@@ -15,8 +15,8 @@ package uk.ryanwong.dazn.codechallenge.data.source.remote
  * - Can only provide static copies of data (i.e. no LiveData)
  */
 interface RemoteDataSource {
-
     // Return static data
     suspend fun getEvents(): ApiResult<Any>
+
     suspend fun getSchedules(): ApiResult<Any>
 }

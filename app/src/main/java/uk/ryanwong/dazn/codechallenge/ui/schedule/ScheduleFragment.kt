@@ -19,20 +19,25 @@ import uk.ryanwong.dazn.codechallenge.util.filterErrorMessage
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ScheduleFragment @Inject constructor() : Fragment() {
-
+class ScheduleFragment
+@Inject
+constructor() : Fragment() {
     private val viewModel: ScheduleViewModel by viewModels()
     private var _binding: FragmentScheduleBinding? = null
     private val binding get() = _binding!!
 
-    private val adapterDataObserver = object : RecyclerView.AdapterDataObserver() {
-        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-            viewModel.listState?.let {
-                // layoutManager.scrollToPositionWithOffset(position, 0)
-                binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
+    private val adapterDataObserver =
+        object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(
+                positionStart: Int,
+                itemCount: Int,
+            ) {
+                viewModel.listState?.let {
+                    // layoutManager.scrollToPositionWithOffset(position, 0)
+                    binding.recyclerview.layoutManager?.onRestoreInstanceState(it)
+                }
             }
         }
-    }
 
     @Inject
     lateinit var scheduleAdapter: ScheduleAdapter
@@ -40,13 +45,16 @@ class ScheduleFragment @Inject constructor() : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentScheduleBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         scheduleAdapter.apply {
@@ -67,14 +75,15 @@ class ScheduleFragment @Inject constructor() : Fragment() {
             addItemDecoration(
                 DividerItemDecoration(
                     requireContext(),
-                    DividerItemDecoration.VERTICAL
-                )
+                    DividerItemDecoration.VERTICAL,
+                ),
             )
         }
         this.setupRefreshLayout(binding.refreshlayout) { viewModel.refreshList() }
     }
 
     private var errorDialog: AlertDialog? = null
+
     override fun onStart() {
         super.onStart()
 
@@ -101,10 +110,11 @@ class ScheduleFragment @Inject constructor() : Fragment() {
         }
 
         viewModel.showNoData.observe(viewLifecycleOwner) { isShowNoData ->
-            binding.textviewNodata.visibility = when (isShowNoData) {
-                true -> View.VISIBLE
-                else -> View.GONE
-            }
+            binding.textviewNodata.visibility =
+                when (isShowNoData) {
+                    true -> View.VISIBLE
+                    else -> View.GONE
+                }
         }
 
         viewModel.listContents.observe(viewLifecycleOwner) {

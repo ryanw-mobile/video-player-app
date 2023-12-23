@@ -11,7 +11,6 @@ import uk.ryanwong.dazn.codechallenge.data.source.local.entities.ScheduleDbEntit
 @Database(entities = [EventDbEntity::class, ScheduleDbEntity::class], version = 5, exportSchema = false)
 @TypeConverters(RoomDbConverters::class)
 abstract class DaznApiDatabase : RoomDatabase() {
-
     // DAOs
     abstract val eventsDao: EventsDao
     abstract val scheduleDao: ScheduleDao

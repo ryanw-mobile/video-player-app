@@ -18,15 +18,17 @@ import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
  * - Can provide live data or a data snapshot
  */
 interface LocalDataSource {
-
     // Return LiveData
     fun observeEvents(): LiveData<List<Event>>
+
     fun observeSchedule(): LiveData<List<Schedule>>
 
     // Return static data
     suspend fun getEvents(): List<Event>
+
     suspend fun getSchedules(): List<Schedule>
 
     suspend fun submitEvents(events: List<Event>)
+
     suspend fun submitSchedule(schedules: List<Schedule>)
 }

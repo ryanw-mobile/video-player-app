@@ -12,12 +12,12 @@ import uk.ryanwong.dazn.codechallenge.R
 
 fun Fragment.setupRefreshLayout(
     refreshLayout: SwipeRefreshLayout,
-    refreshListener: SwipeRefreshLayout.OnRefreshListener
+    refreshListener: SwipeRefreshLayout.OnRefreshListener,
 ) {
     refreshLayout.setColorSchemeColors(
         ContextCompat.getColor(requireActivity(), R.color.colorPrimary),
         ContextCompat.getColor(requireActivity(), R.color.colorAccent),
-        ContextCompat.getColor(requireActivity(), R.color.colorPrimaryDark)
+        ContextCompat.getColor(requireActivity(), R.color.colorPrimaryDark),
     )
     refreshLayout.setOnRefreshListener(refreshListener)
 }

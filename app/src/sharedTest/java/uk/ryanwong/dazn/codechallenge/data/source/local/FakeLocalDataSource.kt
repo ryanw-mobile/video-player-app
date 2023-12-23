@@ -11,9 +11,8 @@ import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 
 class FakeLocalDataSource(
     private val events: MutableList<Event> = mutableListOf(),
-    private val schedules: MutableList<Schedule> = mutableListOf()
+    private val schedules: MutableList<Schedule> = mutableListOf(),
 ) : LocalDataSource {
-
     override fun observeEvents(): LiveData<List<Event>> {
         TODO("Not yet implemented")
     }

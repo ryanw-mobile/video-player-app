@@ -18,12 +18,11 @@ import uk.ryanwong.dazn.codechallenge.data.source.remote.RemoteDataSource
 @InstallIn(ViewModelComponent::class)
 @Module
 object RepositoryModules {
-
     @Provides
     @ViewModelScoped
     fun provideRepository(
         remoteDataSource: RemoteDataSource,
-        localDataSource: LocalDataSource
+        localDataSource: LocalDataSource,
     ): Repository {
         synchronized(this) {
             return LocalCacheRepository(remoteDataSource, localDataSource)

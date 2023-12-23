@@ -7,24 +7,18 @@ import java.util.Date
 
 @JsonClass(generateAdapter = true)
 data class EventNetworkEntity(
-
     @Json(name = "id")
     val eventId: Int,
-
     @Json(name = "title")
     val title: String,
-
     @Json(name = "subtitle")
     val subtitle: String,
-
     @Json(name = "date")
     val date: Date,
-
     @Json(name = "imageUrl")
     val imageUrl: String,
-
     @Json(name = "videoUrl")
-    val videoUrl: String
+    val videoUrl: String,
 )
 
 fun List<EventNetworkEntity>.asDomainModel(): List<Event> {
@@ -35,7 +29,7 @@ fun List<EventNetworkEntity>.asDomainModel(): List<Event> {
             subtitle = it.subtitle,
             date = it.date,
             imageUrl = it.imageUrl,
-            videoUrl = it.videoUrl
+            videoUrl = it.videoUrl,
         )
     }
 }
@@ -48,7 +42,7 @@ fun List<Event>.asNetworkModel(): List<EventNetworkEntity> {
             subtitle = it.subtitle,
             date = it.date,
             imageUrl = it.imageUrl,
-            videoUrl = it.videoUrl
+            videoUrl = it.videoUrl,
         )
     }
 }

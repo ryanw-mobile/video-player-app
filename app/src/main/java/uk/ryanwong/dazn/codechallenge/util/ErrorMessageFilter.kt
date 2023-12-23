@@ -14,7 +14,10 @@ import uk.ryanwong.dazn.codechallenge.R
  * when an error occurs, or we may want to provide different high level error messages
  * depends on the known exception types. On debug builds we may want show the errors.
  */
-fun filterErrorMessage(context: Context, message: String): String =
+fun filterErrorMessage(
+    context: Context,
+    message: String,
+): String =
     when (BuildConfig.DEBUG) {
         true -> "${context.getString(R.string.generic_error_string)} ($message)"
         false -> context.getString(R.string.generic_error_string)

@@ -16,16 +16,23 @@ import uk.ryanwong.dazn.codechallenge.domain.models.Schedule
 import uk.ryanwong.dazn.codechallenge.ui.schedule.ScheduleAdapter.ViewHolder
 import javax.inject.Inject
 
-class ScheduleAdapter @Inject constructor() :
+class ScheduleAdapter
+@Inject
+constructor() :
     ListAdapter<Schedule, ViewHolder>(ScheduleDiffCallback()) {
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+    ) {
         val item = getItem(position)
 
         holder.bind(item)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewHolder {
         return ViewHolder.from(parent)
     }
 
@@ -37,7 +44,6 @@ class ScheduleAdapter @Inject constructor() :
 
     class ViewHolder private constructor(private val binding: ListitemScheduleBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(item: Schedule) {
             binding.schedule = item
             binding.executePendingBindings()
@@ -64,12 +70,18 @@ class ScheduleAdapter @Inject constructor() :
  * https://medium.com/analytics-vidhya/data-class-in-kotlin-32bf038729a1
  */
 class ScheduleDiffCallback : DiffUtil.ItemCallback<Schedule>() {
-    override fun areItemsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
+    override fun areItemsTheSame(
+        oldItem: Schedule,
+        newItem: Schedule,
+    ): Boolean {
         Timber.v("areItemsTheSame: ${oldItem.scheduleId == newItem.scheduleId}")
         return oldItem.scheduleId == newItem.scheduleId
     }
 
-    override fun areContentsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
+    override fun areContentsTheSame(
+        oldItem: Schedule,
+        newItem: Schedule,
+    ): Boolean {
         Timber.v("areContentsTheSame: ${oldItem == newItem}")
         return oldItem == newItem
     }

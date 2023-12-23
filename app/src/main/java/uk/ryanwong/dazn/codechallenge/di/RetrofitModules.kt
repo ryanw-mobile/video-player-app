@@ -23,7 +23,6 @@ private const val BASE_URL = "https://us-central1-dazn-sandbox.cloudfunctions.ne
 @InstallIn(SingletonComponent::class)
 @Module
 object RetrofitModules {
-
     /**
      * Moshi's composition mechanism tries to find the best adapter for each type.
      * It starts with the first adapter or factory registered with Moshi.Builder.add(),
@@ -42,13 +41,13 @@ object RetrofitModules {
 
     @Provides
     @Singleton
-    fun provideRetrofit(moshi: Moshi): Retrofit = Retrofit.Builder()
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .baseUrl(BASE_URL)
-        .build()
+    fun provideRetrofit(moshi: Moshi): Retrofit =
+        Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .baseUrl(BASE_URL)
+            .build()
 
     @Provides
     @Singleton
-    fun retrofitService(retrofit: Retrofit): DaznApiService =
-        retrofit.create(DaznApiService::class.java)
+    fun retrofitService(retrofit: Retrofit): DaznApiService = retrofit.create(DaznApiService::class.java)
 }

@@ -18,7 +18,7 @@ import javax.inject.Singleton
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [DataSourceModules::class]
+    replaces = [DataSourceModules::class],
 )
 object FakeDataSourceModules {
     @Provides
