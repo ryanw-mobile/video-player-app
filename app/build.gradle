@@ -171,7 +171,7 @@ dependencies {
 
     implementation 'com.jakewharton.timber:timber:5.0.1'
     // Firebase services
-    implementation platform('com.google.firebase:firebase-bom:32.7.0')
+    implementation platform('com.google.firebase:firebase-bom:32.7.1')
     implementation 'com.google.firebase:firebase-crashlytics'
 
     // Dependencies for local unit tests
