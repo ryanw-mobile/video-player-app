@@ -7,7 +7,7 @@ buildscript {
         lifecycle_version = '2.7.0'
         navigation_version = '2.7.6'
         retrofit_version = '2.9.0'
-        moshi_version = '1.15.0'
+        moshi_version = '1.15.1'
         room_version = '2.6.1'
         glide_version = '4.16.0'
         junit_version = '4.13.2'
