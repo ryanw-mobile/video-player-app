@@ -176,7 +176,7 @@ dependencies {
 
     // Dependencies for local unit tests
     testImplementation "junit:junit:$junit_version"
-    testImplementation('com.google.truth:truth:1.3.0') {
+    testImplementation('com.google.truth:truth:1.4.0') {
         exclude group: 'org.checkerframework', module: 'checker-qual'
     }
 
@@ -199,7 +199,7 @@ dependencies {
     implementation "androidx.test:core-ktx:$test_core_version"
     // runBlockingTest replacement
     androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3'
-    androidTestImplementation('com.google.truth:truth:1.3.0') {
+    androidTestImplementation('com.google.truth:truth:1.4.0') {
         exclude group: 'org.checkerframework', module: 'checker-qual'
     }
 
