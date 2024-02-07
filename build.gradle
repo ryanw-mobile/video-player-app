@@ -5,7 +5,7 @@ buildscript {
         hilt_version = '2.50'
         coroutines_version = '1.7.3'
         lifecycle_version = '2.7.0'
-        navigation_version = '2.7.6'
+        navigation_version = '2.7.7'
         retrofit_version = '2.9.0'
         moshi_version = '1.15.1'
         room_version = '2.6.1'
