@@ -185,7 +185,7 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.11.1'
     testImplementation "androidx.test.ext:junit-ktx:$test_ext_version"
     testImplementation "androidx.arch.core:core-testing:$arch_core_testing_version"
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0'
 
 
     // AndroidX Test - Instrumented testing
@@ -198,7 +198,7 @@ dependencies {
     debugImplementation 'androidx.fragment:fragment-testing:1.6.2'
     implementation "androidx.test:core-ktx:$test_core_version"
     // runBlockingTest replacement
-    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3'
+    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0'
     androidTestImplementation('com.google.truth:truth:1.4.0') {
         exclude group: 'org.checkerframework', module: 'checker-qual'
     }
