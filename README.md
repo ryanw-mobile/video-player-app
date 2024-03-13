@@ -12,7 +12,9 @@ Under the commit history, you will see how I have built everything from scratch 
 refactoring and bug fixes. The interview process was concluded in October, 2021, but I am still keep
 on improving the codes for demonstration purpose.
 
-I still have a plan to further rewrite this App using Jetpack Compose. However, since it is not likely that I will work for DAZN in the future, this may not happen so soon as I give priority to other projects.
+I still have a plan to further rewrite this App using Jetpack Compose. However, since it is not
+likely that I will work for DAZN in the future, this may not happen so soon as I give priority to
+other projects.
 
 Please note that the APIs are supplied by DAZN for recruitment purpose. They may not work at any
 time, as we have already concluded the interview process.
@@ -64,23 +66,38 @@ would be:
 * [Ktlint Gradle](https://github.com/jlleitschuh/ktlint-gradle) - ktlint plugin to check and apply
   code autoformat
 
+## Binaries download
+
+If you want to try out the app without building it, check out
+the [Releases section](https://github.com/ryanw-mobile/dazn-code-challenge/releases) where you can
+find the APK and App Bundles for each major version. A working Giphy API key was applied when
+building the app, therefore you can test it by just installing it.
+
 ## Requirements
 
-* Android Studio Iguana | 2023.2.1 Canary 18
+* Android Studio Iguana | 2023.2.1
 * Android device or simulator running Android 9.0+ (API 28)
 
-## Setting up the keystore
+## Unit tests
 
-* You don't need to setup a keystore to run the debug build. The following instructions are required only if you want to produce the release build.
+* Tests can be executed on Android Studio, by choosing the tests to run
+* Command line options are: ` ./gradlew testDebugUnitTest` and `./gradlew testReleaseUnitTest`
 
-* Android keystore is not being stored in this repository. You need your own keystore to generate
+## Building the App
+
+### Setting up the keystore
+
+Release builds will be signed if either the keystore file or environment variables are set.
+Otherwise, the app will be built unsigned.
+
+### Local
+
+* Android Keystore is not being stored in this repository. You need your own Keystore to generate
   the apk / App Bundle
 
-* To ensure sensitive data are not being pushed to Git by accident, the keystore and its passwords
-  are kept one level up of the project folder, so they are not managed by Git.
-
-* If your project folder is at `/app/dazn-code-challenge/`, the keystore file
-  and `keystore.properties` should be placed at `/app/`
+* If your project folder is at `/app/dazn-code-challenge/`, the Keystore file
+  and `keystore.properties`
+  should be placed at `/app/`
 
 * The format of `keystore.properties` is:
   ```
@@ -90,12 +107,18 @@ would be:
      storePass=<keystore password>
   ```
 
-## Unit tests
+### CI environment
 
-* Tests can be executed on Android Studio, by choosing the tests to run
-* Command line options are: ` ./gradlew testDebugUnitTest` and `./gradlew testReleaseUnitTest`
+* This project has been configured to build automatically on CI.
 
-## Building the App
+* The following environment variables have been set to provide the keystore:
+  ```
+     BITRISE = true
+     HOME = <the home directory of the bitrise environment>
+     BITRISEIO_ANDROID_KEYSTORE_PASSWORD = <your keystore password>
+     BITRISEIO_ANDROID_KEYSTORE_ALIAS = <your keystore alias>
+     BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD = <your keystore private key password>
+  ```
 
 ### Build and install on the connected device
 
@@ -108,20 +131,12 @@ would be:
 * Options are: `Debug`, `Release`
 * Debug builds will have an App package name suffix `.debug`
 
-### Build and sign a bundle for distribution
-
-After August 2021, all new apps and games will be required to publish with the Android App Bundle
-format.
+### Build an apk or bundle for distribution
 
    ```
    ./gradlew clean bundleRelease
-   ```
-
-### Build and sign an apk for distribution
-
-   ```
+   // or
    ./gradlew clean assembleRelease
    ```
 
-* The generated apk(s) will be stored under `app/build/outputs/apk/`
-* Other usages can be listed using `./gradelew tasks`
+* The generated apks and bundles will be stored under `app/build/outputs/apk/`
