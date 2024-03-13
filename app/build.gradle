@@ -19,18 +19,22 @@ android {
             def isRunningOnCI = System.getenv("BITRISE") == "true"
             def keystorePropertiesFile = file('../../keystore.properties')
 
-            if (isRunningOnCI || !keystorePropertiesFile.exists()) {
+            if (isRunningOnCI) {
+                println("Signing Config: using environment variables")
                 storeFile = file(System.getenv("KEYSTORE_LOCATION"))
                 storePassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
                 keyAlias = System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
                 keyPassword = System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
-            } else {
+            } else if (keystorePropertiesFile.exists()) {
+                println("Signing Config: using keystore properties")
                 Properties keyProps = new Properties()
                 keyProps.load(new FileInputStream(keystorePropertiesFile))
                 storeFile = file(keyProps["store"])
                 keyAlias = keyProps["alias"]
                 storePassword = keyProps["storePass"]
                 keyPassword = keyProps["pass"]
+            } else {
+                println("Signing Config: skipping signing")
             }
         }
     }
@@ -40,7 +44,7 @@ android {
         minSdk 28
         targetSdk 34
         versionCode 4
-        versionName "1.1.2"
+        versionName "1.1.3"
         resourceConfigurations += ['en']
 
         vectorDrawables.useSupportLibrary = true
@@ -60,7 +64,7 @@ android {
                 variant.outputs.all { output ->
                     def date = new Date()
                     def formattedDate = date.format('yyyyMMdd-HHmmss')
-                    outputFileName = "dazn-${variant.name}-${variant.versionName}-${formattedDate}.apk"
+                    outputFileName = "dazn-${variant.versionName}-${formattedDate}-${variant.name}.apk"
                 }
             }
         }
@@ -70,12 +74,15 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
-            signingConfig signingConfigs.release
+            if (signingConfigs.getByName("release").keyAlias != null) {
+                signingConfig signingConfigs.release
+            }
+
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
                     def date = new Date()
                     def formattedDate = date.format('yyyyMMdd-HHmmss')
-                    outputFileName = "dazn-${variant.name}-${variant.versionName}-${formattedDate}.apk"
+                    outputFileName = "dazn-${variant.versionName}-${formattedDate}-${variant.name}.apk"
                 }
             }
         }
