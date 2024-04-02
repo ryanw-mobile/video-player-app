@@ -189,7 +189,7 @@ dependencies {
 
     // AndroidX Test - JVM testing
     testImplementation "androidx.test:core-ktx:$test_core_version"
-    testImplementation 'org.robolectric:robolectric:4.12'
+    testImplementation 'org.robolectric:robolectric:4.12.1'
     testImplementation "androidx.test.ext:junit-ktx:$test_ext_version"
     testImplementation "androidx.arch.core:core-testing:$arch_core_testing_version"
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0'
