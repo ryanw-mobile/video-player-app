@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2024. Ryan Wong
+  ~ https://github.com/ryanw-mobile
+  ~ Sponsored by RW MobiMedia UK Limited
+  ~
+  -->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/navigation_events">
+
+    <fragment
+        android:id="@+id/navigation_events"
+        android:name="uk.ryanwong.dazn.codechallenge.ui.events.EventsFragment"
+        android:label="@string/events"
+        tools:layout="@layout/fragment_events" >
+        <action
+            android:id="@+id/action_navigation_events_to_exoplayerActivity"
+            app:destination="@id/exoplayerActivity"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_schedule"
+        android:name="uk.ryanwong.dazn.codechallenge.ui.schedule.ScheduleFragment"
+        android:label="@string/schedule"
+        tools:layout="@layout/fragment_schedule" />
+
+    <activity
+        android:id="@+id/exoplayerActivity"
+        android:name="uk.ryanwong.dazn.codechallenge.ui.exoplayer.ExoplayerActivity"
+        android:label="ExoplayerActivity" >
+        <argument
+            android:name="videoUrl"
+            app:argType="string" />
+    </activity>
+</navigation>

@@ -1,5 +1,0 @@
-<resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="match_constraint">0dp</dimen>
-    <dimen name="margin_mini">8dp</dimen>
-</resources>
