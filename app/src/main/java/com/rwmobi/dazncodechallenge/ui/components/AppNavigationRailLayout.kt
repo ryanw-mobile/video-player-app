@@ -6,6 +6,7 @@
 package com.rwmobi.dazncodechallenge.ui.components
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +33,8 @@ import androidx.navigation.compose.rememberNavController
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavHost
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
 import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
+import com.rwmobi.dazncodechallenge.ui.theme.dazn_surface
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,6 +55,7 @@ fun AppNavigationRailLayout(
 
         VerticalDivider(
             modifier = Modifier.fillMaxHeight(),
+            color = dazn_divider,
         )
 
         Scaffold(
@@ -66,6 +70,7 @@ fun AppNavigationRailLayout(
             val actionLabel = stringResource(android.R.string.ok)
             AppNavHost(
                 modifier = Modifier
+                    .background(color = dazn_surface)
                     .fillMaxSize()
                     .padding(paddingValues),
                 windowSizeClass = windowSizeClass,

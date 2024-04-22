@@ -5,6 +5,7 @@
 
 package com.rwmobi.dazncodechallenge.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,6 +33,8 @@ import androidx.navigation.compose.rememberNavController
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavHost
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
 import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
+import com.rwmobi.dazncodechallenge.ui.theme.dazn_surface
 
 @Composable
 fun AppBottomNavigationLayout(
@@ -53,6 +56,7 @@ fun AppBottomNavigationLayout(
             Column {
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
+                    color = dazn_divider,
                 )
 
                 AppBottomNavigationBar(
@@ -65,6 +69,7 @@ fun AppBottomNavigationLayout(
         val actionLabel = stringResource(android.R.string.ok)
         AppNavHost(
             modifier = Modifier
+                .background(color = dazn_surface)
                 .fillMaxSize()
                 .padding(paddingValues),
             windowSizeClass = windowSizeClass,

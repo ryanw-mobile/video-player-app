@@ -34,7 +34,7 @@ fun DAZNCodeChallengeApp(
             modifier = Modifier
                 .safeDrawingPadding()
                 .fillMaxSize(),
-            color = MaterialTheme.colorScheme.background,
+            color = MaterialTheme.colorScheme.surface,
         ) {
             // Select a navigation element based on window size.
             when (windowSizeClass.widthSizeClass) {
