@@ -7,11 +7,9 @@
 
 package com.rwmobi.dazncodechallenge.ui.viewmodel
 
-import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import coil.ImageLoader
 import com.rwmobi.dazncodechallenge.di.DispatcherModule
 import com.rwmobi.dazncodechallenge.domain.model.Event
@@ -57,6 +55,17 @@ constructor(
 
     fun refresh() {
         startLoading()
+
+        //        _showLoading.value = true
+//        viewModelScope.launch(dispatcher) {
+//            try {
+//                // Expected exceptions
+//                repository.refreshEvents()
+//            } catch (ex: Exception) {
+//                ex.printStackTrace()
+//                //  showErrorMessage.postValue(ex.message)
+//            }
+//            _showLoading.postValue(false)
 
         _uiState.update {
             it.copy(
@@ -219,50 +228,9 @@ constructor(
         )
     }
 
-    //  val showErrorMessage: SingleLiveEvent<String> = SingleLiveEvent()
-
-    // This is to maintain the recyclerview scrolling state during list refresh
-    private var _listState: Parcelable? = null
-    val listState: Parcelable?
-        get() = _listState
-
-    fun saveListState(listScrollingState: Parcelable?) {
-        _listState = listScrollingState
-    }
-
-    // directly expose the list contents from the repository
-    val listContents = repository.observeEvents()
-
-    private val _showLoading = MutableLiveData(false)
-    val showLoading: LiveData<Boolean>
-        get() = _showLoading
-
-    val showNoData: LiveData<Boolean> =
-        listContents.map { list ->
-            list.isEmpty()
-        }
-
     private val _openVideoPlayerUrl = MutableLiveData<String?>(null)
     val openVideoPlayerUrl: LiveData<String?>
         get() = _openVideoPlayerUrl
-
-//    init {
-//        refreshList()
-//    }
-//
-//    fun refreshList() {
-//        _showLoading.value = true
-//        viewModelScope.launch(dispatcher) {
-//            try {
-//                // Expected exceptions
-//                repository.refreshEvents()
-//            } catch (ex: Exception) {
-//                ex.printStackTrace()
-//                //  showErrorMessage.postValue(ex.message)
-//            }
-//            _showLoading.postValue(false)
-//        }
-//    }
 
     fun setEventClicked(event: Event) {
         event.videoUrl.let {

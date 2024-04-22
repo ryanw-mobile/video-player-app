@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,6 +36,7 @@ import coil.request.ImageRequest
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.ui.previewparameter.EventProvider
 import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.dazn_accent
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
 import com.rwmobi.dazncodechallenge.ui.utils.asNiceString
@@ -74,51 +74,43 @@ fun EventListItem(
         Column(
             modifier = Modifier
                 .fillMaxHeight()
-                .weight(weight = 1f),
+                .weight(weight = 1f)
+                .padding(
+                    horizontal = dimension.defaultFullPadding,
+                    vertical = dimension.defaultHalfPadding,
+                ),
         ) {
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = dimension.minListItemHeight)
-                    .padding(
-                        horizontal = dimension.defaultFullPadding,
-                        vertical = dimension.defaultHalfPadding,
-                    ),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                maxLines = 2,
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Black,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 text = event.title,
             )
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = dimension.minListItemHeight)
-                    .padding(
-                        horizontal = dimension.defaultFullPadding,
-                        vertical = dimension.defaultHalfPadding,
-                    ),
+                modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold,
-                maxLines = 2,
+                fontWeight = FontWeight.Normal,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 text = event.subtitle,
             )
 
-            Spacer(Modifier.weight(weight = 1f))
+            Spacer(
+                Modifier
+                    .weight(weight = 1f)
+                    .padding(vertical = dimension.defaultFullPadding),
+            )
 
             Text(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = dimension.minListItemHeight)
-                    .padding(
-                        horizontal = dimension.defaultFullPadding,
-                        vertical = dimension.defaultHalfPadding,
-                    ),
+                    .fillMaxWidth(),
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Normal,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                color = dazn_accent,
                 text = event.date.asNiceString(context = context),
             )
         }

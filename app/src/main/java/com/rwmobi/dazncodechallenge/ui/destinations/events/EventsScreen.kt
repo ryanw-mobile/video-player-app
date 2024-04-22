@@ -56,7 +56,10 @@ fun EventsScreen(
         uiState.events?.let { events ->
             if (events.isNotEmpty()) {
                 when (windowSizeClass.widthSizeClass) {
-                    WindowWidthSizeClass.Compact -> {
+                    WindowWidthSizeClass.Medium,
+                    WindowWidthSizeClass.Expanded,
+                    WindowWidthSizeClass.Compact,
+                    -> {
                         TrendingListCompact(
                             modifier = Modifier.fillMaxSize(),
                             events = events,
@@ -66,9 +69,9 @@ fun EventsScreen(
                         )
                     }
 
-                    WindowWidthSizeClass.Medium,
-                    WindowWidthSizeClass.Expanded,
-                    -> {
+//                    WindowWidthSizeClass.Medium,
+//                    WindowWidthSizeClass.Expanded,
+//                    -> {
 //                        TrendingStaggeredGrid(
 //                            modifier = Modifier.fillMaxSize(),
 //                            giphyImageItems = giphyImageItems,
@@ -86,7 +89,7 @@ fun EventsScreen(
 //                            onClickToShare = { url -> clipboardHistory.add(url) },
 //                            onScrolledToTop = uiEvent.onScrolledToTop,
 //                        )
-                    }
+                    //                   }
                 }
             } else if (!uiState.isLoading) {
                 NoDataScreen(
