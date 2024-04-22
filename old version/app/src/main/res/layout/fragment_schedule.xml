@@ -14,7 +14,7 @@
 
         <variable
             name="viewModel"
-            type="uk.ryanwong.dazn.codechallenge.ui.schedule.ScheduleViewModel" />
+            type="com.rwmobi.dazncodechallenge.ui.viewmodel.ScheduleViewModel" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
