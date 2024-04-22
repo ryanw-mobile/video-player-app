@@ -5,19 +5,19 @@
 
 package com.rwmobi.dazncodechallenge.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,6 +30,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
 import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.dazn_navigation_checked
+import com.rwmobi.dazncodechallenge.ui.theme.dazn_navigation_unchecked
 
 @Composable
 fun AppBottomNavigationBar(
@@ -66,17 +68,23 @@ fun AppBottomNavigationBar(
                     Icon(
                         painter = painterResource(id = item.iconResId),
                         contentDescription = null,
-                        tint = if (selected) MaterialTheme.colorScheme.tertiary else LocalContentColor.current,
                     )
                 },
                 label = {
-                    AnimatedVisibility(visible = selected) {
-                        Text(
-                            text = stringResource(id = item.titleResId).uppercase(),
-                            style = MaterialTheme.typography.labelMedium,
-                        )
-                    }
+                    Text(
+                        text = stringResource(id = item.titleResId).uppercase(),
+                        style = MaterialTheme.typography.labelMedium,
+                    )
                 },
+                colors = NavigationBarItemColors(
+                    selectedIconColor = dazn_navigation_checked,
+                    selectedTextColor = dazn_navigation_checked,
+                    selectedIndicatorColor = Color.Transparent,
+                    unselectedIconColor = dazn_navigation_unchecked,
+                    unselectedTextColor = dazn_navigation_unchecked,
+                    disabledIconColor = dazn_navigation_unchecked,
+                    disabledTextColor = dazn_navigation_unchecked,
+                ),
             )
         }
     }

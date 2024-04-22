@@ -9,15 +9,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.NavigationRailItemColors
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -31,8 +32,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
 import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.dazn_navigation_checked
+import com.rwmobi.dazncodechallenge.ui.theme.dazn_navigation_unchecked
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
-import java.util.Locale
 
 @Composable
 fun AppNavigationRail(
@@ -72,22 +74,23 @@ fun AppNavigationRail(
                     Icon(
                         painter = painterResource(id = item.iconResId),
                         contentDescription = null,
-                        tint = if (selected) MaterialTheme.colorScheme.tertiary else LocalContentColor.current,
                     )
                 },
                 label = {
-                    // Always show label to maintain the vertical position
                     Text(
-                        text = stringResource(id = item.titleResId).replaceFirstChar {
-                            if (it.isLowerCase()) {
-                                it.titlecase(locale = Locale.ENGLISH)
-                            } else {
-                                it.toString()
-                            }
-                        },
+                        text = stringResource(id = item.titleResId).uppercase(),
                         style = MaterialTheme.typography.labelMedium,
                     )
                 },
+                colors = NavigationRailItemColors(
+                    selectedIconColor = dazn_navigation_checked,
+                    selectedTextColor = dazn_navigation_checked,
+                    selectedIndicatorColor = Color.Transparent,
+                    unselectedIconColor = dazn_navigation_unchecked,
+                    unselectedTextColor = dazn_navigation_unchecked,
+                    disabledIconColor = dazn_navigation_unchecked,
+                    disabledTextColor = dazn_navigation_unchecked,
+                ),
             )
         }
 

@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.Color
 val dazn_background = Color(0xFF0c161d)
 val dazn_divider = Color(0xFF242d34)
 val dazn_accent = Color(0xFFd7e01a)
+val dazn_navigation_unchecked = Color(0xFF999999)
+val dazn_navigation_checked = Color(0xFFFFFFFF)
 
 val md_theme_light_primary = dazn_background
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
