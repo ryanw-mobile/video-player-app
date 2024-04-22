@@ -11,5 +11,6 @@ data class EventsUIEvent(
     val onRefresh: () -> Unit,
     val onScrolledToTop: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
-    val onShowSnackbar: suspend (String) -> Unit,
+    val onShowSnackbar: suspend (message: String) -> Unit,
+    val onPlayVideo: (videoUrl: String) -> Unit,
 )

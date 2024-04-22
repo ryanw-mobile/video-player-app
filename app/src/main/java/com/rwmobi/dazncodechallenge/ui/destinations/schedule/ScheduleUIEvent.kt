@@ -11,5 +11,5 @@ data class ScheduleUIEvent(
     val onRefresh: () -> Unit,
     val onScrolledToTop: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
-    val onShowSnackbar: suspend (String) -> Unit,
+    val onShowSnackbar: suspend (message: String) -> Unit,
 )

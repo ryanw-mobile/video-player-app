@@ -39,6 +39,7 @@ internal fun EventsListCompact(
     events: List<Event>,
     requestScrollToTop: Boolean,
     onScrolledToTop: () -> Unit,
+    onPlayVideo: (videoUrl: String) -> Unit,
 ) {
     val dimension = LocalConfiguration.current.getDimension()
     val contentDescriptionTrendingList = "some list"
@@ -58,6 +59,7 @@ internal fun EventsListCompact(
                 modifier = Modifier.fillMaxWidth(),
                 event = event,
                 imageLoader = imageLoader,
+                onItemClicked = { onPlayVideo(it) },
             )
 
             if (index < events.lastIndex) {
@@ -94,6 +96,7 @@ private fun Preview(
                 events = events,
                 requestScrollToTop = false,
                 onScrolledToTop = {},
+                onPlayVideo = {},
             )
         }
     }

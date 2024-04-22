@@ -66,6 +66,7 @@ fun EventsScreen(
                             imageLoader = imageLoader,
                             requestScrollToTop = uiState.requestScrollToTop,
                             onScrolledToTop = uiEvent.onScrolledToTop,
+                            onPlayVideo = uiEvent.onPlayVideo,
                         )
                     }
 

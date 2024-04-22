@@ -8,6 +8,7 @@
 package com.rwmobi.dazncodechallenge.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -46,12 +47,15 @@ fun EventListItem(
     modifier: Modifier = Modifier,
     event: Event,
     imageLoader: ImageLoader,
+    onItemClicked: (videoUrl: String) -> Unit,
 ) {
     val dimension = LocalConfiguration.current.getDimension()
     val context = LocalContext.current
 
     Row(
-        modifier = modifier.height(intrinsicSize = IntrinsicSize.Min),
+        modifier = modifier
+            .height(intrinsicSize = IntrinsicSize.Min)
+            .clickable(onClick = { onItemClicked(event.videoUrl) }),
     ) {
         AsyncImage(
             modifier = Modifier
@@ -128,6 +132,7 @@ private fun Preview(
                 modifier = Modifier.fillMaxWidth(),
                 event = event,
                 imageLoader = ImageLoader(LocalContext.current),
+                onItemClicked = {},
             )
         }
     }

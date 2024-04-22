@@ -58,6 +58,8 @@ fun AppNavHost(
                     onErrorShown = { viewModel.errorShown(it) },
                     onScrolledToTop = { onScrolledToTop(AppNavItem.Events) },
                     onShowSnackbar = onShowSnackbar,
+                    onPlayVideo = { // Navigate to exoplayer
+                    },
                 ),
             )
         }
