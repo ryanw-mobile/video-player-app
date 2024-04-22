@@ -44,6 +44,7 @@ fun AppNavigationRail(
 ) {
     NavigationRail(
         modifier = modifier,
+        containerColor = MaterialTheme.colorScheme.background,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
