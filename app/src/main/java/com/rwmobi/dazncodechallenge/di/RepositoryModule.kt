@@ -14,20 +14,24 @@ import com.rwmobi.dazncodechallenge.domain.repository.Repository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import javax.inject.Singleton
 
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 @Module
-object RepositoryModules {
+object RepositoryModule {
     @Provides
-    @ViewModelScoped
+    @Singleton
     fun provideRepository(
         remoteDataSource: RemoteDataSource,
         localDataSource: LocalDataSource,
+        @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
     ): Repository {
-        synchronized(this) {
-            return LocalCacheRepository(remoteDataSource, localDataSource)
-        }
+        return LocalCacheRepository(
+            remoteDataSource = remoteDataSource,
+            localDataSource = localDataSource,
+            dispatcher = dispatcher,
+        )
     }
 }

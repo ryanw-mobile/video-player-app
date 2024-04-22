@@ -7,24 +7,13 @@
 
 package com.rwmobi.dazncodechallenge.domain.repository
 
-import androidx.lifecycle.LiveData
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
 
 interface Repository {
-    // The LiveData implementations are designed to be used by ViewModels
-    fun observeEvents(): LiveData<List<Event>>
+    suspend fun getEvents(): Result<List<Event>>
+    suspend fun getSchedule(): Result<List<Schedule>>
 
-    fun observeSchedule(): LiveData<List<Schedule>>
-
-    // The static versions are designed to be used for tests
-    suspend fun getEvents(): List<Event>
-
-    suspend fun getSchedule(): List<Schedule>
-
-    // The functions exposed to ViewModels
-    // They don't have to care about where we pulled the data from
-    suspend fun refreshEvents()
-
-    suspend fun refreshSchedule()
+    suspend fun refreshEvents(): Result<Unit>
+    suspend fun refreshSchedule(): Result<Unit>
 }
