@@ -9,7 +9,7 @@ package com.rwmobi.dazncodechallenge.di
 
 import com.rwmobi.dazncodechallenge.data.repository.LocalCacheRepository
 import com.rwmobi.dazncodechallenge.data.source.local.interfaces.LocalDataSource
-import com.rwmobi.dazncodechallenge.data.source.remote.interfaces.RemoteDataSource
+import com.rwmobi.dazncodechallenge.data.source.network.interfaces.NetworkDataSource
 import com.rwmobi.dazncodechallenge.domain.repository.Repository
 import dagger.Module
 import dagger.Provides
@@ -24,12 +24,12 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideRepository(
-        remoteDataSource: RemoteDataSource,
+        networkDataSource: NetworkDataSource,
         localDataSource: LocalDataSource,
         @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
     ): Repository {
         return LocalCacheRepository(
-            remoteDataSource = remoteDataSource,
+            networkDataSource = networkDataSource,
             localDataSource = localDataSource,
             dispatcher = dispatcher,
         )

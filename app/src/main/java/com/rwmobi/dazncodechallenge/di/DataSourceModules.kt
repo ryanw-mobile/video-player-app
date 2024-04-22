@@ -9,17 +9,15 @@ package com.rwmobi.dazncodechallenge.di
 
 import com.rwmobi.dazncodechallenge.data.source.local.DaznApiDatabase
 import com.rwmobi.dazncodechallenge.data.source.local.RoomDbDataSource
-import com.rwmobi.dazncodechallenge.data.source.local.dao.DaznApiDaos
 import com.rwmobi.dazncodechallenge.data.source.local.interfaces.LocalDataSource
-import com.rwmobi.dazncodechallenge.data.source.remote.SandBoxAPIDataSource
-import com.rwmobi.dazncodechallenge.data.source.remote.interfaces.RemoteDataSource
-import dagger.Binds
+import com.rwmobi.dazncodechallenge.data.source.network.DaznApiService
+import com.rwmobi.dazncodechallenge.data.source.network.SandBoxAPIDataSource
+import com.rwmobi.dazncodechallenge.data.source.network.interfaces.NetworkDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -27,26 +25,26 @@ import javax.inject.Singleton
 object DataSourceModules {
     @Provides
     @Singleton
-    fun provideCoroutineDispatcher(): CoroutineDispatcher {
-        return Dispatchers.IO
+    fun provideLocalDataSource(
+        database: DaznApiDatabase,
+        @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
+    ): LocalDataSource {
+        return RoomDbDataSource(
+            eventsDao = database.eventsDao,
+            scheduleDao = database.scheduleDao,
+            dispatcher = dispatcher,
+        )
     }
 
     @Provides
-    fun provideDaznApiDaos(database: DaznApiDatabase): DaznApiDaos {
-        return DaznApiDaos(database.eventsDao, database.scheduleDao)
+    @Singleton
+    fun provideNetworkDataSource(
+        retrofitService: DaznApiService,
+        @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
+    ): NetworkDataSource {
+        return SandBoxAPIDataSource(
+            retrofitService = retrofitService,
+            dispatcher = dispatcher,
+        )
     }
-}
-
-@InstallIn(SingletonComponent::class)
-@Module
-abstract class LocalDataSourceModule {
-    @Binds
-    abstract fun bindLocalDataSource(impl: RoomDbDataSource): LocalDataSource
-}
-
-@InstallIn(SingletonComponent::class)
-@Module
-abstract class RemoteDataSourceModule {
-    @Binds
-    abstract fun bindRemoteDataSource(impl: SandBoxAPIDataSource): RemoteDataSource
 }

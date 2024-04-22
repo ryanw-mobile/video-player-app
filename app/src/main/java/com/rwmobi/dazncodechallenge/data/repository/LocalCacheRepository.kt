@@ -8,8 +8,7 @@
 package com.rwmobi.dazncodechallenge.data.repository
 
 import com.rwmobi.dazncodechallenge.data.source.local.interfaces.LocalDataSource
-import com.rwmobi.dazncodechallenge.data.source.remote.ApiResult
-import com.rwmobi.dazncodechallenge.data.source.remote.interfaces.RemoteDataSource
+import com.rwmobi.dazncodechallenge.data.source.network.interfaces.NetworkDataSource
 import com.rwmobi.dazncodechallenge.di.DispatcherModule
 import com.rwmobi.dazncodechallenge.domain.exceptions.except
 import com.rwmobi.dazncodechallenge.domain.model.Event
@@ -21,7 +20,7 @@ import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
 class LocalCacheRepository @Inject constructor(
-    private val remoteDataSource: RemoteDataSource,
+    private val networkDataSource: NetworkDataSource,
     private val localDataSource: LocalDataSource,
     @DispatcherModule.IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : Repository {
@@ -44,12 +43,13 @@ class LocalCacheRepository @Inject constructor(
     override suspend fun refreshEvents(): Result<Unit> {
         return withContext(dispatcher) {
             Result.runCatching {
-                val remoteEvents = remoteDataSource.getEvents()
+                val remoteEvents = networkDataSource.getEvents()
 
-                if (remoteEvents is ApiResult.Success && remoteEvents.data is List<*>) {
-                    localDataSource.submitEvents(remoteEvents.data.filterIsInstance<Event>())
-                } else if (remoteEvents is ApiResult.Error) {
-                    throw remoteEvents.exception
+                when (remoteEvents.isFailure) {
+                    true -> throw remoteEvents.exceptionOrNull() ?: Exception("Unknown data source exception")
+                    false -> {
+                        localDataSource.submitEvents(events = remoteEvents.getOrNull() ?: emptyList())
+                    }
                 }
             }.except<CancellationException, _>()
         }
@@ -58,12 +58,13 @@ class LocalCacheRepository @Inject constructor(
     override suspend fun refreshSchedule(): Result<Unit> {
         return withContext(dispatcher) {
             Result.runCatching {
-                val remoteSchedules = remoteDataSource.getSchedules()
+                val remoteSchedules = networkDataSource.getSchedules()
 
-                if (remoteSchedules is ApiResult.Success && remoteSchedules.data is List<*>) {
-                    localDataSource.submitSchedule(remoteSchedules.data.filterIsInstance<Schedule>())
-                } else if (remoteSchedules is ApiResult.Error) {
-                    throw remoteSchedules.exception
+                when (remoteSchedules.isFailure) {
+                    true -> throw remoteSchedules.exceptionOrNull() ?: Exception("Unknown data source exception")
+                    false -> {
+                        localDataSource.submitSchedule(schedules = remoteSchedules.getOrNull() ?: emptyList())
+                    }
                 }
             }.except<CancellationException, _>()
         }

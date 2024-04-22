@@ -7,7 +7,6 @@
 
 package com.rwmobi.dazncodechallenge.data.source.local.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -23,13 +22,7 @@ sealed interface EventsDao {
     suspend fun insertAll(eventDBEntities: List<EventDbEntity>)
 
     @Query("SELECT * FROM event_table ORDER BY date ASC")
-    fun observeEvents(): LiveData<List<EventDbEntity>>
-
-    @Query("SELECT * FROM event_table ORDER BY date ASC")
     suspend fun getEvents(): List<EventDbEntity>
-
-    @Query("SELECT * FROM event_table WHERE event_id = :eventId LIMIT 1")
-    fun observeEventById(eventId: Int): LiveData<EventDbEntity>
 
     @Query("SELECT * FROM event_table WHERE event_id = :eventId LIMIT 1")
     suspend fun getEventById(eventId: Int): EventDbEntity

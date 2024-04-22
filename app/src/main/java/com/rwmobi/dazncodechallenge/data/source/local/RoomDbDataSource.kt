@@ -7,12 +7,12 @@
 
 package com.rwmobi.dazncodechallenge.data.source.local
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
-import com.rwmobi.dazncodechallenge.data.source.local.dao.DaznApiDaos
+import com.rwmobi.dazncodechallenge.data.source.local.dao.EventsDao
+import com.rwmobi.dazncodechallenge.data.source.local.dao.ScheduleDao
 import com.rwmobi.dazncodechallenge.data.source.local.interfaces.LocalDataSource
 import com.rwmobi.dazncodechallenge.data.source.local.model.asDatabaseModel
 import com.rwmobi.dazncodechallenge.data.source.local.model.asDomainModel
+import com.rwmobi.dazncodechallenge.di.DispatcherModule
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,60 +20,19 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
-/**
- * Concrete implementation of a data source as a db.
- */
-class RoomDbDataSource
-@Inject
-constructor(
-    private val daznApiDaos: DaznApiDaos,
-    private val ioDispatcher: CoroutineDispatcher,
+class RoomDbDataSource @Inject constructor(
+    private val eventsDao: EventsDao,
+    private val scheduleDao: ScheduleDao,
+    @DispatcherModule.IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : LocalDataSource {
-    override fun observeEvents(): LiveData<List<Event>> {
-        return (daznApiDaos.eventsDao.observeEvents()).map {
-            it.map { item ->
-                Event(
-                    item.eventId,
-                    item.title,
-                    item.subtitle,
-                    item.date,
-                    item.imageUrl,
-                    item.videoUrl,
-                )
-            }
-        }
-    }
-
-    override fun observeSchedule(): LiveData<List<Schedule>> {
-        return (daznApiDaos.scheduleDao.observeSchedules()).map {
-            it.map { item ->
-                Schedule(
-                    item.scheduleId,
-                    item.title,
-                    item.subtitle,
-                    item.date,
-                    item.imageUrl,
-                )
-            }
-        }
-    }
-
-    /**
-     * Returns the events cached in the local database.
-     * Data can be cached using syncEvents(...)
-     */
     override suspend fun getEvents(): List<Event> =
-        withContext(ioDispatcher) {
-            daznApiDaos.eventsDao.getEvents().asDomainModel()
+        withContext(dispatcher) {
+            eventsDao.getEvents().asDomainModel()
         }
 
-    /**
-     * Returns the schedules cached in the local database.
-     * Data can be cached using syncSchedules(...)
-     */
     override suspend fun getSchedules(): List<Schedule> =
-        withContext(ioDispatcher) {
-            daznApiDaos.scheduleDao.getSchedules().asDomainModel()
+        withContext(dispatcher) {
+            scheduleDao.getSchedules().asDomainModel()
         }
 
     // Implementation note:
@@ -81,24 +40,21 @@ constructor(
     // We assume each time calling to submit*(..) will have a complete dataset supplied, and we overwrite our local DB
     // Afterwards, any cached data no longer in the new dataset will be deleted using the dirty bit approach
     override suspend fun submitEvents(events: List<Event>) =
-        withContext(ioDispatcher) {
+        withContext(dispatcher) {
             Timber.d("syncEvents() - processed ${events.size} items")
-            // Kotlin usage note
-            // apply: Object configuration. Returns Context object
-            // run: Object configuration and computing the result. Returns lambda result
-            daznApiDaos.eventsDao.run {
+            with(eventsDao) {
                 markDirty()
-                insertAll(events.asDatabaseModel())
+                insertAll(eventDBEntities = events.asDatabaseModel())
                 deleteDirty()
             }
         }
 
     override suspend fun submitSchedule(schedules: List<Schedule>) =
-        withContext(ioDispatcher) {
+        withContext(dispatcher) {
             Timber.d("syncSchedule() - processed ${schedules.size} items")
-            daznApiDaos.scheduleDao.run {
+            with(scheduleDao) {
                 markDirty()
-                insertAll(schedules.asDatabaseModel())
+                insertAll(scheduleDBEntities = schedules.asDatabaseModel())
                 deleteDirty()
             }
         }

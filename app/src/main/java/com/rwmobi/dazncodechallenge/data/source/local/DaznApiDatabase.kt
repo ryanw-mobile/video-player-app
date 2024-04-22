@@ -15,10 +15,16 @@ import com.rwmobi.dazncodechallenge.data.source.local.dao.ScheduleDao
 import com.rwmobi.dazncodechallenge.data.source.local.model.EventDbEntity
 import com.rwmobi.dazncodechallenge.data.source.local.model.ScheduleDbEntity
 
-@Database(entities = [EventDbEntity::class, ScheduleDbEntity::class], version = 5, exportSchema = false)
+@Database(
+    entities = [
+        EventDbEntity::class,
+        ScheduleDbEntity::class,
+    ],
+    version = 5,
+    exportSchema = false,
+)
 @TypeConverters(DateTypeConverters::class)
 abstract class DaznApiDatabase : RoomDatabase() {
-    // DAOs
     abstract val eventsDao: EventsDao
     abstract val scheduleDao: ScheduleDao
 }
