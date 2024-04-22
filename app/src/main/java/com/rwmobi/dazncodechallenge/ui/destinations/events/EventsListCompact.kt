@@ -33,7 +33,7 @@ import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
 
 @Composable
-internal fun TrendingListCompact(
+internal fun EventsListCompact(
     modifier: Modifier = Modifier,
     imageLoader: ImageLoader,
     events: List<Event>,
@@ -88,7 +88,7 @@ private fun Preview(
 ) {
     DAZNCodeChallengeTheme {
         Surface {
-            TrendingListCompact(
+            EventsListCompact(
                 modifier = Modifier.fillMaxSize(),
                 imageLoader = ImageLoader(LocalContext.current),
                 events = events,

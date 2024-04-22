@@ -60,7 +60,7 @@ fun EventsScreen(
                     WindowWidthSizeClass.Expanded,
                     WindowWidthSizeClass.Compact,
                     -> {
-                        TrendingListCompact(
+                        EventsListCompact(
                             modifier = Modifier.fillMaxSize(),
                             events = events,
                             imageLoader = imageLoader,
