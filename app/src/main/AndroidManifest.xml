@@ -8,6 +8,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".DaznApplication"
         android:allowBackup="true"
@@ -17,7 +20,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_dazn_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DAZNCodeChallenge"
+        android:theme="@style/Theme.DAZNCodeChallenge.Starting"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
@@ -29,6 +32,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.splash_screen_theme"
+                android:resource="@style/Theme.DAZNCodeChallenge.Starting" />
         </activity>
     </application>
 
