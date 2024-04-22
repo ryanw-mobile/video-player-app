@@ -70,8 +70,7 @@ would be:
 
 If you want to try out the app without building it, check out
 the [Releases section](https://github.com/ryanw-mobile/dazn-code-challenge/releases) where you can
-find the APK and App Bundles for each major version. A working Giphy API key was applied when
-building the app, therefore you can test it by just installing it.
+find the APK and App Bundles for each major version.
 
 ## Requirements
 

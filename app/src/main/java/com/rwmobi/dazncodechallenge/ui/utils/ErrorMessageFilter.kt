@@ -5,11 +5,11 @@
  *
  */
 
-package uk.ryanwong.dazn.codechallenge.util
+package com.rwmobi.dazncodechallenge.ui.utils
 
 import android.content.Context
-import uk.ryanwong.dazn.codechallenge.BuildConfig
-import uk.ryanwong.dazn.codechallenge.R
+import com.rwmobi.dazncodechallenge.BuildConfig
+import com.rwmobi.dazncodechallenge.R
 
 /***
  * Depends on the user experience, sometimes we may want to just hide the technical details
