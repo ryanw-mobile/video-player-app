@@ -1,10 +1,7 @@
-name: Renovate check
+name: Renovate Check
 
 on:
   merge_group:
-  pull_request:
-    branches:
-      - 'renovate/**'
   push:
     branches:
       - 'renovate/**'
@@ -23,18 +20,18 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: set up JDK 17
+      - name: set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
-          java-version: '17'
+          java-version: '21'
           cache: gradle
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Gradle Check
-        run: ./gradlew check --no-daemon
+        run: ./gradlew check assembleDebug --no-daemon
         env:
           BITRISE: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
