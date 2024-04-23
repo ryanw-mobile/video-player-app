@@ -32,6 +32,12 @@ class ScheduleViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<ScheduleUIState> = MutableStateFlow(ScheduleUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
+    init {
+        viewModelScope.launch(dispatcher) {
+            getSchedule()
+        }
+    }
+
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
             val errorMessages = currentUiState.errorMessages.filterNot { it.id == errorId }
@@ -55,36 +61,34 @@ class ScheduleViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             val refreshResult = repository.refreshSchedule()
             if (refreshResult.isFailure) {
-                val exception = refreshResult.exceptionOrNull() ?: Exception("Unknown exception")
+                val exception = refreshResult.exceptionOrNull() ?: Exception("Unknown network communication exception")
                 exception.printStackTrace()
-                updateUIForError(exception.message ?: "some error")
-                stopLoading()
+                updateUIForError(exception.message ?: "Unknown network communication error")
                 return@launch
             }
 
-            val getScheduleResult = repository.getSchedule()
-            when (getScheduleResult.isFailure) {
-                true -> {
-                    updateUIForError("Error getting data: ${getScheduleResult.exceptionOrNull()?.message}")
-                    stopLoading()
-                }
+            getSchedule()
+        }
+    }
 
-                false -> _uiState.update { currentUiState ->
-                    currentUiState.copy(
-                        isLoading = false,
-                        schedules = getScheduleResult.getOrNull() ?: emptyList(),
-                    )
-                }
+    private suspend fun getSchedule() {
+        val getScheduleResult = repository.getSchedule()
+        when (getScheduleResult.isFailure) {
+            true -> {
+                updateUIForError("Error getting data: ${getScheduleResult.exceptionOrNull()?.message}")
+            }
+
+            false -> _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    isLoading = false,
+                    schedules = getScheduleResult.getOrNull() ?: emptyList(),
+                )
             }
         }
     }
 
     private fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
-    }
-
-    private fun stopLoading() {
-        _uiState.update { it.copy(isLoading = false) }
     }
 
     private fun updateUIForError(message: String) {
@@ -102,6 +106,7 @@ class ScheduleViewModel @Inject constructor(
             message = message,
         )
         return currentUiState.copy(
+            // So that each time we show a message we expect loading should have stopped
             isLoading = false,
             errorMessages = currentUiState.errorMessages + newErrorMessage,
         )

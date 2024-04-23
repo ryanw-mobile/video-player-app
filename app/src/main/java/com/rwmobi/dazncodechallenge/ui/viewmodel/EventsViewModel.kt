@@ -7,13 +7,10 @@
 
 package com.rwmobi.dazncodechallenge.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import com.rwmobi.dazncodechallenge.di.DispatcherModule
-import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.domain.repository.Repository
 import com.rwmobi.dazncodechallenge.ui.destinations.events.EventsUIState
 import com.rwmobi.dazncodechallenge.ui.model.ErrorMessage
@@ -36,6 +33,12 @@ constructor(
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<EventsUIState> = MutableStateFlow(EventsUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
+
+    init {
+        viewModelScope.launch(dispatcher) {
+            getEvents()
+        }
+    }
 
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
@@ -60,36 +63,34 @@ constructor(
         viewModelScope.launch(dispatcher) {
             val refreshResult = repository.refreshEvents()
             if (refreshResult.isFailure) {
-                val exception = refreshResult.exceptionOrNull() ?: Exception("Unknown exception")
+                val exception = refreshResult.exceptionOrNull() ?: Exception("Unknown network communication exception")
                 exception.printStackTrace()
-                updateUIForError(exception.message ?: "some error")
-                stopLoading()
+                updateUIForError(exception.message ?: "Unknown network communication error")
                 return@launch
             }
 
-            val getEventsResult = repository.getEvents()
-            when (getEventsResult.isFailure) {
-                true -> {
-                    updateUIForError("Error getting data: ${getEventsResult.exceptionOrNull()?.message}")
-                    stopLoading()
-                }
+            getEvents()
+        }
+    }
 
-                false -> _uiState.update { currentUiState ->
-                    currentUiState.copy(
-                        isLoading = false,
-                        events = getEventsResult.getOrNull() ?: emptyList(),
-                    )
-                }
+    private suspend fun getEvents() {
+        val getEventsResult = repository.getEvents()
+        when (getEventsResult.isFailure) {
+            true -> {
+                updateUIForError("Error getting data: ${getEventsResult.exceptionOrNull()?.message}")
+            }
+
+            false -> _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    isLoading = false,
+                    events = getEventsResult.getOrNull() ?: emptyList(),
+                )
             }
         }
     }
 
     private fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
-    }
-
-    private fun stopLoading() {
-        _uiState.update { it.copy(isLoading = false) }
     }
 
     private fun updateUIForError(message: String) {
@@ -107,26 +108,9 @@ constructor(
             message = message,
         )
         return currentUiState.copy(
+            // So that each time we show a message we expect loading should have stopped
             isLoading = false,
             errorMessages = currentUiState.errorMessages + newErrorMessage,
         )
-    }
-
-    private val _openVideoPlayerUrl = MutableLiveData<String?>(null)
-    val openVideoPlayerUrl: LiveData<String?>
-        get() = _openVideoPlayerUrl
-
-    fun setEventClicked(event: Event) {
-        event.videoUrl.let {
-            _openVideoPlayerUrl.value =
-                when (it.isEmpty()) {
-                    false -> it
-                    true -> null
-                }
-        }
-    }
-
-    fun notifyVideoPlayerNavigationCompleted() {
-        _openVideoPlayerUrl.value = null
     }
 }
