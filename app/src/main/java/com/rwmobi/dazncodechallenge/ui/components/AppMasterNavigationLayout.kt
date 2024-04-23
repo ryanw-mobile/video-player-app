@@ -83,7 +83,7 @@ fun AppMasterNavigationLayout(
     Row(modifier = modifier) {
         AnimatedVisibility(
             visible = (navigationLayoutType == NavigationLayoutType.NavigationRail),
-            enter = slideInHorizontally(initialOffsetX = { it }),
+            enter = slideInHorizontally(initialOffsetX = { -it }),
             exit = shrinkHorizontally() + fadeOut(),
         ) {
             AppNavigationRail(
