@@ -22,7 +22,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object DataSourceModules {
+object DataSourceModule {
     @Provides
     @Singleton
     fun provideLocalDataSource(

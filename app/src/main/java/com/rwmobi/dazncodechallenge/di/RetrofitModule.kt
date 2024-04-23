@@ -24,7 +24,7 @@ private const val BASE_URL = "https://us-central1-dazn-sandbox.cloudfunctions.ne
 
 @InstallIn(SingletonComponent::class)
 @Module
-object RetrofitModules {
+object RetrofitModule {
     /**
      * Moshi's composition mechanism tries to find the best adapter for each type.
      * It starts with the first adapter or factory registered with Moshi.Builder.add(),
