@@ -131,7 +131,6 @@ fun AppMasterNavigationLayout(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
-                windowSizeClass = windowSizeClass,
                 navController = navController,
                 lastDoubleTappedNavItem = lastDoubleTappedNavItem.value,
                 onShowSnackbar = { errorMessageText ->

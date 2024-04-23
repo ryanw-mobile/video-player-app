@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
@@ -62,7 +63,7 @@ class ScheduleViewModel @Inject constructor(
             val refreshResult = repository.refreshSchedule()
             if (refreshResult.isFailure) {
                 val exception = refreshResult.exceptionOrNull() ?: Exception("Unknown network communication exception")
-                exception.printStackTrace()
+                Timber.tag("refresh").e(exception)
                 updateUIForError(exception.message ?: "Unknown network communication error")
                 return@launch
             }

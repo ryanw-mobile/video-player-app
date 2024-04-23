@@ -14,17 +14,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import coil.ImageLoader
 import com.rwmobi.dazncodechallenge.ui.components.NoDataScreen
 import kotlinx.coroutines.delay
@@ -34,7 +29,6 @@ import kotlinx.coroutines.isActive
 @Composable
 fun ScheduleScreen(
     modifier: Modifier = Modifier,
-    windowSizeClass: WindowSizeClass,
     imageLoader: ImageLoader,
     uiState: ScheduleUIState,
     uiEvent: ScheduleUIEvent,
@@ -49,51 +43,20 @@ fun ScheduleScreen(
         }
     }
 
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
     val pullRefreshState = rememberPullToRefreshState()
-    val clipboardHistory = remember { mutableStateListOf<String>() }
+    var firstRefreshRequested = false
 
     Box(modifier = modifier.nestedScroll(connection = pullRefreshState.nestedScrollConnection)) {
         uiState.schedules?.let { schedules ->
             if (schedules.isNotEmpty()) {
-                when (windowSizeClass.widthSizeClass) {
-                    WindowWidthSizeClass.Medium,
-                    WindowWidthSizeClass.Expanded,
-                    WindowWidthSizeClass.Compact,
-                    -> {
-                        SchedulesListCompact(
-                            modifier = Modifier.fillMaxSize(),
-                            schedules = schedules,
-                            imageLoader = imageLoader,
-                            requestScrollToTop = uiState.requestScrollToTop,
-                            onScrolledToTop = uiEvent.onScrolledToTop,
-                        )
-                    }
-
-//                    WindowWidthSizeClass.Medium,
-//                    WindowWidthSizeClass.Expanded,
-//                    -> {
-//                        TrendingStaggeredGrid(
-//                            modifier = Modifier.fillMaxSize(),
-//                            giphyImageItems = giphyImageItems,
-//                            imageLoader = imageLoader,
-//                            requestScrollToTop = uiState.requestScrollToTop,
-//                            onClickToDownload = { imageUrl ->
-//                                downloadImage(
-//                                    imageUrl = imageUrl,
-//                                    coroutineScope = coroutineScope,
-//                                    context = context,
-//                                    onError = { uiEvent.onShowSnackbar(context.getString(R.string.failed_to_download_file)) },
-//                                )
-//                            },
-//                            onClickToOpen = { url -> context.startBrowserActivity(url = url) },
-//                            onClickToShare = { url -> clipboardHistory.add(url) },
-//                            onScrolledToTop = uiEvent.onScrolledToTop,
-//                        )
-                    //                   }
-                }
-            } else if (!uiState.isLoading) {
+                SchedulesListCompact(
+                    modifier = Modifier.fillMaxSize(),
+                    schedules = schedules,
+                    imageLoader = imageLoader,
+                    requestScrollToTop = uiState.requestScrollToTop,
+                    onScrolledToTop = uiEvent.onScrolledToTop,
+                )
+            } else if (!uiState.isLoading && firstRefreshRequested) {
                 NoDataScreen(
                     modifier = Modifier
                         .fillMaxSize()
@@ -105,7 +68,6 @@ fun ScheduleScreen(
         if (pullRefreshState.isRefreshing) {
             LaunchedEffect(true) {
                 if (!uiState.isLoading) {
-                    delay(1000) // Trick to let user know work in progress
                     uiEvent.onRefresh()
                 }
             }
@@ -126,6 +88,7 @@ fun ScheduleScreen(
 
         LaunchedEffect(true) {
             uiEvent.onRefresh()
+            firstRefreshRequested = true
 
             while (isActive) {
                 delay(30_000)
