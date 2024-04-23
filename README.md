@@ -72,6 +72,7 @@ now [logged as issues](https://github.com/ryanw-mobile/dazn-code-challenge/issue
 * [LeakCanary](https://github.com/square/leakcanary) - Memory leak detection tool
 * `JUnit 4` - Testing framework and runner
 * [Robolectric](https://robolectric.org/) - Testing framework for Android-JVM tests
+* [kotest](https://kotest.io/) - We use the assertion library only, not the runner
 * [MockK](https://mockk.io/) - Mocking library for Kotlin
 * [Ktlint Gradle](https://github.com/jlleitschuh/ktlint-gradle) - Plugin for linting and formatting
   Kotlin code
