@@ -48,7 +48,7 @@ fun ExoPlayerScreen(
                 showBackwardIncrementButton = true,
                 showBackTrackButton = false,
                 showNextTrackButton = false,
-                showFullScreenButton = true,
+                showFullScreenButton = false, // We made it fullscreen already. Simply rotates the App and we support natively
                 showRepeatModeButton = true,
                 controllerShowTimeMilliSeconds = 5_000,
                 controllerAutoShow = true,

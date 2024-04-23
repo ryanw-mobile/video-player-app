@@ -6,8 +6,9 @@
 package com.rwmobi.dazncodechallenge.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -62,7 +63,7 @@ fun AppBottomNavigationLayout(
             AnimatedVisibility(
                 visible = !isFullScreenPlayer,
                 enter = slideInVertically(initialOffsetY = { it }),
-                exit = slideOutVertically(targetOffsetY = { it }),
+                exit = shrinkVertically() + fadeOut(),
             ) {
                 Column {
                     HorizontalDivider(
