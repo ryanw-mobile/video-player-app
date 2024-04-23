@@ -10,8 +10,10 @@ package com.rwmobi.dazncodechallenge.data.source.local
 import com.rwmobi.dazncodechallenge.data.source.local.dao.EventsDao
 import com.rwmobi.dazncodechallenge.data.source.local.dao.ScheduleDao
 import com.rwmobi.dazncodechallenge.data.source.local.interfaces.LocalDataSource
-import com.rwmobi.dazncodechallenge.data.source.local.model.asDatabaseModel
-import com.rwmobi.dazncodechallenge.data.source.local.model.asDomainModel
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.asEvent
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.asEventDbEntity
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.asSchedule
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.asScheduleDbEntity
 import com.rwmobi.dazncodechallenge.di.DispatcherModule
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
@@ -27,12 +29,12 @@ class RoomDbDataSource @Inject constructor(
 ) : LocalDataSource {
     override suspend fun getEvents(): List<Event> =
         withContext(dispatcher) {
-            eventsDao.getEvents().asDomainModel()
+            eventsDao.getEvents().asEvent()
         }
 
     override suspend fun getSchedules(): List<Schedule> =
         withContext(dispatcher) {
-            scheduleDao.getSchedules().asDomainModel()
+            scheduleDao.getSchedules().asSchedule()
         }
 
     // Implementation note:
@@ -44,7 +46,7 @@ class RoomDbDataSource @Inject constructor(
             Timber.d("syncEvents() - processed ${events.size} items")
             with(eventsDao) {
                 markDirty()
-                insertAll(eventDBEntities = events.asDatabaseModel())
+                insertAll(eventDBEntities = events.asEventDbEntity())
                 deleteDirty()
             }
         }
@@ -54,7 +56,7 @@ class RoomDbDataSource @Inject constructor(
             Timber.d("syncSchedule() - processed ${schedules.size} items")
             with(scheduleDao) {
                 markDirty()
-                insertAll(scheduleDBEntities = schedules.asDatabaseModel())
+                insertAll(scheduleDBEntities = schedules.asScheduleDbEntity())
                 deleteDirty()
             }
         }

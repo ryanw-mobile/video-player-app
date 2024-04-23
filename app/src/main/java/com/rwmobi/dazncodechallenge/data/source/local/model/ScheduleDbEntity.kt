@@ -10,7 +10,6 @@ package com.rwmobi.dazncodechallenge.data.source.local.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.rwmobi.dazncodechallenge.domain.model.Schedule
 import java.util.Date
 
 @Entity(tableName = "schedule_table")
@@ -32,36 +31,3 @@ data class ScheduleDbEntity(
     @ColumnInfo(name = "dirty")
     val dirty: Boolean = false,
 )
-
-fun List<ScheduleDbEntity>.asDomainModel(): List<Schedule> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
-fun ScheduleDbEntity.asDomainModel(): Schedule {
-    return Schedule(
-        scheduleId = this.scheduleId,
-        title = this.title,
-        subtitle = this.subtitle,
-        date = this.date,
-        imageUrl = this.imageUrl,
-    )
-}
-
-fun List<Schedule>.asDatabaseModel(): List<ScheduleDbEntity> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
-fun Schedule.asDatabaseModel(): ScheduleDbEntity {
-    return ScheduleDbEntity(
-        scheduleId = this.scheduleId,
-        title = this.title,
-        subtitle = this.subtitle,
-        date = this.date,
-        imageUrl = this.imageUrl,
-        dirty = false,
-    )
-}
