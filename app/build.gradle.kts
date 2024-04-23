@@ -197,6 +197,12 @@ dependencies {
     implementation(libs.androidx.material3.adaptive.android)
     implementation(libs.androidx.profileinstaller)
 
+    // Video Player Library
+    implementation(libs.compose.video)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.session)
+    implementation(libs.androidx.media3.ui)
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.leakcanary.android)

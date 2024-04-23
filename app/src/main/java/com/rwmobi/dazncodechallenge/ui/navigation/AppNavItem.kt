@@ -24,7 +24,7 @@ sealed class AppNavItem(var screenRoute: String, @StringRes var titleResId: Int,
     )
 
     data object Exoplayer : AppNavItem(
-        titleResId = R.string.schedule,
+        titleResId = R.string.events,
         iconResId = R.drawable.ic_baseline_local_activity_24,
         screenRoute = "exoplayer",
     )
