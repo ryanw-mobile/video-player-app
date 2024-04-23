@@ -1,11 +1,12 @@
-# DAZN Code Challenge - Android TV ![Gradle Build](https://github.com/ryanw-mobile/dazn-code-challenge/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/giphy-trending/graph/badge.svg?token=J8PHIH3OPU)](https://codecov.io/gh/ryanw-mobile/giphy-trending)
+# DAZN Code Challenge - Android TV ![Gradle Build](https://github.com/ryanw-mobile/dazn-code-challenge/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/dazn-code-challenge/graph/badge.svg?token=YK2DNKYBRO)](https://app.codecov.io/github/ryanw-mobile/dazn-code-challenge)
 
 A responsive Android sample app written in Kotlin and Jetpack Compose, supporting different
 navigation layout on screen sizes. The video player is currently Jetpack Media 3.
 
 The events under the Events tab provides video playback.
 The schedule under the Schedule tab refreshes automatically every 30 seconds.
-For both tabs, you can always do swipe-to-refresh, or tap the navigation icon to scroll to the top of the list.
+For both tabs, you can always do swipe-to-refresh, or tap the navigation icon to scroll to the top
+of the list.
 
 ## History
 
