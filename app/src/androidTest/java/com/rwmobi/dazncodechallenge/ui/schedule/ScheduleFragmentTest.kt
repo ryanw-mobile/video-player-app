@@ -3,7 +3,7 @@
  *
  */
 
-package uk.ryanwong.dazn.codechallenge.ui.schedule
+package com.rwmobi.dazncodechallenge.ui.schedule
 
 import android.os.Bundle
 import androidx.test.espresso.Espresso
@@ -13,6 +13,12 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
+import com.rwmobi.dazncodechallenge.R
+import com.rwmobi.dazncodechallenge.TestData.schedule1
+import com.rwmobi.dazncodechallenge.TestData.schedule2
+import com.rwmobi.dazncodechallenge.data.repository.FakeRepository
+import com.rwmobi.dazncodechallenge.data.repository.Repository
+import com.rwmobi.dazncodechallenge.launchFragmentInHiltContainer
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,12 +28,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import uk.ryanwong.dazn.codechallenge.R
-import uk.ryanwong.dazn.codechallenge.TestData.schedule1
-import uk.ryanwong.dazn.codechallenge.TestData.schedule2
-import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
-import uk.ryanwong.dazn.codechallenge.data.repository.Repository
-import uk.ryanwong.dazn.codechallenge.launchFragmentInHiltContainer
 import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)

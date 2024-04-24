@@ -3,22 +3,22 @@
  *
  */
 
-package uk.ryanwong.dazn.codechallenge.di
+package com.rwmobi.dazncodechallenge.di
 
+import com.rwmobi.dazncodechallenge.data.repository.FakeRepository
+import com.rwmobi.dazncodechallenge.domain.repository.Repository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
-import uk.ryanwong.dazn.codechallenge.data.repository.Repository
 import javax.inject.Singleton
 
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [RepositoryModules::class],
+    replaces = [RepositoryModule::class],
 )
-object FakeBaseRepositoryModules {
+object FakeBaseRepositoryModule {
     @Provides
     @Singleton
     fun provideFakeRepository(): Repository {

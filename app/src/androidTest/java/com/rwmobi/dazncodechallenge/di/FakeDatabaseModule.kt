@@ -3,25 +3,24 @@
  *
  */
 
-package uk.ryanwong.dazn.codechallenge.di
+package com.rwmobi.dazncodechallenge.di
 
 import android.content.Context
 import androidx.room.Room
+import com.rwmobi.dazncodechallenge.data.source.local.DaznApiDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import uk.ryanwong.dazn.codechallenge.data.source.local.DaznApiDatabase
 import javax.inject.Singleton
 
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [DatabaseModules::class],
+    replaces = [DatabaseModule::class],
 )
-object FakeDatabaseModules {
-    // Using an in-memory database for testing, because it doesn't survive killing the process.
+object FakeDatabaseModule {
     @Provides
     @Singleton
     fun provideDatabase(

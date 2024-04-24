@@ -3,7 +3,7 @@
  *
  */
 
-package uk.ryanwong.dazn.codechallenge.ui.events
+package com.rwmobi.dazncodechallenge.ui.events
 
 import android.os.Bundle
 import androidx.navigation.NavController
@@ -20,6 +20,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
+import com.rwmobi.dazncodechallenge.R
+import com.rwmobi.dazncodechallenge.TestData.event1
+import com.rwmobi.dazncodechallenge.TestData.event2
+import com.rwmobi.dazncodechallenge.TestData.event3
+import com.rwmobi.dazncodechallenge.data.repository.FakeRepository
+import com.rwmobi.dazncodechallenge.data.repository.Repository
+import com.rwmobi.dazncodechallenge.launchFragmentInHiltContainer
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,13 +37,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
-import uk.ryanwong.dazn.codechallenge.R
-import uk.ryanwong.dazn.codechallenge.TestData.event1
-import uk.ryanwong.dazn.codechallenge.TestData.event2
-import uk.ryanwong.dazn.codechallenge.TestData.event3
-import uk.ryanwong.dazn.codechallenge.data.repository.FakeRepository
-import uk.ryanwong.dazn.codechallenge.data.repository.Repository
-import uk.ryanwong.dazn.codechallenge.launchFragmentInHiltContainer
 import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
