@@ -28,7 +28,18 @@ any time.
 
 ## Screenshots
 
-![Screenshot1](screenshots/screen0.png) ![Screenshot1](screenshots/screen1.png) ![Screenshot1](screenshots/screen2.png)
+&nbsp;
+
+<p align="center">
+  <img src="screenshots/240424_screen0.png" width="200" />
+  <img src="screenshots/240424_screen1.png" width="200" />
+  <img src="screenshots/240424_screen2.png" width="200" />
+</p>
+<p align="center">
+  <img src="screenshots/240424_screen3.png" width="400" />
+</p>
+
+&nbsp;
 
 ## To-do lists
 
@@ -67,6 +78,8 @@ now [logged as issues](https://github.com/ryanw-mobile/dazn-code-challenge/issue
   screen solution
 * [Coil](https://coil-kt.github.io/coil/) - Image loading library for Android, leveraging Kotlin
   Coroutines
+* [compose-video](https://github.com/dsa28s/compose-video) - Media3 Video Player wrapper (buggy, to
+  be replaced/fixed)
 * [Dagger Hilt](https://dagger.dev/hilt/) - Dependency injection framework
 * [Timber](https://github.com/JakeWharton/timber) - Logging utility
 * [LeakCanary](https://github.com/square/leakcanary) - Memory leak detection tool
