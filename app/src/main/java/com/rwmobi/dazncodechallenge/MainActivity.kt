@@ -21,10 +21,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         installSplashScreen()
 
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             DAZNCodeChallengeApp(
                 windowSizeClass = calculateWindowSizeClass(this),
