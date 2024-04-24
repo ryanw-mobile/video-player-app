@@ -5,7 +5,6 @@
 
 package com.rwmobi.dazncodechallenge.ui.components
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
@@ -26,8 +25,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.VerticalDivider
-import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -36,7 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -44,6 +41,7 @@ import com.rwmobi.dazncodechallenge.ui.navigation.AppNavHost
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
 import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
+import com.rwmobi.dazncodechallenge.ui.utils.getPreviewWindowSizeClass
 
 private enum class NavigationLayoutType {
     BottomNavigation,
@@ -86,17 +84,19 @@ fun AppMasterNavigationLayout(
             enter = slideInHorizontally(initialOffsetX = { -it }),
             exit = shrinkHorizontally() + fadeOut(),
         ) {
-            AppNavigationRail(
-                modifier = Modifier.fillMaxHeight(),
-                navController = navController,
-                onCurrentRouteSecondTapped = { lastDoubleTappedNavItem.value = it },
-            )
-        }
+            Row {
+                AppNavigationRail(
+                    modifier = Modifier.fillMaxHeight(),
+                    navController = navController,
+                    onCurrentRouteSecondTapped = { lastDoubleTappedNavItem.value = it },
+                )
 
-        VerticalDivider(
-            modifier = Modifier.fillMaxHeight(),
-            color = dazn_divider,
-        )
+                VerticalDivider(
+                    modifier = Modifier.fillMaxHeight(),
+                    color = dazn_divider,
+                )
+            }
+        }
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -146,19 +146,7 @@ fun AppMasterNavigationLayout(
     }
 }
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
-@Preview(
-    name = "Phone - Landscape",
-    device = "spec:width = 411dp, height = 891dp, orientation = landscape, dpi = 420",
-    showSystemUi = true,
-    showBackground = true,
-)
-@Preview(
-    name = "Phone - Portrait",
-    device = "spec:width = 411dp, height = 891dp, orientation = portrait, dpi = 420",
-    showSystemUi = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
+@PreviewScreenSizes
 @Composable
 private fun Preview() {
     DAZNCodeChallengeTheme {
@@ -169,7 +157,7 @@ private fun Preview() {
         ) {
             AppMasterNavigationLayout(
                 modifier = Modifier.fillMaxSize(),
-                windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
+                windowSizeClass = getPreviewWindowSizeClass(),
                 navController = rememberNavController(),
                 snackbarHostState = remember { SnackbarHostState() },
             )
