@@ -50,11 +50,13 @@ class ScheduleViewModel @Inject constructor(
 
     fun getImageLoader() = imageLoader
 
-    fun fetchCacheAndReload() {
+    fun fetchCacheAndRefresh() {
         startLoading()
         viewModelScope.launch(dispatcher) {
-            getSchedule()
-            refresh()
+            val isSuccess = getSchedule()
+            if (isSuccess) {
+                refresh()
+            }
         }
     }
 
@@ -74,18 +76,22 @@ class ScheduleViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getSchedule() {
+    private suspend fun getSchedule(): Boolean {
         val getScheduleResult = repository.getSchedule()
-        when (getScheduleResult.isFailure) {
-            true -> {
+        return when (getScheduleResult.isSuccess) {
+            false -> {
                 updateUIForError("Error getting data: ${getScheduleResult.exceptionOrNull()?.message}")
+                false
             }
 
-            false -> _uiState.update { currentUiState ->
-                currentUiState.copy(
-                    isLoading = false,
-                    schedules = getScheduleResult.getOrNull() ?: emptyList(),
-                )
+            true -> {
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        isLoading = false,
+                        schedules = getScheduleResult.getOrNull() ?: emptyList(),
+                    )
+                }
+                true
             }
         }
     }

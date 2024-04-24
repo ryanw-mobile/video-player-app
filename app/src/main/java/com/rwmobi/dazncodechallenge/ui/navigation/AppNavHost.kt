@@ -60,7 +60,7 @@ fun AppNavHost(
                 imageLoader = viewModel.getImageLoader(),
                 uiState = uiState,
                 uiEvent = EventsUIEvent(
-                    onInitialLoad = { viewModel.fetchCacheAndReload() },
+                    onInitialLoad = { viewModel.fetchCacheAndRefresh() },
                     onRefresh = { viewModel.refresh() },
                     onErrorShown = { viewModel.errorShown(it) },
                     onScrolledToTop = { onScrolledToTop(AppNavItem.Events) },
@@ -89,7 +89,7 @@ fun AppNavHost(
                 imageLoader = viewModel.getImageLoader(),
                 uiState = uiState,
                 uiEvent = ScheduleUIEvent(
-                    onInitialLoad = { viewModel.fetchCacheAndReload() },
+                    onInitialLoad = { viewModel.fetchCacheAndRefresh() },
                     onRefresh = { viewModel.refresh() },
                     onErrorShown = { viewModel.errorShown(it) },
                     onScrolledToTop = { onScrolledToTop(AppNavItem.Events) },

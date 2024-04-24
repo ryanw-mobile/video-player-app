@@ -52,11 +52,13 @@ constructor(
 
     fun getImageLoader() = imageLoader
 
-    fun fetchCacheAndReload() {
+    fun fetchCacheAndRefresh() {
         startLoading()
         viewModelScope.launch(dispatcher) {
-            getEvents()
-            refresh()
+            val isSuccess = getEvents()
+            if (isSuccess) {
+                refresh()
+            }
         }
     }
 
@@ -76,18 +78,22 @@ constructor(
         }
     }
 
-    private suspend fun getEvents() {
+    private suspend fun getEvents(): Boolean {
         val getEventsResult = repository.getEvents()
-        when (getEventsResult.isFailure) {
-            true -> {
+        return when (getEventsResult.isSuccess) {
+            false -> {
                 updateUIForError("Error getting data: ${getEventsResult.exceptionOrNull()?.message}")
+                false
             }
 
-            false -> _uiState.update { currentUiState ->
-                currentUiState.copy(
-                    isLoading = false,
-                    events = getEventsResult.getOrNull() ?: emptyList(),
-                )
+            true -> {
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        isLoading = false,
+                        events = getEventsResult.getOrNull() ?: emptyList(),
+                    )
+                }
+                true
             }
         }
     }
