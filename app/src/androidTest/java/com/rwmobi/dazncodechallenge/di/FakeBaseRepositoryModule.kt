@@ -5,12 +5,12 @@
 
 package com.rwmobi.dazncodechallenge.di
 
-//@Module
-//@TestInstallIn(
+// @Module
+// @TestInstallIn(
 //    components = [SingletonComponent::class],
 //    replaces = [RepositoryModule::class],
-//)
-//object FakeBaseRepositoryModule {
+// )
+// object FakeBaseRepositoryModule {
 //    @Provides
 //    @Singleton
 //    fun provideFakeRepository(): Repository {
@@ -18,4 +18,4 @@ package com.rwmobi.dazncodechallenge.di
 //            return FakeRepository()
 //        }
 //    }
-//}
+// }
