@@ -35,12 +35,6 @@ constructor(
     private val _uiState: MutableStateFlow<EventsUIState> = MutableStateFlow(EventsUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
-    init {
-        viewModelScope.launch(dispatcher) {
-            getEvents()
-        }
-    }
-
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
             val errorMessages = currentUiState.errorMessages.filterNot { it.id == errorId }
@@ -57,6 +51,14 @@ constructor(
     }
 
     fun getImageLoader() = imageLoader
+
+    fun fetchCacheAndReload() {
+        startLoading()
+        viewModelScope.launch(dispatcher) {
+            getEvents()
+            refresh()
+        }
+    }
 
     fun refresh() {
         startLoading()

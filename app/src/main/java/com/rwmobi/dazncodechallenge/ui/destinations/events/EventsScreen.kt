@@ -87,7 +87,7 @@ fun EventsScreen(
         }
 
         DisposableEffect(true) {
-            uiEvent.onRefresh()
+            uiEvent.onInitialLoad()
             firstRefreshRequested = true
             onDispose { }
         }

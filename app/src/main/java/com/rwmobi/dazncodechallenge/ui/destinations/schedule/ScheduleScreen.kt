@@ -87,7 +87,7 @@ fun ScheduleScreen(
         }
 
         LaunchedEffect(true) {
-            uiEvent.onRefresh()
+            uiEvent.onInitialLoad()
             firstRefreshRequested = true
 
             while (isActive) {

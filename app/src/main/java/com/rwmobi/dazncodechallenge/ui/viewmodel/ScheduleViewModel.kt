@@ -33,12 +33,6 @@ class ScheduleViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<ScheduleUIState> = MutableStateFlow(ScheduleUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
-    init {
-        viewModelScope.launch(dispatcher) {
-            getSchedule()
-        }
-    }
-
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
             val errorMessages = currentUiState.errorMessages.filterNot { it.id == errorId }
@@ -55,6 +49,14 @@ class ScheduleViewModel @Inject constructor(
     }
 
     fun getImageLoader() = imageLoader
+
+    fun fetchCacheAndReload() {
+        startLoading()
+        viewModelScope.launch(dispatcher) {
+            getSchedule()
+            refresh()
+        }
+    }
 
     fun refresh() {
         startLoading()
