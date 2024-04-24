@@ -48,7 +48,7 @@ fun EventsScreen(
     Box(modifier = modifier.nestedScroll(connection = pullRefreshState.nestedScrollConnection)) {
         uiState.events?.let { events ->
             if (events.isNotEmpty()) {
-                EventsListCompact(
+                EventsList(
                     modifier = Modifier.fillMaxSize(),
                     events = events,
                     imageLoader = imageLoader,
@@ -65,6 +65,11 @@ fun EventsScreen(
             }
         }
 
+        PullToRefreshContainer(
+            modifier = Modifier.align(Alignment.TopCenter),
+            state = pullRefreshState,
+        )
+
         if (pullRefreshState.isRefreshing) {
             LaunchedEffect(true) {
                 if (!uiState.isLoading) {
@@ -80,11 +85,6 @@ fun EventsScreen(
                 pullRefreshState.startRefresh()
             }
         }
-
-        PullToRefreshContainer(
-            modifier = Modifier.align(Alignment.TopCenter),
-            state = pullRefreshState,
-        )
 
         DisposableEffect(true) {
             uiEvent.onRefresh()

@@ -49,7 +49,7 @@ fun ScheduleScreen(
     Box(modifier = modifier.nestedScroll(connection = pullRefreshState.nestedScrollConnection)) {
         uiState.schedules?.let { schedules ->
             if (schedules.isNotEmpty()) {
-                SchedulesListCompact(
+                SchedulesList(
                     modifier = Modifier.fillMaxSize(),
                     schedules = schedules,
                     imageLoader = imageLoader,
@@ -64,6 +64,11 @@ fun ScheduleScreen(
                 )
             }
         }
+
+        PullToRefreshContainer(
+            modifier = Modifier.align(Alignment.TopCenter),
+            state = pullRefreshState,
+        )
 
         if (pullRefreshState.isRefreshing) {
             LaunchedEffect(true) {
@@ -80,11 +85,6 @@ fun ScheduleScreen(
                 pullRefreshState.startRefresh()
             }
         }
-
-        PullToRefreshContainer(
-            modifier = Modifier.align(Alignment.TopCenter),
-            state = pullRefreshState,
-        )
 
         LaunchedEffect(true) {
             uiEvent.onRefresh()

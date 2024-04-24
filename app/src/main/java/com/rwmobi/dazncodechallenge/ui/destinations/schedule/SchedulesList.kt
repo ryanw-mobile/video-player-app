@@ -35,7 +35,7 @@ import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
 
 @Composable
-internal fun SchedulesListCompact(
+internal fun SchedulesList(
     modifier: Modifier = Modifier,
     imageLoader: ImageLoader,
     schedules: List<Schedule>,
@@ -90,7 +90,7 @@ private fun Preview(
 ) {
     DAZNCodeChallengeTheme {
         Surface {
-            SchedulesListCompact(
+            SchedulesList(
                 modifier = Modifier.fillMaxSize(),
                 imageLoader = ImageLoader(LocalContext.current),
                 schedules = schedules,
