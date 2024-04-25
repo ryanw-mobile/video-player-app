@@ -33,5 +33,5 @@ jobs:
       - name: Gradle Check
         run: ./gradlew check assembleDebug --no-daemon
         env:
-          BITRISE: 'true'
+          CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
