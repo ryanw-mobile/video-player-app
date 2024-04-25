@@ -1,6 +1,8 @@
 /*
  * Copyright (c) 2024. Ryan Wong
  * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
  */
 
 package com.rwmobi.dazncodechallenge.ui.components
@@ -28,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
 import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_navigation_checked
@@ -39,14 +42,17 @@ fun AppBottomNavigationBar(
     navController: NavController,
     onCurrentRouteSecondTapped: (item: AppNavItem) -> Unit,
 ) {
+    val context = LocalContext.current
+
     NavigationBar(
-        modifier = modifier,
+        modifier = modifier.semantics {
+            contentDescription = context.getString(R.string.content_description_navigation_bar)
+        },
         tonalElevation = 0.dp,
         containerColor = MaterialTheme.colorScheme.background,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
-        val context = LocalContext.current
 
         for (item in AppNavItem.navBarItems) {
             val selected = currentRoute == item.screenRoute

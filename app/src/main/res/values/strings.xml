@@ -13,4 +13,6 @@
     <string name="ok">OK</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="generic_error_string">We encountered an error when communicating with the server. Please try again later.</string>
+    <string name="content_description_navigation_bar">Navigation Bar</string>
+    <string name="content_description_navigation_rail">Navigation Rail</string>
 </resources>
