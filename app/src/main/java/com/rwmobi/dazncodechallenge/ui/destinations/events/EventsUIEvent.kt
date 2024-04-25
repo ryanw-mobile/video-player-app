@@ -8,6 +8,7 @@
 package com.rwmobi.dazncodechallenge.ui.destinations.events
 
 data class EventsUIEvent(
+    val onInitialLoad: () -> Unit,
     val onRefresh: () -> Unit,
     val onScrolledToTop: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,

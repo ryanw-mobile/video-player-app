@@ -33,12 +33,6 @@ class ScheduleViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<ScheduleUIState> = MutableStateFlow(ScheduleUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
-    init {
-        viewModelScope.launch(dispatcher) {
-            getSchedule()
-        }
-    }
-
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
             val errorMessages = currentUiState.errorMessages.filterNot { it.id == errorId }
@@ -56,6 +50,16 @@ class ScheduleViewModel @Inject constructor(
 
     fun getImageLoader() = imageLoader
 
+    fun fetchCacheAndRefresh() {
+        startLoading()
+        viewModelScope.launch(dispatcher) {
+            val isSuccess = getSchedule()
+            if (isSuccess) {
+                refresh()
+            }
+        }
+    }
+
     fun refresh() {
         startLoading()
 
@@ -72,18 +76,22 @@ class ScheduleViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getSchedule() {
+    private suspend fun getSchedule(): Boolean {
         val getScheduleResult = repository.getSchedule()
-        when (getScheduleResult.isFailure) {
-            true -> {
+        return when (getScheduleResult.isSuccess) {
+            false -> {
                 updateUIForError("Error getting data: ${getScheduleResult.exceptionOrNull()?.message}")
+                false
             }
 
-            false -> _uiState.update { currentUiState ->
-                currentUiState.copy(
-                    isLoading = false,
-                    schedules = getScheduleResult.getOrNull() ?: emptyList(),
-                )
+            true -> {
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        isLoading = false,
+                        schedules = getScheduleResult.getOrNull() ?: emptyList(),
+                    )
+                }
+                true
             }
         }
     }

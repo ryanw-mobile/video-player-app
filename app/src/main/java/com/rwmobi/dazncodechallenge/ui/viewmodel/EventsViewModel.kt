@@ -35,12 +35,6 @@ constructor(
     private val _uiState: MutableStateFlow<EventsUIState> = MutableStateFlow(EventsUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
-    init {
-        viewModelScope.launch(dispatcher) {
-            getEvents()
-        }
-    }
-
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
             val errorMessages = currentUiState.errorMessages.filterNot { it.id == errorId }
@@ -58,6 +52,16 @@ constructor(
 
     fun getImageLoader() = imageLoader
 
+    fun fetchCacheAndRefresh() {
+        startLoading()
+        viewModelScope.launch(dispatcher) {
+            val isSuccess = getEvents()
+            if (isSuccess) {
+                refresh()
+            }
+        }
+    }
+
     fun refresh() {
         startLoading()
 
@@ -74,18 +78,22 @@ constructor(
         }
     }
 
-    private suspend fun getEvents() {
+    private suspend fun getEvents(): Boolean {
         val getEventsResult = repository.getEvents()
-        when (getEventsResult.isFailure) {
-            true -> {
+        return when (getEventsResult.isSuccess) {
+            false -> {
                 updateUIForError("Error getting data: ${getEventsResult.exceptionOrNull()?.message}")
+                false
             }
 
-            false -> _uiState.update { currentUiState ->
-                currentUiState.copy(
-                    isLoading = false,
-                    events = getEventsResult.getOrNull() ?: emptyList(),
-                )
+            true -> {
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        isLoading = false,
+                        events = getEventsResult.getOrNull() ?: emptyList(),
+                    )
+                }
+                true
             }
         }
     }

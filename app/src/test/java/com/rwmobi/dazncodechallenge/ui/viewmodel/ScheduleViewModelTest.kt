@@ -32,9 +32,6 @@ internal class ScheduleViewModelTest {
     fun init() {
         fakeRepository = FakeRepository()
         mockImageLoader = mockk(relaxed = true)
-    }
-
-    private fun setupViewModel() {
         viewModel = ScheduleViewModel(
             repository = fakeRepository,
             imageLoader = mockImageLoader,
@@ -43,36 +40,24 @@ internal class ScheduleViewModelTest {
     }
 
     @Test
-    fun `Should return empty list on first initialisation`() {
-        fakeRepository.setRemoteSchedulesForTest(listOf(schedule1, schedule2))
-        fakeRepository.setLocalSchedulesForTest(emptyList())
-
-        setupViewModel()
-
-        val uiState = viewModel.uiState.value
-        uiState.isLoading shouldBe false
-        uiState.schedules shouldBe emptyList()
-        uiState.errorMessages.size shouldBe 0
-    }
-
-    @Test
-    fun `Should fetch cached schedules on initialisation`() {
+    fun `Should return refreshed schedule on fetchCacheAndRefresh`() {
         fakeRepository.setRemoteSchedulesForTest(listOf(schedule1, schedule2))
         fakeRepository.setLocalSchedulesForTest(listOf(schedule3))
 
-        setupViewModel()
+        viewModel.fetchCacheAndRefresh()
 
         val uiState = viewModel.uiState.value
         uiState.isLoading shouldBe false
-        uiState.schedules shouldContainExactly listOf(schedule3)
+        uiState.schedules shouldContainExactly listOf(schedule1, schedule2)
     }
 
     @Test
-    fun `Should return error on first initialisation when repository returned failure`() {
+    fun `Should return error without refresh on fetchCacheAndReload when fetching cache and repository returned failure`() {
         val exceptionMessage = "repository error"
         fakeRepository.setExceptionForTest(IOException(exceptionMessage))
+        fakeRepository.setRemoteSchedulesForTest(listOf(schedule1, schedule2))
 
-        setupViewModel()
+        viewModel.fetchCacheAndRefresh()
 
         val uiState = viewModel.uiState.value
         uiState.isLoading shouldBe false
@@ -85,7 +70,7 @@ internal class ScheduleViewModelTest {
     fun `Should fetch schedules successfully on refresh`() {
         fakeRepository.setRemoteSchedulesForTest(listOf(schedule1, schedule2))
         fakeRepository.setLocalSchedulesForTest(listOf(schedule3))
-        setupViewModel()
+        viewModel.fetchCacheAndRefresh()
 
         viewModel.refresh()
 
@@ -96,8 +81,8 @@ internal class ScheduleViewModelTest {
 
     @Test
     fun `Should return errors and keep previous cached schedules on failed refresh`() {
-        fakeRepository.setLocalSchedulesForTest(listOf(schedule3))
-        setupViewModel()
+        fakeRepository.setRemoteSchedulesForTest(listOf(schedule3))
+        viewModel.fetchCacheAndRefresh()
 
         val exceptionMessage = "repository error"
         fakeRepository.setExceptionForTest(IOException(exceptionMessage))
@@ -112,7 +97,7 @@ internal class ScheduleViewModelTest {
 
     @Test
     fun `Should update UI with error message on fetch failure`() {
-        setupViewModel()
+        viewModel.fetchCacheAndRefresh()
         val errorMessage = "Test error"
         fakeRepository.setExceptionForTest(Exception(errorMessage))
 
@@ -125,7 +110,7 @@ internal class ScheduleViewModelTest {
 
     @Test
     fun `Should accumulate error messages in UIState upon multiple errors`() {
-        setupViewModel()
+        viewModel.fetchCacheAndRefresh()
         val errorMessage1 = "Test error 1"
         val errorMessage2 = "Test error 2"
 
@@ -142,7 +127,7 @@ internal class ScheduleViewModelTest {
 
     @Test
     fun `Should remove error message when errorShown is called with valid ID`() {
-        setupViewModel()
+        viewModel.fetchCacheAndRefresh()
         val errorMessage = "Test error"
         fakeRepository.setExceptionForTest(Exception(errorMessage))
 
@@ -156,7 +141,7 @@ internal class ScheduleViewModelTest {
 
     @Test
     fun `Should enable scroll to top when requested`() {
-        setupViewModel()
+        viewModel.fetchCacheAndRefresh()
         val expectedRequestScrollToTop = true
         viewModel.requestScrollToTop(enabled = expectedRequestScrollToTop)
         val uiState = viewModel.uiState.value
@@ -165,7 +150,7 @@ internal class ScheduleViewModelTest {
 
     @Test
     fun `Should return the correct ImageLoader instance`() {
-        setupViewModel()
+        viewModel.fetchCacheAndRefresh()
         val expectedImageLoader = mockImageLoader
         val imageLoader = viewModel.getImageLoader()
         imageLoader shouldBeSameInstanceAs expectedImageLoader
