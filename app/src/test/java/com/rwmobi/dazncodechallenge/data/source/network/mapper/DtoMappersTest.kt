@@ -14,8 +14,10 @@ import org.junit.Test
 
 internal class DtoMappersTest {
 
+    // Test function names reviewed by ChatGPT for consistency
+
     @Test
-    fun `Should convert Event to EventNetworkDto correctly`() {
+    fun convertEventToEventNetworkDto_ShouldMapFieldsCorrectly_ForSingleEvent() {
         val event = EventSampleData.event1
         val dto = event.asEventNetworkDto()
         with(dto) {
@@ -29,7 +31,7 @@ internal class DtoMappersTest {
     }
 
     @Test
-    fun `Should convert multiple Events to EventNetworkDtos correctly`() {
+    fun convertEventsToEventNetworkDtos_ShouldMapFieldsCorrectly_ForMultipleEvents() {
         val events = listOf(
             EventSampleData.event1,
             EventSampleData.event2,
@@ -51,7 +53,7 @@ internal class DtoMappersTest {
     }
 
     @Test
-    fun `Should convert Schedule to ScheduleNetworkDto correctly`() {
+    fun convertScheduleToScheduleNetworkDto_ShouldMapFieldsCorrectly_ForSingleSchedule() {
         val schedule = ScheduleSampleData.schedule1
         val dto = schedule.asScheduleNetworkDto()
         with(dto) {
@@ -64,7 +66,7 @@ internal class DtoMappersTest {
     }
 
     @Test
-    fun `Should convert multiple Schedules to ScheduleNetworkDtos correctly`() {
+    fun convertSchedulesToScheduleNetworkDtos_ShouldMapFieldsCorrectly_ForMultipleSchedules() {
         val schedules = listOf(
             ScheduleSampleData.schedule1,
             ScheduleSampleData.schedule2,

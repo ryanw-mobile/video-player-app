@@ -57,17 +57,18 @@ internal class RoomDbDataSourceTest {
         database.close()
     }
 
+    // Test function names reviewed by ChatGPT for consistency
     // Test coverage: basic CRUD on both events and schedule
 
     @Test
-    fun emptyList_SyncOneEvent_ReturnOneEvent() = runTest {
+    fun submitEvents_ShouldReturnOneEvent_WhenOneEventSubmittedToEmptyList() = runTest {
         localDataSource.submitEvents(listOf(event1))
         val resultList = localDataSource.getEvents()
         resultList.shouldContainExactlyInAnyOrder(event1)
     }
 
     @Test
-    fun oneEvent_UpsertOneEvent_ReturnEventUpdated() = runTest {
+    fun submitEvents_ShouldUpdateEvent_WhenEventUpserted() = runTest {
         localDataSource.submitEvents(listOf(event1))
         localDataSource.submitEvents(listOf(event1Modified))
         val resultList = localDataSource.getEvents()
@@ -75,7 +76,7 @@ internal class RoomDbDataSourceTest {
     }
 
     @Test
-    fun threeEvents_SyncEmptyList_ReturnNoEvents() = runTest {
+    fun submitEvents_ShouldClearEvents_WhenEmptyListSubmitted() = runTest {
         localDataSource.submitEvents(listOf(event1, event2, event3))
         localDataSource.submitEvents(listOf())
         val resultList = localDataSource.getEvents()
@@ -83,14 +84,14 @@ internal class RoomDbDataSourceTest {
     }
 
     @Test
-    fun emptyList_SyncOneSchedule_ReturnOneSchedule() = runTest {
+    fun submitSchedule_ShouldReturnOneSchedule_WhenOneScheduleSubmittedToEmptyList() = runTest {
         localDataSource.submitSchedule(listOf(schedule1))
         val resultList = localDataSource.getSchedules()
         resultList.shouldContainExactlyInAnyOrder(schedule1)
     }
 
     @Test
-    fun oneSchedule_UpsertOneSchedule_ReturnScheduleUpdated() = runTest {
+    fun submitSchedule_ShouldUpdateSchedule_WhenScheduleUpserted() = runTest {
         localDataSource.submitSchedule(listOf(schedule1))
         localDataSource.submitSchedule(listOf(schedule1Modified))
         val resultList = localDataSource.getSchedules()
@@ -98,7 +99,7 @@ internal class RoomDbDataSourceTest {
     }
 
     @Test
-    fun threeSchedules_SyncEmptyList_ReturnNoSchedules() = runTest {
+    fun submitSchedule_ShouldClearSchedules_WhenEmptyListSubmitted() = runTest {
         localDataSource.submitSchedule(listOf(schedule1, schedule2, schedule3))
         localDataSource.submitSchedule(listOf())
         val resultList = localDataSource.getSchedules()

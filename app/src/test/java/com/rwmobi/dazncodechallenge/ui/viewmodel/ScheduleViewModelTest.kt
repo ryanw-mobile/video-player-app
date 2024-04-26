@@ -39,8 +39,10 @@ internal class ScheduleViewModelTest {
         )
     }
 
+    // Test function names reviewed by ChatGPT for consistency
+
     @Test
-    fun `Should return refreshed schedule on fetchCacheAndRefresh`() {
+    fun fetchCacheAndRefresh_ShouldDisplayRefreshedSchedules_WhenSuccessful() {
         fakeRepository.setRemoteSchedulesForTest(listOf(schedule1, schedule2))
         fakeRepository.setLocalSchedulesForTest(listOf(schedule3))
 
@@ -52,7 +54,7 @@ internal class ScheduleViewModelTest {
     }
 
     @Test
-    fun `Should return error without refresh on fetchCacheAndReload when fetching cache and repository returned failure`() {
+    fun fetchCacheAndRefresh_ShouldShowError_WhenRepositoryFails() {
         val exceptionMessage = "repository error"
         fakeRepository.setExceptionForTest(IOException(exceptionMessage))
         fakeRepository.setRemoteSchedulesForTest(listOf(schedule1, schedule2))
@@ -67,7 +69,7 @@ internal class ScheduleViewModelTest {
     }
 
     @Test
-    fun `Should fetch schedules successfully on refresh`() {
+    fun refresh_ShouldUpdateSchedulesSuccessfully_WhenCalled() {
         fakeRepository.setRemoteSchedulesForTest(listOf(schedule1, schedule2))
         fakeRepository.setLocalSchedulesForTest(listOf(schedule3))
         viewModel.fetchCacheAndRefresh()
@@ -80,7 +82,7 @@ internal class ScheduleViewModelTest {
     }
 
     @Test
-    fun `Should return errors and keep previous cached schedules on failed refresh`() {
+    fun refresh_ShouldRetainCachedSchedulesAndShowError_OnFailure() {
         fakeRepository.setRemoteSchedulesForTest(listOf(schedule3))
         viewModel.fetchCacheAndRefresh()
 
@@ -96,7 +98,7 @@ internal class ScheduleViewModelTest {
     }
 
     @Test
-    fun `Should update UI with error message on fetch failure`() {
+    fun refresh_ShouldDisplayErrorMessage_OnFetchFailure() {
         viewModel.fetchCacheAndRefresh()
         val errorMessage = "Test error"
         fakeRepository.setExceptionForTest(Exception(errorMessage))
@@ -109,7 +111,7 @@ internal class ScheduleViewModelTest {
     }
 
     @Test
-    fun `Should accumulate error messages in UIState upon multiple errors`() {
+    fun refresh_ShouldAccumulateErrorMessages_OnMultipleFailures() {
         viewModel.fetchCacheAndRefresh()
         val errorMessage1 = "Test error 1"
         val errorMessage2 = "Test error 2"
@@ -126,7 +128,7 @@ internal class ScheduleViewModelTest {
     }
 
     @Test
-    fun `Should remove error message when errorShown is called with valid ID`() {
+    fun errorShown_ShouldClearErrorMessage_WhenCalledWithValidId() {
         viewModel.fetchCacheAndRefresh()
         val errorMessage = "Test error"
         fakeRepository.setExceptionForTest(Exception(errorMessage))
@@ -140,7 +142,7 @@ internal class ScheduleViewModelTest {
     }
 
     @Test
-    fun `Should enable scroll to top when requested`() {
+    fun requestScrollToTop_ShouldEnableScrollToTop_WhenRequested() {
         viewModel.fetchCacheAndRefresh()
         val expectedRequestScrollToTop = true
         viewModel.requestScrollToTop(enabled = expectedRequestScrollToTop)
@@ -149,7 +151,7 @@ internal class ScheduleViewModelTest {
     }
 
     @Test
-    fun `Should return the correct ImageLoader instance`() {
+    fun getImageLoader_ShouldReturnCorrectInstance() {
         viewModel.fetchCacheAndRefresh()
         val expectedImageLoader = mockImageLoader
         val imageLoader = viewModel.getImageLoader()
