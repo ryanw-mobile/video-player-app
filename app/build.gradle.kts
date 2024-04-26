@@ -73,7 +73,7 @@ android {
 
         resourceConfigurations += setOf("en")
 
-        testInstrumentationRunner = "com.rwmobi.dazncodechallenge.ui.utils.CustomTestRunner"
+        testInstrumentationRunner = "com.rwmobi.dazncodechallenge.ui.test.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }

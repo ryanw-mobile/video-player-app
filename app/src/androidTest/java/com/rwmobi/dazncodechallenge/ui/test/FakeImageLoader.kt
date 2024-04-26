@@ -1,9 +1,11 @@
 /*
  * Copyright (c) 2024. Ryan Wong
  * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
  */
 
-package com.rwmobi.dazncodechallenge.ui.utils
+package com.rwmobi.dazncodechallenge.ui.test
 
 import android.content.Context
 import android.graphics.Color
@@ -24,7 +26,7 @@ import kotlinx.coroutines.CompletableDeferred
 /**
  * Reference: https://coil-kt.github.io/coil/image_loaders/#testing,
  */
-class FakeImageLoader(private val context: Context) : ImageLoader {
+internal class FakeImageLoader(private val context: Context) : ImageLoader {
     override val defaults = DefaultRequestOptions()
     override val components = ComponentRegistry()
     override val memoryCache: MemoryCache? get() = null

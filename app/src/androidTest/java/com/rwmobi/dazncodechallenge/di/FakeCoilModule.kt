@@ -7,10 +7,12 @@
 
 package com.rwmobi.dazncodechallenge.di
 
-import com.rwmobi.dazncodechallenge.data.repository.FakeUITestRepository
-import com.rwmobi.dazncodechallenge.domain.repository.Repository
+import android.content.Context
+import coil.ImageLoader
+import com.rwmobi.dazncodechallenge.ui.test.FakeImageLoader
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import javax.inject.Singleton
@@ -18,12 +20,12 @@ import javax.inject.Singleton
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [RepositoryModule::class],
+    replaces = [CoilModule::class],
 )
-object FakeBaseRepositoryModule {
-    @Provides
+object FakeCoilModule {
     @Singleton
-    fun provideFakeRepository(): Repository {
-        return FakeUITestRepository()
+    @Provides
+    fun provideFakeCoilImageLoader(@ApplicationContext context: Context): ImageLoader {
+        return FakeImageLoader(context = context)
     }
 }

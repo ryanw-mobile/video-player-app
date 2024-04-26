@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
+import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
 import com.rwmobi.dazncodechallenge.ui.components.ScheduleListItem
 import com.rwmobi.dazncodechallenge.ui.previewparameter.SchedulesProvider
@@ -43,13 +44,13 @@ internal fun SchedulesList(
     onScrolledToTop: () -> Unit,
 ) {
     val dimension = LocalConfiguration.current.getDimension()
-    val contentDescriptionTrendingList = "some list"
     val lazyListState = rememberLazyListState()
+    val context = LocalContext.current
 
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .semantics { contentDescription = contentDescriptionTrendingList },
+            .semantics { contentDescription = context.getString(R.string.content_description_schedule_list) },
         state = lazyListState,
     ) {
         itemsIndexed(

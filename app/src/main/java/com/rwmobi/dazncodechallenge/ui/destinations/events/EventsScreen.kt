@@ -15,13 +15,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import coil.ImageLoader
+import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.components.NoDataScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +46,7 @@ fun EventsScreen(
     }
 
     val pullRefreshState = rememberPullToRefreshState()
-    var firstRefreshRequested = false
+    val context = LocalContext.current
 
     Box(modifier = modifier.nestedScroll(connection = pullRefreshState.nestedScrollConnection)) {
         uiState.events?.let { events ->
@@ -56,7 +59,7 @@ fun EventsScreen(
                     onScrolledToTop = uiEvent.onScrolledToTop,
                     onPlayVideo = uiEvent.onPlayVideo,
                 )
-            } else if (!uiState.isLoading && firstRefreshRequested) {
+            } else if (!uiState.isLoading) {
                 NoDataScreen(
                     modifier = Modifier
                         .fillMaxSize()
@@ -66,7 +69,9 @@ fun EventsScreen(
         }
 
         PullToRefreshContainer(
-            modifier = Modifier.align(Alignment.TopCenter),
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .semantics { contentDescription = context.getString(R.string.content_description_pull_to_refresh) },
             state = pullRefreshState,
         )
 
@@ -86,10 +91,8 @@ fun EventsScreen(
             }
         }
 
-        DisposableEffect(true) {
+        LaunchedEffect(true) {
             uiEvent.onInitialLoad()
-            firstRefreshRequested = true
-            onDispose { }
         }
     }
 }

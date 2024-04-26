@@ -1,6 +1,8 @@
 /*
  * Copyright (c) 2024. Ryan Wong
  * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
  */
 
 package com.rwmobi.dazncodechallenge.ui.components
@@ -30,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
 import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_navigation_checked
@@ -42,14 +45,17 @@ fun AppNavigationRail(
     navController: NavController,
     onCurrentRouteSecondTapped: (item: AppNavItem) -> Unit,
 ) {
+    val context = LocalContext.current
+
     NavigationRail(
-        modifier = modifier,
+        modifier = modifier.semantics {
+            contentDescription = context.getString(R.string.content_description_navigation_rail)
+        },
         containerColor = MaterialTheme.colorScheme.background,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         val dimension = LocalConfiguration.current.getDimension()
-        val context = LocalContext.current
 
         Spacer(Modifier.weight(1f))
 

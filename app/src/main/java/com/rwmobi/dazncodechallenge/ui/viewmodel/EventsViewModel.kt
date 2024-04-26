@@ -55,7 +55,7 @@ constructor(
     fun fetchCacheAndRefresh() {
         startLoading()
         viewModelScope.launch(dispatcher) {
-            val isSuccess = getEvents()
+            val isSuccess = getEvents(setLoadingCompleted = false)
             if (isSuccess) {
                 refresh()
             }
@@ -71,14 +71,13 @@ constructor(
                 val exception = refreshResult.exceptionOrNull() ?: Exception("Unknown network communication exception")
                 Timber.tag("refresh").e(exception)
                 updateUIForError(exception.message ?: "Unknown network communication error")
-                return@launch
+            } else {
+                getEvents()
             }
-
-            getEvents()
         }
     }
 
-    private suspend fun getEvents(): Boolean {
+    private suspend fun getEvents(setLoadingCompleted: Boolean = true): Boolean {
         val getEventsResult = repository.getEvents()
         return when (getEventsResult.isSuccess) {
             false -> {
@@ -89,7 +88,7 @@ constructor(
             true -> {
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
-                        isLoading = false,
+                        isLoading = !setLoadingCompleted,
                         events = getEventsResult.getOrNull() ?: emptyList(),
                     )
                 }

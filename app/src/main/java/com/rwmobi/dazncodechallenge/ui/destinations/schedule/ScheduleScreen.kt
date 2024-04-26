@@ -44,7 +44,6 @@ fun ScheduleScreen(
     }
 
     val pullRefreshState = rememberPullToRefreshState()
-    var firstRefreshRequested = false
 
     Box(modifier = modifier.nestedScroll(connection = pullRefreshState.nestedScrollConnection)) {
         uiState.schedules?.let { schedules ->
@@ -56,7 +55,7 @@ fun ScheduleScreen(
                     requestScrollToTop = uiState.requestScrollToTop,
                     onScrolledToTop = uiEvent.onScrolledToTop,
                 )
-            } else if (!uiState.isLoading && firstRefreshRequested) {
+            } else if (!uiState.isLoading) {
                 NoDataScreen(
                     modifier = Modifier
                         .fillMaxSize()
@@ -88,7 +87,6 @@ fun ScheduleScreen(
 
         LaunchedEffect(true) {
             uiEvent.onInitialLoad()
-            firstRefreshRequested = true
 
             while (isActive) {
                 delay(30_000)
