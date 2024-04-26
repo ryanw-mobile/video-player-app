@@ -13,6 +13,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.printToLog
 import com.rwmobi.dazncodechallenge.R
@@ -29,6 +30,14 @@ internal class ScheduleScreenTestRobot(
     fun scrollToListItem(index: Int) {
         with(composeTestRule) {
             onNodeWithContentDescription(label = activity.getString(R.string.content_description_schedule_list)).performScrollToIndex(index = index)
+        }
+    }
+
+    fun tapOK() {
+        with(composeTestRule) {
+            onNode(
+                matcher = withRole(Role.Button).and(hasText(text = activity.getString(R.string.ok))),
+            ).performClick()
         }
     }
 
@@ -68,6 +77,15 @@ internal class ScheduleScreenTestRobot(
             onNode(
                 matcher = withRole(Role.Button).and(hasText(text = activity.getString(R.string.ok))),
             ).assertIsDisplayed()
+        }
+    }
+
+    fun assertSnackbarIsNotDisplayed(message: String) {
+        with(composeTestRule) {
+            onNodeWithText(text = message).assertDoesNotExist()
+            onNode(
+                matcher = withRole(Role.Button).and(hasText(text = activity.getString(R.string.ok))),
+            ).assertDoesNotExist()
         }
     }
 }

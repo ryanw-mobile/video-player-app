@@ -88,6 +88,20 @@ internal class ScheduleScreenTest {
 
             // expect snackbar with error message
             assertSnackbarIsDisplayed(message = exceptionMessage)
+
+            tapOK()
+            assertSnackbarIsNotDisplayed(message = exceptionMessage)
+        }
+
+        with(mainActivityTestRobot) {
+            // tap on navigation bar again to scroll to top
+            tapNavigationSchedule()
+        }
+
+        with(scheduleScreenTestRobot) {
+            assertScheduleItemIsDisplayed(
+                title = ScheduleListSampleData.listOfSixteen[0].title,
+            )
         }
     }
 }
