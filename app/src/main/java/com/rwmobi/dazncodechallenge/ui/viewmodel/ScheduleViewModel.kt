@@ -53,7 +53,7 @@ class ScheduleViewModel @Inject constructor(
     fun fetchCacheAndRefresh() {
         startLoading()
         viewModelScope.launch(dispatcher) {
-            val isSuccess = getSchedule()
+            val isSuccess = getSchedule(setLoadingCompleted = false)
             if (isSuccess) {
                 refresh()
             }
@@ -76,7 +76,7 @@ class ScheduleViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getSchedule(): Boolean {
+    private suspend fun getSchedule(setLoadingCompleted: Boolean = true): Boolean {
         val getScheduleResult = repository.getSchedule()
         return when (getScheduleResult.isSuccess) {
             false -> {
@@ -87,7 +87,7 @@ class ScheduleViewModel @Inject constructor(
             true -> {
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
-                        isLoading = false,
+                        isLoading = !setLoadingCompleted,
                         schedules = getScheduleResult.getOrNull() ?: emptyList(),
                     )
                 }

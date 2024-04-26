@@ -15,4 +15,6 @@
     <string name="generic_error_string">We encountered an error when communicating with the server. Please try again later.</string>
     <string name="content_description_navigation_bar">Navigation Bar</string>
     <string name="content_description_navigation_rail">Navigation Rail</string>
+    <string name="content_description_schedule_list">Schedule List</string>
+    <string name="content_description_events_list">Events List</string>
 </resources>

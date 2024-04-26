@@ -55,7 +55,7 @@ constructor(
     fun fetchCacheAndRefresh() {
         startLoading()
         viewModelScope.launch(dispatcher) {
-            val isSuccess = getEvents()
+            val isSuccess = getEvents(setLoadingCompleted = false)
             if (isSuccess) {
                 refresh()
             }
@@ -78,7 +78,7 @@ constructor(
         }
     }
 
-    private suspend fun getEvents(): Boolean {
+    private suspend fun getEvents(setLoadingCompleted: Boolean = true): Boolean {
         val getEventsResult = repository.getEvents()
         return when (getEventsResult.isSuccess) {
             false -> {
@@ -89,7 +89,7 @@ constructor(
             true -> {
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
-                        isLoading = false,
+                        isLoading = !setLoadingCompleted,
                         events = getEventsResult.getOrNull() ?: emptyList(),
                     )
                 }

@@ -15,7 +15,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -43,7 +42,6 @@ fun EventsScreen(
     }
 
     val pullRefreshState = rememberPullToRefreshState()
-    var firstRefreshRequested = false
 
     Box(modifier = modifier.nestedScroll(connection = pullRefreshState.nestedScrollConnection)) {
         uiState.events?.let { events ->
@@ -56,7 +54,7 @@ fun EventsScreen(
                     onScrolledToTop = uiEvent.onScrolledToTop,
                     onPlayVideo = uiEvent.onPlayVideo,
                 )
-            } else if (!uiState.isLoading && firstRefreshRequested) {
+            } else if (!uiState.isLoading) {
                 NoDataScreen(
                     modifier = Modifier
                         .fillMaxSize()
@@ -86,10 +84,8 @@ fun EventsScreen(
             }
         }
 
-        DisposableEffect(true) {
+        LaunchedEffect(true) {
             uiEvent.onInitialLoad()
-            firstRefreshRequested = true
-            onDispose { }
         }
     }
 }
