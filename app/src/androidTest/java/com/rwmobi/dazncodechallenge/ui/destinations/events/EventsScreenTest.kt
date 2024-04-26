@@ -107,7 +107,7 @@ internal class EventsScreenTest {
             // Repository set to return error, trigger auto refresh
             val exceptionMessage = "Testing Exception"
             fakeUITestRepository.setExceptionForTest(IOException(exceptionMessage))
-            performPullToRefresh2()
+            performPullToRefresh()
 
             // expect snackbar with error message
             assertSnackbarIsDisplayed(message = exceptionMessage)

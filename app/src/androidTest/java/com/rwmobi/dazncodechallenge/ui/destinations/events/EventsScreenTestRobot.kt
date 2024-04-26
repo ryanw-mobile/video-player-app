@@ -42,19 +42,6 @@ internal class EventsScreenTestRobot(
         }
     }
 
-    fun performPullToRefresh2() {
-        with(composeTestRule) {
-            onNodeWithContentDescription(label = activity.getString(R.string.content_description_events_list))
-                .performTouchInput {
-                    swipeDown(
-                        startY = 0f,
-                        endY = 500f,
-                        durationMillis = 1_000,
-                    )
-                }
-        }
-    }
-
     fun tapOK() {
         with(composeTestRule) {
             onNode(
