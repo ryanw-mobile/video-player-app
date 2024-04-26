@@ -71,10 +71,9 @@ constructor(
                 val exception = refreshResult.exceptionOrNull() ?: Exception("Unknown network communication exception")
                 Timber.tag("refresh").e(exception)
                 updateUIForError(exception.message ?: "Unknown network communication error")
-                return@launch
+            } else {
+                getEvents()
             }
-
-            getEvents()
         }
     }
 

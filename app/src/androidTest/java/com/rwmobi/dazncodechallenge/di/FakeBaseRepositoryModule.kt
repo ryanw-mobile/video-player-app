@@ -7,7 +7,7 @@
 
 package com.rwmobi.dazncodechallenge.di
 
-import com.rwmobi.dazncodechallenge.data.repository.FakeRepository
+import com.rwmobi.dazncodechallenge.data.repository.FakeUITestRepository
 import com.rwmobi.dazncodechallenge.domain.repository.Repository
 import dagger.Module
 import dagger.Provides
@@ -24,6 +24,6 @@ object FakeBaseRepositoryModule {
     @Provides
     @Singleton
     fun provideFakeRepository(): Repository {
-        return FakeRepository()
+        return FakeUITestRepository()
     }
 }

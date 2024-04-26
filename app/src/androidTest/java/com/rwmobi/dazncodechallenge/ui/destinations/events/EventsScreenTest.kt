@@ -8,9 +8,13 @@
 package com.rwmobi.dazncodechallenge.ui.destinations.events
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.rwmobi.dazncodechallenge.MainActivity
+import com.rwmobi.dazncodechallenge.data.repository.FakeUITestRepository
+import com.rwmobi.dazncodechallenge.domain.repository.Repository
 import com.rwmobi.dazncodechallenge.ui.MainActivityTestRobot
+import com.rwmobi.dazncodechallenge.ui.test.EventsListSampleData
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
@@ -18,6 +22,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.IOException
+import javax.inject.Inject
 
 @kotlinx.coroutines.ExperimentalCoroutinesApi
 @HiltAndroidTest
@@ -29,54 +35,85 @@ internal class EventsScreenTest {
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
+    @Inject
+    lateinit var repository: Repository
+
     private lateinit var mainActivityTestRobot: MainActivityTestRobot
     private lateinit var eventsScreenTestRobot: EventsScreenTestRobot
+    private lateinit var fakeUITestRepository: FakeUITestRepository
 
     @Before
     fun setUp() {
-        runTest {
-            hiltRule.inject()
-            mainActivityTestRobot = MainActivityTestRobot(composeTestRule)
-            eventsScreenTestRobot = EventsScreenTestRobot(composeTestRule)
-        }
+        hiltRule.inject()
+        mainActivityTestRobot = MainActivityTestRobot(composeTestRule)
+        eventsScreenTestRobot = EventsScreenTestRobot(composeTestRule)
+        fakeUITestRepository = repository as FakeUITestRepository // workaround
     }
 
     @Test
-    fun eventsJourneyTest() = runTest {
+    fun eventJourneyTest() = runTest {
+        fakeUITestRepository.setRemoteEventsForTest(events = emptyList())
+
         with(mainActivityTestRobot) {
             tapNavigationEvents()
             assertEventsTabIsSelected()
         }
 
-        // initialise both local and remote data source have no data to return
+        with(eventsScreenTestRobot) {
+            // Repository returns no data - expect no data screen
+            assertNoDataScreenIsDisplayed()
+            assertEventListIsNotDisplayed()
+
+            // Remote data source supplies some data, pull to refresh
+            fakeUITestRepository.setRemoteEventsForTest(events = EventsListSampleData.listOfSixteen)
+            performPullToRefresh()
+
+            // expect full list to be shown
+            assertNoDataScreenIsNotDisplayed()
+            assertEventListIsDisplayed()
+            assertEventItemIsDisplayed(
+                title = EventsListSampleData.listOfSixteen[0].title,
+            )
+
+            val lastListItemIndex = EventsListSampleData.listOfSixteen.lastIndex
+            scrollToListItem(lastListItemIndex)
+            assertEventItemIsDisplayed(
+                title = EventsListSampleData.listOfSixteen[lastListItemIndex].title,
+            )
+
+            tapListItem(lastListItemIndex)
+        }
+
+        with(mainActivityTestRobot) {
+            assertExoPlayerIsDisplayed()
+            assertNavigationBarIsNotDisplayed()
+
+            pressBack()
+            waitUntilPlayerDismissed()
+
+            assertExoPlayerIsNotDisplayed()
+            assertNavigationBarIsDisplayed()
+            assertEventsTabIsSelected()
+
+            // tap on navigation bar again to scroll to top
+            tapNavigationEvents()
+        }
 
         with(eventsScreenTestRobot) {
-            // check no data screen is displayed
-            // check list is not displayed
-            // set remote data source has data
-            // pull to refresh (how?)
-            // check no data screen is not displayed
-            // check list is displayed
-            // click on an event
-            // check if exoplayer is opened
-            // back
-            // check the list is displayed
+            assertEventItemIsDisplayed(
+                title = EventsListSampleData.listOfSixteen[0].title,
+            )
+
+            // Repository set to return error, trigger auto refresh
+            val exceptionMessage = "Testing Exception"
+            fakeUITestRepository.setExceptionForTest(IOException(exceptionMessage))
+            performPullToRefresh2()
+
+            // expect snackbar with error message
+            assertSnackbarIsDisplayed(message = exceptionMessage)
+
+            tapOK()
+            assertSnackbarIsNotDisplayed(message = exceptionMessage)
         }
     }
-
-//    @Test
-//    fun repositoryError_ShowErrorDialog() =
-//        runTest {
-//            // GIVEN - the repository is set to always return error
-//            val errorMessage = "Instrumentation test error"
-//            (repository as FakeRepository).setReturnError(true, errorMessage)
-//
-//            // WHEN - Launching the fragment
-//            launchFragmentInHiltContainer<ScheduleFragment>(Bundle(), R.style.Theme_DaznCodeChallenge)
-//
-//            // THEN - error dialog is shown
-//            // Expects reminder to be saved successfully
-//            Espresso.onView(withText(R.string.something_went_wrong))
-//                .check(matches(isDisplayed()))
-//        }
 }

@@ -12,6 +12,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
@@ -34,9 +35,39 @@ internal class MainActivityTestRobot(
         composeTestRule.onRoot().printToLog("SemanticTree")
     }
 
+    fun tapNavigationEvents() {
+        with(composeTestRule) {
+            onNode(
+                matcher = withRole(Role.Tab).and(hasContentDescription(value = activity.getString(R.string.events))),
+            ).performClick()
+        }
+    }
+
+    fun tapNavigationSchedule() {
+        with(composeTestRule) {
+            onNode(
+                matcher = withRole(Role.Tab).and(hasContentDescription(value = activity.getString(R.string.schedule))),
+            ).performClick()
+        }
+    }
+
+    fun waitUntilPlayerDismissed() {
+        with(composeTestRule) {
+            waitUntil(timeoutMillis = 2_000) {
+                !onNodeWithContentDescription(label = activity.getString(R.string.content_description_video_player)).isDisplayed()
+            }
+        }
+    }
+
     fun assertNavigationBarIsDisplayed() {
         with(composeTestRule) {
             onNodeWithContentDescription(label = activity.getString(R.string.content_description_navigation_bar)).assertIsDisplayed()
+        }
+    }
+
+    fun assertNavigationBarIsNotDisplayed() {
+        with(composeTestRule) {
+            onNodeWithContentDescription(label = activity.getString(R.string.content_description_navigation_bar)).assertDoesNotExist()
         }
     }
 
@@ -80,19 +111,15 @@ internal class MainActivityTestRobot(
         }
     }
 
-    fun tapNavigationEvents() {
+    fun assertExoPlayerIsDisplayed() {
         with(composeTestRule) {
-            onNode(
-                matcher = withRole(Role.Tab).and(hasContentDescription(value = activity.getString(R.string.events))),
-            ).performClick()
+            onNodeWithContentDescription(label = activity.getString(R.string.content_description_video_player)).assertIsDisplayed()
         }
     }
 
-    fun tapNavigationSchedule() {
+    fun assertExoPlayerIsNotDisplayed() {
         with(composeTestRule) {
-            onNode(
-                matcher = withRole(Role.Tab).and(hasContentDescription(value = activity.getString(R.string.schedule))),
-            ).performClick()
+            onNodeWithContentDescription(label = activity.getString(R.string.content_description_video_player)).assertDoesNotExist()
         }
     }
 }

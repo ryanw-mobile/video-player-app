@@ -20,7 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import coil.ImageLoader
+import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.components.NoDataScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,6 +46,7 @@ fun EventsScreen(
     }
 
     val pullRefreshState = rememberPullToRefreshState()
+    val context = LocalContext.current
 
     Box(modifier = modifier.nestedScroll(connection = pullRefreshState.nestedScrollConnection)) {
         uiState.events?.let { events ->
@@ -64,7 +69,9 @@ fun EventsScreen(
         }
 
         PullToRefreshContainer(
-            modifier = Modifier.align(Alignment.TopCenter),
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .semantics { contentDescription = context.getString(R.string.content_description_pull_to_refresh) },
             state = pullRefreshState,
         )
 

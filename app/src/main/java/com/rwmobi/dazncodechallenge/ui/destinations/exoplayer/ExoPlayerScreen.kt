@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import com.rwmobi.dazncodechallenge.R
 import io.sanghun.compose.video.RepeatMode
 import io.sanghun.compose.video.VideoPlayer
 import io.sanghun.compose.video.controller.VideoPlayerControllerConfig
@@ -24,13 +28,16 @@ fun ExoPlayerScreen(
     modifier: Modifier = Modifier,
     videoUrl: Uri,
 ) {
+    val context = LocalContext.current
+
     Box(
         modifier = modifier,
     ) {
         VideoPlayer(
             modifier = Modifier
                 .fillMaxSize()
-                .align(Alignment.Center),
+                .align(Alignment.Center)
+                .semantics { contentDescription = context.getString(R.string.content_description_video_player) },
             mediaItems = listOf(
                 VideoPlayerMediaItem.NetworkMediaItem(url = videoUrl.toString()),
             ),

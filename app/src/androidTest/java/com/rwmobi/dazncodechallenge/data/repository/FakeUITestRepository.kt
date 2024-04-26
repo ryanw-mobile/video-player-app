@@ -12,7 +12,7 @@ import com.rwmobi.dazncodechallenge.domain.model.Schedule
 import com.rwmobi.dazncodechallenge.domain.repository.Repository
 import javax.inject.Inject
 
-class FakeRepository @Inject constructor() : Repository {
+class FakeUITestRepository @Inject constructor() : Repository {
     private var localEvents: List<Event> = emptyList()
     private var localSchedules: List<Schedule> = emptyList()
     private var remoteEvents: List<Event> = emptyList()

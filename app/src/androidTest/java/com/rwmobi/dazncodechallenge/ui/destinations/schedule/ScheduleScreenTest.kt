@@ -10,7 +10,7 @@ package com.rwmobi.dazncodechallenge.ui.destinations.schedule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.rwmobi.dazncodechallenge.MainActivity
-import com.rwmobi.dazncodechallenge.data.repository.FakeRepository
+import com.rwmobi.dazncodechallenge.data.repository.FakeUITestRepository
 import com.rwmobi.dazncodechallenge.domain.repository.Repository
 import com.rwmobi.dazncodechallenge.ui.MainActivityTestRobot
 import com.rwmobi.dazncodechallenge.ui.test.ScheduleListSampleData
@@ -39,22 +39,23 @@ internal class ScheduleScreenTest {
 
     private lateinit var mainActivityTestRobot: MainActivityTestRobot
     private lateinit var scheduleScreenTestRobot: ScheduleScreenTestRobot
-    private lateinit var fakeRepository: FakeRepository
+    private lateinit var fakeUITestRepository: FakeUITestRepository
 
     @Before
     fun setUp() {
         hiltRule.inject()
         mainActivityTestRobot = MainActivityTestRobot(composeTestRule)
         scheduleScreenTestRobot = ScheduleScreenTestRobot(composeTestRule)
-        fakeRepository = repository as FakeRepository // workaround
+        fakeUITestRepository = repository as FakeUITestRepository // workaround
     }
 
     @Test
     fun scheduleJourneyTest() = runTest {
-        fakeRepository.setRemoteSchedulesForTest(schedule = emptyList())
+        fakeUITestRepository.setRemoteSchedulesForTest(schedule = emptyList())
 
         with(mainActivityTestRobot) {
-            // Switch to the Schedule Tab
+            // Switch to the Schedule Tab - ensure it is not a double tap
+            tapNavigationEvents()
             tapNavigationSchedule()
             assertScheduleTabIsSelected()
         }
@@ -65,7 +66,7 @@ internal class ScheduleScreenTest {
             assertScheduleListIsNotDisplayed()
 
             // Remote data source supplies some data, trigger auto refresh
-            fakeRepository.setRemoteSchedulesForTest(schedule = ScheduleListSampleData.listOfSixteen)
+            fakeUITestRepository.setRemoteSchedulesForTest(schedule = ScheduleListSampleData.listOfSixteen)
             composeTestRule.mainClock.advanceTimeBy(milliseconds = 31_000)
 
             // expect full list to be shown
@@ -83,7 +84,7 @@ internal class ScheduleScreenTest {
 
             // Repository set to return error, trigger auto refresh
             val exceptionMessage = "Testing Exception"
-            fakeRepository.setExceptionForTest(IOException(exceptionMessage))
+            fakeUITestRepository.setExceptionForTest(IOException(exceptionMessage))
             composeTestRule.mainClock.advanceTimeBy(milliseconds = 31_000)
 
             // expect snackbar with error message
