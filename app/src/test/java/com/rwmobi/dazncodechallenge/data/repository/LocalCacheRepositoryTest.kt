@@ -45,8 +45,10 @@ internal class LocalCacheRepositoryTest {
         )
     }
 
+    // Test function names reviewed by ChatGPT for consistencies
+
     @Test
-    fun `Should return failure when refreshEvents and remote returned an exception`() = runTest {
+    fun refreshEvents_ShouldReturnFailure_WhenRemoteThrowsException() = runTest {
         remoteDataSource.setExceptionForTest(exception = IOException())
 
         val result = localCacheRepository.refreshEvents()
@@ -56,7 +58,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should return success when refreshEvents and remote returned empty list`() = runTest {
+    fun refreshEvents_ShouldReturnSuccess_WhenRemoteReturnsEmptyList() = runTest {
         val remoteEvents = emptyList<Event>()
         remoteDataSource.setEventsForTest(remoteEvents)
 
@@ -66,7 +68,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should return success when refreshEvents and remote returned data`() = runTest {
+    fun refreshEvents_ShouldReturnSuccess_WhenRemoteReturnsData() = runTest {
         val remoteEvents = listOf(event1, event2, event3)
         remoteDataSource.setEventsForTest(remoteEvents)
 
@@ -76,7 +78,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should cache remote events when refreshEvents and data source returns data`() = runTest {
+    fun refreshEvents_ShouldCacheRemoteEvents_WhenDataSourceReturnsData() = runTest {
         val remoteEvents = listOf(event1, event2, event3)
         remoteDataSource.setEventsForTest(remoteEvents)
 
@@ -88,7 +90,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should overwrite cached events when refreshEvents and data source returns data`() = runTest {
+    fun refreshEvents_ShouldOverwriteCachedEvents_WhenDataSourceReturnsData() = runTest {
         val remoteEvents = listOf(event1, event2)
         remoteDataSource.setEventsForTest(remoteEvents)
         localDataSource.submitEvents(listOf(event3))
@@ -101,7 +103,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should clear cached events when refreshEvents and remote returns empty list`() = runTest {
+    fun refreshEvents_ShouldClearCachedEvents_WhenRemoteReturnsEmptyList() = runTest {
         val remoteEvents = emptyList<Event>()
         remoteDataSource.setEventsForTest(remoteEvents)
         localDataSource.submitEvents(listOf(event3))
@@ -114,7 +116,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should retain cached events when refreshEvents and remote returns exception`() = runTest {
+    fun refreshEvents_ShouldRetainCachedEvents_WhenRemoteThrowsException() = runTest {
         val localEvents = listOf(event1, event2, event3)
         remoteDataSource.setExceptionForTest(exception = IOException())
         localDataSource.submitEvents(localEvents)
@@ -127,7 +129,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should return cached events without refreshEvents`() = runTest {
+    fun getEvents_ShouldReturnCachedEvents_WithoutRefresh() = runTest {
         val localEvents = listOf(event1, event2, event3)
         localDataSource.submitEvents(localEvents)
 
@@ -139,7 +141,7 @@ internal class LocalCacheRepositoryTest {
 
     // Schedules - the same set of tests but different objects
     @Test
-    fun `Should return failure when refreshSchedule and remote returned an exception`() = runTest {
+    fun refreshSchedule_ShouldReturnFailure_WhenRemoteThrowsException() = runTest {
         remoteDataSource.setExceptionForTest(exception = IOException())
 
         val result = localCacheRepository.refreshSchedule()
@@ -149,7 +151,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should return success when refreshSchedule and remote returned empty list`() = runTest {
+    fun refreshSchedule_ShouldReturnSuccess_WhenRemoteReturnsEmptyList() = runTest {
         val remoteSchedule = emptyList<Schedule>()
         remoteDataSource.setScheduleForTest(remoteSchedule)
 
@@ -159,7 +161,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should return success when refreshSchedule and remote returned data`() = runTest {
+    fun refreshSchedule_ShouldReturnSuccess_WhenRemoteReturnsData() = runTest {
         val remoteSchedule = listOf(schedule1, schedule2, schedule3)
         remoteDataSource.setScheduleForTest(remoteSchedule)
 
@@ -169,7 +171,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should cache remote Schedule when refreshSchedule and data source returns data`() = runTest {
+    fun refreshSchedule_ShouldCacheRemoteSchedules_WhenDataSourceReturnsData() = runTest {
         val remoteSchedule = listOf(schedule1, schedule2, schedule3)
         remoteDataSource.setScheduleForTest(remoteSchedule)
 
@@ -181,7 +183,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should overwrite cached Schedule when refreshSchedule and data source returns data`() = runTest {
+    fun refreshSchedule_ShouldOverwriteCachedSchedules_WhenDataSourceReturnsData() = runTest {
         val remoteSchedule = listOf(schedule1, schedule2)
         remoteDataSource.setScheduleForTest(remoteSchedule)
         localDataSource.submitSchedule(listOf(schedule3))
@@ -194,7 +196,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should clear cached Schedule when refreshSchedule and remote returns empty list`() = runTest {
+    fun refreshSchedule_ShouldClearCachedSchedules_WhenRemoteReturnsEmptyList() = runTest {
         val remoteSchedule = emptyList<Schedule>()
         remoteDataSource.setScheduleForTest(remoteSchedule)
         localDataSource.submitSchedule(listOf(schedule3))
@@ -207,7 +209,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should retain cached Schedule when refreshSchedule and remote returns exception`() = runTest {
+    fun refreshSchedule_ShouldRetainCachedSchedules_WhenRemoteThrowsException() = runTest {
         val localSchedule = listOf(schedule1, schedule2, schedule3)
         remoteDataSource.setExceptionForTest(exception = IOException())
         localDataSource.submitSchedule(localSchedule)
@@ -220,7 +222,7 @@ internal class LocalCacheRepositoryTest {
     }
 
     @Test
-    fun `Should return cached Schedule without refreshSchedule`() = runTest {
+    fun getSchedule_ShouldReturnCachedSchedules_WithoutRefresh() = runTest {
         val localSchedule = listOf(schedule1, schedule2, schedule3)
         localDataSource.submitSchedule(localSchedule)
 
