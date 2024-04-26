@@ -47,8 +47,10 @@ internal class EventDaoTest {
         database.close()
     }
 
+    // Test function names reviewed by ChatGPT for consistencies
+
     @Test
-    fun insertEvent_GetById_ReturnSameEvent() = runTest {
+    fun getEventById_ShouldReturnInsertedEvent() = runTest {
         // GIVEN - empty database
         database.eventsDao.insert(event1.asEventDbEntity())
         val result = database.eventsDao.getEventById(event1.eventId)
@@ -56,7 +58,7 @@ internal class EventDaoTest {
     }
 
     @Test
-    fun insertAll_GetEvents_ReturnCorrectListSize() = runTest {
+    fun getEvents_ShouldReturnAllInsertedEvents() = runTest {
         // GIVEN - Empty database
         database.eventsDao.insertAll(listOf(event1, event2, event3).asEventDbEntity())
         val result = database.eventsDao.getEvents()
@@ -64,7 +66,7 @@ internal class EventDaoTest {
     }
 
     @Test
-    fun upsertEvent_GetById_ReturnUpdatedEvent() = runTest {
+    fun getEventById_ShouldReturnUpdatedEventAfterUpsert() = runTest {
         database.eventsDao.insert(event1.asEventDbEntity())
         database.eventsDao.insert(event1Modified.asEventDbEntity())
         val result = database.eventsDao.getEventById(event1.eventId)
@@ -72,7 +74,7 @@ internal class EventDaoTest {
     }
 
     @Test
-    fun deleteEvent_GetById_ReturnNull() = runTest {
+    fun getEventById_ShouldReturnNullAfterEventDeletion() = runTest {
         database.eventsDao.insert(event1.asEventDbEntity())
         database.eventsDao.delete(event1.eventId)
         val result = database.eventsDao.getEventById(event1.eventId)
@@ -80,7 +82,7 @@ internal class EventDaoTest {
     }
 
     @Test
-    fun insertAll_DeleteOneAndGetById_ReturnNull() = runTest {
+    fun getEventById_ShouldReturnNullAfterDeletingEvent() = runTest {
         database.eventsDao.insertAll(
             listOf(event1, event2, event3).asEventDbEntity(),
         )
@@ -90,7 +92,7 @@ internal class EventDaoTest {
     }
 
     @Test
-    fun insertAll_Clear_ReturnEmptyList() = runTest {
+    fun getEvents_ShouldReturnEmptyListAfterClear() = runTest {
         database.eventsDao.insertAll(listOf(event1, event2, event3).asEventDbEntity())
         database.eventsDao.clear()
         val result = database.eventsDao.getEvents()
@@ -99,7 +101,7 @@ internal class EventDaoTest {
 
     // Dirty bit testing
     @Test
-    fun insertNewEvent_GetById_ReturnDirtyFalse() = runTest {
+    fun getEventById_ShouldReturnEventWithDirtyFlagFalseAfterInsert() = runTest {
         // GIVEN - empty database
         database.eventsDao.insert(event1.asEventDbEntity())
         val result = database.eventsDao.getEventById(event1.eventId)
@@ -107,7 +109,7 @@ internal class EventDaoTest {
     }
 
     @Test
-    fun markDirty_GetById_ReturnDirtyTrue() = runTest {
+    fun getEventById_ShouldReturnEventWithDirtyFlagTrueAfterMarkDirty() = runTest {
         database.eventsDao.insertAll(listOf(event1, event2, event3).asEventDbEntity())
         database.eventsDao.markDirty()
         val result = database.eventsDao.getEventById(event1.eventId)
@@ -115,7 +117,7 @@ internal class EventDaoTest {
     }
 
     @Test
-    fun dirtyEvents_UpdateEvent_ReturnDirtyFalse() = runTest {
+    fun getEventById_ShouldReturnEventWithDirtyFlagFalseAfterUpdate() = runTest {
         database.eventsDao.insertAll(listOf(event1, event2, event3).asEventDbEntity())
         database.eventsDao.markDirty()
 
@@ -126,7 +128,7 @@ internal class EventDaoTest {
     }
 
     @Test
-    fun dirtyEvents_InsertOneAndDeleteDirty_ReturnOneEvent() = runTest {
+    fun getEvents_ShouldReturnNonDirtyEventsAfterDeleteDirty() = runTest {
         database.eventsDao.insertAll(listOf(event1, event3).asEventDbEntity())
         database.eventsDao.markDirty()
 
