@@ -47,7 +47,7 @@ internal class EventDaoTest {
         database.close()
     }
 
-    // Test function names reviewed by ChatGPT for consistencies
+    // Test function names reviewed by ChatGPT for consistency
 
     @Test
     fun getEventById_ShouldReturnInsertedEvent() = runTest {

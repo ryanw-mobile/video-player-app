@@ -45,7 +45,7 @@ internal class LocalCacheRepositoryTest {
         )
     }
 
-    // Test function names reviewed by ChatGPT for consistencies
+    // Test function names reviewed by ChatGPT for consistency
 
     @Test
     fun refreshEvents_ShouldReturnFailure_WhenRemoteThrowsException() = runTest {

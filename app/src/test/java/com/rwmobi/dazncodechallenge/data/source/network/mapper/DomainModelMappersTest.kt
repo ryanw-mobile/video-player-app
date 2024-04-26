@@ -14,8 +14,10 @@ import org.junit.Test
 
 internal class DomainModelMappersTest {
 
+    // Test function names reviewed by ChatGPT for consistency
+
     @Test
-    fun `Should convert EventNetworkDto to Event correctly`() {
+    fun convertEventNetworkDtoToEvent_ShouldMapFieldsCorrectly_ForSingleDto() {
         val dtos = listOf(
             EventNetworkDtoSampleData.eventNetworkDto1,
         )
@@ -33,7 +35,7 @@ internal class DomainModelMappersTest {
     }
 
     @Test
-    fun `Should convert multiple EventNetworkDtos to Events correctly`() {
+    fun convertEventNetworkDtosToEvents_ShouldMapFieldsCorrectly_ForMultipleDtos() {
         val dtos = listOf(
             EventNetworkDtoSampleData.eventNetworkDto1,
             EventNetworkDtoSampleData.eventNetworkDto2,
@@ -56,7 +58,7 @@ internal class DomainModelMappersTest {
     }
 
     @Test
-    fun `Should convert ScheduleNetworkDto to Schedule correctly`() {
+    fun convertScheduleNetworkDtoToSchedule_ShouldMapFieldsCorrectly_ForSingleDto() {
         val dtos = listOf(
             ScheduleNetworkDtoSampleData.scheduleNetworkDto1,
         )
@@ -73,7 +75,7 @@ internal class DomainModelMappersTest {
     }
 
     @Test
-    fun `Should convert multiple ScheduleNetworkDtos to Schedules correctly`() {
+    fun convertScheduleNetworkDtosToSchedules_ShouldMapFieldsCorrectly_ForMultipleDtos() {
         val dtos = listOf(
             ScheduleNetworkDtoSampleData.scheduleNetworkDto1,
             ScheduleNetworkDtoSampleData.scheduleNetworkDto2,

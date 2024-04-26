@@ -57,7 +57,7 @@ internal class RoomDbDataSourceTest {
         database.close()
     }
 
-    // Test function names reviewed by ChatGPT for consistencies
+    // Test function names reviewed by ChatGPT for consistency
     // Test coverage: basic CRUD on both events and schedule
 
     @Test

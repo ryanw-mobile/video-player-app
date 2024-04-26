@@ -47,7 +47,7 @@ internal class ScheduleDaoTest {
         database.close()
     }
 
-    // Test function names reviewed by ChatGPT for consistencies
+    // Test function names reviewed by ChatGPT for consistency
 
     @Test
     fun getScheduleById_ShouldReturnInsertedSchedule() = runTest {
