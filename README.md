@@ -39,7 +39,7 @@ any time.
   <img src="screenshots/240424_screen3.png" width="400" />
 </p>
 
-&nbsp;
+_&nbsp;
 
 ## To-do lists
 
@@ -58,6 +58,7 @@ now [logged as issues](https://github.com/ryanw-mobile/dazn-code-challenge/issue
 * Media 3 video player
 * Gradle Kotlin DSL and Version Catalog
 * Baseline Profile
+* Full unit test and UI (Journey) test suite
 
 ### Major libraries used
 
@@ -83,7 +84,11 @@ now [logged as issues](https://github.com/ryanw-mobile/dazn-code-challenge/issue
 * [Dagger Hilt](https://dagger.dev/hilt/) - Dependency injection framework
 * [Timber](https://github.com/JakeWharton/timber) - Logging utility
 * [LeakCanary](https://github.com/square/leakcanary) - Memory leak detection tool
-* `JUnit 4` - Testing framework and runner
+* JUnit 4 - Testing framework and runner
+* [Espresso](https://developer.android.com/training/testing/espresso) - UI testing framework for
+  Android
+* [UI Automator](https://developer.android.com/training/testing/ui-automator) - UI testing framework
+  for user interaction automation
 * [Robolectric](https://robolectric.org/) - Testing framework for Android-JVM tests
 * [kotest](https://kotest.io/) - We use the assertion library only, not the runner
 * [MockK](https://mockk.io/) - Mocking library for Kotlin

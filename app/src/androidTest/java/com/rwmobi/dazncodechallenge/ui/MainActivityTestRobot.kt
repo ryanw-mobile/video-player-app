@@ -7,6 +7,9 @@
 
 package com.rwmobi.dazncodechallenge.ui
 
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
@@ -17,6 +20,9 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
+import androidx.test.platform.app.InstrumentationRegistry
 import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
 import com.rwmobi.dazncodechallenge.ui.test.DaznCodeChallengeTestRule
@@ -26,11 +32,25 @@ internal class MainActivityTestRobot(
     private val composeTestRule: DaznCodeChallengeTestRule,
 ) {
     init {
-        printSemanticTree()
-        assertNavigationBarIsDisplayed()
         assertNavigationItemsAreDisplayed()
     }
 
+    // Checks
+    fun checkNavigationLayoutIsCorrect() {
+        try {
+            val windowWidthSizeClass = getWindowSizeClass().widthSizeClass
+            if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
+                assertNavigationBarIsDisplayed()
+            } else {
+                assertNavigationRailIsDisplayed()
+            }
+        } catch (e: AssertionError) {
+            composeTestRule.onRoot().printToLog("MainActivityTestRobotError")
+            throw AssertionError("Expected navigation layout is not observed. ${e.message}", e)
+        }
+    }
+
+    // Actions
     fun printSemanticTree() {
         composeTestRule.onRoot().printToLog("SemanticTree")
     }
@@ -59,6 +79,20 @@ internal class MainActivityTestRobot(
         }
     }
 
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+    private fun getWindowSizeClass(): WindowSizeClass {
+        val metrics = InstrumentationRegistry.getInstrumentation().targetContext.resources.displayMetrics
+        val widthPx = metrics.widthPixels
+        val heightPx = metrics.heightPixels
+        val density = metrics.density
+
+        val widthDp = widthPx / density
+        val heightDp = heightPx / density
+
+        return WindowSizeClass.calculateFromSize(size = DpSize(width = widthDp.dp, height = heightDp.dp))
+    }
+
+    // Assertions
     fun assertNavigationBarIsDisplayed() {
         with(composeTestRule) {
             onNodeWithContentDescription(label = activity.getString(R.string.content_description_navigation_bar)).assertIsDisplayed()

@@ -255,6 +255,7 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.androidx.test.rules)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.uiautomator)
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.kotest.assertions.core)
     androidTestImplementation(libs.jetbrains.kotlinx.coroutines.test)
