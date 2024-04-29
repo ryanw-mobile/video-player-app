@@ -52,6 +52,10 @@ class ExoPlayerViewModel @Inject constructor(
                                 updateUIForError(message = message)
                             }
                         }
+                    } else {
+                        cause?.message?.let { message ->
+                            updateUIForError(message = message)
+                        }
                     }
                 }
             },
