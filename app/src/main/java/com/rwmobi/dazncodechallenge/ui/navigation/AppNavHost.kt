@@ -23,11 +23,13 @@ import androidx.navigation.navArgument
 import com.rwmobi.dazncodechallenge.ui.destinations.events.EventsScreen
 import com.rwmobi.dazncodechallenge.ui.destinations.events.EventsUIEvent
 import com.rwmobi.dazncodechallenge.ui.destinations.exoplayer.ExoPlayerScreen
+import com.rwmobi.dazncodechallenge.ui.destinations.exoplayer.ExoPlayerUIEvent
 import com.rwmobi.dazncodechallenge.ui.destinations.schedule.ScheduleScreen
 import com.rwmobi.dazncodechallenge.ui.destinations.schedule.ScheduleUIEvent
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_background
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_surface
 import com.rwmobi.dazncodechallenge.ui.viewmodel.EventsViewModel
+import com.rwmobi.dazncodechallenge.ui.viewmodel.ExoPlayerViewModel
 import com.rwmobi.dazncodechallenge.ui.viewmodel.ScheduleViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,11 +109,20 @@ fun AppNavHost(
             val videoUrlStr = backStackEntry.arguments?.getString("videoUrl") ?: ""
             val videoUrl = Uri.parse(videoUrlStr)
 
+            val viewModel: ExoPlayerViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
             ExoPlayerScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(color = dazn_background),
-                videoUrl = videoUrl,
+                player = viewModel.getPlayer(),
+                uiState = uiState,
+                uiEvent = ExoPlayerUIEvent(
+                    onPlayVideo = { viewModel.playVideo(videoUrl = videoUrl.toString()) },
+                    onErrorShown = { viewModel.errorShown(it) },
+                    onShowSnackbar = onShowSnackbar,
+                ),
             )
         }
     }

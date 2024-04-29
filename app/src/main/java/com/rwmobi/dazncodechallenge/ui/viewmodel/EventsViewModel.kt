@@ -25,12 +25,10 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class EventsViewModel
-@Inject
-constructor(
+class EventsViewModel @Inject constructor(
     private val repository: Repository,
     private val imageLoader: ImageLoader,
-    @DispatcherModule.MainDispatcher private val dispatcher: CoroutineDispatcher,
+    @DispatcherModule.IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<EventsUIState> = MutableStateFlow(EventsUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()

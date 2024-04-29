@@ -7,64 +7,92 @@
 
 package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
 
-import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.media3.common.Player
+import androidx.media3.ui.PlayerView
 import com.rwmobi.dazncodechallenge.R
-import io.sanghun.compose.video.RepeatMode
-import io.sanghun.compose.video.VideoPlayer
-import io.sanghun.compose.video.controller.VideoPlayerControllerConfig
-import io.sanghun.compose.video.uri.VideoPlayerMediaItem
-import timber.log.Timber
 
 @Composable
 fun ExoPlayerScreen(
     modifier: Modifier = Modifier,
-    videoUrl: Uri,
+    player: Player,
+    uiState: ExoPlayerUIState,
+    uiEvent: ExoPlayerUIEvent,
 ) {
-    val context = LocalContext.current
-
     Box(
         modifier = modifier,
     ) {
-        VideoPlayer(
+        if (uiState.errorMessages.isNotEmpty()) {
+            val errorMessage = remember(uiState) { uiState.errorMessages[0] }
+            val errorMessageText = errorMessage.message
+
+            LaunchedEffect(errorMessage.id) {
+                uiEvent.onShowSnackbar(errorMessageText)
+                uiEvent.onErrorShown(errorMessage.id)
+            }
+        }
+
+        var lifecycle by remember {
+            mutableStateOf(Lifecycle.Event.ON_CREATE)
+        }
+        val lifecycleOwner = LocalLifecycleOwner.current
+        DisposableEffect(lifecycleOwner) {
+            val observer = LifecycleEventObserver { _, event ->
+                lifecycle = event
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
+        }
+
+        val localContext = LocalContext.current
+        AndroidView(
+            factory = { context ->
+                PlayerView(context.applicationContext).also {
+                    it.player = player
+                }
+            },
+            update = {
+                when (lifecycle) {
+                    Lifecycle.Event.ON_PAUSE -> {
+                        it.onPause()
+                        it.player?.pause()
+                    }
+
+                    Lifecycle.Event.ON_RESUME -> {
+                        it.onResume()
+                    }
+
+                    else -> Unit
+                }
+            },
             modifier = Modifier
                 .fillMaxSize()
-                .align(Alignment.Center)
-                .semantics { contentDescription = context.getString(R.string.content_description_video_player) },
-            mediaItems = listOf(
-                VideoPlayerMediaItem.NetworkMediaItem(url = videoUrl.toString()),
-            ),
-            handleLifecycle = true,
-            autoPlay = true,
-            usePlayerController = true,
-            enablePip = false,
-            handleAudioFocus = true,
-            controllerConfig = VideoPlayerControllerConfig(
-                showSpeedAndPitchOverlay = false,
-                showSubtitleButton = false,
-                showCurrentTimeAndTotalTime = true,
-                showBufferingProgress = true,
-                showForwardIncrementButton = true,
-                showBackwardIncrementButton = true,
-                showBackTrackButton = false,
-                showNextTrackButton = false,
-                showFullScreenButton = false, // We made it fullscreen already. Simply rotates the App and we support natively
-                showRepeatModeButton = true,
-                controllerShowTimeMilliSeconds = 5_000,
-                controllerAutoShow = true,
-            ),
-            volume = 0.5f, // volume 0.0f to 1.0f
-            repeatMode = RepeatMode.NONE, // or RepeatMode.ALL, RepeatMode.ONE
-            onCurrentTimeChanged = { // long type, current player time (millisec)
-                Timber.tag("CurrentTime").e(it.toString())
-            },
+                .semantics { contentDescription = localContext.getString(R.string.content_description_video_player) },
         )
+    }
+
+    LaunchedEffect(true) {
+        if (!uiState.hasVideoLoaded) {
+            uiEvent.onPlayVideo()
+        }
     }
 }
