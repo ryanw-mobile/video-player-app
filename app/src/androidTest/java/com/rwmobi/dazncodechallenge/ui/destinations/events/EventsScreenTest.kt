@@ -8,7 +8,6 @@
 package com.rwmobi.dazncodechallenge.ui.destinations.events
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.espresso.Espresso.pressBack
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.rwmobi.dazncodechallenge.MainActivity
 import com.rwmobi.dazncodechallenge.data.repository.FakeUITestRepository
@@ -47,73 +46,41 @@ internal class EventsScreenTest {
         hiltRule.inject()
         mainActivityTestRobot = MainActivityTestRobot(composeTestRule)
         eventsScreenTestRobot = EventsScreenTestRobot(composeTestRule)
-        fakeUITestRepository = repository as FakeUITestRepository // workaround
+        fakeUITestRepository = repository as? FakeUITestRepository
+            ?: throw IllegalStateException("Injected repository is not a FakeUITestRepository")
     }
 
     @Test
     fun eventJourneyTest() = runTest {
-        fakeUITestRepository.setRemoteEventsForTest(events = emptyList())
-
-        with(mainActivityTestRobot) {
-            tapNavigationEvents()
-            assertEventsTabIsSelected()
-        }
-
         with(eventsScreenTestRobot) {
             // Repository returns no data - expect no data screen
-            assertNoDataScreenIsDisplayed()
-            assertEventListIsNotDisplayed()
+            fakeUITestRepository.setRemoteEventsForTest(events = emptyList())
+            mainActivityTestRobot.checkTapEventsNavigationAndEventsTabIsSelected()
+            checkNoDataScreenIsDisplayed()
 
-            // Remote data source supplies some data, pull to refresh
+            // Remote data source supplies some data, pull to refresh, and expect full list to be shown
             fakeUITestRepository.setRemoteEventsForTest(events = EventsListSampleData.listOfSixteen)
             performPullToRefresh()
+            checkAllListItemsAreDisplayed(events = EventsListSampleData.listOfSixteen)
 
-            // expect full list to be shown
-            assertNoDataScreenIsNotDisplayed()
-            assertEventListIsDisplayed()
-            assertEventItemIsDisplayed(
-                title = EventsListSampleData.listOfSixteen[0].title,
-            )
+            with(mainActivityTestRobot) {
+                // Reusing the previous event list on the screen
+                scrollAndTapListItem(EventsListSampleData.listOfSixteen.lastIndex)
+                checkExoPlayerIsDisplayedAndClosed()
 
-            val lastListItemIndex = EventsListSampleData.listOfSixteen.lastIndex
-            scrollToListItem(lastListItemIndex)
-            assertEventItemIsDisplayed(
-                title = EventsListSampleData.listOfSixteen[lastListItemIndex].title,
-            )
-
-            tapListItem(lastListItemIndex)
-        }
-
-        with(mainActivityTestRobot) {
-            assertExoPlayerIsDisplayed()
-            assertNavigationBarIsNotDisplayed()
-
-            pressBack()
-            waitUntilPlayerDismissed()
-
-            assertExoPlayerIsNotDisplayed()
-            assertNavigationBarIsDisplayed()
-            assertEventsTabIsSelected()
-
-            // tap on navigation bar again to scroll to top
-            tapNavigationEvents()
-        }
-
-        with(eventsScreenTestRobot) {
-            assertEventItemIsDisplayed(
-                title = EventsListSampleData.listOfSixteen[0].title,
-            )
+                // tap on navigation bar again (second tap) to scroll to top
+                assertEventsTabIsSelected()
+                tapNavigationEvents()
+                assertEventItemIsDisplayed(
+                    title = EventsListSampleData.listOfSixteen[0].title,
+                )
+            }
 
             // Repository set to return error, trigger auto refresh
             val exceptionMessage = "Testing Exception"
             fakeUITestRepository.setExceptionForTest(IOException(exceptionMessage))
             performPullToRefresh()
-
-            // expect snackbar with error message
-            assertSnackbarIsDisplayed(message = exceptionMessage)
-
-            tapOK()
-            assertSnackbarIsNotDisplayed(message = exceptionMessage)
+            mainActivityTestRobot.checkSnackBarExceptionMessageIsDisplayedAndDismissed(exceptionMessage = exceptionMessage)
         }
     }
 }

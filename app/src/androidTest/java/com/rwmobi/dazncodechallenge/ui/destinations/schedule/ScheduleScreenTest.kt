@@ -46,60 +46,32 @@ internal class ScheduleScreenTest {
         hiltRule.inject()
         mainActivityTestRobot = MainActivityTestRobot(composeTestRule)
         scheduleScreenTestRobot = ScheduleScreenTestRobot(composeTestRule)
-        fakeUITestRepository = repository as FakeUITestRepository // workaround
+        fakeUITestRepository = repository as? FakeUITestRepository
+            ?: throw IllegalStateException("Injected repository is not a FakeUITestRepository")
     }
 
     @Test
     fun scheduleJourneyTest() = runTest {
-        fakeUITestRepository.setRemoteSchedulesForTest(schedule = emptyList())
-
-        with(mainActivityTestRobot) {
-            // Switch to the Schedule Tab - ensure it is not a double tap
-            tapNavigationEvents()
-            tapNavigationSchedule()
-            assertScheduleTabIsSelected()
-        }
-
         with(scheduleScreenTestRobot) {
-            // Repository returns no data - expect no data screen
-            assertNoDataScreenIsDisplayed()
-            assertScheduleListIsNotDisplayed()
+            // Switch to the Schedule Tab - ensure it is not a second tap
+            fakeUITestRepository.setRemoteSchedulesForTest(schedule = emptyList())
+            mainActivityTestRobot.tapNavigationEvents()
+            mainActivityTestRobot.checkTapScheduleNavigationAndScheduleTabIsSelected()
+            checkNoDataScreenIsDisplayed()
 
             // Remote data source supplies some data, trigger auto refresh
             fakeUITestRepository.setRemoteSchedulesForTest(schedule = ScheduleListSampleData.listOfSixteen)
             composeTestRule.mainClock.advanceTimeBy(milliseconds = 31_000)
-
-            // expect full list to be shown
-            assertNoDataScreenIsNotDisplayed()
-            assertScheduleListIsDisplayed()
-            assertScheduleItemIsDisplayed(
-                title = ScheduleListSampleData.listOfSixteen[0].title,
-            )
-
-            val lastListItemIndex = ScheduleListSampleData.listOfSixteen.lastIndex
-            scrollToListItem(lastListItemIndex)
-            assertScheduleItemIsDisplayed(
-                title = ScheduleListSampleData.listOfSixteen[lastListItemIndex].title,
-            )
+            checkAllListItemsAreDisplayed(schedule = ScheduleListSampleData.listOfSixteen)
 
             // Repository set to return error, trigger auto refresh
             val exceptionMessage = "Testing Exception"
             fakeUITestRepository.setExceptionForTest(IOException(exceptionMessage))
             composeTestRule.mainClock.advanceTimeBy(milliseconds = 31_000)
+            mainActivityTestRobot.checkSnackBarExceptionMessageIsDisplayedAndDismissed(exceptionMessage = exceptionMessage)
 
-            // expect snackbar with error message
-            assertSnackbarIsDisplayed(message = exceptionMessage)
-
-            tapOK()
-            assertSnackbarIsNotDisplayed(message = exceptionMessage)
-        }
-
-        with(mainActivityTestRobot) {
-            // tap on navigation bar again to scroll to top
-            tapNavigationSchedule()
-        }
-
-        with(scheduleScreenTestRobot) {
+            // tap on navigation bar again (second tap) to scroll to top
+            mainActivityTestRobot.tapNavigationSchedule()
             assertScheduleItemIsDisplayed(
                 title = ScheduleListSampleData.listOfSixteen[0].title,
             )
