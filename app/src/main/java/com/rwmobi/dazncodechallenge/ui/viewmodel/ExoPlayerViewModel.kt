@@ -28,6 +28,8 @@ class ExoPlayerViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<ExoPlayerUIState> = MutableStateFlow(ExoPlayerUIState())
     val uiState = _uiState.asStateFlow()
 
+    private var videoUrl: String? = null
+
     init {
         player.prepare()
         player.addListener(
@@ -72,7 +74,7 @@ class ExoPlayerViewModel @Inject constructor(
 
     fun playVideo(videoUrl: String) {
         // Intended to resume playing position when device is rotated
-        if (!_uiState.value.hasVideoLoaded) {
+        if (!_uiState.value.hasVideoLoaded || videoUrl != this.videoUrl) {
             player.apply {
                 setMediaItem(
                     MediaItem.fromUri(videoUrl),
