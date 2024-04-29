@@ -62,7 +62,7 @@ fun ExoPlayerScreen(
 
         AndroidView(
             factory = { context ->
-                PlayerView(context).also {
+                PlayerView(context.applicationContext).also {
                     it.player = player
                 }
             },
