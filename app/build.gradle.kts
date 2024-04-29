@@ -26,6 +26,7 @@ plugins {
     alias(libs.plugins.kotlinxKover)
     alias(libs.plugins.devtoolsKsp)
     alias(libs.plugins.gradleKtlint)
+    alias(libs.plugins.baselineprofile)
 }
 
 android {
@@ -202,6 +203,7 @@ dependencies {
     implementation(libs.androidx.media3.dash)
     implementation(libs.androidx.media3.session)
     implementation(libs.androidx.media3.ui)
+    "baselineProfile"(project(":baselineprofile"))
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
