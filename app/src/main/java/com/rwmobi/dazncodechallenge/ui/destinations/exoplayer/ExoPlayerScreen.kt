@@ -17,12 +17,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.Player
 import androidx.media3.ui.PlayerView
+import com.rwmobi.dazncodechallenge.R
 
 @Composable
 fun ExoPlayerScreen(
@@ -59,6 +63,7 @@ fun ExoPlayerScreen(
             }
         }
 
+        val localContext = LocalContext.current
         AndroidView(
             factory = { context ->
                 PlayerView(context.applicationContext).also {
@@ -80,7 +85,8 @@ fun ExoPlayerScreen(
                 }
             },
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .semantics { contentDescription = localContext.getString(R.string.content_description_video_player) },
         )
     }
 
