@@ -248,6 +248,7 @@ dependencies {
     testImplementation(libs.robolectric)
     testImplementation(libs.mockk.android)
     testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.androidx.media3.test.utils)
 
     // For instrumented tests - with Kotlin
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -260,6 +261,7 @@ dependencies {
     androidTestImplementation(libs.kotest.assertions.core)
     androidTestImplementation(libs.jetbrains.kotlinx.coroutines.test)
     androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.androidx.media3.test.utils)
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
