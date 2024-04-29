@@ -55,7 +55,7 @@ now [logged as issues](https://github.com/ryanw-mobile/dazn-code-challenge/issue
 * Dependency Injection using Dagger Hilt
 * Material 3
 * Dynamic screen layout support using Windows Size Class
-* Media 3 video player
+* Jetpack Media 3 video player
 * Gradle Kotlin DSL and Version Catalog
 * Baseline Profile
 * Full unit test and UI (Journey) test suite
@@ -79,8 +79,7 @@ now [logged as issues](https://github.com/ryanw-mobile/dazn-code-challenge/issue
   screen solution
 * [Coil](https://coil-kt.github.io/coil/) - Image loading library for Android, leveraging Kotlin
   Coroutines
-* [compose-video](https://github.com/dsa28s/compose-video) - Media3 Video Player wrapper (buggy, to
-  be replaced/fixed)
+* [media3-exoplayer](https://developer.android.com/media/media3/exoplayer) - Video Player
 * [Dagger Hilt](https://dagger.dev/hilt/) - Dependency injection framework
 * [Timber](https://github.com/JakeWharton/timber) - Logging utility
 * [LeakCanary](https://github.com/square/leakcanary) - Memory leak detection tool
