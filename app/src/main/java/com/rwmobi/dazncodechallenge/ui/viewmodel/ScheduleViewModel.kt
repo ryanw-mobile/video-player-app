@@ -28,7 +28,7 @@ import javax.inject.Inject
 class ScheduleViewModel @Inject constructor(
     private val repository: Repository,
     private val imageLoader: ImageLoader,
-    @DispatcherModule.MainDispatcher private val dispatcher: CoroutineDispatcher,
+    @DispatcherModule.IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<ScheduleUIState> = MutableStateFlow(ScheduleUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
