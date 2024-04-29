@@ -96,6 +96,8 @@ fun ExoPlayerScreen(
     }
 
     LaunchedEffect(true) {
-        uiEvent.onPlayVideo()
+        if (!uiState.hasVideoLoaded) {
+            uiEvent.onPlayVideo()
+        }
     }
 }
