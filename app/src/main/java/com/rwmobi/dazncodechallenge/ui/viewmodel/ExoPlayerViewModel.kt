@@ -18,7 +18,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
@@ -29,10 +28,7 @@ class ExoPlayerViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<ExoPlayerUIState> = MutableStateFlow(ExoPlayerUIState())
     val uiState = _uiState.asStateFlow()
 
-    private var hasPlayed = false
-
     init {
-        Timber.d("player initialising")
         player.prepare()
         player.addListener(
             object : Player.Listener {
@@ -69,7 +65,6 @@ class ExoPlayerViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        Timber.d("player releasing")
         player.release()
     }
 

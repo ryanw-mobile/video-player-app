@@ -23,7 +23,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.Player
 import androidx.media3.ui.PlayerView
-import timber.log.Timber
 
 @Composable
 fun ExoPlayerScreen(
@@ -75,16 +74,6 @@ fun ExoPlayerScreen(
 
                     Lifecycle.Event.ON_RESUME -> {
                         it.onResume()
-                    }
-
-                    Lifecycle.Event.ON_STOP -> {
-                        Timber.d("OnStop: ${it.player?.currentPosition}")
-                        it.player = null
-                    }
-
-                    Lifecycle.Event.ON_DESTROY -> {
-                        Timber.d("OnDestroy: ${it.player?.currentPosition}")
-                        it.player = null
                     }
 
                     else -> Unit
