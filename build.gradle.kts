@@ -13,4 +13,5 @@ plugins {
     alias(libs.plugins.devtoolsKsp) apply false
     alias(libs.plugins.kotlinxKover) apply false
     alias(libs.plugins.androidTest) apply false
+    alias(libs.plugins.baselineprofile) apply false
 }

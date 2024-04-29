@@ -28,3 +28,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "DAZN Code Challenge"
 include(":app")
+include(":baselineprofile")
