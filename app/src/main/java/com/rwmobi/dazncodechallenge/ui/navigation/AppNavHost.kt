@@ -115,10 +115,8 @@ fun AppNavHost(
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
             LaunchedEffect(isInPipMode) {
-                if (!isInPipMode) {
-                    Timber.d("returned from PIP mode")
-                    viewModel.setPipMode(enabled = isInPipMode)
-                }
+                Timber.d("isInPipMode = $isInPipMode")
+                viewModel.setPipMode(enabled = isInPipMode)
             }
 
             ExoPlayerScreen(

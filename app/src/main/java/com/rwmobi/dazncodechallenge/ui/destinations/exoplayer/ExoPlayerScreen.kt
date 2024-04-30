@@ -9,6 +9,7 @@ package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
 
 import android.app.Activity
 import android.util.Rational
+import androidx.annotation.OptIn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
@@ -31,11 +32,13 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
 import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.utils.enterPIPMode
 import timber.log.Timber
 
+@OptIn(UnstableApi::class)
 @Composable
 fun ExoPlayerScreen(
     modifier: Modifier = Modifier,
@@ -78,6 +81,8 @@ fun ExoPlayerScreen(
             factory = { context ->
                 PlayerView(context.applicationContext).also {
                     it.player = player
+                    it.controllerAutoShow = false
+                    it.controllerHideOnTouch = true
                 }
             },
             update = {
