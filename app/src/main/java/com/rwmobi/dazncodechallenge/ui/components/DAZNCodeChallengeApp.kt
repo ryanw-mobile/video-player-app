@@ -21,6 +21,7 @@ import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
 
 @Composable
 fun DAZNCodeChallengeApp(
+    isInPipMode: Boolean,
     windowSizeClass: WindowSizeClass,
 ) {
     val navController = rememberNavController()
@@ -36,6 +37,7 @@ fun DAZNCodeChallengeApp(
                 modifier = Modifier
                     .fillMaxSize()
                     .imePadding(),
+                isInPipMode = isInPipMode,
                 windowSizeClass = windowSizeClass,
                 navController = navController,
                 snackbarHostState = snackbarHostState,

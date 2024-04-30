@@ -9,6 +9,7 @@ package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
 
 data class ExoPlayerUIEvent(
     val onPlayVideo: () -> Unit,
+    val onTriggerPIPMode: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,
 )

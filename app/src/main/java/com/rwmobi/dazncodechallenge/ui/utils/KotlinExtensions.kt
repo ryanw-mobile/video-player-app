@@ -7,8 +7,11 @@
 
 package com.rwmobi.dazncodechallenge.ui.utils
 
+import android.app.Activity
+import android.app.PictureInPictureParams
 import android.content.Context
 import android.text.format.DateUtils
+import android.util.Rational
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -28,4 +31,11 @@ fun Date.asNiceString(context: Context): String {
         DateUtils.DAY_IN_MILLIS * 3,
         0,
     ).toString()
+}
+
+fun Activity.enterPIPMode(aspectRatio: Rational) {
+    val params = PictureInPictureParams.Builder()
+        .setAspectRatio(Rational(16, 9)) // Example aspect ratio
+        .build()
+    enterPictureInPictureMode(params)
 }

@@ -49,8 +49,8 @@ private enum class NavigationLayoutType {
     FullScreen,
 }
 
-private fun calculateNavigationLayout(windowWidthSizeClass: WindowWidthSizeClass, currentRoute: String?): NavigationLayoutType {
-    if (currentRoute?.startsWith(AppNavItem.Exoplayer.screenRoute) == true) {
+private fun calculateNavigationLayout(windowWidthSizeClass: WindowWidthSizeClass, currentRoute: String?, isInPipMode: Boolean): NavigationLayoutType {
+    if (currentRoute?.startsWith(AppNavItem.Exoplayer.screenRoute) == true || isInPipMode) {
         return NavigationLayoutType.FullScreen
     }
     return when (windowWidthSizeClass) {
@@ -69,6 +69,7 @@ private fun calculateNavigationLayout(windowWidthSizeClass: WindowWidthSizeClass
 @Composable
 fun AppMasterNavigationLayout(
     modifier: Modifier = Modifier,
+    isInPipMode: Boolean,
     windowSizeClass: WindowSizeClass,
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
@@ -76,7 +77,7 @@ fun AppMasterNavigationLayout(
     val lastDoubleTappedNavItem = remember { mutableStateOf<AppNavItem?>(null) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val navigationLayoutType = calculateNavigationLayout(windowWidthSizeClass = windowSizeClass.widthSizeClass, currentRoute = currentRoute)
+    val navigationLayoutType = calculateNavigationLayout(windowWidthSizeClass = windowSizeClass.widthSizeClass, currentRoute = currentRoute, isInPipMode = isInPipMode)
 
     Row(modifier = modifier) {
         AnimatedVisibility(
@@ -133,6 +134,7 @@ fun AppMasterNavigationLayout(
                     .padding(paddingValues),
                 navController = navController,
                 lastDoubleTappedNavItem = lastDoubleTappedNavItem.value,
+                isInPipMode = isInPipMode,
                 onShowSnackbar = { errorMessageText ->
                     snackbarHostState.showSnackbar(
                         message = errorMessageText,
@@ -157,6 +159,7 @@ private fun Preview() {
         ) {
             AppMasterNavigationLayout(
                 modifier = Modifier.fillMaxSize(),
+                isInPipMode = false,
                 windowSizeClass = getPreviewWindowSizeClass(),
                 navController = rememberNavController(),
                 snackbarHostState = remember { SnackbarHostState() },

@@ -31,12 +31,14 @@ import com.rwmobi.dazncodechallenge.ui.theme.dazn_surface
 import com.rwmobi.dazncodechallenge.ui.viewmodel.EventsViewModel
 import com.rwmobi.dazncodechallenge.ui.viewmodel.ExoPlayerViewModel
 import com.rwmobi.dazncodechallenge.ui.viewmodel.ScheduleViewModel
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    isInPipMode: Boolean,
     lastDoubleTappedNavItem: AppNavItem?,
     onShowSnackbar: suspend (String) -> Unit,
     onScrolledToTop: (AppNavItem) -> Unit,
@@ -112,6 +114,13 @@ fun AppNavHost(
             val viewModel: ExoPlayerViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+            LaunchedEffect(isInPipMode) {
+                if (!isInPipMode) {
+                    Timber.d("returned from PIP mode")
+                    viewModel.setPipMode(enabled = isInPipMode)
+                }
+            }
+
             ExoPlayerScreen(
                 modifier = Modifier
                     .fillMaxSize()
@@ -122,6 +131,9 @@ fun AppNavHost(
                     onPlayVideo = { viewModel.playVideo(videoUrl = videoUrl.toString()) },
                     onErrorShown = { viewModel.errorShown(it) },
                     onShowSnackbar = onShowSnackbar,
+                    onTriggerPIPMode = {
+                        viewModel.setPipMode(true)
+                    },
                 ),
             )
         }
