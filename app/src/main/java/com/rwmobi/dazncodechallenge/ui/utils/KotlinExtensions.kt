@@ -35,7 +35,7 @@ fun Date.asNiceString(context: Context): String {
 
 fun Activity.enterPIPMode(aspectRatio: Rational) {
     val params = PictureInPictureParams.Builder()
-        .setAspectRatio(Rational(16, 9)) // Example aspect ratio
+        .setAspectRatio(aspectRatio)
         .build()
     enterPictureInPictureMode(params)
 }

@@ -7,8 +7,6 @@
 
 package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
 
-import android.app.Activity
-import android.util.Rational
 import androidx.annotation.OptIn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,13 +33,13 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
 import com.rwmobi.dazncodechallenge.R
-import com.rwmobi.dazncodechallenge.ui.utils.enterPIPMode
 import timber.log.Timber
 
 @OptIn(UnstableApi::class)
 @Composable
 fun ExoPlayerScreen(
     modifier: Modifier = Modifier,
+    shouldShowPiPButton: Boolean,
     player: Player,
     uiState: ExoPlayerUIState,
     uiEvent: ExoPlayerUIEvent,
@@ -75,7 +73,6 @@ fun ExoPlayerScreen(
         }
 
         val localContext = LocalContext.current
-        val isInPipMode = uiState.isInPIPMode
 
         AndroidView(
             factory = { context ->
@@ -88,14 +85,14 @@ fun ExoPlayerScreen(
             update = {
                 when (lifecycle) {
                     Lifecycle.Event.ON_PAUSE -> {
-                        if (!isInPipMode) {
-                            it.onPause()
+                        it.onPause()
+                        if (!shouldShowPiPButton) {
                             it.player?.pause()
                         }
                     }
 
                     Lifecycle.Event.ON_RESUME -> {
-                        if (!isInPipMode) {
+                        if (!shouldShowPiPButton) {
                             it.onResume()
                         }
                     }
@@ -111,7 +108,7 @@ fun ExoPlayerScreen(
                 .semantics { contentDescription = localContext.getString(R.string.content_description_video_player) },
         )
 
-        if (!isInPipMode) {
+        if (shouldShowPiPButton) {
             IconButton(
                 modifier = Modifier.align(alignment = Alignment.TopEnd),
                 onClick = { uiEvent.onTriggerPIPMode() },
@@ -127,13 +124,6 @@ fun ExoPlayerScreen(
     LaunchedEffect(true) {
         if (!uiState.hasVideoLoaded) {
             uiEvent.onPlayVideo()
-        }
-    }
-
-    val activity = LocalContext.current as Activity
-    if (uiState.isInPIPMode) {
-        LaunchedEffect(true) {
-            activity.enterPIPMode(Rational(16, 9))
         }
     }
 }

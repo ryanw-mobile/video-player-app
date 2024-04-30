@@ -92,14 +92,6 @@ class ExoPlayerViewModel @Inject constructor(
         }
     }
 
-    fun setPipMode(enabled: Boolean) {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isInPIPMode = enabled,
-            )
-        }
-    }
-
     private fun updateUIForError(message: String) {
         _uiState.update {
             addErrorMessage(
