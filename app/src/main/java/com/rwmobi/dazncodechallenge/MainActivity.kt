@@ -14,13 +14,21 @@ import android.util.Rational
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.rememberNavController
 import com.rwmobi.dazncodechallenge.ui.components.DAZNCodeChallengeApp
+import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
 import com.rwmobi.dazncodechallenge.ui.utils.enterPIPMode
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -37,16 +45,28 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-//        hasSystemFeature()
+
         setContent {
-            DAZNCodeChallengeApp(
-                windowSizeClass = calculateWindowSizeClass(this),
-                isInPipMode = isInPipMode,
-                onTriggerPIPMode = {
-                    isInPipMode = true
-                    enterPIPMode(Rational(16, 9))
-                },
-            )
+            val navController = rememberNavController()
+            val snackbarHostState = remember { SnackbarHostState() }
+
+            DAZNCodeChallengeTheme {
+                DAZNCodeChallengeApp(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .imePadding()
+                        .safeDrawingPadding(),
+                    windowSizeClass = calculateWindowSizeClass(this),
+                    isPipModeSupported = isPipModeSupported,
+                    isInPipMode = isInPipMode,
+                    navController = navController,
+                    snackbarHostState = snackbarHostState,
+                    onTriggerPIPMode = {
+                        isInPipMode = true
+                        enterPIPMode(Rational(16, 9))
+                    },
+                )
+            }
         }
     }
 
@@ -63,14 +83,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        Timber.d("onPause()")
-    }
-
     override fun onResume() {
         super.onResume()
-        Timber.d("onResume()")
         isPipModeSupported = packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
     }
 }
