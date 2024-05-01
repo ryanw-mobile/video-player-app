@@ -30,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.rwmobi.dazncodechallenge.ui.components.DAZNCodeChallengeApp
 import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
 import com.rwmobi.dazncodechallenge.ui.utils.enterPIPMode
+import com.rwmobi.dazncodechallenge.ui.utils.hasPictureInPicturePermission
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -77,6 +78,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         // This is not triggered when entering PIP mode but returning from PIP mode.
-        isPipModeSupported = packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
+        isPipModeSupported = packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) &&
+            applicationContext.hasPictureInPicturePermission()
     }
 }
