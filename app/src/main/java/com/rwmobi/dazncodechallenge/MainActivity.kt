@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        Timber.d("!!! onPictureInPictureModeChanged = $isInPictureInPictureMode")
+        Timber.d("!!! onPictureInPictureModeChanged = $isInPictureInPictureMode, newConfig = $newConfig")
         isInPipMode = isInPictureInPictureMode
         if (isInPictureInPictureMode) {
             Timber.d("Should hide the full UI")
