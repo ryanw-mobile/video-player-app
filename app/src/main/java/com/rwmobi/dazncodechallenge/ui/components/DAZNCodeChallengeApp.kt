@@ -134,7 +134,6 @@ fun DAZNCodeChallengeApp(
                 }
             },
         ) { paddingValues ->
-            // Note that we take MaxSize and expect individual screens to handle screen size
             val actionLabel = stringResource(android.R.string.ok)
             AppNavHost(
                 modifier = Modifier

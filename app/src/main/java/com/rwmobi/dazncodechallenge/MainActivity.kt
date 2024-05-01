@@ -61,9 +61,7 @@ class MainActivity : ComponentActivity() {
                     isInPictureInPictureMode = isInPipMode,
                     navController = navController,
                     snackbarHostState = snackbarHostState,
-                    onTriggerPIPMode = {
-                        enterPIPMode(Rational(16, 9))
-                    },
+                    onTriggerPIPMode = { enterPIPMode(Rational(16, 9)) },
                 )
             }
         }
