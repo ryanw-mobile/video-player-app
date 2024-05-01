@@ -144,11 +144,13 @@ fun DAZNCodeChallengeApp(
                 isInPictureInPictureMode = isInPictureInPictureMode,
                 isPipModeSupported = isPipModeSupported,
                 onShowSnackbar = { errorMessageText ->
-                    snackbarHostState.showSnackbar(
-                        message = errorMessageText,
-                        actionLabel = actionLabel,
-                        duration = SnackbarDuration.Long,
-                    )
+                    if (!isInPictureInPictureMode) {
+                        snackbarHostState.showSnackbar(
+                            message = errorMessageText,
+                            actionLabel = actionLabel,
+                            duration = SnackbarDuration.Long,
+                        )
+                    }
                 },
                 onScrolledToTop = { lastDoubleTappedNavItem.value = null },
                 onTriggerPIPMode = onTriggerPIPMode,
