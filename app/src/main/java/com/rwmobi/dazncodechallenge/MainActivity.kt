@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        Timber.v("onPictureInPictureModeChanged = $isInPictureInPictureMode, newConfig = $newConfig")
+        Timber.v("\uD83D\uDD25  isInPictureInPictureMode = $isInPictureInPictureMode")
         this.isInPipMode = isInPictureInPictureMode
     }
 

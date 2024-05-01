@@ -50,7 +50,7 @@ fun ExoPlayerScreen(
     uiEvent: ExoPlayerUIEvent,
 ) {
     // Due to player lifecycle concerns it needs to know the state changes before entering the PIP mode
-    var isInPipMode by remember { mutableStateOf(isInPictureInPictureMode) }
+    var isInPipMode by remember(isInPictureInPictureMode) { mutableStateOf(isInPictureInPictureMode) }
 
     val localContext = LocalContext.current
     val dimension = LocalConfiguration.current.getDimension()
@@ -87,29 +87,44 @@ fun ExoPlayerScreen(
                     it.player = player
                 }
             },
-            update = {
+            update = { playerView ->
+                Timber.v("🔥 Lifecycle $lifecycle: isInPictureInPictureMode = $isInPictureInPictureMode, shouldPlayOnResume = ${uiState.shouldPlayOnResume}")
                 when (lifecycle) {
                     Lifecycle.Event.ON_PAUSE -> {
-                        if (!isInPipMode) {
-                            it.onPause()
-                            it.player?.pause()
-                        } else {
+                        // ON_STOP handles all applicable cases when we really have to pause the playback
+                        if (isInPipMode) {
                             // The PIP screen overlay blocks access to buttons
-                            it.hideController()
-                            it.controllerAutoShow = false
+                            playerView.hideController()
+                            playerView.controllerAutoShow = false
                         }
                     }
 
                     Lifecycle.Event.ON_RESUME -> {
+                        // Generally ON_RESUME shouldn't happen under PIP mode, just to make sure
                         if (!isInPipMode) {
-                            it.onResume()
-                            it.controllerAutoShow = true
+                            playerView.onResume()
+                            playerView.controllerAutoShow = true
+                            if (uiState.shouldPlayOnResume) {
+                                playerView.player?.play()
+                                uiEvent.onPlaybackResumed()
+                            }
                         }
                     }
 
-                    else -> {
-                        Timber.v("Lifecycle event not handled by PlayerView: ${lifecycle.name}")
+                    Lifecycle.Event.ON_STOP -> {
+                        // On Stop is triggered without going through OnPause when:
+                        // - Clicking close under PIP Mode, or
+                        // - Home button is pressed, or
+                        // - Switching to another app via the launcher, or
+                        // - Navigating out
+                        playerView.onPause()
+                        if (playerView.player?.isPlaying == true) {
+                            uiEvent.onRegisterPlaybackModeOnResume(true)
+                            playerView.player?.pause()
+                        }
                     }
+
+                    else -> {}
                 }
             },
             modifier = Modifier

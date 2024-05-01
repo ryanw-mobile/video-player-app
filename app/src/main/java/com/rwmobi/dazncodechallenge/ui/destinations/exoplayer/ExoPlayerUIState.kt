@@ -11,5 +11,6 @@ import com.rwmobi.dazncodechallenge.ui.model.ErrorMessage
 
 data class ExoPlayerUIState(
     val hasVideoLoaded: Boolean = false,
+    val shouldPlayOnResume: Boolean = false,
     val errorMessages: List<ErrorMessage> = emptyList(),
 )

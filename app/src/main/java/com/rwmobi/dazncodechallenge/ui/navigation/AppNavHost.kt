@@ -126,6 +126,8 @@ fun AppNavHost(
                 uiEvent = ExoPlayerUIEvent(
                     onPlayVideo = { viewModel.playVideo(videoUrl = videoUrl.toString()) },
                     onErrorShown = { viewModel.errorShown(it) },
+                    onRegisterPlaybackModeOnResume = { viewModel.setPlaybackModeOnResume(shouldResumePlayback = it) },
+                    onPlaybackResumed = { viewModel.setPlaybackModeOnResume(shouldResumePlayback = false) },
                     onShowSnackbar = onShowSnackbar,
                     onTriggerPIPMode = onTriggerPIPMode,
                 ),
