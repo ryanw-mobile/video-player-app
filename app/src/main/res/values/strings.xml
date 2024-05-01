@@ -19,4 +19,5 @@
     <string name="content_description_events_list">Events List</string>
     <string name="content_description_pull_to_refresh">Pull to refresh</string>
     <string name="content_description_video_player">Video Player</string>
+    <string name="content_description_play_video_in_picture_in_picture_mode">Play video in Picture-in-Picture mode</string>
 </resources>

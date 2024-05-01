@@ -37,7 +37,8 @@ import com.rwmobi.dazncodechallenge.ui.viewmodel.ScheduleViewModel
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    isInPipMode: Boolean,
+    isInPictureInPictureMode: Boolean,
+    isPipModeSupported: Boolean,
     lastDoubleTappedNavItem: AppNavItem?,
     onShowSnackbar: suspend (String) -> Unit,
     onScrolledToTop: (AppNavItem) -> Unit,
@@ -118,7 +119,8 @@ fun AppNavHost(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(color = dazn_background),
-                shouldShowPiPButton = !isInPipMode,
+                isInPictureInPictureMode = isInPictureInPictureMode,
+                shouldShowPiPButton = !isInPictureInPictureMode && isPipModeSupported,
                 player = viewModel.getPlayer(),
                 uiState = uiState,
                 uiEvent = ExoPlayerUIEvent(

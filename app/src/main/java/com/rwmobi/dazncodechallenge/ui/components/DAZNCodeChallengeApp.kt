@@ -51,11 +51,12 @@ private enum class NavigationLayoutType {
     FullScreen,
 }
 
-private fun calculateNavigationLayout(windowWidthSizeClass: WindowWidthSizeClass, currentRoute: String?, isInPipMode: Boolean): NavigationLayoutType {
-    if (currentRoute?.startsWith(AppNavItem.Exoplayer.screenRoute) == true || isInPipMode) {
+private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?, isInPictureInPictureMode: Boolean): NavigationLayoutType {
+    if (currentRoute?.startsWith(AppNavItem.Exoplayer.screenRoute) == true || isInPictureInPictureMode) {
         return NavigationLayoutType.FullScreen
     }
-    return when (windowWidthSizeClass) {
+
+    return when (widthSizeClass) {
         WindowWidthSizeClass.Compact -> {
             NavigationLayoutType.BottomNavigation
         }
@@ -71,7 +72,7 @@ private fun calculateNavigationLayout(windowWidthSizeClass: WindowWidthSizeClass
 @Composable
 fun DAZNCodeChallengeApp(
     modifier: Modifier = Modifier,
-    isInPipMode: Boolean,
+    isInPictureInPictureMode: Boolean,
     isPipModeSupported: Boolean,
     windowSizeClass: WindowSizeClass,
     navController: NavHostController,
@@ -81,7 +82,10 @@ fun DAZNCodeChallengeApp(
     val lastDoubleTappedNavItem = remember { mutableStateOf<AppNavItem?>(null) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val navigationLayoutType = calculateNavigationLayout(windowWidthSizeClass = windowSizeClass.widthSizeClass, currentRoute = currentRoute, isInPipMode = isInPipMode)
+    val navigationLayoutType = windowSizeClass.calculateNavigationLayout(
+        currentRoute = currentRoute,
+        isInPictureInPictureMode = isInPictureInPictureMode,
+    )
 
     Row(modifier = modifier) {
         AnimatedVisibility(
@@ -138,7 +142,8 @@ fun DAZNCodeChallengeApp(
                     .padding(paddingValues),
                 navController = navController,
                 lastDoubleTappedNavItem = lastDoubleTappedNavItem.value,
-                isInPipMode = isInPipMode,
+                isInPictureInPictureMode = isInPictureInPictureMode,
+                isPipModeSupported = isPipModeSupported,
                 onShowSnackbar = { errorMessageText ->
                     snackbarHostState.showSnackbar(
                         message = errorMessageText,
@@ -164,7 +169,7 @@ private fun Preview() {
         ) {
             DAZNCodeChallengeApp(
                 modifier = Modifier.fillMaxSize(),
-                isInPipMode = false,
+                isInPictureInPictureMode = false,
                 isPipModeSupported = false,
                 windowSizeClass = getPreviewWindowSizeClass(),
                 navController = rememberNavController(),

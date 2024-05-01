@@ -37,7 +37,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private var isInPipMode by mutableStateOf(false)
+    private var isInPipMode by mutableStateOf(isInPictureInPictureMode)
     private var isPipModeSupported by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +45,6 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         setContent {
             val navController = rememberNavController()
             val snackbarHostState = remember { SnackbarHostState() }
@@ -58,11 +57,10 @@ class MainActivity : ComponentActivity() {
                         .safeDrawingPadding(),
                     windowSizeClass = calculateWindowSizeClass(this),
                     isPipModeSupported = isPipModeSupported,
-                    isInPipMode = isInPipMode,
+                    isInPictureInPictureMode = isInPipMode,
                     navController = navController,
                     snackbarHostState = snackbarHostState,
                     onTriggerPIPMode = {
-                        isInPipMode = true
                         enterPIPMode(Rational(16, 9))
                     },
                 )
@@ -72,19 +70,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        Timber.d("!!! onPictureInPictureModeChanged = $isInPictureInPictureMode, newConfig = $newConfig")
-        isInPipMode = isInPictureInPictureMode
-        if (isInPictureInPictureMode) {
-            Timber.d("Should hide the full UI")
-            // Hide the full UI (controls, app bars, etc.)
-        } else {
-            // Restore the full UI
-            Timber.d("Should restore the full UI")
-        }
+        Timber.v("onPictureInPictureModeChanged = $isInPictureInPictureMode, newConfig = $newConfig")
+        this.isInPipMode = isInPictureInPictureMode
     }
 
     override fun onResume() {
         super.onResume()
+        // This is not triggered when entering PIP mode but returning from PIP mode.
         isPipModeSupported = packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
     }
 }
