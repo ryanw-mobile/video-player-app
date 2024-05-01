@@ -73,6 +73,7 @@ fun AppMasterNavigationLayout(
     windowSizeClass: WindowSizeClass,
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
+    onTriggerPIPMode: () -> Unit,
 ) {
     val lastDoubleTappedNavItem = remember { mutableStateOf<AppNavItem?>(null) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -143,6 +144,7 @@ fun AppMasterNavigationLayout(
                     )
                 },
                 onScrolledToTop = { lastDoubleTappedNavItem.value = null },
+                onTriggerPIPMode = onTriggerPIPMode,
             )
         }
     }
@@ -163,6 +165,7 @@ private fun Preview() {
                 windowSizeClass = getPreviewWindowSizeClass(),
                 navController = rememberNavController(),
                 snackbarHostState = remember { SnackbarHostState() },
+                onTriggerPIPMode = {},
             )
         }
     }

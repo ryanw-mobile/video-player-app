@@ -23,6 +23,7 @@ import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
 fun DAZNCodeChallengeApp(
     isInPipMode: Boolean,
     windowSizeClass: WindowSizeClass,
+    onTriggerPIPMode: () -> Unit,
 ) {
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -41,6 +42,7 @@ fun DAZNCodeChallengeApp(
                 windowSizeClass = windowSizeClass,
                 navController = navController,
                 snackbarHostState = snackbarHostState,
+                onTriggerPIPMode = onTriggerPIPMode,
             )
         }
     }

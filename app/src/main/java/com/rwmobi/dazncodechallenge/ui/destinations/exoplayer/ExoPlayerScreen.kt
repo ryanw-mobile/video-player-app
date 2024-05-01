@@ -44,6 +44,8 @@ fun ExoPlayerScreen(
     uiState: ExoPlayerUIState,
     uiEvent: ExoPlayerUIEvent,
 ) {
+    var isInPipMode by remember { mutableStateOf(!shouldShowPiPButton) }
+
     Box(
         modifier = modifier,
     ) {
@@ -78,21 +80,19 @@ fun ExoPlayerScreen(
             factory = { context ->
                 PlayerView(context.applicationContext).also {
                     it.player = player
-                    it.controllerAutoShow = false
-                    it.controllerHideOnTouch = true
                 }
             },
             update = {
                 when (lifecycle) {
                     Lifecycle.Event.ON_PAUSE -> {
-                        it.onPause()
-                        if (!shouldShowPiPButton) {
+                        if (!isInPipMode) {
+                            it.onPause()
                             it.player?.pause()
                         }
                     }
 
                     Lifecycle.Event.ON_RESUME -> {
-                        if (!shouldShowPiPButton) {
+                        if (!isInPipMode) {
                             it.onResume()
                         }
                     }
@@ -108,10 +108,13 @@ fun ExoPlayerScreen(
                 .semantics { contentDescription = localContext.getString(R.string.content_description_video_player) },
         )
 
-        if (shouldShowPiPButton) {
+        if (!isInPipMode) {
             IconButton(
                 modifier = Modifier.align(alignment = Alignment.TopEnd),
-                onClick = { uiEvent.onTriggerPIPMode() },
+                onClick = {
+                    isInPipMode = true
+                    uiEvent.onTriggerPIPMode()
+                },
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.rounded_picture_in_picture_24),
@@ -119,6 +122,10 @@ fun ExoPlayerScreen(
                 )
             }
         }
+    }
+
+    LaunchedEffect(key1 = isInPipMode) {
+        Timber.d("isInPipMode = $isInPipMode")
     }
 
     LaunchedEffect(true) {

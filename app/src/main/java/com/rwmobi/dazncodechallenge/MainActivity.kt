@@ -7,8 +7,10 @@
 
 package com.rwmobi.dazncodechallenge
 
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Rational
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.rwmobi.dazncodechallenge.ui.components.DAZNCodeChallengeApp
+import com.rwmobi.dazncodechallenge.ui.utils.enterPIPMode
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -26,24 +29,30 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    var isInPipMode by mutableStateOf(false)
+    private var isInPipMode by mutableStateOf(false)
+    private var isPipModeSupported by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+//        hasSystemFeature()
         setContent {
             DAZNCodeChallengeApp(
                 windowSizeClass = calculateWindowSizeClass(this),
                 isInPipMode = isInPipMode,
+                onTriggerPIPMode = {
+                    isInPipMode = true
+                    enterPIPMode(Rational(16, 9))
+                },
             )
         }
     }
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        Timber.d("!!!")
+        Timber.d("!!! onPictureInPictureModeChanged = $isInPictureInPictureMode")
         isInPipMode = isInPictureInPictureMode
         if (isInPictureInPictureMode) {
             Timber.d("Should hide the full UI")
@@ -62,5 +71,6 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         Timber.d("onResume()")
+        isPipModeSupported = packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
     }
 }
