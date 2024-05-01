@@ -92,6 +92,12 @@ class ExoPlayerViewModel @Inject constructor(
         }
     }
 
+    fun setPlaybackModeOnResume(shouldResumePlayback: Boolean) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(shouldPlayOnResume = shouldResumePlayback)
+        }
+    }
+
     private fun updateUIForError(message: String) {
         _uiState.update {
             addErrorMessage(

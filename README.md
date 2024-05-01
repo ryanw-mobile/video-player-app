@@ -1,7 +1,8 @@
 # DAZN Code Challenge - Android TV ![Gradle Build](https://github.com/ryanw-mobile/dazn-code-challenge/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/dazn-code-challenge/graph/badge.svg?token=YK2DNKYBRO)](https://app.codecov.io/github/ryanw-mobile/dazn-code-challenge)
 
 A responsive Android sample app written in Kotlin and Jetpack Compose, supporting different
-navigation layout on screen sizes. The video player is currently Jetpack Media 3.
+navigation layout on screen sizes. The Media 3 Exoplayer is implemented on top of the single
+activity architecture. It is fully functional with Picture-in-Picture support.
 
 The events under the Events tab provides video playback.
 The schedule under the Schedule tab refreshes automatically every 30 seconds.
@@ -31,9 +32,10 @@ any time.
 &nbsp;
 
 <p align="center">
-  <img src="screenshots/240424_screen0.png" width="200" />
-  <img src="screenshots/240424_screen1.png" width="200" />
-  <img src="screenshots/240424_screen2.png" width="200" />
+  <img src="screenshots/240424_screen0.png" width="150" />
+  <img src="screenshots/240424_screen1.png" width="150" />
+  <img src="screenshots/240424_screen2.png" width="150" />
+  <img src="screenshots/240501_screen4.png" width="150" />
 </p>
 <p align="center">
   <img src="screenshots/240424_screen3.png" width="400" />

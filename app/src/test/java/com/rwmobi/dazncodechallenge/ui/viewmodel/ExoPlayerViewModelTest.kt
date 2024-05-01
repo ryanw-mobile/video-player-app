@@ -121,4 +121,13 @@ internal class ExoPlayerViewModelTest {
         val uiState = viewModel.uiState.value
         uiState.errorMessages shouldBe emptyList()
     }
+
+    @Test
+    fun setPlaybackModeOnResume_ShouldUpdateUIState() = runTest {
+        for (shouldResumePlayback in listOf(true, false)) {
+            viewModel.setPlaybackModeOnResume(shouldResumePlayback = shouldResumePlayback)
+            val uiState = viewModel.uiState.value
+            uiState.shouldPlayOnResume shouldBe shouldResumePlayback
+        }
+    }
 }
