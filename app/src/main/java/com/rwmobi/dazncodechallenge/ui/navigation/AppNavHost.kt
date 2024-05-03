@@ -5,7 +5,9 @@
 
 package com.rwmobi.dazncodechallenge.ui.navigation
 
+import android.app.Activity
 import android.net.Uri
+import android.util.Rational
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -28,6 +31,7 @@ import com.rwmobi.dazncodechallenge.ui.destinations.schedule.ScheduleScreen
 import com.rwmobi.dazncodechallenge.ui.destinations.schedule.ScheduleUIEvent
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_background
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_surface
+import com.rwmobi.dazncodechallenge.ui.utils.enterPIPMode
 import com.rwmobi.dazncodechallenge.ui.viewmodel.EventsViewModel
 import com.rwmobi.dazncodechallenge.ui.viewmodel.ExoPlayerViewModel
 import com.rwmobi.dazncodechallenge.ui.viewmodel.ScheduleViewModel
@@ -42,7 +46,6 @@ fun AppNavHost(
     lastDoubleTappedNavItem: AppNavItem?,
     onShowSnackbar: suspend (String) -> Unit,
     onScrolledToTop: (AppNavItem) -> Unit,
-    onTriggerPIPMode: () -> Unit,
 ) {
     NavHost(
         modifier = modifier,
@@ -114,6 +117,7 @@ fun AppNavHost(
 
             val viewModel: ExoPlayerViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val activity = LocalContext.current as? Activity
 
             ExoPlayerScreen(
                 modifier = Modifier
@@ -129,7 +133,7 @@ fun AppNavHost(
                     onRegisterPlaybackModeOnResume = { viewModel.setPlaybackModeOnResume(shouldResumePlayback = it) },
                     onPlaybackResumed = { viewModel.setPlaybackModeOnResume(shouldResumePlayback = false) },
                     onShowSnackbar = onShowSnackbar,
-                    onTriggerPIPMode = onTriggerPIPMode,
+                    onTriggerPIPMode = { activity?.enterPIPMode(Rational(uiState.videoWidth, uiState.videoHeight)) },
                 ),
             )
         }
