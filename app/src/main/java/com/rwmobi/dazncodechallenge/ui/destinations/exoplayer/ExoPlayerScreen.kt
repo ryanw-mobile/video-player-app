@@ -13,11 +13,11 @@ import android.graphics.Rect
 import android.view.View
 import androidx.annotation.OptIn
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -31,8 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.viewinterop.AndroidView
@@ -100,7 +98,8 @@ fun ExoPlayerScreen(
         }
     }
 
-    var isControllerVisible by remember { mutableStateOf(false) }
+    var controllerVisibility by remember { mutableStateOf(ControllerTransitionState.GONE) }
+
     Box(
         modifier = modifier,
     ) {
@@ -114,7 +113,10 @@ fun ExoPlayerScreen(
                     it.setShowNextButton(false)
                     it.setControllerVisibilityListener(
                         PlayerView.ControllerVisibilityListener { visibility ->
-                            isControllerVisible = it.isControllerFullyVisible
+                            controllerVisibility = controllerVisibility.updateState(
+                                visibility = visibility,
+                                isControllerFullyVisible = it.isControllerFullyVisible,
+                            )
                         },
                     )
                     it.addOnLayoutChangeListener { v: View?, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int, newLeft: Int, newTop: Int, newRight: Int, newBottom: Int ->
@@ -158,7 +160,9 @@ fun ExoPlayerScreen(
             modifier = Modifier
                 .align(alignment = Alignment.TopEnd)
                 .padding(all = dimension.defaultFullPadding),
-            visible = shouldShowPiPButton && isControllerVisible,
+            visible = shouldShowPiPButton && (controllerVisibility == ControllerTransitionState.VISIBLE || controllerVisibility == ControllerTransitionState.APPEARING),
+            enter = slideInVertically(),
+            exit = slideOutVertically(),
         ) {
             PictureInPictureButton(onClick = { uiEvent.onEnterPictureInPictureMode })
         }
@@ -167,6 +171,30 @@ fun ExoPlayerScreen(
     LaunchedEffect(true) {
         if (!uiState.hasVideoLoaded) {
             uiEvent.onPlayVideo()
+        }
+    }
+}
+
+private enum class ControllerTransitionState {
+    GONE,
+    APPEARING,
+    VISIBLE,
+    DISAPPEARING,
+    ;
+
+    fun updateState(visibility: Int, isControllerFullyVisible: Boolean): ControllerTransitionState {
+        return when {
+            visibility == View.INVISIBLE && !isControllerFullyVisible -> GONE
+            visibility == View.VISIBLE && isControllerFullyVisible -> VISIBLE
+            visibility == View.VISIBLE && !isControllerFullyVisible -> {
+                when (this) {
+                    VISIBLE -> DISAPPEARING
+                    GONE -> APPEARING
+                    else -> DISAPPEARING
+                }
+            }
+
+            else -> GONE
         }
     }
 }
