@@ -119,40 +119,24 @@ fun ExoPlayerScreen(
                 }
             },
             update = { playerView ->
-                Timber.v("🔥 Lifecycle $lifecycle: isInPictureInPictureMode = $isInPictureInPictureMode, shouldPlayOnResume = ${uiState.shouldPlayOnResume}")
+                Timber.v("🔥 Lifecycle $lifecycle: isInPictureInPictureMode = $isInPictureInPictureMode")
                 when (lifecycle) {
+                    /**
+                     * In Android 7.0 and later, you should pause and resume video playback when the system calls your activity's onStop() and onStart(). By doing this, you can avoid having to check if your app is in PiP mode in onPause() and explicitly continuing playback.
+                     */
                     Lifecycle.Event.ON_PAUSE -> {
-                        // ON_STOP handles all applicable cases when we really have to pause the playback
-                        if (isInPipMode) {
-                            // The PIP screen overlay blocks access to buttons
-                            playerView.hideController()
-                            playerView.controllerAutoShow = false
-                        }
+                        playerView.hideController()
                     }
 
                     Lifecycle.Event.ON_RESUME -> {
-                        // Generally ON_RESUME shouldn't happen under PIP mode, just to make sure
-                        if (!isInPipMode) {
-                            playerView.onResume()
-                            playerView.controllerAutoShow = true
-                            if (uiState.shouldPlayOnResume) {
-                                playerView.player?.play()
-                                uiEvent.onPlaybackResumed()
-                            }
-                        }
+                        //  ON_RESUME shouldn't happen under PIP mode
+                        playerView.onResume()
+                        uiEvent.onRestorePlaybackState()
                     }
 
                     Lifecycle.Event.ON_STOP -> {
-                        // On Stop is triggered without going through OnPause when:
-                        // - Clicking close under PIP Mode, or
-                        // - Home button is pressed, or
-                        // - Switching to another app via the launcher, or
-                        // - Navigating out
                         playerView.onPause()
-                        if (playerView.player?.isPlaying == true) {
-                            uiEvent.onRegisterPlaybackModeOnResume(true)
-                            playerView.player?.pause()
-                        }
+                        uiEvent.onSavePlaybackState()
                     }
 
                     else -> {}

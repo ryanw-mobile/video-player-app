@@ -130,8 +130,8 @@ fun AppNavHost(
                 uiEvent = ExoPlayerUIEvent(
                     onPlayVideo = { viewModel.playVideo(videoUrl = videoUrl.toString()) },
                     onErrorShown = { viewModel.errorShown(it) },
-                    onRegisterPlaybackModeOnResume = { viewModel.setPlaybackModeOnResume(shouldResumePlayback = it) },
-                    onPlaybackResumed = { viewModel.setPlaybackModeOnResume(shouldResumePlayback = false) },
+                    onSavePlaybackState = { viewModel.savePlaybackState() },
+                    onRestorePlaybackState = { viewModel.restorePlaybackState() },
                     onShowSnackbar = onShowSnackbar,
                     onTriggerPIPMode = { activity?.enterPIPMode(Rational(uiState.videoWidth, uiState.videoHeight)) },
                     onToggleFullScreenMode = { viewModel.setFullScreenMode(isFullScreenMode = it) },

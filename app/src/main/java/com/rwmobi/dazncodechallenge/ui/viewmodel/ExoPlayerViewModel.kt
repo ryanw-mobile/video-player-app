@@ -33,6 +33,7 @@ class ExoPlayerViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     private var videoUrl: String? = null
+    private var isPlayerPausedForResume = false
 
     init {
         player.prepare()
@@ -106,9 +107,17 @@ class ExoPlayerViewModel @Inject constructor(
         }
     }
 
-    fun setPlaybackModeOnResume(shouldResumePlayback: Boolean) {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(shouldPlayOnResume = shouldResumePlayback)
+    fun savePlaybackState() {
+        isPlayerPausedForResume = player.isPlaying
+        player.pause()
+    }
+
+    fun restorePlaybackState() {
+        if (isPlayerPausedForResume) {
+            if (!player.isPlaying) {
+                player.play()
+            }
+            isPlayerPausedForResume = false
         }
     }
 
