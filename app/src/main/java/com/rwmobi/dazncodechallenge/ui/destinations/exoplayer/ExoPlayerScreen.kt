@@ -104,28 +104,34 @@ fun ExoPlayerScreen(
         modifier = modifier,
     ) {
         AndroidView(
+            modifier = Modifier
+                .fillMaxSize()
+                .semantics { contentDescription = localContext.getString(R.string.content_description_video_player) },
             factory = { context ->
-                PlayerView(context.applicationContext).also {
-                    it.player = player
-                    it.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH
-                    it.controllerAutoShow = false
-                    it.setFullscreenButtonClickListener { isFullScreen -> uiEvent.onToggleFullScreenMode(isFullScreen) }
-                    it.setShowNextButton(false)
-                    it.setControllerVisibilityListener(
+                PlayerView(context.applicationContext).apply {
+                    resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH
+                    controllerAutoShow = false
+                    setFullscreenButtonClickListener { isFullScreen -> uiEvent.onToggleFullScreenMode(isFullScreen) }
+                    setShowNextButton(false)
+                    setControllerVisibilityListener(
                         PlayerView.ControllerVisibilityListener { visibility ->
                             controllerVisibility = controllerVisibility.updateState(
                                 visibility = visibility,
-                                isControllerFullyVisible = it.isControllerFullyVisible,
+                                isControllerFullyVisible = isControllerFullyVisible,
                             )
                         },
                     )
-                    it.addOnLayoutChangeListener { v: View?, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int, newLeft: Int, newTop: Int, newRight: Int, newBottom: Int ->
+                    addOnLayoutChangeListener { v: View?, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int, newLeft: Int, newTop: Int, newRight: Int, newBottom: Int ->
                         val sourceRectHint = Rect()
-                        it.getGlobalVisibleRect(sourceRectHint)
+                        getGlobalVisibleRect(sourceRectHint)
                         val builder = PictureInPictureParams.Builder()
                             .setSourceRectHint(sourceRectHint)
                         activity?.setPictureInPictureParams(builder.build())
                     }
+                    this.player = player
+                    player.playWhenReady = true
+                    controllerAutoShow = false
+
                 }
             },
             update = { playerView ->
@@ -151,9 +157,6 @@ fun ExoPlayerScreen(
                     else -> {}
                 }
             },
-            modifier = Modifier
-                .fillMaxSize()
-                .semantics { contentDescription = localContext.getString(R.string.content_description_video_player) },
         )
 
         AnimatedVisibility(
