@@ -164,37 +164,18 @@ fun ExoPlayerScreen(
             enter = slideInVertically(),
             exit = slideOutVertically(),
         ) {
-            PictureInPictureButton(onClick = { uiEvent.onEnterPictureInPictureMode })
+            PictureInPictureButton(
+                onClick = {
+                    controllerVisibility = ControllerTransitionState.DISAPPEARING
+                    uiEvent.onEnterPictureInPictureMode()
+                },
+            )
         }
     }
 
     LaunchedEffect(true) {
         if (!uiState.hasVideoLoaded) {
             uiEvent.onPlayVideo()
-        }
-    }
-}
-
-private enum class ControllerTransitionState {
-    GONE,
-    APPEARING,
-    VISIBLE,
-    DISAPPEARING,
-    ;
-
-    fun updateState(visibility: Int, isControllerFullyVisible: Boolean): ControllerTransitionState {
-        return when {
-            visibility == View.INVISIBLE && !isControllerFullyVisible -> GONE
-            visibility == View.VISIBLE && isControllerFullyVisible -> VISIBLE
-            visibility == View.VISIBLE && !isControllerFullyVisible -> {
-                when (this) {
-                    VISIBLE -> DISAPPEARING
-                    GONE -> APPEARING
-                    else -> DISAPPEARING
-                }
-            }
-
-            else -> GONE
         }
     }
 }
