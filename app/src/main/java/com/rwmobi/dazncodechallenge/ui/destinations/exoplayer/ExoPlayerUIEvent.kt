@@ -9,7 +9,7 @@ package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
 
 data class ExoPlayerUIEvent(
     val onPlayVideo: () -> Unit,
-    val onTriggerPIPMode: () -> Unit,
+    val onEnterPictureInPictureMode: () -> Unit,
     val onSavePlaybackState: () -> Unit,
     val onRestorePlaybackState: () -> Unit,
     val onToggleFullScreenMode: (fullScreenMode: Boolean) -> Unit,

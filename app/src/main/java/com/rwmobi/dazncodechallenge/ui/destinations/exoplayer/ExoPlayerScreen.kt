@@ -43,21 +43,16 @@ import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
 import com.rwmobi.dazncodechallenge.ui.utils.enterFullScreenMode
 import com.rwmobi.dazncodechallenge.ui.utils.exitFullScreenMode
-import timber.log.Timber
 
 @OptIn(UnstableApi::class)
 @Composable
 fun ExoPlayerScreen(
     modifier: Modifier = Modifier,
-    isInPictureInPictureMode: Boolean,
     shouldShowPiPButton: Boolean,
     player: Player,
     uiState: ExoPlayerUIState,
     uiEvent: ExoPlayerUIEvent,
 ) {
-    // Due to player lifecycle concerns it needs to know the state changes before entering the PIP mode
-    var isInPipMode by remember(isInPictureInPictureMode) { mutableStateOf(isInPictureInPictureMode) }
-
     val localContext = LocalContext.current
     val dimension = LocalConfiguration.current.getDimension()
     var lifecycle by remember { mutableStateOf(Lifecycle.Event.ON_CREATE) }
@@ -119,7 +114,6 @@ fun ExoPlayerScreen(
                 }
             },
             update = { playerView ->
-                Timber.v("🔥 Lifecycle $lifecycle: isInPictureInPictureMode = $isInPictureInPictureMode")
                 when (lifecycle) {
                     /**
                      * In Android 7.0 and later, you should pause and resume video playback when the system calls your activity's onStop() and onStart(). By doing this, you can avoid having to check if your app is in PiP mode in onPause() and explicitly continuing playback.
@@ -152,10 +146,7 @@ fun ExoPlayerScreen(
                 modifier = Modifier
                     .align(alignment = Alignment.TopEnd)
                     .padding(all = dimension.defaultFullPadding),
-                onClick = {
-                    isInPipMode = true
-                    uiEvent.onTriggerPIPMode()
-                },
+                onClick = uiEvent.onEnterPictureInPictureMode,
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.rounded_picture_in_picture_24),
