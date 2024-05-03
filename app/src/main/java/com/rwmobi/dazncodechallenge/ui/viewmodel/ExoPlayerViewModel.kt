@@ -112,6 +112,12 @@ class ExoPlayerViewModel @Inject constructor(
         }
     }
 
+    fun setFullScreenMode(isFullScreenMode: Boolean) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(isFullScreenMode = isFullScreenMode)
+        }
+    }
+
     private fun updateUIForError(message: String) {
         _uiState.update {
             addErrorMessage(

@@ -14,5 +14,6 @@ data class ExoPlayerUIState(
     val videoHeight: Int = 0,
     val hasVideoLoaded: Boolean = false,
     val shouldPlayOnResume: Boolean = false,
+    val isFullScreenMode: Boolean = false,
     val errorMessages: List<ErrorMessage> = emptyList(),
 )

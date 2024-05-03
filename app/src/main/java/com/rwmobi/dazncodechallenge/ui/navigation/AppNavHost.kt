@@ -134,6 +134,7 @@ fun AppNavHost(
                     onPlaybackResumed = { viewModel.setPlaybackModeOnResume(shouldResumePlayback = false) },
                     onShowSnackbar = onShowSnackbar,
                     onTriggerPIPMode = { activity?.enterPIPMode(Rational(uiState.videoWidth, uiState.videoHeight)) },
+                    onToggleFullScreenMode = { viewModel.setFullScreenMode(isFullScreenMode = it) },
                 ),
             )
         }

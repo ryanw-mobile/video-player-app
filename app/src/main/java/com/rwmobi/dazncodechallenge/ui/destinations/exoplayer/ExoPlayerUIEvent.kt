@@ -12,6 +12,7 @@ data class ExoPlayerUIEvent(
     val onTriggerPIPMode: () -> Unit,
     val onRegisterPlaybackModeOnResume: (shouldResumePlayback: Boolean) -> Unit,
     val onPlaybackResumed: () -> Unit,
+    val onToggleFullScreenMode: (fullScreenMode: Boolean) -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,
 )

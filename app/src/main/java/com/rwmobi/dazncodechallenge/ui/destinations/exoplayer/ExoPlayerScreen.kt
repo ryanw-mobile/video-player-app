@@ -7,6 +7,7 @@
 
 package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
 
+import android.app.Activity
 import androidx.annotation.OptIn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +39,8 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
 import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
+import com.rwmobi.dazncodechallenge.ui.utils.enterFullScreenMode
+import com.rwmobi.dazncodechallenge.ui.utils.exitFullScreenMode
 import timber.log.Timber
 
 @OptIn(UnstableApi::class)
@@ -78,6 +82,23 @@ fun ExoPlayerScreen(
         }
     }
 
+    val activity = LocalContext.current as? Activity
+    DisposableEffect(Unit) {
+        onDispose {
+            activity?.exitFullScreenMode()
+        }
+    }
+
+    SideEffect {
+        activity?.let {
+            if (uiState.isFullScreenMode) {
+                it.enterFullScreenMode()
+            } else {
+                it.exitFullScreenMode()
+            }
+        }
+    }
+
     Box(
         modifier = modifier,
     ) {
@@ -85,6 +106,7 @@ fun ExoPlayerScreen(
             factory = { context ->
                 PlayerView(context.applicationContext).also {
                     it.player = player
+                    it.setFullscreenButtonClickListener { isFullScreen -> uiEvent.onToggleFullScreenMode(isFullScreen) }
                 }
             },
             update = { playerView ->
