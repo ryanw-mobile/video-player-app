@@ -8,6 +8,7 @@
 package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
 
 import android.app.Activity
+import android.view.ViewGroup
 import androidx.annotation.OptIn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,6 +37,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
@@ -106,7 +108,14 @@ fun ExoPlayerScreen(
             factory = { context ->
                 PlayerView(context.applicationContext).also {
                     it.player = player
+                    it.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH
+                    it.controllerAutoShow = false
+                    it.layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                    )
                     it.setFullscreenButtonClickListener { isFullScreen -> uiEvent.onToggleFullScreenMode(isFullScreen) }
+                    it.setShowNextButton(false)
                 }
             },
             update = { playerView ->
