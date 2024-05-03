@@ -8,8 +8,9 @@
 package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
 
 import android.app.Activity
+import android.app.PictureInPictureParams
+import android.graphics.Rect
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.OptIn
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
@@ -108,10 +109,6 @@ fun ExoPlayerScreen(
                     it.player = player
                     it.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH
                     it.controllerAutoShow = false
-                    it.layoutParams = ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                    )
                     it.setFullscreenButtonClickListener { isFullScreen -> uiEvent.onToggleFullScreenMode(isFullScreen) }
                     it.setShowNextButton(false)
                     it.setControllerVisibilityListener(
@@ -119,6 +116,13 @@ fun ExoPlayerScreen(
                             isControllerVisible = (visibility == View.VISIBLE)
                         },
                     )
+                    it.addOnLayoutChangeListener { v: View?, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int, newLeft: Int, newTop: Int, newRight: Int, newBottom: Int ->
+                        val sourceRectHint = Rect()
+                        it.getGlobalVisibleRect(sourceRectHint)
+                        val builder = PictureInPictureParams.Builder()
+                            .setSourceRectHint(sourceRectHint)
+                        activity?.setPictureInPictureParams(builder.build())
+                    }
                 }
             },
             update = { playerView ->
