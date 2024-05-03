@@ -8,8 +8,10 @@
 package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
 
 import android.app.Activity
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.OptIn
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -96,6 +98,7 @@ fun ExoPlayerScreen(
         }
     }
 
+    var isControllerVisible by remember { mutableStateOf(false) }
     Box(
         modifier = modifier,
     ) {
@@ -111,6 +114,11 @@ fun ExoPlayerScreen(
                     )
                     it.setFullscreenButtonClickListener { isFullScreen -> uiEvent.onToggleFullScreenMode(isFullScreen) }
                     it.setShowNextButton(false)
+                    it.setControllerVisibilityListener(
+                        PlayerView.ControllerVisibilityListener { visibility ->
+                            isControllerVisible = (visibility == View.VISIBLE)
+                        },
+                    )
                 }
             },
             update = { playerView ->
@@ -141,11 +149,13 @@ fun ExoPlayerScreen(
                 .semantics { contentDescription = localContext.getString(R.string.content_description_video_player) },
         )
 
-        if (shouldShowPiPButton) {
+        AnimatedVisibility(
+            modifier = Modifier
+                .align(alignment = Alignment.TopEnd)
+                .padding(all = dimension.defaultFullPadding),
+            visible = shouldShowPiPButton && isControllerVisible,
+        ) {
             IconButton(
-                modifier = Modifier
-                    .align(alignment = Alignment.TopEnd)
-                    .padding(all = dimension.defaultFullPadding),
                 onClick = uiEvent.onEnterPictureInPictureMode,
             ) {
                 Icon(
