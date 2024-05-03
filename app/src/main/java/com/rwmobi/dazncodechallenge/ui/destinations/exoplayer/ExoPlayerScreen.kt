@@ -43,6 +43,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import com.rwmobi.dazncodechallenge.R
+import com.rwmobi.dazncodechallenge.ui.components.PictureInPictureButton
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
 import com.rwmobi.dazncodechallenge.ui.utils.enterFullScreenMode
 import com.rwmobi.dazncodechallenge.ui.utils.exitFullScreenMode
@@ -159,14 +160,7 @@ fun ExoPlayerScreen(
                 .padding(all = dimension.defaultFullPadding),
             visible = shouldShowPiPButton && isControllerVisible,
         ) {
-            IconButton(
-                onClick = uiEvent.onEnterPictureInPictureMode,
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.rounded_picture_in_picture_24),
-                    contentDescription = stringResource(R.string.content_description_play_video_in_picture_in_picture_mode),
-                )
-            }
+            PictureInPictureButton(onClick = { uiEvent.onEnterPictureInPictureMode })
         }
     }
 
