@@ -124,7 +124,7 @@ fun AppNavHost(
                     .fillMaxSize()
                     .background(color = dazn_background),
                 isInPictureInPictureMode = isInPictureInPictureMode,
-                shouldShowPiPButton = !isInPictureInPictureMode && isPipModeSupported,
+                shouldShowPiPButton = !isInPictureInPictureMode && isPipModeSupported && uiState.videoWidth > 0 && uiState.videoHeight > 0,
                 player = viewModel.getPlayer(),
                 uiState = uiState,
                 uiEvent = ExoPlayerUIEvent(
