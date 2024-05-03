@@ -131,7 +131,6 @@ fun ExoPlayerScreen(
                     this.player = player
                     player.playWhenReady = true
                     controllerAutoShow = false
-
                 }
             },
             update = { playerView ->
