@@ -7,10 +7,13 @@
 
 package com.rwmobi.dazncodechallenge.ui.viewmodel
 
+import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.VideoSize
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.HttpDataSource
 import com.rwmobi.dazncodechallenge.ui.destinations.exoplayer.ExoPlayerUIState
 import com.rwmobi.dazncodechallenge.ui.model.ErrorMessage
@@ -22,6 +25,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
+@OptIn(UnstableApi::class)
 class ExoPlayerViewModel @Inject constructor(
     private val player: Player,
 ) : ViewModel() {
@@ -29,11 +33,22 @@ class ExoPlayerViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     private var videoUrl: String? = null
+    private var isPlayerPausedForResume = false
 
     init {
         player.prepare()
         player.addListener(
             object : Player.Listener {
+                override fun onVideoSizeChanged(videoSize: VideoSize) {
+                    super.onVideoSizeChanged(videoSize)
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            videoWidth = videoSize.width,
+                            videoHeight = videoSize.height,
+                        )
+                    }
+                }
+
                 override fun onPlayerError(error: PlaybackException) {
                     val cause = error.cause
                     if (cause is HttpDataSource.HttpDataSourceException) {
@@ -92,9 +107,23 @@ class ExoPlayerViewModel @Inject constructor(
         }
     }
 
-    fun setPlaybackModeOnResume(shouldResumePlayback: Boolean) {
+    fun savePlaybackState() {
+        isPlayerPausedForResume = player.isPlaying
+        player.pause()
+    }
+
+    fun restorePlaybackState() {
+        if (isPlayerPausedForResume) {
+            if (!player.isPlaying) {
+                player.play()
+            }
+            isPlayerPausedForResume = false
+        }
+    }
+
+    fun setFullScreenMode(isFullScreenMode: Boolean) {
         _uiState.update { currentUiState ->
-            currentUiState.copy(shouldPlayOnResume = shouldResumePlayback)
+            currentUiState.copy(isFullScreenMode = isFullScreenMode)
         }
     }
 

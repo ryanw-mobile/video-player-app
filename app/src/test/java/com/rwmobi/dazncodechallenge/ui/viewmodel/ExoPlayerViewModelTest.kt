@@ -10,6 +10,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.slot
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -93,6 +94,37 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
+    fun restorePlaybackState_whenPlayingBefore_ShouldResumePlaying() {
+        every { mockPlayer.isPlaying } answers { true }
+        viewModel.savePlaybackState()
+
+        every { mockPlayer.isPlaying } answers { false }
+        viewModel.restorePlaybackState()
+
+        verify(exactly = 1) { mockPlayer.play() }
+    }
+
+    @Test
+    fun restorePlaybackState_whenPausedBefore_ShouldNotResumePlaying() {
+        every { mockPlayer.isPlaying } answers { false }
+        viewModel.savePlaybackState()
+
+        every { mockPlayer.isPlaying } answers { false }
+        viewModel.restorePlaybackState()
+
+        verify(exactly = 0) { mockPlayer.play() }
+    }
+
+    @Test
+    fun setFullScreenMode_ShouldUpdateUiState() = runTest {
+        viewModel.setFullScreenMode(isFullScreenMode = true)
+        viewModel.uiState.value.isFullScreenMode shouldBe true
+
+        viewModel.setFullScreenMode(isFullScreenMode = false)
+        viewModel.uiState.value.isFullScreenMode shouldBe false
+    }
+
+    @Test
     fun refresh_ShouldAccumulateErrorMessages_OnMultipleFailures() {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
@@ -120,14 +152,5 @@ internal class ExoPlayerViewModelTest {
 
         val uiState = viewModel.uiState.value
         uiState.errorMessages shouldBe emptyList()
-    }
-
-    @Test
-    fun setPlaybackModeOnResume_ShouldUpdateUIState() = runTest {
-        for (shouldResumePlayback in listOf(true, false)) {
-            viewModel.setPlaybackModeOnResume(shouldResumePlayback = shouldResumePlayback)
-            val uiState = viewModel.uiState.value
-            uiState.shouldPlayOnResume shouldBe shouldResumePlayback
-        }
     }
 }

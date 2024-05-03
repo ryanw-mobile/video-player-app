@@ -10,7 +10,6 @@ package com.rwmobi.dazncodechallenge
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Rational
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -29,7 +28,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.rwmobi.dazncodechallenge.ui.components.DAZNCodeChallengeApp
 import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
-import com.rwmobi.dazncodechallenge.ui.utils.enterPIPMode
 import com.rwmobi.dazncodechallenge.ui.utils.hasPictureInPicturePermission
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -61,7 +59,6 @@ class MainActivity : ComponentActivity() {
                     isInPictureInPictureMode = isInPipMode,
                     navController = navController,
                     snackbarHostState = snackbarHostState,
-                    onTriggerPIPMode = { enterPIPMode(Rational(16, 9)) },
                 )
             }
         }

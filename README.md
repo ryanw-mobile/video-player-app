@@ -9,6 +9,20 @@ The schedule under the Schedule tab refreshes automatically every 30 seconds.
 For both tabs, you can always do swipe-to-refresh, or tap the navigation icon to scroll to the top
 of the list.
 
+## Download the App
+
+If you want to try out the app without building it, check out
+the [Releases section](https://github.com/ryanw-mobile/dazn-code-challenge/releases) where you can
+find the APK and App Bundles for each major release.
+
+### Known issues
+
+The video player has [known _refused-to-fix_ bugs](https://github.com/androidx/media/issues/1270) on
+Android 14 and 15. You may see the video playback not resizing properly. As a workaround, rotating
+the device, toggling between full screen or Picture-in-Picture mode can solve the issue.
+
+&nbsp;
+
 ## History
 
 This was a code test assignment as a part of the interview process. The task covered
@@ -34,14 +48,14 @@ any time.
 <p align="center">
   <img src="screenshots/240424_screen0.png" width="150" />
   <img src="screenshots/240424_screen1.png" width="150" />
-  <img src="screenshots/240424_screen2.png" width="150" />
+  <img src="screenshots/240503_screen2.png" width="150" />
   <img src="screenshots/240501_screen4.png" width="150" />
 </p>
 <p align="center">
   <img src="screenshots/240424_screen3.png" width="400" />
 </p>
 
-_&nbsp;
+&nbsp;
 
 ## To-do lists
 
@@ -98,12 +112,6 @@ now [logged as issues](https://github.com/ryanw-mobile/dazn-code-challenge/issue
 * [Kover](https://github.com/Kotlin/kotlinx-kover) - Kotlin code coverage tool
 * [Github Action](https://github.com/features/actions) - CI/CD
 * [codecov](https://codecov.io/) - code coverage
-
-## Binaries download
-
-If you want to try out the app without building it, check out
-the [Releases section](https://github.com/ryanw-mobile/dazn-code-challenge/releases) where you can
-find the APK and App Bundles for each major version.
 
 ## Requirements
 

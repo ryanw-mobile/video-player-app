@@ -15,6 +15,9 @@ import android.content.Context
 import android.os.Build
 import android.text.format.DateUtils
 import android.util.Rational
+import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -41,6 +44,31 @@ internal fun Activity.enterPIPMode(aspectRatio: Rational) {
         .setAspectRatio(aspectRatio)
         .build()
     enterPictureInPictureMode(params)
+}
+
+internal fun Activity.enterFullScreenMode() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val controller = window.insetsController
+        controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+        controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    } else {
+        // For older versions, use legacy system UI flags
+        window.decorView.systemUiVisibility = (
+            View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            )
+    }
+}
+
+internal fun Activity.exitFullScreenMode() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val controller = window.insetsController
+        controller?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+    } else {
+        // Reset system UI flags for older versions
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+    }
 }
 
 @SuppressLint("ObsoleteSdkInt")
