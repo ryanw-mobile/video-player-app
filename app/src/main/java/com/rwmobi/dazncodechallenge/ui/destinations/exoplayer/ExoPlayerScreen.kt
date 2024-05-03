@@ -113,7 +113,7 @@ fun ExoPlayerScreen(
                     it.setShowNextButton(false)
                     it.setControllerVisibilityListener(
                         PlayerView.ControllerVisibilityListener { visibility ->
-                            isControllerVisible = (visibility == View.VISIBLE)
+                            isControllerVisible = it.isControllerFullyVisible
                         },
                     )
                     it.addOnLayoutChangeListener { v: View?, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int, newLeft: Int, newTop: Int, newRight: Int, newBottom: Int ->
