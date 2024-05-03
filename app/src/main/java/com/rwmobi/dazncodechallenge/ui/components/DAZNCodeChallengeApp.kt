@@ -46,25 +46,25 @@ import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.utils.getPreviewWindowSizeClass
 
 private enum class NavigationLayoutType {
-    BottomNavigation,
-    NavigationRail,
-    FullScreen,
+    BOTTOM_NAVIGATION,
+    NAVIGATION_RAIL,
+    FULL_SCREEN,
 }
 
 private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?, isInPictureInPictureMode: Boolean): NavigationLayoutType {
     if (currentRoute?.startsWith(AppNavItem.Exoplayer.screenRoute) == true || isInPictureInPictureMode) {
-        return NavigationLayoutType.FullScreen
+        return NavigationLayoutType.FULL_SCREEN
     }
 
     return when (widthSizeClass) {
         WindowWidthSizeClass.Compact -> {
-            NavigationLayoutType.BottomNavigation
+            NavigationLayoutType.BOTTOM_NAVIGATION
         }
 
         else -> {
             // WindowWidthSizeClass.Medium, -- tablet portrait
             // WindowWidthSizeClass.Expanded, -- phone landscape mode
-            NavigationLayoutType.NavigationRail
+            NavigationLayoutType.NAVIGATION_RAIL
         }
     }
 }
@@ -88,7 +88,7 @@ fun DAZNCodeChallengeApp(
 
     Row(modifier = modifier) {
         AnimatedVisibility(
-            visible = (navigationLayoutType == NavigationLayoutType.NavigationRail),
+            visible = (navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL),
             enter = slideInHorizontally(initialOffsetX = { -it }),
             exit = shrinkHorizontally() + fadeOut(),
         ) {
@@ -115,7 +115,7 @@ fun DAZNCodeChallengeApp(
             },
             bottomBar = {
                 AnimatedVisibility(
-                    visible = (navigationLayoutType == NavigationLayoutType.BottomNavigation),
+                    visible = (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION),
                     enter = slideInVertically(initialOffsetY = { it }),
                     exit = shrinkVertically() + fadeOut(),
                 ) {
