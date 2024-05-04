@@ -1,6 +1,7 @@
 package com.rwmobi.dazncodechallenge.ui.viewmodel
 
 import androidx.media3.common.Player
+import androidx.media3.common.VideoSize
 import com.rwmobi.dazncodechallenge.test.PlaybackExceptionSampleData
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
@@ -45,6 +46,22 @@ internal class ExoPlayerViewModelTest {
         viewModel.playVideo(videoUrl)
         val uiState = viewModel.uiState.value
         uiState.hasVideoLoaded shouldBe true
+    }
+
+    @Test
+    fun onVideoSizeChanged_ShouldUpdateUiState() = runTest {
+        val expectedVideoWidth = 640
+        val expectedVideoHeight = 1080
+        every { mockPlayer.play() } answers {
+            listenerSlot.captured.onVideoSizeChanged(VideoSize(expectedVideoWidth, expectedVideoHeight))
+        }
+
+        viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
+
+        with(viewModel.uiState.value) {
+            this.videoWidth shouldBe expectedVideoWidth
+            this.videoHeight shouldBe expectedVideoHeight
+        }
     }
 
     @Test
