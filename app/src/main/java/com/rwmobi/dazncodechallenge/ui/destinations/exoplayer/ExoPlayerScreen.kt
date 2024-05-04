@@ -42,6 +42,7 @@ import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.components.PictureInPictureButton
+import com.rwmobi.dazncodechallenge.ui.model.ControllerTransitionState
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
 import com.rwmobi.dazncodechallenge.ui.utils.enterFullScreenMode
 import com.rwmobi.dazncodechallenge.ui.utils.exitFullScreenMode
