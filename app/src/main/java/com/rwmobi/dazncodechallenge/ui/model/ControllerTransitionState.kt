@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
+package com.rwmobi.dazncodechallenge.ui.model
 
 import android.view.View
 
