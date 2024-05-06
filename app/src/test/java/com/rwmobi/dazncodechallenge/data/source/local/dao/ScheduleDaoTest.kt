@@ -11,8 +11,8 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.rwmobi.dazncodechallenge.data.source.local.DaznApiDatabase
-import com.rwmobi.dazncodechallenge.data.source.local.mapper.asSchedule
 import com.rwmobi.dazncodechallenge.data.source.local.mapper.asScheduleDbEntity
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.toSchedule
 import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule1
 import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule1Modified
 import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule2
@@ -54,7 +54,7 @@ internal class ScheduleDaoTest {
         // GIVEN - empty database
         database.scheduleDao.insert(schedule1.asScheduleDbEntity())
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        result.asSchedule() shouldBe schedule1
+        result.toSchedule() shouldBe schedule1
     }
 
     @Test
@@ -70,7 +70,7 @@ internal class ScheduleDaoTest {
         database.scheduleDao.insert(schedule1.asScheduleDbEntity())
         database.scheduleDao.insert(schedule1Modified.asScheduleDbEntity())
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        result.asSchedule() shouldBe schedule1Modified
+        result.toSchedule() shouldBe schedule1Modified
     }
 
     @Test
@@ -134,6 +134,6 @@ internal class ScheduleDaoTest {
         database.scheduleDao.deleteDirty()
 
         val result = database.scheduleDao.getSchedules()
-        result.asSchedule().shouldContainExactly(schedule2)
+        result.toSchedule().shouldContainExactly(schedule2)
     }
 }

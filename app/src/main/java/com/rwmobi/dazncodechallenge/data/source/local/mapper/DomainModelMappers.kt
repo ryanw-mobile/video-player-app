@@ -12,7 +12,7 @@ import com.rwmobi.dazncodechallenge.data.source.local.model.ScheduleDbEntity
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
 
-fun EventDbEntity.asEvent(): Event {
+fun EventDbEntity.toEvent(): Event {
     return Event(
         eventId = this.eventId,
         title = this.title,
@@ -23,13 +23,13 @@ fun EventDbEntity.asEvent(): Event {
     )
 }
 
-fun List<EventDbEntity>.asEvent(): List<Event> {
+fun List<EventDbEntity>.toEvent(): List<Event> {
     return map {
-        it.asEvent()
+        it.toEvent()
     }
 }
 
-fun ScheduleDbEntity.asSchedule(): Schedule {
+fun ScheduleDbEntity.toSchedule(): Schedule {
     return Schedule(
         scheduleId = this.scheduleId,
         title = this.title,
@@ -39,8 +39,8 @@ fun ScheduleDbEntity.asSchedule(): Schedule {
     )
 }
 
-fun List<ScheduleDbEntity>.asSchedule(): List<Schedule> {
+fun List<ScheduleDbEntity>.toSchedule(): List<Schedule> {
     return map {
-        it.asSchedule()
+        it.toSchedule()
     }
 }

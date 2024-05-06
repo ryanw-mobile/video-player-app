@@ -11,8 +11,8 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.rwmobi.dazncodechallenge.data.source.local.DaznApiDatabase
-import com.rwmobi.dazncodechallenge.data.source.local.mapper.asEvent
 import com.rwmobi.dazncodechallenge.data.source.local.mapper.asEventDbEntity
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.toEvent
 import com.rwmobi.dazncodechallenge.test.EventSampleData.event1
 import com.rwmobi.dazncodechallenge.test.EventSampleData.event1Modified
 import com.rwmobi.dazncodechallenge.test.EventSampleData.event2
@@ -54,7 +54,7 @@ internal class EventDaoTest {
         // GIVEN - empty database
         database.eventsDao.insert(event1.asEventDbEntity())
         val result = database.eventsDao.getEventById(event1.eventId)
-        result.asEvent() shouldBe event1
+        result.toEvent() shouldBe event1
     }
 
     @Test
@@ -70,7 +70,7 @@ internal class EventDaoTest {
         database.eventsDao.insert(event1.asEventDbEntity())
         database.eventsDao.insert(event1Modified.asEventDbEntity())
         val result = database.eventsDao.getEventById(event1.eventId)
-        result.asEvent() shouldBe event1Modified
+        result.toEvent() shouldBe event1Modified
     }
 
     @Test
@@ -105,7 +105,7 @@ internal class EventDaoTest {
         // GIVEN - empty database
         database.eventsDao.insert(event1.asEventDbEntity())
         val result = database.eventsDao.getEventById(event1.eventId)
-        result.asEvent() shouldBe event1
+        result.toEvent() shouldBe event1
     }
 
     @Test
@@ -136,6 +136,6 @@ internal class EventDaoTest {
         database.eventsDao.deleteDirty()
 
         val result = database.eventsDao.getEvents()
-        result.asEvent().shouldContainExactly(event2)
+        result.toEvent().shouldContainExactly(event2)
     }
 }
