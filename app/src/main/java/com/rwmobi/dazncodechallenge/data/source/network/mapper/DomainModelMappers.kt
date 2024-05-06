@@ -12,7 +12,7 @@ import com.rwmobi.dazncodechallenge.data.source.network.dto.ScheduleNetworkDto
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
 
-fun EventNetworkDto.asEvent(): Event {
+fun EventNetworkDto.toEvent(): Event {
     return Event(
         eventId = eventId,
         title = title,
@@ -23,13 +23,13 @@ fun EventNetworkDto.asEvent(): Event {
     )
 }
 
-fun List<EventNetworkDto>.asEvent(): List<Event> {
+fun List<EventNetworkDto>.toEvent(): List<Event> {
     return map {
-        it.asEvent()
+        it.toEvent()
     }
 }
 
-fun ScheduleNetworkDto.asSchedule(): Schedule {
+fun ScheduleNetworkDto.toSchedule(): Schedule {
     return Schedule(
         scheduleId = scheduleId,
         title = title,
@@ -39,8 +39,8 @@ fun ScheduleNetworkDto.asSchedule(): Schedule {
     )
 }
 
-fun List<ScheduleNetworkDto>.asSchedule(): List<Schedule> {
+fun List<ScheduleNetworkDto>.toSchedule(): List<Schedule> {
     return map {
-        it.asSchedule()
+        it.toSchedule()
     }
 }

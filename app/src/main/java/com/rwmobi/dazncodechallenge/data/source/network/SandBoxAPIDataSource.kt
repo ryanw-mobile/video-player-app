@@ -8,8 +8,8 @@
 package com.rwmobi.dazncodechallenge.data.source.network
 
 import com.rwmobi.dazncodechallenge.data.source.network.interfaces.NetworkDataSource
-import com.rwmobi.dazncodechallenge.data.source.network.mapper.asEvent
-import com.rwmobi.dazncodechallenge.data.source.network.mapper.asSchedule
+import com.rwmobi.dazncodechallenge.data.source.network.mapper.toEvent
+import com.rwmobi.dazncodechallenge.data.source.network.mapper.toSchedule
 import com.rwmobi.dazncodechallenge.di.DispatcherModule
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
@@ -25,7 +25,7 @@ class SandBoxAPIDataSource @Inject constructor(
     override suspend fun getEvents(): Result<List<Event>> {
         return withContext(dispatcher) {
             Result.runCatching {
-                retrofitService.getEvents().asEvent()
+                retrofitService.getEvents().toEvent()
             }
         }
     }
@@ -33,7 +33,7 @@ class SandBoxAPIDataSource @Inject constructor(
     override suspend fun getSchedules(): Result<List<Schedule>> {
         return withContext(dispatcher) {
             Result.runCatching {
-                retrofitService.getSchedule().asSchedule()
+                retrofitService.getSchedule().toSchedule()
             }
         }
     }
