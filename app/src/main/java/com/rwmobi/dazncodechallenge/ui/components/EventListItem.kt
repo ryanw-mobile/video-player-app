@@ -40,7 +40,7 @@ import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_accent
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
-import com.rwmobi.dazncodechallenge.ui.utils.asNiceString
+import com.rwmobi.dazncodechallenge.ui.utils.toRelativeDateTimeString
 
 @Composable
 fun EventListItem(
@@ -115,7 +115,7 @@ fun EventListItem(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = dazn_accent,
-                text = event.date.asNiceString(context = context),
+                text = event.date.toRelativeDateTimeString(context = context),
             )
         }
     }

@@ -22,7 +22,7 @@ internal class DomainModelMappersTest {
             EventNetworkDtoSampleData.eventNetworkDto1,
         )
 
-        val events = dtos.asEvent()
+        val events = dtos.toEvent()
 
         with(events.first()) {
             eventId shouldBe EventNetworkDtoSampleData.eventNetworkDto1.eventId
@@ -42,7 +42,7 @@ internal class DomainModelMappersTest {
             EventNetworkDtoSampleData.eventNetworkDto3,
         )
 
-        val events = dtos.asEvent()
+        val events = dtos.toEvent()
 
         events.size shouldBe 3
         dtos.zip(events).forEach { (dto, event) ->
@@ -63,7 +63,7 @@ internal class DomainModelMappersTest {
             ScheduleNetworkDtoSampleData.scheduleNetworkDto1,
         )
 
-        val schedules = dtos.asSchedule()
+        val schedules = dtos.toSchedule()
 
         with(schedules.first()) {
             scheduleId shouldBe ScheduleNetworkDtoSampleData.scheduleNetworkDto1.scheduleId
@@ -82,7 +82,7 @@ internal class DomainModelMappersTest {
             ScheduleNetworkDtoSampleData.scheduleNetworkDto3,
         )
 
-        val schedules = dtos.asSchedule()
+        val schedules = dtos.toSchedule()
 
         schedules.size shouldBe 3
         dtos.zip(schedules).forEach { (dto, schedule) ->

@@ -10,10 +10,10 @@ package com.rwmobi.dazncodechallenge.data.source.local
 import com.rwmobi.dazncodechallenge.data.source.local.dao.EventsDao
 import com.rwmobi.dazncodechallenge.data.source.local.dao.ScheduleDao
 import com.rwmobi.dazncodechallenge.data.source.local.interfaces.LocalDataSource
-import com.rwmobi.dazncodechallenge.data.source.local.mapper.asEvent
-import com.rwmobi.dazncodechallenge.data.source.local.mapper.asEventDbEntity
-import com.rwmobi.dazncodechallenge.data.source.local.mapper.asSchedule
-import com.rwmobi.dazncodechallenge.data.source.local.mapper.asScheduleDbEntity
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.toEvent
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.toEventDbEntity
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.toSchedule
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.toScheduleDbEntity
 import com.rwmobi.dazncodechallenge.di.DispatcherModule
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
@@ -29,12 +29,12 @@ class RoomDbDataSource @Inject constructor(
 ) : LocalDataSource {
     override suspend fun getEvents(): List<Event> =
         withContext(dispatcher) {
-            eventsDao.getEvents().asEvent()
+            eventsDao.getEvents().toEvent()
         }
 
     override suspend fun getSchedules(): List<Schedule> =
         withContext(dispatcher) {
-            scheduleDao.getSchedules().asSchedule()
+            scheduleDao.getSchedules().toSchedule()
         }
 
     // Implementation note:
@@ -46,7 +46,7 @@ class RoomDbDataSource @Inject constructor(
             Timber.d("syncEvents() - processed ${events.size} items")
             with(eventsDao) {
                 markDirty()
-                insertAll(eventDBEntities = events.asEventDbEntity())
+                insertAll(eventDBEntities = events.toEventDbEntity())
                 deleteDirty()
             }
         }
@@ -56,7 +56,7 @@ class RoomDbDataSource @Inject constructor(
             Timber.d("syncSchedule() - processed ${schedules.size} items")
             with(scheduleDao) {
                 markDirty()
-                insertAll(scheduleDBEntities = schedules.asScheduleDbEntity())
+                insertAll(scheduleDBEntities = schedules.toScheduleDbEntity())
                 deleteDirty()
             }
         }

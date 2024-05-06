@@ -19,7 +19,7 @@ internal class DtoMappersTest {
     @Test
     fun convertEventToEventNetworkDto_ShouldMapFieldsCorrectly_ForSingleEvent() {
         val event = EventSampleData.event1
-        val dto = event.asEventNetworkDto()
+        val dto = event.toEventNetworkDto()
         with(dto) {
             eventId shouldBe EventSampleData.event1.eventId
             title shouldBe EventSampleData.event1.title
@@ -37,7 +37,7 @@ internal class DtoMappersTest {
             EventSampleData.event2,
             EventSampleData.event3,
         )
-        val dtos = events.asEventNetworkDto()
+        val dtos = events.toEventNetworkDto()
 
         dtos.size shouldBe events.size
         events.zip(dtos).forEach { (event, dto) ->
@@ -55,7 +55,7 @@ internal class DtoMappersTest {
     @Test
     fun convertScheduleToScheduleNetworkDto_ShouldMapFieldsCorrectly_ForSingleSchedule() {
         val schedule = ScheduleSampleData.schedule1
-        val dto = schedule.asScheduleNetworkDto()
+        val dto = schedule.toScheduleNetworkDto()
         with(dto) {
             scheduleId shouldBe ScheduleSampleData.schedule1.scheduleId
             title shouldBe ScheduleSampleData.schedule1.title
@@ -72,7 +72,7 @@ internal class DtoMappersTest {
             ScheduleSampleData.schedule2,
             ScheduleSampleData.schedule3,
         )
-        val dtos = schedules.asScheduleNetworkDto()
+        val dtos = schedules.toScheduleNetworkDto()
 
         dtos.size shouldBe schedules.size
         schedules.zip(dtos).forEach { (schedule, dto) ->
