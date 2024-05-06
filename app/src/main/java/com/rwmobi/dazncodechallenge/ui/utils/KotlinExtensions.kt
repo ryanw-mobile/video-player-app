@@ -27,14 +27,19 @@ internal fun String.parseTimeStamp(dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss")
     return simpleDateFormat.parse(this)!!
 }
 
-internal fun Date.asNiceString(context: Context): String {
+internal fun Date.toRelativeDateTimeString(context: Context): String {
     // Data formatting similar but not exactly the same as the mockups.
-    // This is done without using any 3rd party library
+    // This is done using the Android library (in Java, so not KMP compatible)
     return DateUtils.getRelativeDateTimeString(
+        /* c = */
         context,
+        /* time = */
         time,
+        /* minResolution = */
         DateUtils.DAY_IN_MILLIS,
+        /* transitionResolution = */
         DateUtils.DAY_IN_MILLIS * 3,
+        /* flags = */
         0,
     ).toString()
 }
