@@ -11,7 +11,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.rwmobi.dazncodechallenge.data.source.local.DaznApiDatabase
-import com.rwmobi.dazncodechallenge.data.source.local.mapper.asScheduleDbEntity
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.toDbEntity
 import com.rwmobi.dazncodechallenge.data.source.local.mapper.toSchedule
 import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule1
 import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule1Modified
@@ -52,7 +52,7 @@ internal class ScheduleDaoTest {
     @Test
     fun getScheduleById_ShouldReturnInsertedSchedule() = runTest {
         // GIVEN - empty database
-        database.scheduleDao.insert(schedule1.asScheduleDbEntity())
+        database.scheduleDao.insert(schedule1.toDbEntity())
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
         result.toSchedule() shouldBe schedule1
     }
@@ -60,22 +60,22 @@ internal class ScheduleDaoTest {
     @Test
     fun getSchedules_ShouldReturnAllInsertedSchedules() = runTest {
         // GIVEN - Empty database
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asScheduleDbEntity())
+        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).toDbEntity())
         val result = database.scheduleDao.getSchedules()
         result.size shouldBe 3
     }
 
     @Test
     fun getScheduleById_ShouldReturnUpdatedScheduleAfterUpsert() = runTest {
-        database.scheduleDao.insert(schedule1.asScheduleDbEntity())
-        database.scheduleDao.insert(schedule1Modified.asScheduleDbEntity())
+        database.scheduleDao.insert(schedule1.toDbEntity())
+        database.scheduleDao.insert(schedule1Modified.toDbEntity())
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
         result.toSchedule() shouldBe schedule1Modified
     }
 
     @Test
     fun getScheduleById_ShouldReturnNullAfterScheduleDeletion() = runTest {
-        database.scheduleDao.insert(schedule1.asScheduleDbEntity())
+        database.scheduleDao.insert(schedule1.toDbEntity())
         database.scheduleDao.delete(schedule1.scheduleId)
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
         result shouldBe null
@@ -83,7 +83,7 @@ internal class ScheduleDaoTest {
 
     @Test
     fun getScheduleById_ShouldReturnNullAfterDeletingSchedule() = runTest {
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asScheduleDbEntity())
+        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).toDbEntity())
         database.scheduleDao.delete(schedule1.scheduleId)
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
         result shouldBe null
@@ -91,7 +91,7 @@ internal class ScheduleDaoTest {
 
     @Test
     fun getSchedules_ShouldReturnEmptyListAfterClear() = runTest {
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asScheduleDbEntity())
+        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).toDbEntity())
         database.scheduleDao.clear()
         val result = database.scheduleDao.getSchedules()
         result shouldBe emptyList()
@@ -101,14 +101,14 @@ internal class ScheduleDaoTest {
     @Test
     fun getScheduleById_ShouldReturnScheduleWithDirtyFlagFalseAfterInsert() = runTest {
         // GIVEN - empty database
-        database.scheduleDao.insert(schedule1.asScheduleDbEntity())
+        database.scheduleDao.insert(schedule1.toDbEntity())
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
         result.dirty shouldBe false
     }
 
     @Test
     fun getScheduleById_ShouldReturnScheduleWithDirtyFlagTrueAfterMarkDirty() = runTest {
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asScheduleDbEntity())
+        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).toDbEntity())
         database.scheduleDao.markDirty()
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
         result.dirty shouldBe true
@@ -116,10 +116,10 @@ internal class ScheduleDaoTest {
 
     @Test
     fun getScheduleById_ShouldReturnScheduleWithDirtyFlagFalseAfterUpdate() = runTest {
-        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).asScheduleDbEntity())
+        database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3).toDbEntity())
         database.scheduleDao.markDirty()
 
-        database.scheduleDao.insert(schedule1Modified.asScheduleDbEntity())
+        database.scheduleDao.insert(schedule1Modified.toDbEntity())
 
         val result = database.scheduleDao.getScheduleById(schedule1Modified.scheduleId)
         result.dirty shouldBe false
@@ -127,10 +127,10 @@ internal class ScheduleDaoTest {
 
     @Test
     fun getSchedules_ShouldReturnNonDirtySchedulesAfterDeleteDirty() = runTest {
-        database.scheduleDao.insertAll(listOf(schedule1, schedule3).asScheduleDbEntity())
+        database.scheduleDao.insertAll(listOf(schedule1, schedule3).toDbEntity())
         database.scheduleDao.markDirty()
 
-        database.scheduleDao.insert(schedule2.asScheduleDbEntity())
+        database.scheduleDao.insert(schedule2.toDbEntity())
         database.scheduleDao.deleteDirty()
 
         val result = database.scheduleDao.getSchedules()

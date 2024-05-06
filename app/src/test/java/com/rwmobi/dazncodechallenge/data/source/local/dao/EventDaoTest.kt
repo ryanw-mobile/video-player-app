@@ -11,7 +11,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.rwmobi.dazncodechallenge.data.source.local.DaznApiDatabase
-import com.rwmobi.dazncodechallenge.data.source.local.mapper.asEventDbEntity
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.toDbEntity
 import com.rwmobi.dazncodechallenge.data.source.local.mapper.toEvent
 import com.rwmobi.dazncodechallenge.test.EventSampleData.event1
 import com.rwmobi.dazncodechallenge.test.EventSampleData.event1Modified
@@ -52,7 +52,7 @@ internal class EventDaoTest {
     @Test
     fun getEventById_ShouldReturnInsertedEvent() = runTest {
         // GIVEN - empty database
-        database.eventsDao.insert(event1.asEventDbEntity())
+        database.eventsDao.insert(event1.toDbEntity())
         val result = database.eventsDao.getEventById(event1.eventId)
         result.toEvent() shouldBe event1
     }
@@ -60,22 +60,22 @@ internal class EventDaoTest {
     @Test
     fun getEvents_ShouldReturnAllInsertedEvents() = runTest {
         // GIVEN - Empty database
-        database.eventsDao.insertAll(listOf(event1, event2, event3).asEventDbEntity())
+        database.eventsDao.insertAll(listOf(event1, event2, event3).toDbEntity())
         val result = database.eventsDao.getEvents()
         result.size shouldBe 3
     }
 
     @Test
     fun getEventById_ShouldReturnUpdatedEventAfterUpsert() = runTest {
-        database.eventsDao.insert(event1.asEventDbEntity())
-        database.eventsDao.insert(event1Modified.asEventDbEntity())
+        database.eventsDao.insert(event1.toDbEntity())
+        database.eventsDao.insert(event1Modified.toDbEntity())
         val result = database.eventsDao.getEventById(event1.eventId)
         result.toEvent() shouldBe event1Modified
     }
 
     @Test
     fun getEventById_ShouldReturnNullAfterEventDeletion() = runTest {
-        database.eventsDao.insert(event1.asEventDbEntity())
+        database.eventsDao.insert(event1.toDbEntity())
         database.eventsDao.delete(event1.eventId)
         val result = database.eventsDao.getEventById(event1.eventId)
         result shouldBe null
@@ -84,7 +84,7 @@ internal class EventDaoTest {
     @Test
     fun getEventById_ShouldReturnNullAfterDeletingEvent() = runTest {
         database.eventsDao.insertAll(
-            listOf(event1, event2, event3).asEventDbEntity(),
+            listOf(event1, event2, event3).toDbEntity(),
         )
         database.eventsDao.delete(event1.eventId)
         val result = database.eventsDao.getEventById(event1.eventId)
@@ -93,7 +93,7 @@ internal class EventDaoTest {
 
     @Test
     fun getEvents_ShouldReturnEmptyListAfterClear() = runTest {
-        database.eventsDao.insertAll(listOf(event1, event2, event3).asEventDbEntity())
+        database.eventsDao.insertAll(listOf(event1, event2, event3).toDbEntity())
         database.eventsDao.clear()
         val result = database.eventsDao.getEvents()
         result shouldBe emptyList()
@@ -103,14 +103,14 @@ internal class EventDaoTest {
     @Test
     fun getEventById_ShouldReturnEventWithDirtyFlagFalseAfterInsert() = runTest {
         // GIVEN - empty database
-        database.eventsDao.insert(event1.asEventDbEntity())
+        database.eventsDao.insert(event1.toDbEntity())
         val result = database.eventsDao.getEventById(event1.eventId)
         result.toEvent() shouldBe event1
     }
 
     @Test
     fun getEventById_ShouldReturnEventWithDirtyFlagTrueAfterMarkDirty() = runTest {
-        database.eventsDao.insertAll(listOf(event1, event2, event3).asEventDbEntity())
+        database.eventsDao.insertAll(listOf(event1, event2, event3).toDbEntity())
         database.eventsDao.markDirty()
         val result = database.eventsDao.getEventById(event1.eventId)
         result.dirty shouldBe true
@@ -118,10 +118,10 @@ internal class EventDaoTest {
 
     @Test
     fun getEventById_ShouldReturnEventWithDirtyFlagFalseAfterUpdate() = runTest {
-        database.eventsDao.insertAll(listOf(event1, event2, event3).asEventDbEntity())
+        database.eventsDao.insertAll(listOf(event1, event2, event3).toDbEntity())
         database.eventsDao.markDirty()
 
-        database.eventsDao.insert(event1Modified.asEventDbEntity())
+        database.eventsDao.insert(event1Modified.toDbEntity())
 
         val result = database.eventsDao.getEventById(event1Modified.eventId)
         result.dirty shouldBe false
@@ -129,10 +129,10 @@ internal class EventDaoTest {
 
     @Test
     fun getEvents_ShouldReturnNonDirtyEventsAfterDeleteDirty() = runTest {
-        database.eventsDao.insertAll(listOf(event1, event3).asEventDbEntity())
+        database.eventsDao.insertAll(listOf(event1, event3).toDbEntity())
         database.eventsDao.markDirty()
 
-        database.eventsDao.insert(event2.asEventDbEntity())
+        database.eventsDao.insert(event2.toDbEntity())
         database.eventsDao.deleteDirty()
 
         val result = database.eventsDao.getEvents()
