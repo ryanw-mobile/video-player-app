@@ -10,9 +10,10 @@ package com.rwmobi.dazncodechallenge.data.source.local
 import com.rwmobi.dazncodechallenge.data.source.local.dao.EventsDao
 import com.rwmobi.dazncodechallenge.data.source.local.dao.ScheduleDao
 import com.rwmobi.dazncodechallenge.data.source.local.interfaces.LocalDataSource
-import com.rwmobi.dazncodechallenge.data.source.local.mapper.toDbEntity
 import com.rwmobi.dazncodechallenge.data.source.local.mapper.toEvent
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.toEventDbEntity
 import com.rwmobi.dazncodechallenge.data.source.local.mapper.toSchedule
+import com.rwmobi.dazncodechallenge.data.source.local.mapper.toScheduleDbEntity
 import com.rwmobi.dazncodechallenge.di.DispatcherModule
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
@@ -45,7 +46,7 @@ class RoomDbDataSource @Inject constructor(
             Timber.d("syncEvents() - processed ${events.size} items")
             with(eventsDao) {
                 markDirty()
-                insertAll(eventDBEntities = events.toDbEntity())
+                insertAll(eventDBEntities = events.toEventDbEntity())
                 deleteDirty()
             }
         }
@@ -55,7 +56,7 @@ class RoomDbDataSource @Inject constructor(
             Timber.d("syncSchedule() - processed ${schedules.size} items")
             with(scheduleDao) {
                 markDirty()
-                insertAll(scheduleDBEntities = schedules.toDbEntity())
+                insertAll(scheduleDBEntities = schedules.toScheduleDbEntity())
                 deleteDirty()
             }
         }
