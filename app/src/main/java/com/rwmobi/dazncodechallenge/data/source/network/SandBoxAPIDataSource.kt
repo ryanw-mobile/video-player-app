@@ -7,12 +7,10 @@
 
 package com.rwmobi.dazncodechallenge.data.source.network
 
+import com.rwmobi.dazncodechallenge.data.source.network.dto.EventNetworkDto
+import com.rwmobi.dazncodechallenge.data.source.network.dto.ScheduleNetworkDto
 import com.rwmobi.dazncodechallenge.data.source.network.interfaces.NetworkDataSource
-import com.rwmobi.dazncodechallenge.data.source.network.mapper.toEvent
-import com.rwmobi.dazncodechallenge.data.source.network.mapper.toSchedule
 import com.rwmobi.dazncodechallenge.di.DispatcherModule
-import com.rwmobi.dazncodechallenge.domain.model.Event
-import com.rwmobi.dazncodechallenge.domain.model.Schedule
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -22,19 +20,15 @@ class SandBoxAPIDataSource @Inject constructor(
     @DispatcherModule.IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : NetworkDataSource {
 
-    override suspend fun getEvents(): Result<List<Event>> {
+    override suspend fun getEvents(): List<EventNetworkDto> {
         return withContext(dispatcher) {
-            Result.runCatching {
-                retrofitService.getEvents().toEvent()
-            }
+            retrofitService.getEvents()
         }
     }
 
-    override suspend fun getSchedules(): Result<List<Schedule>> {
+    override suspend fun getSchedules(): List<ScheduleNetworkDto> {
         return withContext(dispatcher) {
-            Result.runCatching {
-                retrofitService.getSchedule().toSchedule()
-            }
+            retrofitService.getSchedule()
         }
     }
 }
