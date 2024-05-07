@@ -7,10 +7,10 @@
 
 package com.rwmobi.dazncodechallenge.data.source.network.interfaces
 
-import com.rwmobi.dazncodechallenge.domain.model.Event
-import com.rwmobi.dazncodechallenge.domain.model.Schedule
+import com.rwmobi.dazncodechallenge.data.source.network.dto.EventNetworkDto
+import com.rwmobi.dazncodechallenge.data.source.network.dto.ScheduleNetworkDto
 
 interface NetworkDataSource {
-    suspend fun getEvents(): Result<List<Event>>
-    suspend fun getSchedules(): Result<List<Schedule>>
+    suspend fun getEvents(): List<EventNetworkDto>
+    suspend fun getSchedules(): List<ScheduleNetworkDto>
 }

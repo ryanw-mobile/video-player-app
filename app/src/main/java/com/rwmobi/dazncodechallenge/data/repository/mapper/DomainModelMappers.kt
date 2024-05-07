@@ -5,10 +5,12 @@
  *
  */
 
-package com.rwmobi.dazncodechallenge.data.source.local.mapper
+package com.rwmobi.dazncodechallenge.data.repository.mapper
 
 import com.rwmobi.dazncodechallenge.data.source.local.model.EventDbEntity
 import com.rwmobi.dazncodechallenge.data.source.local.model.ScheduleDbEntity
+import com.rwmobi.dazncodechallenge.data.source.network.dto.EventNetworkDto
+import com.rwmobi.dazncodechallenge.data.source.network.dto.ScheduleNetworkDto
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
 
@@ -43,4 +45,25 @@ fun List<ScheduleDbEntity>.toSchedule(): List<Schedule> {
     return map {
         it.toSchedule()
     }
+}
+
+fun EventNetworkDto.toEvent(): Event {
+    return Event(
+        eventId = eventId,
+        title = title,
+        subtitle = subtitle,
+        date = date,
+        imageUrl = imageUrl,
+        videoUrl = videoUrl,
+    )
+}
+
+fun ScheduleNetworkDto.toSchedule(): Schedule {
+    return Schedule(
+        scheduleId = scheduleId,
+        title = title,
+        subtitle = subtitle,
+        date = date,
+        imageUrl = imageUrl,
+    )
 }
