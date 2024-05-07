@@ -7,6 +7,7 @@
 
 package com.rwmobi.dazncodechallenge.data.source.network.mapper
 
+import com.rwmobi.dazncodechallenge.data.repository.mapper.toNetworkDto
 import com.rwmobi.dazncodechallenge.test.EventSampleData
 import com.rwmobi.dazncodechallenge.test.ScheduleSampleData
 import io.kotest.matchers.shouldBe
@@ -19,7 +20,7 @@ internal class DtoMappersTest {
     @Test
     fun convertEventToEventNetworkDto_ShouldMapFieldsCorrectly_ForSingleEvent() {
         val event = EventSampleData.event1
-        val dto = event.toEventNetworkDto()
+        val dto = event.toNetworkDto()
         with(dto) {
             eventId shouldBe EventSampleData.event1.eventId
             title shouldBe EventSampleData.event1.title
@@ -37,7 +38,7 @@ internal class DtoMappersTest {
             EventSampleData.event2,
             EventSampleData.event3,
         )
-        val dtos = events.toEventNetworkDto()
+        val dtos = events.map { it.toNetworkDto() }
 
         dtos.size shouldBe events.size
         events.zip(dtos).forEach { (event, dto) ->
@@ -55,7 +56,7 @@ internal class DtoMappersTest {
     @Test
     fun convertScheduleToScheduleNetworkDto_ShouldMapFieldsCorrectly_ForSingleSchedule() {
         val schedule = ScheduleSampleData.schedule1
-        val dto = schedule.toScheduleNetworkDto()
+        val dto = schedule.toNetworkDto()
         with(dto) {
             scheduleId shouldBe ScheduleSampleData.schedule1.scheduleId
             title shouldBe ScheduleSampleData.schedule1.title
@@ -72,7 +73,7 @@ internal class DtoMappersTest {
             ScheduleSampleData.schedule2,
             ScheduleSampleData.schedule3,
         )
-        val dtos = schedules.toScheduleNetworkDto()
+        val dtos = schedules.map { it.toNetworkDto() }
 
         dtos.size shouldBe schedules.size
         schedules.zip(dtos).forEach { (schedule, dto) ->
