@@ -128,6 +128,21 @@ internal class ScheduleViewModelTest {
     }
 
     @Test
+    fun refresh_ShouldNotAccumulateDuplicatedErrorMessages_OnMultipleFailures() {
+        viewModel.fetchCacheAndRefresh()
+        val errorMessage1 = "Test error 1"
+
+        repeat(times = 2) {
+            fakeRepository.setExceptionForTest(Exception(errorMessage1))
+            viewModel.refresh()
+        }
+
+        val uiState = viewModel.uiState.value
+        uiState.errorMessages.size shouldBe 1
+        uiState.errorMessages[0].message shouldBe errorMessage1
+    }
+
+    @Test
     fun errorShown_ShouldClearErrorMessage_WhenCalledWithValidId() {
         viewModel.fetchCacheAndRefresh()
         val errorMessage = "Test error"

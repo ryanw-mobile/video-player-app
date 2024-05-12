@@ -128,21 +128,18 @@ class ExoPlayerViewModel @Inject constructor(
     }
 
     private fun updateUIForError(message: String) {
-        _uiState.update {
-            addErrorMessage(
-                currentUiState = it,
-                message = message,
+        _uiState.update { currentUiState ->
+            val newErrorMessages = if (_uiState.value.errorMessages.any { it.message == message }) {
+                currentUiState.errorMessages
+            } else {
+                currentUiState.errorMessages + ErrorMessage(
+                    id = UUID.randomUUID().mostSignificantBits,
+                    message = message,
+                )
+            }
+            currentUiState.copy(
+                errorMessages = newErrorMessages,
             )
         }
-    }
-
-    private fun addErrorMessage(currentUiState: ExoPlayerUIState, message: String): ExoPlayerUIState {
-        val newErrorMessage = ErrorMessage(
-            id = UUID.randomUUID().mostSignificantBits,
-            message = message,
-        )
-        return currentUiState.copy(
-            errorMessages = currentUiState.errorMessages + newErrorMessage,
-        )
     }
 }
