@@ -146,15 +146,32 @@ internal class ExoPlayerViewModelTest {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
         }
+        viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
+
+        every { mockPlayer.play() } answers {
+            listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.ioException)
+        }
+        viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
+
+        val uiState = viewModel.uiState.value
+        uiState.errorMessages.size shouldBe 2
+        uiState.errorMessages[0].message shouldBe PlaybackExceptionSampleData.genericExceptionMessage
+        uiState.errorMessages[1].message shouldBe PlaybackExceptionSampleData.ioExceptionMessage
+    }
+
+    @Test
+    fun refresh_ShouldNotAccumulateDuplicatedErrorMessages_OnMultipleFailures() {
+        every { mockPlayer.play() } answers {
+            listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
+        }
 
         repeat(times = 2) {
             viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
         }
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 2
+        uiState.errorMessages.size shouldBe 1
         uiState.errorMessages[0].message shouldBe PlaybackExceptionSampleData.genericExceptionMessage
-        uiState.errorMessages[1].message shouldBe PlaybackExceptionSampleData.genericExceptionMessage
     }
 
     @Test
