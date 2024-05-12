@@ -65,34 +65,35 @@ class EventsViewModel @Inject constructor(
 
         viewModelScope.launch(dispatcher) {
             val refreshResult = repository.refreshEvents()
-            if (refreshResult.isFailure) {
-                val exception = refreshResult.exceptionOrNull() ?: Exception("Unknown network communication exception")
-                Timber.tag("refresh").e(exception)
-                updateUIForError(exception.message ?: "Unknown network communication error")
-            } else {
-                getEvents()
-            }
+            refreshResult.fold(
+                onSuccess = {
+                    getEvents()
+                },
+                onFailure = { exception ->
+                    Timber.tag("refresh").e(exception)
+                    updateUIForError(exception.message ?: "Unknown network communication error")
+                },
+            )
         }
     }
 
     private suspend fun getEvents(setLoadingCompleted: Boolean = true): Boolean {
         val getEventsResult = repository.getEvents()
-        return when (getEventsResult.isSuccess) {
-            false -> {
-                updateUIForError("Error getting data: ${getEventsResult.exceptionOrNull()?.message}")
-                false
-            }
-
-            true -> {
+        return getEventsResult.fold(
+            onSuccess = { events ->
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
                         isLoading = !setLoadingCompleted,
-                        events = getEventsResult.getOrNull() ?: emptyList(),
+                        events = events,
                     )
                 }
                 true
-            }
-        }
+            },
+            onFailure = { exception ->
+                updateUIForError("Error getting data: ${exception.message}")
+                false
+            },
+        )
     }
 
     private fun startLoading() {

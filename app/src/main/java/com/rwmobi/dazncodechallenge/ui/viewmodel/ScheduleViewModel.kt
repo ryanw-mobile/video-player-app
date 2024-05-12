@@ -65,35 +65,35 @@ class ScheduleViewModel @Inject constructor(
 
         viewModelScope.launch(dispatcher) {
             val refreshResult = repository.refreshSchedule()
-            if (refreshResult.isFailure) {
-                val exception = refreshResult.exceptionOrNull() ?: Exception("Unknown network communication exception")
-                Timber.tag("refresh").e(exception)
-                updateUIForError(exception.message ?: "Unknown network communication error")
-                return@launch
-            }
-
-            getSchedule()
+            refreshResult.fold(
+                onSuccess = {
+                    getSchedule()
+                },
+                onFailure = { exception ->
+                    Timber.tag("refresh").e(exception)
+                    updateUIForError(exception.message ?: "Unknown network communication error")
+                },
+            )
         }
     }
 
     private suspend fun getSchedule(setLoadingCompleted: Boolean = true): Boolean {
         val getScheduleResult = repository.getSchedule()
-        return when (getScheduleResult.isSuccess) {
-            false -> {
-                updateUIForError("Error getting data: ${getScheduleResult.exceptionOrNull()?.message}")
-                false
-            }
-
-            true -> {
+        return getScheduleResult.fold(
+            onSuccess = { schedules ->
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
                         isLoading = !setLoadingCompleted,
-                        schedules = getScheduleResult.getOrNull() ?: emptyList(),
+                        schedules = schedules,
                     )
                 }
                 true
-            }
-        }
+            },
+            onFailure = { exception ->
+                updateUIForError("Error getting data: ${exception.message}")
+                false
+            },
+        )
     }
 
     private fun startLoading() {
