@@ -27,6 +27,7 @@ plugins {
     alias(libs.plugins.devtoolsKsp)
     alias(libs.plugins.gradleKtlint)
     alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -134,10 +135,6 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
     }
 
     packaging {

@@ -17,20 +17,20 @@ coroutines = "1.8.1"
 coreKtx = "1.13.1"
 coreSplashscreen = "1.0.1"
 datastoreVersion = "1.1.1"
-devtoolsksp = "1.9.24-1.0.20"
+devtoolsksp = "2.0.0-1.0.21"
 espressoCore = "3.5.1"
 hilt = "2.51.1"
 hiltNavigationCompose = "1.2.0"
 jetbrainsKotlinxCoroutinesTest = "1.8.1"
 junit = "4.13.2"
-kotlin = "1.9.24"
+kotlin = "2.0.0"
 kotest = "5.9.0"
 kover = "0.8.0"
 ktlint = "12.1.1"
 leakcanary = "2.14"
 legacySupportV4 = "1.0.0"
 lifecycleExtensions = "2.2.0"
-lifecycle = "2.8.1"
+lifecycle = "2.7.0"
 loggingInterceptor = "5.0.0-alpha.14"
 material3WindowSizeClass = "1.2.1"
 moshi = "1.15.1"
@@ -118,6 +118,7 @@ androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profi
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hiltAndroidPlugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinxKover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 gradleKtlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 devtoolsKsp = { id = "com.google.devtools.ksp", version.ref = "devtoolsksp" }
