@@ -30,7 +30,7 @@ ktlint = "12.1.1"
 leakcanary = "2.14"
 legacySupportV4 = "1.0.0"
 lifecycleExtensions = "2.2.0"
-lifecycle = "2.8.1"
+lifecycle = "2.7.0"
 loggingInterceptor = "5.0.0-alpha.14"
 material3WindowSizeClass = "1.2.1"
 moshi = "1.15.1"
@@ -118,6 +118,7 @@ androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profi
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hiltAndroidPlugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinxKover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 gradleKtlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 devtoolsKsp = { id = "com.google.devtools.ksp", version.ref = "devtoolsksp" }
