@@ -1,4 +1,4 @@
-# DAZN Code Challenge - Android TV ![Gradle Build](https://github.com/ryanw-mobile/dazn-code-challenge/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/dazn-code-challenge/graph/badge.svg?token=YK2DNKYBRO)](https://app.codecov.io/github/ryanw-mobile/dazn-code-challenge)
+# DAZN Code Challenge ![Gradle Build](https://github.com/ryanw-mobile/dazn-code-challenge/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/dazn-code-challenge/graph/badge.svg?token=YK2DNKYBRO)](https://app.codecov.io/github/ryanw-mobile/dazn-code-challenge) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/cfdcc6c589174dabad2241af04c8eddd)](https://app.codacy.com/gh/ryanw-mobile/dazn-code-challenge/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 A responsive Android sample app written in Kotlin and Jetpack Compose, supporting different
 navigation layout on screen sizes. The Media 3 Exoplayer is implemented on top of the single
