@@ -5,14 +5,14 @@
  *
  */
 
-package com.rwmobi.dazncodechallenge.data.source.network.mapper
+package com.rwmobi.dazncodechallenge.data.repository.mapper
 
 import com.rwmobi.dazncodechallenge.data.source.network.dto.EventNetworkDto
 import com.rwmobi.dazncodechallenge.data.source.network.dto.ScheduleNetworkDto
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
 
-fun Schedule.asScheduleNetworkDto(): ScheduleNetworkDto {
+fun Schedule.toNetworkDto(): ScheduleNetworkDto {
     return ScheduleNetworkDto(
         scheduleId = scheduleId,
         title = title,
@@ -22,13 +22,7 @@ fun Schedule.asScheduleNetworkDto(): ScheduleNetworkDto {
     )
 }
 
-fun List<Schedule>.asScheduleNetworkDto(): List<ScheduleNetworkDto> {
-    return map {
-        it.asScheduleNetworkDto()
-    }
-}
-
-fun Event.asEventNetworkDto(): EventNetworkDto {
+fun Event.toNetworkDto(): EventNetworkDto {
     return EventNetworkDto(
         eventId = eventId,
         title = title,
@@ -37,10 +31,4 @@ fun Event.asEventNetworkDto(): EventNetworkDto {
         imageUrl = imageUrl,
         videoUrl = videoUrl,
     )
-}
-
-fun List<Event>.asEventNetworkDto(): List<EventNetworkDto> {
-    return map {
-        it.asEventNetworkDto()
-    }
 }

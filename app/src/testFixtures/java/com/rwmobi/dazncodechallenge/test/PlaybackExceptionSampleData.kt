@@ -47,4 +47,11 @@ object PlaybackExceptionSampleData {
         Exception(genericExceptionMessage),
         PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
     )
+
+    val ioExceptionMessage = "Some IO exception"
+    val ioException = PlaybackException(
+        "Connection Failed",
+        Exception(ioExceptionMessage),
+        PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
+    )
 }

@@ -27,6 +27,7 @@ plugins {
     alias(libs.plugins.devtoolsKsp)
     alias(libs.plugins.gradleKtlint)
     alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -134,10 +135,6 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.13"
     }
 
     packaging {
@@ -280,48 +277,50 @@ tasks.named("preBuild") {
     dependsOn(tasks.named("ktlintFormat"))
 }
 
-koverReport {
-    // common filters for all reports of all variants
-    filters {
-        // exclusions for reports
-        excludes {
-            // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
-            classes(
-                listOf(
-                    "com.rwmobi.dazncodechallenge.DaznApplication",
-                    "com.rwmobi.dazncodechallenge.*.*MembersInjector",
-                    "com.rwmobi.dazncodechallenge.*.*Factory",
-                    "com.rwmobi.dazncodechallenge.*.*HiltModules*",
-                    "com.rwmobi.dazncodechallenge.data.source.local.*_Impl*",
-                    "com.rwmobi.dazncodechallenge.data.source.local.*Impl_Factory",
-                    "com.rwmobi.dazncodechallenge.BR",
-                    "com.rwmobi.dazncodechallenge.BuildConfig",
-                    "com.rwmobi.dazncodechallenge.Hilt*",
-                    "com.rwmobi.dazncodechallenge.*.Hilt_*",
-                    "com.rwmobi.dazncodechallenge.ComposableSingletons*",
-                    "*Fragment",
-                    "*Fragment\$*",
-                    "*Activity",
-                    "*Activity\$*",
-                    "*.BuildConfig",
-                    "*.DebugUtil",
-                ),
-            )
-            // excludes all classes located in specified package and it subpackages, wildcards '*' and '?' are available
-            packages(
-                listOf(
-                    "com.rwmobi.dazncodechallenge.di",
-                    "com.rwmobi.dazncodechallenge.ui.components",
-                    "com.rwmobi.dazncodechallenge.ui.destinations",
-                    "com.rwmobi.dazncodechallenge.ui.navigation",
-                    "com.rwmobi.dazncodechallenge.ui.previewparameter",
-                    "com.rwmobi.dazncodechallenge.ui.theme",
-                    "com.rwmobi.dazncodechallenge.ui.utils",
-                    "androidx",
-                    "dagger.hilt.internal.aggregatedroot.codegen",
-                    "hilt_aggregated_deps",
-                ),
-            )
+kover {
+    reports {
+        // common filters for all reports of all variants
+        filters {
+            // exclusions for reports
+            excludes {
+                // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
+                classes(
+                    listOf(
+                        "com.rwmobi.dazncodechallenge.DaznApplication",
+                        "com.rwmobi.dazncodechallenge.*.*MembersInjector",
+                        "com.rwmobi.dazncodechallenge.*.*Factory",
+                        "com.rwmobi.dazncodechallenge.*.*HiltModules*",
+                        "com.rwmobi.dazncodechallenge.data.source.local.*_Impl*",
+                        "com.rwmobi.dazncodechallenge.data.source.local.*Impl_Factory",
+                        "com.rwmobi.dazncodechallenge.BR",
+                        "com.rwmobi.dazncodechallenge.BuildConfig",
+                        "com.rwmobi.dazncodechallenge.Hilt*",
+                        "com.rwmobi.dazncodechallenge.*.Hilt_*",
+                        "com.rwmobi.dazncodechallenge.ComposableSingletons*",
+                        "*Fragment",
+                        "*Fragment\$*",
+                        "*Activity",
+                        "*Activity\$*",
+                        "*.BuildConfig",
+                        "*.DebugUtil",
+                    ),
+                )
+                // excludes all classes located in specified package and it subpackages, wildcards '*' and '?' are available
+                packages(
+                    listOf(
+                        "com.rwmobi.dazncodechallenge.di",
+                        "com.rwmobi.dazncodechallenge.ui.components",
+                        "com.rwmobi.dazncodechallenge.ui.destinations",
+                        "com.rwmobi.dazncodechallenge.ui.navigation",
+                        "com.rwmobi.dazncodechallenge.ui.previewparameter",
+                        "com.rwmobi.dazncodechallenge.ui.theme",
+                        "com.rwmobi.dazncodechallenge.ui.utils",
+                        "androidx",
+                        "dagger.hilt.internal.aggregatedroot.codegen",
+                        "hilt_aggregated_deps",
+                    ),
+                )
+            }
         }
     }
 }

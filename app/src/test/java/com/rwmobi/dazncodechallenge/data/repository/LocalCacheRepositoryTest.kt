@@ -7,16 +7,20 @@
 
 package com.rwmobi.dazncodechallenge.data.repository
 
+import com.rwmobi.dazncodechallenge.data.repository.mapper.toEvent
+import com.rwmobi.dazncodechallenge.data.repository.mapper.toSchedule
 import com.rwmobi.dazncodechallenge.data.source.local.FakeLocalDataSource
+import com.rwmobi.dazncodechallenge.data.source.network.dto.EventNetworkDto
+import com.rwmobi.dazncodechallenge.data.source.network.dto.ScheduleNetworkDto
 import com.rwmobi.dazncodechallenge.data.source.remote.FakeRemoteDataSource
-import com.rwmobi.dazncodechallenge.domain.model.Event
-import com.rwmobi.dazncodechallenge.domain.model.Schedule
-import com.rwmobi.dazncodechallenge.test.EventSampleData.event1
-import com.rwmobi.dazncodechallenge.test.EventSampleData.event2
-import com.rwmobi.dazncodechallenge.test.EventSampleData.event3
-import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule1
-import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule2
-import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule3
+import com.rwmobi.dazncodechallenge.test.EventDbEntitySampleData
+import com.rwmobi.dazncodechallenge.test.EventNetworkDtoSampleData.event1
+import com.rwmobi.dazncodechallenge.test.EventNetworkDtoSampleData.event2
+import com.rwmobi.dazncodechallenge.test.EventNetworkDtoSampleData.event3
+import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData
+import com.rwmobi.dazncodechallenge.test.ScheduleNetworkDtoSampleData.schedule1
+import com.rwmobi.dazncodechallenge.test.ScheduleNetworkDtoSampleData.schedule2
+import com.rwmobi.dazncodechallenge.test.ScheduleNetworkDtoSampleData.schedule3
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -59,7 +63,7 @@ internal class LocalCacheRepositoryTest {
 
     @Test
     fun refreshEvents_ShouldReturnSuccess_WhenRemoteReturnsEmptyList() = runTest {
-        val remoteEvents = emptyList<Event>()
+        val remoteEvents = emptyList<EventNetworkDto>()
         remoteDataSource.setEventsForTest(remoteEvents)
 
         val result = localCacheRepository.refreshEvents()
@@ -86,27 +90,27 @@ internal class LocalCacheRepositoryTest {
         val refreshedEvents = localCacheRepository.getEvents()
 
         refreshedEvents.isSuccess shouldBe true
-        refreshedEvents.getOrNull() shouldContainExactlyInAnyOrder remoteEvents
+        refreshedEvents.getOrNull() shouldContainExactlyInAnyOrder remoteEvents.map { it.toEvent() }
     }
 
     @Test
     fun refreshEvents_ShouldOverwriteCachedEvents_WhenDataSourceReturnsData() = runTest {
         val remoteEvents = listOf(event1, event2)
         remoteDataSource.setEventsForTest(remoteEvents)
-        localDataSource.submitEvents(listOf(event3))
+        localDataSource.submitEvents(listOf(EventDbEntitySampleData.event3))
 
         localCacheRepository.refreshEvents()
         val refreshedEvents = localCacheRepository.getEvents()
 
         refreshedEvents.isSuccess shouldBe true
-        refreshedEvents.getOrNull() shouldContainExactlyInAnyOrder remoteEvents
+        refreshedEvents.getOrNull() shouldContainExactlyInAnyOrder remoteEvents.map { it.toEvent() }
     }
 
     @Test
     fun refreshEvents_ShouldClearCachedEvents_WhenRemoteReturnsEmptyList() = runTest {
-        val remoteEvents = emptyList<Event>()
+        val remoteEvents = emptyList<EventNetworkDto>()
         remoteDataSource.setEventsForTest(remoteEvents)
-        localDataSource.submitEvents(listOf(event3))
+        localDataSource.submitEvents(listOf(EventDbEntitySampleData.event3))
 
         localCacheRepository.refreshEvents()
         val refreshedEvents = localCacheRepository.getEvents()
@@ -117,7 +121,7 @@ internal class LocalCacheRepositoryTest {
 
     @Test
     fun refreshEvents_ShouldRetainCachedEvents_WhenRemoteThrowsException() = runTest {
-        val localEvents = listOf(event1, event2, event3)
+        val localEvents = listOf(EventDbEntitySampleData.event1, EventDbEntitySampleData.event2, EventDbEntitySampleData.event3)
         remoteDataSource.setExceptionForTest(exception = IOException())
         localDataSource.submitEvents(localEvents)
 
@@ -125,18 +129,18 @@ internal class LocalCacheRepositoryTest {
         val refreshedEvents = localCacheRepository.getEvents()
 
         refreshedEvents.isSuccess shouldBe true
-        refreshedEvents.getOrNull() shouldContainExactlyInAnyOrder localEvents
+        refreshedEvents.getOrNull() shouldContainExactlyInAnyOrder localEvents.map { it.toEvent() }
     }
 
     @Test
     fun getEvents_ShouldReturnCachedEvents_WithoutRefresh() = runTest {
-        val localEvents = listOf(event1, event2, event3)
+        val localEvents = listOf(EventDbEntitySampleData.event1, EventDbEntitySampleData.event2, EventDbEntitySampleData.event3)
         localDataSource.submitEvents(localEvents)
 
         val cachedEvents = localCacheRepository.getEvents()
 
         cachedEvents.isSuccess shouldBe true
-        cachedEvents.getOrNull() shouldContainExactlyInAnyOrder localEvents
+        cachedEvents.getOrNull() shouldContainExactlyInAnyOrder localEvents.map { it.toEvent() }
     }
 
     // Schedules - the same set of tests but different objects
@@ -152,7 +156,7 @@ internal class LocalCacheRepositoryTest {
 
     @Test
     fun refreshSchedule_ShouldReturnSuccess_WhenRemoteReturnsEmptyList() = runTest {
-        val remoteSchedule = emptyList<Schedule>()
+        val remoteSchedule = emptyList<ScheduleNetworkDto>()
         remoteDataSource.setScheduleForTest(remoteSchedule)
 
         val result = localCacheRepository.refreshSchedule()
@@ -179,27 +183,27 @@ internal class LocalCacheRepositoryTest {
         val refreshedSchedule = localCacheRepository.getSchedule()
 
         refreshedSchedule.isSuccess shouldBe true
-        refreshedSchedule.getOrNull() shouldContainExactlyInAnyOrder remoteSchedule
+        refreshedSchedule.getOrNull() shouldContainExactlyInAnyOrder remoteSchedule.map { it.toSchedule() }
     }
 
     @Test
     fun refreshSchedule_ShouldOverwriteCachedSchedules_WhenDataSourceReturnsData() = runTest {
         val remoteSchedule = listOf(schedule1, schedule2)
         remoteDataSource.setScheduleForTest(remoteSchedule)
-        localDataSource.submitSchedule(listOf(schedule3))
+        localDataSource.submitSchedule(listOf(ScheduleDbEntitySampleData.schedule3))
 
         localCacheRepository.refreshSchedule()
         val refreshedSchedule = localCacheRepository.getSchedule()
 
         refreshedSchedule.isSuccess shouldBe true
-        refreshedSchedule.getOrNull() shouldContainExactlyInAnyOrder remoteSchedule
+        refreshedSchedule.getOrNull() shouldContainExactlyInAnyOrder remoteSchedule.map { it.toSchedule() }
     }
 
     @Test
     fun refreshSchedule_ShouldClearCachedSchedules_WhenRemoteReturnsEmptyList() = runTest {
-        val remoteSchedule = emptyList<Schedule>()
+        val remoteSchedule = emptyList<ScheduleNetworkDto>()
         remoteDataSource.setScheduleForTest(remoteSchedule)
-        localDataSource.submitSchedule(listOf(schedule3))
+        localDataSource.submitSchedule(listOf(ScheduleDbEntitySampleData.schedule3))
 
         localCacheRepository.refreshSchedule()
         val refreshedSchedule = localCacheRepository.getSchedule()
@@ -210,7 +214,7 @@ internal class LocalCacheRepositoryTest {
 
     @Test
     fun refreshSchedule_ShouldRetainCachedSchedules_WhenRemoteThrowsException() = runTest {
-        val localSchedule = listOf(schedule1, schedule2, schedule3)
+        val localSchedule = listOf(ScheduleDbEntitySampleData.schedule1, ScheduleDbEntitySampleData.schedule2, ScheduleDbEntitySampleData.schedule3)
         remoteDataSource.setExceptionForTest(exception = IOException())
         localDataSource.submitSchedule(localSchedule)
 
@@ -218,17 +222,17 @@ internal class LocalCacheRepositoryTest {
         val refreshedSchedule = localCacheRepository.getSchedule()
 
         refreshedSchedule.isSuccess shouldBe true
-        refreshedSchedule.getOrNull() shouldContainExactlyInAnyOrder localSchedule
+        refreshedSchedule.getOrNull() shouldContainExactlyInAnyOrder localSchedule.map { it.toSchedule() }
     }
 
     @Test
     fun getSchedule_ShouldReturnCachedSchedules_WithoutRefresh() = runTest {
-        val localSchedule = listOf(schedule1, schedule2, schedule3)
+        val localSchedule = listOf(ScheduleDbEntitySampleData.schedule1, ScheduleDbEntitySampleData.schedule2, ScheduleDbEntitySampleData.schedule3)
         localDataSource.submitSchedule(localSchedule)
 
         val cachedSchedule = localCacheRepository.getSchedule()
 
         cachedSchedule.isSuccess shouldBe true
-        cachedSchedule.getOrNull() shouldContainExactlyInAnyOrder localSchedule
+        cachedSchedule.getOrNull() shouldContainExactlyInAnyOrder localSchedule.map { it.toSchedule() }
     }
 }

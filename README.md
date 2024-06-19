@@ -1,4 +1,4 @@
-# DAZN Code Challenge - Android TV ![Gradle Build](https://github.com/ryanw-mobile/dazn-code-challenge/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/dazn-code-challenge/graph/badge.svg?token=YK2DNKYBRO)](https://app.codecov.io/github/ryanw-mobile/dazn-code-challenge)
+# DAZN Code Challenge ![Gradle Build](https://github.com/ryanw-mobile/dazn-code-challenge/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/dazn-code-challenge/graph/badge.svg?token=YK2DNKYBRO)](https://app.codecov.io/github/ryanw-mobile/dazn-code-challenge) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/cfdcc6c589174dabad2241af04c8eddd)](https://app.codacy.com/gh/ryanw-mobile/dazn-code-challenge/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 A responsive Android sample app written in Kotlin and Jetpack Compose, supporting different
 navigation layout on screen sizes. The Media 3 Exoplayer is implemented on top of the single
@@ -78,40 +78,42 @@ now [logged as issues](https://github.com/ryanw-mobile/dazn-code-challenge/issue
 
 ### Major libraries used
 
-* [Jetpack Compose](https://developer.android.com/jetpack/androidx/releases/compose) - Modern
-  toolkit for building native UI
-* [Jetpack Navigation for Compose](https://developer.android.com/jetpack/androidx/releases/navigation#navigation-compose) -
-  Navigation library for Jetpack Compose applications
-* [Jetpack Lifecycle](https://developer.android.com/jetpack/androidx/releases/lifecycle) -
-  Lifecycle-aware components, including ViewModel support for Jetpack Compose
-* [Kotlin Coroutines](https://github.com/Kotlin/kotlinx.coroutines) - Asynchronous programming
-  with coroutines
-* [Kotlin Flow](https://kotlinlang.org/docs/flow.html) - Reactive streams for Kotlin
-* [Jetpack Room](https://developer.android.com/jetpack/androidx/releases/room) - Database library
-  for local data cache
-* [Retrofit2](https://square.github.io/retrofit/) - HTTP client for Android and Java
-* [Moshi](https://github.com/square/moshi) - Modern JSON library for Android and Java
-* [Splash Screen API](https://developer.android.com/guide/topics/ui/splash-screen) - Official splash
-  screen solution
-* [Coil](https://coil-kt.github.io/coil/) - Image loading library for Android, leveraging Kotlin
-  Coroutines
-* [media3-exoplayer](https://developer.android.com/media/media3/exoplayer) - Video Player
-* [Dagger Hilt](https://dagger.dev/hilt/) - Dependency injection framework
-* [Timber](https://github.com/JakeWharton/timber) - Logging utility
-* [LeakCanary](https://github.com/square/leakcanary) - Memory leak detection tool
-* JUnit 4 - Testing framework and runner
-* [Espresso](https://developer.android.com/training/testing/espresso) - UI testing framework for
-  Android
-* [UI Automator](https://developer.android.com/training/testing/ui-automator) - UI testing framework
-  for user interaction automation
-* [Robolectric](https://robolectric.org/) - Testing framework for Android-JVM tests
-* [kotest](https://kotest.io/) - We use the assertion library only, not the runner
-* [MockK](https://mockk.io/) - Mocking library for Kotlin
-* [Ktlint Gradle](https://github.com/jlleitschuh/ktlint-gradle) - Plugin for linting and formatting
-  Kotlin code
-* [Kover](https://github.com/Kotlin/kotlinx-kover) - Kotlin code coverage tool
-* [Github Action](https://github.com/features/actions) - CI/CD
-* [codecov](https://codecov.io/) - code coverage
+### Dependencies
+
+* [AndroidX Core KTX](https://developer.android.com/jetpack/androidx/releases/core) - Apache 2.0 - Extensions to Java APIs for Android development
+* [AndroidX Media3](https://developer.android.com/jetpack/androidx/releases/media3) - Apache 2.0 - Media support libraries
+* [JUnit](https://junit.org/junit5/) - EPL 2.0 - A simple framework to write repeatable tests
+* [AndroidX Espresso](https://developer.android.com/training/testing/espresso) - Apache 2.0 - UI testing framework
+* [Jetpack Compose](https://developer.android.com/jetpack/compose) - Apache 2.0 - Modern toolkit for building native UI
+* [AndroidX Benchmark](https://developer.android.com/jetpack/androidx/releases/benchmark) - Apache 2.0 - Benchmarking library
+* [AndroidX DataStore](https://developer.android.com/jetpack/androidx/releases/datastore) - Apache 2.0 - Data storage solution
+* [AndroidX Legacy Support](https://developer.android.com/jetpack/androidx/releases/legacy) - Apache 2.0 - Legacy libraries
+* [AndroidX Lifecycle](https://developer.android.com/jetpack/androidx/releases/lifecycle) - Apache 2.0 - Lifecycles-aware components
+* [AndroidX Room](https://developer.android.com/jetpack/androidx/releases/room) - Apache 2.0 - Persistence library
+* [Retrofit](https://square.github.io/retrofit/) - Apache 2.0 - A type-safe HTTP client for Android and Java
+* [Moshi](https://github.com/square/moshi) - Apache 2.0 - A modern JSON library for Android and Java
+* [OkHttp Logging Interceptor](https://square.github.io/okhttp/) - Apache 2.0 - Logging interceptor for OkHttp
+* [Timber](https://github.com/JakeWharton/timber) - Apache 2.0 - A logger with a small, extensible API
+* [Coil](https://coil-kt.github.io/coil/) - Apache 2.0 - An image loading library for Android backed by Kotlin Coroutines
+* [MockK](https://mockk.io/) - Apache 2.0 - Mocking library for Kotlin
+* [Robolectric](http://robolectric.org/) - MIT - A framework that brings fast, reliable unit tests to Android
+* [Kotest](https://kotest.io/) - Apache 2.0 - Kotlin test framework
+* [Hilt](https://dagger.dev/hilt/) - Apache 2.0 - A dependency injection library for Android that reduces the boilerplate of doing manual dependency injection
+* [LeakCanary](https://square.github.io/leakcanary/) - Apache 2.0 - A memory leak detection library for Android
+* [AndroidX Profile Installer](https://developer.android.com/jetpack/androidx/releases/profileinstaller) - Apache 2.0 - Install profiles for faster startup
+
+### Plugins
+
+* [Android Application Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) - Google - Plugin for building Android applications
+* [Jetbrains Kotlin Android Plugin](https://kotlinlang.org/docs/gradle.html) - JetBrains - Plugin for Kotlin Android projects
+* [Hilt Android Plugin](https://dagger.dev/hilt/gradle-setup.html) - Google - Plugin for Hilt dependency injection
+* [Compose Compiler Plugin](https://developer.android.com/jetpack/compose) - JetBrains - Plugin for Jetpack Compose
+* [Kover Plugin](https://github.com/Kotlin/kotlinx-kover) - JetBrains - Code coverage tool for Kotlin
+* [Ktlint Plugin](https://github.com/JLLeitschuh/ktlint-gradle) - JLLeitschuh - Plugin for Kotlin linter
+* [Google DevTools KSP](https://github.com/google/ksp) - Google - Kotlin Symbol Processing API plugin
+* [Android Test Plugin](https://developer.android.com/studio/test) - Google - Plugin for Android testing
+* [Baseline Profile Plugin](https://developer.android.com/studio/profile/baselineprofile) - AndroidX - Plugin for generating baseline profiles
+
 
 ## Requirements
 

@@ -39,7 +39,7 @@ import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_accent
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
-import com.rwmobi.dazncodechallenge.ui.utils.asNiceString
+import com.rwmobi.dazncodechallenge.ui.utils.toRelativeDateTimeString
 
 @Composable
 fun ScheduleListItem(
@@ -111,7 +111,7 @@ fun ScheduleListItem(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = dazn_accent,
-                text = schedule.date.asNiceString(context = context),
+                text = schedule.date.toRelativeDateTimeString(context = context),
             )
         }
     }

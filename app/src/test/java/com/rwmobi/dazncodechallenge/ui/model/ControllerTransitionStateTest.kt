@@ -1,4 +1,11 @@
-package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
+/*
+ * Copyright (c) 2024. Ryan Wong
+ * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
+ */
+
+package com.rwmobi.dazncodechallenge.ui.model
 
 import android.view.View
 import io.kotest.matchers.shouldBe

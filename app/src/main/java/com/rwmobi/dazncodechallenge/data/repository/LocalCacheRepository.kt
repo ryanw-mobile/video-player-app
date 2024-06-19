@@ -7,6 +7,9 @@
 
 package com.rwmobi.dazncodechallenge.data.repository
 
+import com.rwmobi.dazncodechallenge.data.repository.mapper.toDbEntity
+import com.rwmobi.dazncodechallenge.data.repository.mapper.toEvent
+import com.rwmobi.dazncodechallenge.data.repository.mapper.toSchedule
 import com.rwmobi.dazncodechallenge.data.source.local.interfaces.LocalDataSource
 import com.rwmobi.dazncodechallenge.data.source.network.interfaces.NetworkDataSource
 import com.rwmobi.dazncodechallenge.di.DispatcherModule
@@ -22,12 +25,12 @@ import kotlin.coroutines.cancellation.CancellationException
 class LocalCacheRepository @Inject constructor(
     private val networkDataSource: NetworkDataSource,
     private val localDataSource: LocalDataSource,
-    @DispatcherModule.IoDispatcher private val dispatcher: CoroutineDispatcher,
+    @DispatcherModule.DefaultDispatcher private val dispatcher: CoroutineDispatcher,
 ) : Repository {
     override suspend fun getEvents(): Result<List<Event>> {
         return withContext(dispatcher) {
             Result.runCatching {
-                localDataSource.getEvents()
+                localDataSource.getEvents().toEvent()
             }.except<CancellationException, _>()
         }
     }
@@ -35,7 +38,7 @@ class LocalCacheRepository @Inject constructor(
     override suspend fun getSchedule(): Result<List<Schedule>> {
         return withContext(dispatcher) {
             Result.runCatching {
-                localDataSource.getSchedules()
+                localDataSource.getSchedules().toSchedule()
             }.except<CancellationException, _>()
         }
     }
@@ -43,14 +46,8 @@ class LocalCacheRepository @Inject constructor(
     override suspend fun refreshEvents(): Result<Unit> {
         return withContext(dispatcher) {
             Result.runCatching {
-                val remoteEvents = networkDataSource.getEvents()
-
-                when (remoteEvents.isFailure) {
-                    true -> throw remoteEvents.exceptionOrNull() ?: Exception("Unknown data source exception")
-                    false -> {
-                        localDataSource.submitEvents(events = remoteEvents.getOrNull() ?: emptyList())
-                    }
-                }
+                val remoteEvents = networkDataSource.getEvents().map { it.toDbEntity() }
+                localDataSource.submitEvents(events = remoteEvents)
             }.except<CancellationException, _>()
         }
     }
@@ -58,15 +55,9 @@ class LocalCacheRepository @Inject constructor(
     override suspend fun refreshSchedule(): Result<Unit> {
         return withContext(dispatcher) {
             Result.runCatching {
-                val remoteSchedules = networkDataSource.getSchedules()
-
-                when (remoteSchedules.isFailure) {
-                    true -> throw remoteSchedules.exceptionOrNull() ?: Exception("Unknown data source exception")
-                    false -> {
-                        localDataSource.submitSchedule(schedules = remoteSchedules.getOrNull() ?: emptyList())
-                    }
-                }
-            }.except<CancellationException, _>()
-        }
+                val remoteSchedules = networkDataSource.getSchedules().map { it.toDbEntity() }
+                localDataSource.submitSchedule(schedules = remoteSchedules)
+            }
+        }.except<CancellationException, _>()
     }
 }

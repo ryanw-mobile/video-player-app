@@ -8,21 +8,21 @@
 package com.rwmobi.dazncodechallenge.data.source.local
 
 import com.rwmobi.dazncodechallenge.data.source.local.interfaces.LocalDataSource
-import com.rwmobi.dazncodechallenge.domain.model.Event
-import com.rwmobi.dazncodechallenge.domain.model.Schedule
+import com.rwmobi.dazncodechallenge.data.source.local.model.EventDbEntity
+import com.rwmobi.dazncodechallenge.data.source.local.model.ScheduleDbEntity
 
 class FakeLocalDataSource : LocalDataSource {
-    private var events: List<Event> = emptyList()
-    private var schedules: List<Schedule> = emptyList()
+    private var events: List<EventDbEntity> = emptyList()
+    private var schedules: List<ScheduleDbEntity> = emptyList()
 
-    override suspend fun getEvents(): List<Event> = events
-    override suspend fun getSchedules(): List<Schedule> = schedules
+    override suspend fun getEvents(): List<EventDbEntity> = events
+    override suspend fun getSchedules(): List<ScheduleDbEntity> = schedules
 
-    override suspend fun submitEvents(events: List<Event>) {
+    override suspend fun submitEvents(events: List<EventDbEntity>) {
         this.events = events
     }
 
-    override suspend fun submitSchedule(schedules: List<Schedule>) {
+    override suspend fun submitSchedule(schedules: List<ScheduleDbEntity>) {
         this.schedules = schedules
     }
 }
