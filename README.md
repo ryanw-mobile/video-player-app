@@ -15,13 +15,6 @@ If you want to try out the app without building it, check out
 the [Releases section](https://github.com/ryanw-mobile/dazn-code-challenge/releases) where you can
 find the APK and App Bundles for each major release.
 
-> [!NOTE]
->
-> The video player has a [known bug](https://github.com/ryanw-mobile/dazn-code-challenge/issues/44) on
-> Android 14 and 15. The fix is scheduled to be released by Google Android some time later. 
-> For now, you may see the video playback not resizing properly. As a workaround, rotating
-> the device, toggling between full screen or Picture-in-Picture mode can solve the issue.
-
 &nbsp;
 
 ## History
