@@ -16,8 +16,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
 @ExperimentalCoroutinesApi
+@RunWith(RobolectricTestRunner::class)
 internal class ExoPlayerViewModelTest {
     private lateinit var mockPlayer: Player
     private lateinit var listenerSlot: CapturingSlot<Player.Listener>
