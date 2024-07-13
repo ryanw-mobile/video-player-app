@@ -96,7 +96,7 @@ class ExoPlayerViewModel @Inject constructor(
         if (!_uiState.value.hasVideoLoaded || videoUrl != this.videoUrl) {
             player.apply {
                 setMediaItem(
-                    MediaItem.fromUri("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"), // videoUrl),
+                    MediaItem.fromUri(videoUrl),
                 )
                 play()
             }

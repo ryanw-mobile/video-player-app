@@ -46,7 +46,6 @@ import com.rwmobi.dazncodechallenge.ui.model.ControllerTransitionState
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
 import com.rwmobi.dazncodechallenge.ui.utils.enterFullScreenMode
 import com.rwmobi.dazncodechallenge.ui.utils.exitFullScreenMode
-import timber.log.Timber
 
 @OptIn(UnstableApi::class)
 @Composable
@@ -136,7 +135,6 @@ fun ExoPlayerScreen(
                 }
             },
             update = { playerView ->
-                Timber.d("😡 ${playerView.measuredWidth} ${playerView.measuredHeight}")
                 when (lifecycle) {
                     /**
                      * In Android 7.0 and later, you should pause and resume video playback when the system calls your activity's onStop() and onStart(). By doing this, you can avoid having to check if your app is in PiP mode in onPause() and explicitly continuing playback.
