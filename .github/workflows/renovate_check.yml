@@ -31,7 +31,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Gradle Check
-        run: ./gradlew check assembleDebug --no-daemon
+        run: ./gradlew check assembleDebug :app:pixel6Api34DebugAndroidTest --no-daemon
         env:
           CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
