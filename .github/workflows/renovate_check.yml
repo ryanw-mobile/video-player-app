@@ -37,8 +37,14 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Debug Android Test
+        run: ./gradlew :app:pixel2Api34DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1 -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=180
+        env:
+          CI: 'true'
+          KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
+
       - name: Gradle Check
-        run: ./gradlew check assembleDebug :app:pixel6Api34DebugAndroidTest --no-daemon
+        run: ./gradlew check assembleDebug --no-daemon
         env:
           CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
