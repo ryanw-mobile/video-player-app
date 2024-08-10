@@ -38,7 +38,13 @@ jobs:
         run: chmod +x gradlew
 
       - name: Gradle Check
-        run: ./gradlew check assembleDebug :app:pixel6Api34DebugAndroidTest --no-daemon
+        run: ./gradlew check assembleDebug --no-daemon
+        env:
+          CI: 'true'
+          KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
+
+      - name: Debug Android Test
+        run: ./gradlew :app:pixel6Api34DebugAndroidTest -Dorg.gradle.workers.max=1 -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true --info
         env:
           CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
