@@ -1,4 +1,4 @@
-# DAZN Code Challenge ![Gradle Build](https://github.com/ryanw-mobile/dazn-code-challenge/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/dazn-code-challenge/graph/badge.svg?token=YK2DNKYBRO)](https://app.codecov.io/github/ryanw-mobile/dazn-code-challenge) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/cfdcc6c589174dabad2241af04c8eddd)](https://app.codacy.com/gh/ryanw-mobile/dazn-code-challenge/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+# DAZN Code Challenge ![Gradle Build](https://github.com/ryanw-mobile/dazn-code-challenge/actions/workflows/main_build.yml/badge.svg) [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/cfdcc6c589174dabad2241af04c8eddd)](https://app.codacy.com/gh/ryanw-mobile/dazn-code-challenge/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage) [![Codacy Quality Badge](https://app.codacy.com/project/badge/Grade/cfdcc6c589174dabad2241af04c8eddd)](https://app.codacy.com/gh/ryanw-mobile/dazn-code-challenge/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 A responsive Android sample app written in Kotlin and Jetpack Compose, supporting different
 navigation layout on screen sizes. The Media 3 Exoplayer is implemented on top of the single
@@ -56,7 +56,7 @@ any time.
 Planned enhancements are
 now [logged as issues](https://github.com/ryanw-mobile/dazn-code-challenge/issues?q=is%3Aopen+is%3Aissue+label%3Arefactor%2Cfeature%2Cfix%2Ctest).
 
-### High level architecture
+## High level architecture
 
 * Kotlin
 * MVVM & clean architecture
@@ -69,8 +69,6 @@ now [logged as issues](https://github.com/ryanw-mobile/dazn-code-challenge/issue
 * Gradle Kotlin DSL and Version Catalog
 * Baseline Profile
 * Full unit test and UI (Journey) test suite
-
-### Major libraries used
 
 ### Dependencies
 
@@ -107,12 +105,6 @@ now [logged as issues](https://github.com/ryanw-mobile/dazn-code-challenge/issue
 * [Google DevTools KSP](https://github.com/google/ksp) - Google - Kotlin Symbol Processing API plugin
 * [Android Test Plugin](https://developer.android.com/studio/test) - Google - Plugin for Android testing
 * [Baseline Profile Plugin](https://developer.android.com/studio/profile/baselineprofile) - AndroidX - Plugin for generating baseline profiles
-
-
-## Requirements
-
-* Android Studio Iguana | 2023.2.1
-* Android device or simulator running Android 9.0+ (API 28)
 
 ## Building the App
 
