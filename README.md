@@ -1,5 +1,8 @@
 # DAZN Code Challenge ![Gradle Build](https://github.com/ryanw-mobile/dazn-code-challenge/actions/workflows/main_build.yml/badge.svg) [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/cfdcc6c589174dabad2241af04c8eddd)](https://app.codacy.com/gh/ryanw-mobile/dazn-code-challenge/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage) [![Codacy Quality Badge](https://app.codacy.com/project/badge/Grade/cfdcc6c589174dabad2241af04c8eddd)](https://app.codacy.com/gh/ryanw-mobile/dazn-code-challenge/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 
+> [!WARNING]  
+> I do not support the use of my code for your job applications, as it creates unfair competition. If you copy or fork this for your own interviews, you risk disqualification. Please respect the integrity of the process and create your own work.
+
 A responsive Android sample app written in Kotlin and Jetpack Compose, supporting different
 navigation layout on screen sizes. The Media 3 Exoplayer is implemented on top of the single
 activity architecture. It is fully functional with Picture-in-Picture support.
