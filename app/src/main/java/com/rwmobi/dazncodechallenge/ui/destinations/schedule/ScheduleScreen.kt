@@ -7,20 +7,20 @@
 
 package com.rwmobi.dazncodechallenge.ui.destinations.schedule
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import coil.ImageLoader
+import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.components.NoDataScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -43,9 +43,14 @@ fun ScheduleScreen(
         }
     }
 
-    val pullRefreshState = rememberPullToRefreshState()
-
-    Box(modifier = modifier.nestedScroll(connection = pullRefreshState.nestedScrollConnection)) {
+    val context = LocalContext.current
+    PullToRefreshBox(
+        modifier = modifier.semantics { contentDescription = context.getString(R.string.content_description_pull_to_refresh) },
+        isRefreshing = uiState.isLoading,
+        onRefresh = {
+            uiEvent.onRefresh()
+        },
+    ) {
         uiState.schedules?.let { schedules ->
             if (schedules.isNotEmpty()) {
                 SchedulesList(
@@ -63,35 +68,14 @@ fun ScheduleScreen(
                 )
             }
         }
+    }
 
-        PullToRefreshContainer(
-            modifier = Modifier.align(Alignment.TopCenter),
-            state = pullRefreshState,
-        )
+    LaunchedEffect(true) {
+        uiEvent.onInitialLoad()
 
-        if (pullRefreshState.isRefreshing) {
-            LaunchedEffect(true) {
-                if (!uiState.isLoading) {
-                    uiEvent.onRefresh()
-                }
-            }
-        }
-
-        LaunchedEffect(uiState.isLoading) {
-            if (!uiState.isLoading) {
-                pullRefreshState.endRefresh()
-            } else {
-                pullRefreshState.startRefresh()
-            }
-        }
-
-        LaunchedEffect(true) {
-            uiEvent.onInitialLoad()
-
-            while (isActive) {
-                delay(30_000)
-                uiEvent.onRefresh()
-            }
+        while (isActive) {
+            delay(30_000)
+            uiEvent.onRefresh()
         }
     }
 }
