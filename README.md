@@ -1,4 +1,4 @@
-# DAZN Code Challenge ![Gradle Build](https://github.com/ryanw-mobile/dazn-code-challenge/actions/workflows/main_build.yml/badge.svg) [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/cfdcc6c589174dabad2241af04c8eddd)](https://app.codacy.com/gh/ryanw-mobile/dazn-code-challenge/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage) [![Codacy Quality Badge](https://app.codacy.com/project/badge/Grade/cfdcc6c589174dabad2241af04c8eddd)](https://app.codacy.com/gh/ryanw-mobile/dazn-code-challenge/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
+# Video Player App<br/>![Gradle Build](https://github.com/ryanw-mobile/video-player-app/actions/workflows/main_build.yml/badge.svg) [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/cfdcc6c589174dabad2241af04c8eddd)](https://app.codacy.com/gh/ryanw-mobile/video-player-app/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage) [![Codacy Quality Badge](https://app.codacy.com/project/badge/Grade/cfdcc6c589174dabad2241af04c8eddd)](https://app.codacy.com/gh/ryanw-mobile/video-player-app/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 
 > [!WARNING]  
 > I do not support the use of my code for your job applications, as it creates unfair competition. If you copy or fork this for your own interviews, you risk disqualification. Please respect the integrity of the process and create your own work.
@@ -22,21 +22,15 @@ find the APK and App Bundles for each major release.
 
 ## History
 
-This was a code test assignment as a part of the interview process. The task covered
-common RESTApi, SQLite, RecyclerView, Constraint Layout, MVVM, plus dependency injection and
-testings.
-
-Although the title carries "Android TV", it has nothing to do with that - this is an Android mobile
-App as required by the specifications.
-
-The interview process was concluded in October, 2021, but I am still keep on improving the codes for
-demonstration purpose.
+This was a code test assignment done in October, 2021, but I am still keep on improving the codes for
+demonstration purpose.. The task covered common RESTApi, SQLite, RecyclerView, Constraint Layout, MVVM,
+plus dependency injection and testings.
 
 The original XML View version is no longer maintained, you
-can [access to the XML branch here](https://github.com/ryanw-mobile/dazn-code-challenge/tree/xml).
+can [access to the XML branch here](https://github.com/ryanw-mobile/video-player-app/tree/xml).
 
-Please note that the APIs are supplied by DAZN in 2021 for recruitment purpose. They may not work at
-any time.
+Please note that the APIs are supplied by DAZN in 2021. They may not work at any time.
+There is a plan to replace them with my own APIs and contents.
 
 ## Screenshots
 
@@ -57,7 +51,7 @@ any time.
 ## To-do lists
 
 Planned enhancements are
-now [logged as issues](https://github.com/ryanw-mobile/dazn-code-challenge/issues?q=is%3Aopen+is%3Aissue+label%3Arefactor%2Cfeature%2Cfix%2Ctest).
+now [logged as issues](https://github.com/ryanw-mobile/video-player-app/issues?q=is%3Aopen+is%3Aissue+label%3Arefactor%2Cfeature%2Cfix%2Ctest).
 
 ## High level architecture
 
@@ -121,7 +115,7 @@ Otherwise, the app will be built unsigned.
 * Android Keystore is not being stored in this repository. You need your own Keystore to generate
   the apk / App Bundle
 
-* If your project folder is at `/app/dazn-code-challenge/`, the Keystore file
+* If your project folder is at `/app/video-player-app/`, the Keystore file
   and `keystore.properties`
   should be placed at `/app/`
 
