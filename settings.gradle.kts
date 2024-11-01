@@ -26,6 +26,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "DAZN Code Challenge"
+rootProject.name = "Video Player App"
 include(":app")
 include(":baselineprofile")
