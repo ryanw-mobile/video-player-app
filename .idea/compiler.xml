@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="17">
       <module name="DAZN_Code_Challenge.baselineprofile" target="21" />
+      <module name="Video_Player_App.baselineprofile" target="21" />
     </bytecodeTargetLevel>
   </component>
 </project>
