@@ -7,10 +7,10 @@
 
 package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
 
-import android.app.Activity
 import android.app.PictureInPictureParams
 import android.graphics.Rect
 import android.view.View
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.OptIn
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -82,7 +82,7 @@ fun ExoPlayerScreen(
         }
     }
 
-    val activity = LocalContext.current as? Activity
+    val activity = LocalActivity.current
     DisposableEffect(Unit) {
         onDispose {
             activity?.exitFullScreenMode()

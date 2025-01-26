@@ -5,17 +5,15 @@
 
 package com.rwmobi.dazncodechallenge.ui.navigation
 
-import android.app.Activity
 import android.net.Uri
 import android.util.Rational
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -36,7 +34,6 @@ import com.rwmobi.dazncodechallenge.ui.viewmodel.EventsViewModel
 import com.rwmobi.dazncodechallenge.ui.viewmodel.ExoPlayerViewModel
 import com.rwmobi.dazncodechallenge.ui.viewmodel.ScheduleViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
@@ -117,7 +114,7 @@ fun AppNavHost(
 
             val viewModel: ExoPlayerViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-            val activity = LocalContext.current as? Activity
+            val activity = LocalActivity.current
 
             ExoPlayerScreen(
                 modifier = Modifier
