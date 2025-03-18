@@ -252,6 +252,9 @@ dependencies {
     implementation(libs.timber)
 
     // testing
+    testImplementation(kotlin("test"))
+    testImplementation(kotlin("test-common"))
+    testImplementation(kotlin("test-annotations-common"))
     testImplementation(libs.junit)
     testImplementation(libs.androidx.test.core.ktx)
     testImplementation(libs.jetbrains.kotlinx.coroutines.test)
