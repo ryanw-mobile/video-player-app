@@ -15,8 +15,6 @@ import com.rwmobi.dazncodechallenge.test.EventDbEntitySampleData.event1
 import com.rwmobi.dazncodechallenge.test.EventDbEntitySampleData.event1Modified
 import com.rwmobi.dazncodechallenge.test.EventDbEntitySampleData.event2
 import com.rwmobi.dazncodechallenge.test.EventDbEntitySampleData.event3
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -24,6 +22,11 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
@@ -52,7 +55,7 @@ internal class EventDaoTest {
         // GIVEN - empty database
         database.eventsDao.insert(event1)
         val result = database.eventsDao.getEventById(event1.eventId)
-        result shouldBe event1
+        assertEquals(event1, result)
     }
 
     @Test
@@ -60,7 +63,7 @@ internal class EventDaoTest {
         // GIVEN - Empty database
         database.eventsDao.insertAll(listOf(event1, event2, event3))
         val result = database.eventsDao.getEvents()
-        result.size shouldBe 3
+        assertEquals(3, result.size)
     }
 
     @Test
@@ -68,7 +71,7 @@ internal class EventDaoTest {
         database.eventsDao.insert(event1)
         database.eventsDao.insert(event1Modified)
         val result = database.eventsDao.getEventById(event1.eventId)
-        result shouldBe event1Modified
+        assertEquals(event1Modified, result)
     }
 
     @Test
@@ -76,7 +79,7 @@ internal class EventDaoTest {
         database.eventsDao.insert(event1)
         database.eventsDao.delete(event1.eventId)
         val result = database.eventsDao.getEventById(event1.eventId)
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
@@ -86,7 +89,7 @@ internal class EventDaoTest {
         )
         database.eventsDao.delete(event1.eventId)
         val result = database.eventsDao.getEventById(event1.eventId)
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
@@ -94,7 +97,7 @@ internal class EventDaoTest {
         database.eventsDao.insertAll(listOf(event1, event2, event3).map { it })
         database.eventsDao.clear()
         val result = database.eventsDao.getEvents()
-        result shouldBe emptyList()
+        assertTrue(result.isEmpty())
     }
 
     // Dirty bit testing
@@ -103,7 +106,7 @@ internal class EventDaoTest {
         // GIVEN - empty database
         database.eventsDao.insert(event1)
         val result = database.eventsDao.getEventById(event1.eventId)
-        result shouldBe event1
+        assertEquals(event1, result)
     }
 
     @Test
@@ -111,7 +114,7 @@ internal class EventDaoTest {
         database.eventsDao.insertAll(listOf(event1, event2, event3))
         database.eventsDao.markDirty()
         val result = database.eventsDao.getEventById(event1.eventId)
-        result.dirty shouldBe true
+        assertTrue(result.dirty)
     }
 
     @Test
@@ -122,7 +125,7 @@ internal class EventDaoTest {
         database.eventsDao.insert(event1Modified)
 
         val result = database.eventsDao.getEventById(event1Modified.eventId)
-        result.dirty shouldBe false
+        assertFalse(result.dirty)
     }
 
     @Test
@@ -134,6 +137,6 @@ internal class EventDaoTest {
         database.eventsDao.deleteDirty()
 
         val result = database.eventsDao.getEvents()
-        result.shouldContainExactly(event2)
+        assertContentEquals(listOf(event2), result)
     }
 }

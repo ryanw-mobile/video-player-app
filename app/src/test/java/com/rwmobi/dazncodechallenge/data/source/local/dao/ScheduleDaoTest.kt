@@ -15,8 +15,6 @@ import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData.schedule1
 import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData.schedule1Modified
 import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData.schedule2
 import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData.schedule3
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -24,6 +22,11 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
@@ -52,7 +55,7 @@ internal class ScheduleDaoTest {
         // GIVEN - empty database
         database.scheduleDao.insert(schedule1)
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        result shouldBe schedule1
+        assertEquals(schedule1, result)
     }
 
     @Test
@@ -60,7 +63,7 @@ internal class ScheduleDaoTest {
         // GIVEN - Empty database
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
         val result = database.scheduleDao.getSchedules()
-        result.size shouldBe 3
+        assertEquals(3, result.size)
     }
 
     @Test
@@ -68,7 +71,7 @@ internal class ScheduleDaoTest {
         database.scheduleDao.insert(schedule1)
         database.scheduleDao.insert(schedule1Modified)
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        result shouldBe schedule1Modified
+        assertEquals(schedule1Modified, result)
     }
 
     @Test
@@ -76,7 +79,7 @@ internal class ScheduleDaoTest {
         database.scheduleDao.insert(schedule1)
         database.scheduleDao.delete(schedule1.scheduleId)
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
@@ -84,7 +87,7 @@ internal class ScheduleDaoTest {
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
         database.scheduleDao.delete(schedule1.scheduleId)
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
@@ -92,7 +95,7 @@ internal class ScheduleDaoTest {
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
         database.scheduleDao.clear()
         val result = database.scheduleDao.getSchedules()
-        result shouldBe emptyList()
+        assertEquals(emptyList(), result)
     }
 
     // Dirty bit testing
@@ -101,7 +104,7 @@ internal class ScheduleDaoTest {
         // GIVEN - empty database
         database.scheduleDao.insert(schedule1)
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        result.dirty shouldBe false
+        assertFalse(result.dirty)
     }
 
     @Test
@@ -109,7 +112,7 @@ internal class ScheduleDaoTest {
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
         database.scheduleDao.markDirty()
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        result.dirty shouldBe true
+        assertTrue(result.dirty)
     }
 
     @Test
@@ -120,7 +123,7 @@ internal class ScheduleDaoTest {
         database.scheduleDao.insert(schedule1Modified)
 
         val result = database.scheduleDao.getScheduleById(schedule1Modified.scheduleId)
-        result.dirty shouldBe false
+        assertFalse(result.dirty)
     }
 
     @Test
@@ -132,6 +135,6 @@ internal class ScheduleDaoTest {
         database.scheduleDao.deleteDirty()
 
         val result = database.scheduleDao.getSchedules()
-        result.shouldContainExactly(schedule2)
+        assertContentEquals(listOf(schedule2), result)
     }
 }
