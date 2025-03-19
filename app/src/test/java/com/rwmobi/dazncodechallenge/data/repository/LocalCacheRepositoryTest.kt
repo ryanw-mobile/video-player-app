@@ -21,14 +21,15 @@ import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData
 import com.rwmobi.dazncodechallenge.test.ScheduleNetworkDtoSampleData.schedule1
 import com.rwmobi.dazncodechallenge.test.ScheduleNetworkDtoSampleData.schedule2
 import com.rwmobi.dazncodechallenge.test.ScheduleNetworkDtoSampleData.schedule3
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 internal class LocalCacheRepositoryTest {
@@ -57,8 +58,10 @@ internal class LocalCacheRepositoryTest {
 
         val result = localCacheRepository.refreshEvents()
 
-        result.isFailure shouldBe true
-        result.exceptionOrNull() shouldBe IOException()
+        assertTrue(result.isFailure)
+        assertFailsWith<IOException> {
+            throw result.exceptionOrNull()!!
+        }
     }
 
     @Test
@@ -68,7 +71,7 @@ internal class LocalCacheRepositoryTest {
 
         val result = localCacheRepository.refreshEvents()
 
-        result.isSuccess shouldBe true
+        assertTrue(result.isSuccess)
     }
 
     @Test
@@ -78,7 +81,7 @@ internal class LocalCacheRepositoryTest {
 
         val result = localCacheRepository.refreshEvents()
 
-        result.isSuccess shouldBe true
+        assertTrue(result.isSuccess)
     }
 
     @Test
@@ -89,8 +92,8 @@ internal class LocalCacheRepositoryTest {
         localCacheRepository.refreshEvents()
         val refreshedEvents = localCacheRepository.getEvents()
 
-        refreshedEvents.isSuccess shouldBe true
-        refreshedEvents.getOrNull() shouldContainExactlyInAnyOrder remoteEvents.map { it.toEvent() }
+        assertTrue(refreshedEvents.isSuccess)
+        assertEquals(remoteEvents.map { it.toEvent() }, refreshedEvents.getOrNull())
     }
 
     @Test
@@ -102,8 +105,8 @@ internal class LocalCacheRepositoryTest {
         localCacheRepository.refreshEvents()
         val refreshedEvents = localCacheRepository.getEvents()
 
-        refreshedEvents.isSuccess shouldBe true
-        refreshedEvents.getOrNull() shouldContainExactlyInAnyOrder remoteEvents.map { it.toEvent() }
+        assertTrue(refreshedEvents.isSuccess)
+        assertEquals(remoteEvents.map { it.toEvent() }, refreshedEvents.getOrNull())
     }
 
     @Test
@@ -115,8 +118,8 @@ internal class LocalCacheRepositoryTest {
         localCacheRepository.refreshEvents()
         val refreshedEvents = localCacheRepository.getEvents()
 
-        refreshedEvents.isSuccess shouldBe true
-        refreshedEvents.getOrNull() shouldBe emptyList()
+        assertTrue(refreshedEvents.isSuccess)
+        assertEquals(emptyList(), refreshedEvents.getOrNull())
     }
 
     @Test
@@ -128,8 +131,8 @@ internal class LocalCacheRepositoryTest {
         localCacheRepository.refreshEvents()
         val refreshedEvents = localCacheRepository.getEvents()
 
-        refreshedEvents.isSuccess shouldBe true
-        refreshedEvents.getOrNull() shouldContainExactlyInAnyOrder localEvents.map { it.toEvent() }
+        assertTrue(refreshedEvents.isSuccess)
+        assertEquals(localEvents.map { it.toEvent() }, refreshedEvents.getOrNull())
     }
 
     @Test
@@ -139,8 +142,8 @@ internal class LocalCacheRepositoryTest {
 
         val cachedEvents = localCacheRepository.getEvents()
 
-        cachedEvents.isSuccess shouldBe true
-        cachedEvents.getOrNull() shouldContainExactlyInAnyOrder localEvents.map { it.toEvent() }
+        assertTrue(cachedEvents.isSuccess)
+        assertEquals(localEvents.map { it.toEvent() }, cachedEvents.getOrNull())
     }
 
     // Schedules - the same set of tests but different objects
@@ -150,8 +153,10 @@ internal class LocalCacheRepositoryTest {
 
         val result = localCacheRepository.refreshSchedule()
 
-        result.isFailure shouldBe true
-        result.exceptionOrNull() shouldBe IOException()
+        assertTrue(result.isFailure)
+        assertFailsWith<IOException> {
+            throw result.exceptionOrNull()!!
+        }
     }
 
     @Test
@@ -161,7 +166,7 @@ internal class LocalCacheRepositoryTest {
 
         val result = localCacheRepository.refreshSchedule()
 
-        result.isSuccess shouldBe true
+        assertTrue(result.isSuccess)
     }
 
     @Test
@@ -171,7 +176,7 @@ internal class LocalCacheRepositoryTest {
 
         val result = localCacheRepository.refreshSchedule()
 
-        result.isSuccess shouldBe true
+        assertTrue(result.isSuccess)
     }
 
     @Test
@@ -182,8 +187,8 @@ internal class LocalCacheRepositoryTest {
         localCacheRepository.refreshSchedule()
         val refreshedSchedule = localCacheRepository.getSchedule()
 
-        refreshedSchedule.isSuccess shouldBe true
-        refreshedSchedule.getOrNull() shouldContainExactlyInAnyOrder remoteSchedule.map { it.toSchedule() }
+        assertTrue(refreshedSchedule.isSuccess)
+        assertEquals(remoteSchedule.map { it.toSchedule() }, refreshedSchedule.getOrNull())
     }
 
     @Test
@@ -195,8 +200,8 @@ internal class LocalCacheRepositoryTest {
         localCacheRepository.refreshSchedule()
         val refreshedSchedule = localCacheRepository.getSchedule()
 
-        refreshedSchedule.isSuccess shouldBe true
-        refreshedSchedule.getOrNull() shouldContainExactlyInAnyOrder remoteSchedule.map { it.toSchedule() }
+        assertTrue(refreshedSchedule.isSuccess)
+        assertEquals(remoteSchedule.map { it.toSchedule() }, refreshedSchedule.getOrNull())
     }
 
     @Test
@@ -208,8 +213,8 @@ internal class LocalCacheRepositoryTest {
         localCacheRepository.refreshSchedule()
         val refreshedSchedule = localCacheRepository.getSchedule()
 
-        refreshedSchedule.isSuccess shouldBe true
-        refreshedSchedule.getOrNull() shouldBe emptyList()
+        assertTrue(refreshedSchedule.isSuccess)
+        assertEquals(emptyList(), refreshedSchedule.getOrNull())
     }
 
     @Test
@@ -221,8 +226,8 @@ internal class LocalCacheRepositoryTest {
         localCacheRepository.refreshSchedule()
         val refreshedSchedule = localCacheRepository.getSchedule()
 
-        refreshedSchedule.isSuccess shouldBe true
-        refreshedSchedule.getOrNull() shouldContainExactlyInAnyOrder localSchedule.map { it.toSchedule() }
+        assertTrue(refreshedSchedule.isSuccess)
+        assertEquals(localSchedule.map { it.toSchedule() }, refreshedSchedule.getOrNull())
     }
 
     @Test
@@ -232,7 +237,7 @@ internal class LocalCacheRepositoryTest {
 
         val cachedSchedule = localCacheRepository.getSchedule()
 
-        cachedSchedule.isSuccess shouldBe true
-        cachedSchedule.getOrNull() shouldContainExactlyInAnyOrder localSchedule.map { it.toSchedule() }
+        assertTrue(cachedSchedule.isSuccess)
+        assertEquals(localSchedule.map { it.toSchedule() }, cachedSchedule.getOrNull())
     }
 }

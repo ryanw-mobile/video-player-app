@@ -19,8 +19,6 @@ import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData.schedule1
 import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData.schedule1Modified
 import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData.schedule2
 import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData.schedule3
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -29,6 +27,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import kotlin.test.assertContentEquals
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
@@ -64,7 +64,7 @@ internal class RoomDbDataSourceTest {
     fun submitEvents_ShouldReturnOneEvent_WhenOneEventSubmittedToEmptyList() = runTest {
         localDataSource.submitEvents(listOf(event1))
         val resultList = localDataSource.getEvents()
-        resultList.shouldContainExactlyInAnyOrder(event1)
+        assertContentEquals(listOf(event1), resultList)
     }
 
     @Test
@@ -72,7 +72,7 @@ internal class RoomDbDataSourceTest {
         localDataSource.submitEvents(listOf(event1))
         localDataSource.submitEvents(listOf(event1Modified))
         val resultList = localDataSource.getEvents()
-        resultList.shouldContainExactlyInAnyOrder(event1Modified)
+        assertContentEquals(listOf(event1Modified), resultList)
     }
 
     @Test
@@ -80,14 +80,14 @@ internal class RoomDbDataSourceTest {
         localDataSource.submitEvents(listOf(event1, event2, event3))
         localDataSource.submitEvents(listOf())
         val resultList = localDataSource.getEvents()
-        resultList.size shouldBe 0
+        assertTrue(resultList.isEmpty())
     }
 
     @Test
     fun submitSchedule_ShouldReturnOneSchedule_WhenOneScheduleSubmittedToEmptyList() = runTest {
         localDataSource.submitSchedule(listOf(schedule1))
         val resultList = localDataSource.getSchedules()
-        resultList.shouldContainExactlyInAnyOrder(schedule1)
+        assertContentEquals(listOf(schedule1), resultList)
     }
 
     @Test
@@ -95,7 +95,7 @@ internal class RoomDbDataSourceTest {
         localDataSource.submitSchedule(listOf(schedule1))
         localDataSource.submitSchedule(listOf(schedule1Modified))
         val resultList = localDataSource.getSchedules()
-        resultList.shouldContainExactlyInAnyOrder(schedule1Modified)
+        assertContentEquals(listOf(schedule1Modified), resultList)
     }
 
     @Test
@@ -103,6 +103,6 @@ internal class RoomDbDataSourceTest {
         localDataSource.submitSchedule(listOf(schedule1, schedule2, schedule3))
         localDataSource.submitSchedule(listOf())
         val resultList = localDataSource.getSchedules()
-        resultList.size shouldBe 0
+        assertTrue(resultList.isEmpty())
     }
 }
