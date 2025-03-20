@@ -3,8 +3,6 @@ package com.rwmobi.dazncodechallenge.ui.viewmodel
 import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
 import com.rwmobi.dazncodechallenge.test.PlaybackExceptionSampleData
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.just
@@ -18,6 +16,10 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
@@ -39,8 +41,8 @@ internal class ExoPlayerViewModelTest {
     @Test
     fun uiState_initialState_ShouldBeCorrect() {
         val uiState = viewModel.uiState.value
-        assert(uiState.errorMessages.isEmpty())
-        assert(!uiState.hasVideoLoaded)
+        assertTrue(uiState.errorMessages.isEmpty())
+        assertFalse(uiState.hasVideoLoaded)
     }
 
     @Test
@@ -48,7 +50,7 @@ internal class ExoPlayerViewModelTest {
         val videoUrl = "http://fakevideo.com/video.mp4"
         viewModel.playVideo(videoUrl)
         val uiState = viewModel.uiState.value
-        uiState.hasVideoLoaded shouldBe true
+        assertTrue(uiState.hasVideoLoaded)
     }
 
     @Test
@@ -62,8 +64,8 @@ internal class ExoPlayerViewModelTest {
         viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
 
         with(viewModel.uiState.value) {
-            this.videoWidth shouldBe expectedVideoWidth
-            this.videoHeight shouldBe expectedVideoHeight
+            assertEquals(expectedVideoWidth, this.videoWidth)
+            assertEquals(expectedVideoHeight, this.videoHeight)
         }
     }
 
@@ -76,8 +78,8 @@ internal class ExoPlayerViewModelTest {
         viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
 
         val errorMessages = viewModel.uiState.value.errorMessages
-        errorMessages.size shouldBe 1
-        errorMessages[0].message shouldBe "HTTP Error ${PlaybackExceptionSampleData.invalidResponseCodeExceptionErrorCode}"
+        assertEquals(1, errorMessages.size)
+        assertEquals("HTTP Error ${PlaybackExceptionSampleData.invalidResponseCodeExceptionErrorCode}", errorMessages[0].message)
     }
 
     @Test
@@ -89,8 +91,8 @@ internal class ExoPlayerViewModelTest {
         viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
 
         val errorMessages = viewModel.uiState.value.errorMessages
-        errorMessages.size shouldBe 1
-        errorMessages[0].message shouldBe PlaybackExceptionSampleData.httpDataSourceExceptionMessage
+        assertEquals(1, errorMessages.size)
+        assertEquals(PlaybackExceptionSampleData.httpDataSourceExceptionMessage, errorMessages[0].message)
     }
 
     @Test
@@ -102,15 +104,15 @@ internal class ExoPlayerViewModelTest {
         viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
 
         val errorMessages = viewModel.uiState.value.errorMessages
-        errorMessages.size shouldBe 1
-        errorMessages[0].message shouldBe PlaybackExceptionSampleData.genericExceptionMessage
+        assertEquals(1, errorMessages.size)
+        assertEquals(PlaybackExceptionSampleData.genericExceptionMessage, errorMessages[0].message)
     }
 
     @Test
     fun getPlayer_ShouldReturnCorrectInstance() {
         val expectedPlayer = mockPlayer
         val player = viewModel.getPlayer()
-        player shouldBeSameInstanceAs expectedPlayer
+        assertSame(expectedPlayer, player)
     }
 
     @Test
@@ -138,10 +140,10 @@ internal class ExoPlayerViewModelTest {
     @Test
     fun setFullScreenMode_ShouldUpdateUiState() = runTest {
         viewModel.setFullScreenMode(isFullScreenMode = true)
-        viewModel.uiState.value.isFullScreenMode shouldBe true
+        assertTrue(viewModel.uiState.value.isFullScreenMode)
 
         viewModel.setFullScreenMode(isFullScreenMode = false)
-        viewModel.uiState.value.isFullScreenMode shouldBe false
+        assertFalse(viewModel.uiState.value.isFullScreenMode)
     }
 
     @Test
@@ -157,9 +159,9 @@ internal class ExoPlayerViewModelTest {
         viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 2
-        uiState.errorMessages[0].message shouldBe PlaybackExceptionSampleData.genericExceptionMessage
-        uiState.errorMessages[1].message shouldBe PlaybackExceptionSampleData.ioExceptionMessage
+        assertEquals(2, uiState.errorMessages.size)
+        assertEquals(PlaybackExceptionSampleData.genericExceptionMessage, uiState.errorMessages[0].message)
+        assertEquals(PlaybackExceptionSampleData.ioExceptionMessage, uiState.errorMessages[1].message)
     }
 
     @Test
@@ -173,8 +175,8 @@ internal class ExoPlayerViewModelTest {
         }
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages[0].message shouldBe PlaybackExceptionSampleData.genericExceptionMessage
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals(PlaybackExceptionSampleData.genericExceptionMessage, uiState.errorMessages[0].message)
     }
 
     @Test
@@ -188,6 +190,6 @@ internal class ExoPlayerViewModelTest {
         viewModel.errorShown(errorId)
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages shouldBe emptyList()
+        assertTrue(uiState.errorMessages.isEmpty())
     }
 }

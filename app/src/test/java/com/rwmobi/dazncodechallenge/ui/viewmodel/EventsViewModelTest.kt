@@ -10,15 +10,17 @@ import com.rwmobi.dazncodechallenge.data.repository.FakeRepository
 import com.rwmobi.dazncodechallenge.test.EventSampleData.event1
 import com.rwmobi.dazncodechallenge.test.EventSampleData.event2
 import com.rwmobi.dazncodechallenge.test.EventSampleData.event3
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 internal class EventsViewModelTest {
@@ -49,8 +51,8 @@ internal class EventsViewModelTest {
         viewModel.fetchCacheAndRefresh()
 
         val uiState = viewModel.uiState.value
-        uiState.isLoading shouldBe false
-        uiState.events shouldContainExactly listOf(event1, event2)
+        assertFalse(uiState.isLoading)
+        assertEquals(listOf(event1, event2), uiState.events)
     }
 
     @Test
@@ -62,10 +64,10 @@ internal class EventsViewModelTest {
         viewModel.fetchCacheAndRefresh()
 
         val uiState = viewModel.uiState.value
-        uiState.isLoading shouldBe false
-        uiState.events shouldBe null
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages[0].message shouldBe "Error getting data: $exceptionMessage"
+        assertFalse(uiState.isLoading)
+        assertNull(uiState.events)
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals("Error getting data: $exceptionMessage", uiState.errorMessages[0].message)
     }
 
     @Test
@@ -77,8 +79,8 @@ internal class EventsViewModelTest {
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
-        uiState.isLoading shouldBe false
-        uiState.events shouldContainExactly listOf(event1, event2)
+        assertFalse(uiState.isLoading)
+        assertEquals(listOf(event1, event2), uiState.events)
     }
 
     @Test
@@ -91,55 +93,55 @@ internal class EventsViewModelTest {
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
-        uiState.isLoading shouldBe false
-        uiState.events shouldContainExactly listOf(event3)
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages[0].message shouldBe exceptionMessage
+        assertFalse(uiState.isLoading)
+        assertEquals(listOf(event3), uiState.events)
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals(exceptionMessage, uiState.errorMessages[0].message)
     }
 
     @Test
     fun refresh_ShouldDisplayErrorMessage_OnFetchFailure() {
         viewModel.fetchCacheAndRefresh()
-        val errorMessage = "Test error"
-        fakeRepository.setExceptionForTest(Exception(errorMessage))
+        val exceptionMessage = "Test error"
+        fakeRepository.setExceptionForTest(Exception(exceptionMessage))
 
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages.first().message shouldBe errorMessage
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals(exceptionMessage, uiState.errorMessages[0].message)
     }
 
     @Test
     fun refresh_ShouldAccumulateErrorMessages_OnMultipleFailures() {
         viewModel.fetchCacheAndRefresh()
-        val errorMessage1 = "Test error 1"
-        val errorMessage2 = "Test error 2"
+        val exceptionMessage1 = "Test error 1"
+        val exceptionMessage2 = "Test error 2"
 
-        fakeRepository.setExceptionForTest(Exception(errorMessage1))
+        fakeRepository.setExceptionForTest(Exception(exceptionMessage1))
         viewModel.refresh()
-        fakeRepository.setExceptionForTest(Exception(errorMessage2))
+        fakeRepository.setExceptionForTest(Exception(exceptionMessage2))
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 2
-        uiState.errorMessages[0].message shouldBe errorMessage1
-        uiState.errorMessages[1].message shouldBe errorMessage2
+        assertEquals(2, uiState.errorMessages.size)
+        assertEquals(exceptionMessage1, uiState.errorMessages[0].message)
+        assertEquals(exceptionMessage2, uiState.errorMessages[1].message)
     }
 
     @Test
     fun refresh_ShouldNotAccumulateDuplicatedErrorMessages_OnMultipleFailures() {
         viewModel.fetchCacheAndRefresh()
-        val errorMessage1 = "Test error 1"
+        val exceptionMessage = "Test error 1"
 
         repeat(times = 2) {
-            fakeRepository.setExceptionForTest(Exception(errorMessage1))
+            fakeRepository.setExceptionForTest(Exception(exceptionMessage))
             viewModel.refresh()
         }
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages[0].message shouldBe errorMessage1
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals(exceptionMessage, uiState.errorMessages[0].message)
     }
 
     @Test
@@ -153,23 +155,24 @@ internal class EventsViewModelTest {
         viewModel.errorShown(errorId)
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages shouldBe emptyList()
+        assertTrue(uiState.errorMessages.isEmpty())
     }
 
     @Test
     fun requestScrollToTop_ShouldEnableScrollToTop_WhenRequested() {
-        viewModel.fetchCacheAndRefresh()
         val expectedRequestScrollToTop = true
+        viewModel.fetchCacheAndRefresh()
         viewModel.requestScrollToTop(enabled = expectedRequestScrollToTop)
+
         val uiState = viewModel.uiState.value
-        uiState.requestScrollToTop shouldBe expectedRequestScrollToTop
+        assertEquals(expectedRequestScrollToTop, uiState.requestScrollToTop)
     }
 
     @Test
     fun getImageLoader_ShouldReturnCorrectInstance() {
         viewModel.fetchCacheAndRefresh()
-        val expectedImageLoader = mockImageLoader
         val imageLoader = viewModel.getImageLoader()
-        imageLoader shouldBeSameInstanceAs expectedImageLoader
+        val expectedImageLoader = mockImageLoader
+        assertSame(expectedImageLoader, imageLoader)
     }
 }

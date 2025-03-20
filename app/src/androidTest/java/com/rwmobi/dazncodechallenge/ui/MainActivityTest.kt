@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 @kotlinx.coroutines.ExperimentalCoroutinesApi
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest {
+internal class MainActivityTest {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
