@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025. Ryan Wong
+ * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
+ */
+
 package com.rwmobi.dazncodechallenge.ui.viewmodel
 
 import androidx.media3.common.Player

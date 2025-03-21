@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2024. Ryan Wong
+ * Copyright (c) 2025. Ryan Wong
  * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
  */
 
 package com.rwmobi.dazncodechallenge.ui.utils
