@@ -10,15 +10,17 @@ import com.rwmobi.dazncodechallenge.data.repository.FakeRepository
 import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule1
 import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule2
 import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule3
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 internal class ScheduleViewModelTest {
@@ -49,8 +51,8 @@ internal class ScheduleViewModelTest {
         viewModel.fetchCacheAndRefresh()
 
         val uiState = viewModel.uiState.value
-        uiState.isLoading shouldBe false
-        uiState.schedules shouldContainExactly listOf(schedule1, schedule2)
+        assertFalse(uiState.isLoading)
+        assertEquals(listOf(schedule1, schedule2), uiState.schedules)
     }
 
     @Test
@@ -62,10 +64,10 @@ internal class ScheduleViewModelTest {
         viewModel.fetchCacheAndRefresh()
 
         val uiState = viewModel.uiState.value
-        uiState.isLoading shouldBe false
-        uiState.schedules shouldBe null
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages[0].message shouldBe "Error getting data: $exceptionMessage"
+        assertFalse(uiState.isLoading)
+        assertNull(uiState.schedules)
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals("Error getting data: $exceptionMessage", uiState.errorMessages[0].message)
     }
 
     @Test
@@ -77,8 +79,8 @@ internal class ScheduleViewModelTest {
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
-        uiState.isLoading shouldBe false
-        uiState.schedules shouldContainExactly listOf(schedule1, schedule2)
+        assertFalse(uiState.isLoading)
+        assertEquals(listOf(schedule1, schedule2), uiState.schedules)
     }
 
     @Test
@@ -91,10 +93,10 @@ internal class ScheduleViewModelTest {
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
-        uiState.isLoading shouldBe false
-        uiState.schedules shouldContainExactly listOf(schedule3)
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages[0].message shouldBe exceptionMessage
+        assertFalse(uiState.isLoading)
+        assertEquals(listOf(schedule3), uiState.schedules)
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals(exceptionMessage, uiState.errorMessages[0].message)
     }
 
     @Test
@@ -106,8 +108,8 @@ internal class ScheduleViewModelTest {
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages.first().message shouldBe errorMessage
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals(errorMessage, uiState.errorMessages[0].message)
     }
 
     @Test
@@ -122,9 +124,9 @@ internal class ScheduleViewModelTest {
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 2
-        uiState.errorMessages[0].message shouldBe errorMessage1
-        uiState.errorMessages[1].message shouldBe errorMessage2
+        assertEquals(2, uiState.errorMessages.size)
+        assertEquals(errorMessage1, uiState.errorMessages[0].message)
+        assertEquals(errorMessage2, uiState.errorMessages[1].message)
     }
 
     @Test
@@ -138,8 +140,8 @@ internal class ScheduleViewModelTest {
         }
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages[0].message shouldBe errorMessage1
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals(errorMessage1, uiState.errorMessages[0].message)
     }
 
     @Test
@@ -153,16 +155,17 @@ internal class ScheduleViewModelTest {
         viewModel.errorShown(errorId)
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages shouldBe emptyList()
+        assertTrue(uiState.errorMessages.isEmpty())
     }
 
     @Test
     fun requestScrollToTop_ShouldEnableScrollToTop_WhenRequested() {
-        viewModel.fetchCacheAndRefresh()
         val expectedRequestScrollToTop = true
+        viewModel.fetchCacheAndRefresh()
         viewModel.requestScrollToTop(enabled = expectedRequestScrollToTop)
+
         val uiState = viewModel.uiState.value
-        uiState.requestScrollToTop shouldBe expectedRequestScrollToTop
+        assertEquals(expectedRequestScrollToTop, uiState.requestScrollToTop)
     }
 
     @Test
@@ -170,6 +173,6 @@ internal class ScheduleViewModelTest {
         viewModel.fetchCacheAndRefresh()
         val expectedImageLoader = mockImageLoader
         val imageLoader = viewModel.getImageLoader()
-        imageLoader shouldBeSameInstanceAs expectedImageLoader
+        assertSame(expectedImageLoader, imageLoader)
     }
 }
