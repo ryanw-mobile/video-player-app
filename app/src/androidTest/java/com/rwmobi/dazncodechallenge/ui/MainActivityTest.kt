@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024. Ryan Wong
+ * Copyright (c) 2025. Ryan Wong
  * https://github.com/ryanw-mobile
  * Sponsored by RW MobiMedia UK Limited
  *
@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 @kotlinx.coroutines.ExperimentalCoroutinesApi
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest {
+internal class MainActivityTest {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 

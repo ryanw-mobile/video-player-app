@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024. Ryan Wong
+ * Copyright (c) 2025. Ryan Wong
  * https://github.com/ryanw-mobile
  * Sponsored by RW MobiMedia UK Limited
  *
@@ -8,30 +8,41 @@
 package com.rwmobi.dazncodechallenge.ui.model
 
 import android.view.View
-import io.kotest.matchers.shouldBe
 import org.junit.Test
+import kotlin.test.assertEquals
 
-class ControllerTransitionStateTest {
+internal class ControllerTransitionStateTest {
 
+    // Test function names reviewed by Gemini for consistency
     // Simulate when the player controller is invisible, showing full controller, leaving with slider alone, invisible
 
     @Test
-    fun updateState_shouldReturnCorrectState_whenControllerAnimates() {
+    fun `returns APPEARING when controller is visible but not fully visible`() {
         var controllerTransitionState = ControllerTransitionState.GONE
 
         controllerTransitionState = controllerTransitionState.updateState(visibility = View.VISIBLE, isControllerFullyVisible = false)
-        controllerTransitionState shouldBe ControllerTransitionState.APPEARING
+        assertEquals(ControllerTransitionState.APPEARING, controllerTransitionState)
+    }
+
+    @Test
+    fun `returns VISIBLE when controller is visible and fully visible`() {
+        var controllerTransitionState = ControllerTransitionState.APPEARING
 
         controllerTransitionState = controllerTransitionState.updateState(visibility = View.VISIBLE, isControllerFullyVisible = true)
-        controllerTransitionState shouldBe ControllerTransitionState.VISIBLE
+        assertEquals(ControllerTransitionState.VISIBLE, controllerTransitionState)
+    }
 
-        repeat(times = 3) {
-            // This is when the controller hiding parts of it in phases. It triggers the listener every time.
-            controllerTransitionState = controllerTransitionState.updateState(visibility = View.VISIBLE, isControllerFullyVisible = false)
-            controllerTransitionState shouldBe ControllerTransitionState.DISAPPEARING
-        }
-
+    @Test
+    fun `returns GONE when controller is gone`() {
+        var controllerTransitionState = ControllerTransitionState.DISAPPEARING
         controllerTransitionState = controllerTransitionState.updateState(visibility = View.GONE, isControllerFullyVisible = false)
-        controllerTransitionState shouldBe ControllerTransitionState.GONE
+        assertEquals(ControllerTransitionState.GONE, controllerTransitionState)
+    }
+
+    @Test
+    fun `returns DISAPPEARING when controller hiding parts of it`() {
+        var controllerTransitionState = ControllerTransitionState.VISIBLE
+        controllerTransitionState = controllerTransitionState.updateState(visibility = View.VISIBLE, isControllerFullyVisible = false)
+        assertEquals(ControllerTransitionState.DISAPPEARING, controllerTransitionState)
     }
 }

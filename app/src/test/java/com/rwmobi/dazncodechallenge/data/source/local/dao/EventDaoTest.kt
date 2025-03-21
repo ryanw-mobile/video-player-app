@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024. Ryan Wong
+ * Copyright (c) 2025. Ryan Wong
  * https://github.com/ryanw-mobile
  * Sponsored by RW MobiMedia UK Limited
  *
@@ -15,8 +15,6 @@ import com.rwmobi.dazncodechallenge.test.EventDbEntitySampleData.event1
 import com.rwmobi.dazncodechallenge.test.EventDbEntitySampleData.event1Modified
 import com.rwmobi.dazncodechallenge.test.EventDbEntitySampleData.event2
 import com.rwmobi.dazncodechallenge.test.EventDbEntitySampleData.event3
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -24,6 +22,11 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
@@ -45,88 +48,88 @@ internal class EventDaoTest {
         database.close()
     }
 
-    // Test function names reviewed by ChatGPT for consistency
+    // Test function names reviewed by Gemini for consistency
 
     @Test
-    fun getEventById_ShouldReturnInsertedEvent() = runTest {
-        // GIVEN - empty database
+    fun `returns event when get event by id after insert`() = runTest {
+        // GIVEN - empty database when insert an event
         database.eventsDao.insert(event1)
         val result = database.eventsDao.getEventById(event1.eventId)
-        result shouldBe event1
+        assertEquals(event1, result)
     }
 
     @Test
-    fun getEvents_ShouldReturnAllInsertedEvents() = runTest {
+    fun `returns all events when get all events after inserting multiple events`() = runTest {
         // GIVEN - Empty database
         database.eventsDao.insertAll(listOf(event1, event2, event3))
         val result = database.eventsDao.getEvents()
-        result.size shouldBe 3
+        assertEquals(3, result.size)
     }
 
     @Test
-    fun getEventById_ShouldReturnUpdatedEventAfterUpsert() = runTest {
+    fun `returns updated event when upserting an existing event`() = runTest {
         database.eventsDao.insert(event1)
         database.eventsDao.insert(event1Modified)
         val result = database.eventsDao.getEventById(event1.eventId)
-        result shouldBe event1Modified
+        assertEquals(event1Modified, result)
     }
 
     @Test
-    fun getEventById_ShouldReturnNullAfterEventDeletion() = runTest {
+    fun `returns null when get event by id after deleting it`() = runTest {
         database.eventsDao.insert(event1)
         database.eventsDao.delete(event1.eventId)
         val result = database.eventsDao.getEventById(event1.eventId)
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
-    fun getEventById_ShouldReturnNullAfterDeletingEvent() = runTest {
+    fun `returns null when get event by id after deleting one of the multiple events`() = runTest {
         database.eventsDao.insertAll(
             listOf(event1, event2, event3).map { it },
         )
         database.eventsDao.delete(event1.eventId)
         val result = database.eventsDao.getEventById(event1.eventId)
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
-    fun getEvents_ShouldReturnEmptyListAfterClear() = runTest {
+    fun `returns empty list when get all events after clearing the database`() = runTest {
         database.eventsDao.insertAll(listOf(event1, event2, event3).map { it })
         database.eventsDao.clear()
         val result = database.eventsDao.getEvents()
-        result shouldBe emptyList()
+        assertTrue(result.isEmpty())
     }
 
     // Dirty bit testing
     @Test
-    fun getEventById_ShouldReturnEventWithDirtyFlagFalseAfterInsert() = runTest {
+    fun `returns event with dirty flag false after insert`() = runTest {
         // GIVEN - empty database
         database.eventsDao.insert(event1)
         val result = database.eventsDao.getEventById(event1.eventId)
-        result shouldBe event1
+        assertEquals(event1, result)
     }
 
     @Test
-    fun getEventById_ShouldReturnEventWithDirtyFlagTrueAfterMarkDirty() = runTest {
+    fun `returns event with dirty flag true when marked dirty`() = runTest {
         database.eventsDao.insertAll(listOf(event1, event2, event3))
         database.eventsDao.markDirty()
         val result = database.eventsDao.getEventById(event1.eventId)
-        result.dirty shouldBe true
+        assertTrue(result.dirty)
     }
 
     @Test
-    fun getEventById_ShouldReturnEventWithDirtyFlagFalseAfterUpdate() = runTest {
+    fun `returns event with dirty flag false when upserting an existing event after marked dirty`() = runTest {
         database.eventsDao.insertAll(listOf(event1, event2, event3))
         database.eventsDao.markDirty()
 
         database.eventsDao.insert(event1Modified)
 
         val result = database.eventsDao.getEventById(event1Modified.eventId)
-        result.dirty shouldBe false
+        assertFalse(result.dirty)
     }
 
     @Test
-    fun getEvents_ShouldReturnNonDirtyEventsAfterDeleteDirty() = runTest {
+    fun `returns only non-dirty events when getting all events after deleting dirty`() = runTest {
         database.eventsDao.insertAll(listOf(event1, event3))
         database.eventsDao.markDirty()
 
@@ -134,6 +137,6 @@ internal class EventDaoTest {
         database.eventsDao.deleteDirty()
 
         val result = database.eventsDao.getEvents()
-        result.shouldContainExactly(event2)
+        assertContentEquals(listOf(event2), result)
     }
 }

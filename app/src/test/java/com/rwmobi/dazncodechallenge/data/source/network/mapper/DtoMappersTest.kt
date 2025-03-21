@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024. Ryan Wong
+ * Copyright (c) 2025. Ryan Wong
  * https://github.com/ryanw-mobile
  * Sponsored by RW MobiMedia UK Limited
  *
@@ -10,29 +10,29 @@ package com.rwmobi.dazncodechallenge.data.source.network.mapper
 import com.rwmobi.dazncodechallenge.data.repository.mapper.toNetworkDto
 import com.rwmobi.dazncodechallenge.test.EventSampleData
 import com.rwmobi.dazncodechallenge.test.ScheduleSampleData
-import io.kotest.matchers.shouldBe
 import org.junit.Test
+import kotlin.test.assertEquals
 
 internal class DtoMappersTest {
 
-    // Test function names reviewed by ChatGPT for consistency
+    // Test function names reviewed by Gemini for consistency
 
     @Test
-    fun convertEventToEventNetworkDto_ShouldMapFieldsCorrectly_ForSingleEvent() {
+    fun `maps event fields correctly when converting a single event to event network DTO`() {
         val event = EventSampleData.event1
         val dto = event.toNetworkDto()
         with(dto) {
-            eventId shouldBe EventSampleData.event1.eventId
-            title shouldBe EventSampleData.event1.title
-            subtitle shouldBe EventSampleData.event1.subtitle
-            date shouldBe EventSampleData.event1.date
-            imageUrl shouldBe EventSampleData.event1.imageUrl
-            videoUrl shouldBe EventSampleData.event1.videoUrl
+            assertEquals(EventSampleData.event1.eventId, eventId)
+            assertEquals(EventSampleData.event1.title, title)
+            assertEquals(EventSampleData.event1.subtitle, subtitle)
+            assertEquals(EventSampleData.event1.date, date)
+            assertEquals(EventSampleData.event1.imageUrl, imageUrl)
+            assertEquals(EventSampleData.event1.videoUrl, videoUrl)
         }
     }
 
     @Test
-    fun convertEventsToEventNetworkDtos_ShouldMapFieldsCorrectly_ForMultipleEvents() {
+    fun `maps event fields correctly when converting multiple events to event network DTOs`() {
         val events = listOf(
             EventSampleData.event1,
             EventSampleData.event2,
@@ -40,34 +40,34 @@ internal class DtoMappersTest {
         )
         val dtos = events.map { it.toNetworkDto() }
 
-        dtos.size shouldBe events.size
+        assertEquals(events.size, dtos.size)
         events.zip(dtos).forEach { (event, dto) ->
             with(dto) {
-                eventId shouldBe event.eventId
-                title shouldBe event.title
-                subtitle shouldBe event.subtitle
-                date shouldBe event.date
-                imageUrl shouldBe event.imageUrl
-                videoUrl shouldBe event.videoUrl
+                assertEquals(event.eventId, eventId)
+                assertEquals(event.title, title)
+                assertEquals(event.subtitle, subtitle)
+                assertEquals(event.date, date)
+                assertEquals(event.imageUrl, imageUrl)
+                assertEquals(event.videoUrl, videoUrl)
             }
         }
     }
 
     @Test
-    fun convertScheduleToScheduleNetworkDto_ShouldMapFieldsCorrectly_ForSingleSchedule() {
+    fun `maps schedule fields correctly when converting a single schedule to schedule network DTO`() {
         val schedule = ScheduleSampleData.schedule1
         val dto = schedule.toNetworkDto()
         with(dto) {
-            scheduleId shouldBe ScheduleSampleData.schedule1.scheduleId
-            title shouldBe ScheduleSampleData.schedule1.title
-            subtitle shouldBe ScheduleSampleData.schedule1.subtitle
-            date shouldBe ScheduleSampleData.schedule1.date
-            imageUrl shouldBe ScheduleSampleData.schedule1.imageUrl
+            assertEquals(ScheduleSampleData.schedule1.scheduleId, scheduleId)
+            assertEquals(ScheduleSampleData.schedule1.title, title)
+            assertEquals(ScheduleSampleData.schedule1.subtitle, subtitle)
+            assertEquals(ScheduleSampleData.schedule1.date, date)
+            assertEquals(ScheduleSampleData.schedule1.imageUrl, imageUrl)
         }
     }
 
     @Test
-    fun convertSchedulesToScheduleNetworkDtos_ShouldMapFieldsCorrectly_ForMultipleSchedules() {
+    fun `maps schedule fields correctly when converting multiple schedules to schedule network DTOs`() {
         val schedules = listOf(
             ScheduleSampleData.schedule1,
             ScheduleSampleData.schedule2,
@@ -75,14 +75,14 @@ internal class DtoMappersTest {
         )
         val dtos = schedules.map { it.toNetworkDto() }
 
-        dtos.size shouldBe schedules.size
+        assertEquals(schedules.size, dtos.size)
         schedules.zip(dtos).forEach { (schedule, dto) ->
             with(dto) {
-                scheduleId shouldBe schedule.scheduleId
-                title shouldBe schedule.title
-                subtitle shouldBe schedule.subtitle
-                date shouldBe schedule.date
-                imageUrl shouldBe schedule.imageUrl
+                assertEquals(schedule.scheduleId, scheduleId)
+                assertEquals(schedule.title, title)
+                assertEquals(schedule.subtitle, subtitle)
+                assertEquals(schedule.date, date)
+                assertEquals(schedule.imageUrl, imageUrl)
             }
         }
     }

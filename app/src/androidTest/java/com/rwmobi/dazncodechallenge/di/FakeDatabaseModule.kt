@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2021. Ryan Wong (hello@ryanwong.co.uk)
+ * Copyright (c) 2025. Ryan Wong
+ * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
  *
  */
 

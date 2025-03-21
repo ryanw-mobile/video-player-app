@@ -1,9 +1,9 @@
 /*
-* Copyright (c) 2024. Ryan Wong
-* https://github.com/ryanw-mobile
-* Sponsored by RW MobiMedia UK Limited
-*
-*/
+ * Copyright (c) 2025. Ryan Wong
+ * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
+ */
 
 package com.rwmobi.dazncodechallenge.data.source.local
 
@@ -19,8 +19,6 @@ import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData.schedule1
 import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData.schedule1Modified
 import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData.schedule2
 import com.rwmobi.dazncodechallenge.test.ScheduleDbEntitySampleData.schedule3
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -29,6 +27,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import kotlin.test.assertContentEquals
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
@@ -57,52 +57,52 @@ internal class RoomDbDataSourceTest {
         database.close()
     }
 
-    // Test function names reviewed by ChatGPT for consistency
+    // Test function names reviewed by Gemini for consistency
     // Test coverage: basic CRUD on both events and schedule
 
     @Test
-    fun submitEvents_ShouldReturnOneEvent_WhenOneEventSubmittedToEmptyList() = runTest {
+    fun `returns one event when one event submitted to empty list`() = runTest {
         localDataSource.submitEvents(listOf(event1))
         val resultList = localDataSource.getEvents()
-        resultList.shouldContainExactlyInAnyOrder(event1)
+        assertContentEquals(listOf(event1), resultList)
     }
 
     @Test
-    fun submitEvents_ShouldUpdateEvent_WhenEventUpserted() = runTest {
+    fun `updates event when event upserted`() = runTest {
         localDataSource.submitEvents(listOf(event1))
         localDataSource.submitEvents(listOf(event1Modified))
         val resultList = localDataSource.getEvents()
-        resultList.shouldContainExactlyInAnyOrder(event1Modified)
+        assertContentEquals(listOf(event1Modified), resultList)
     }
 
     @Test
-    fun submitEvents_ShouldClearEvents_WhenEmptyListSubmitted() = runTest {
+    fun `clears events when empty list submitted`() = runTest {
         localDataSource.submitEvents(listOf(event1, event2, event3))
         localDataSource.submitEvents(listOf())
         val resultList = localDataSource.getEvents()
-        resultList.size shouldBe 0
+        assertTrue(resultList.isEmpty())
     }
 
     @Test
-    fun submitSchedule_ShouldReturnOneSchedule_WhenOneScheduleSubmittedToEmptyList() = runTest {
+    fun `returns one schedule when one schedule submitted to empty list`() = runTest {
         localDataSource.submitSchedule(listOf(schedule1))
         val resultList = localDataSource.getSchedules()
-        resultList.shouldContainExactlyInAnyOrder(schedule1)
+        assertContentEquals(listOf(schedule1), resultList)
     }
 
     @Test
-    fun submitSchedule_ShouldUpdateSchedule_WhenScheduleUpserted() = runTest {
+    fun `updates schedule when schedule upserted`() = runTest {
         localDataSource.submitSchedule(listOf(schedule1))
         localDataSource.submitSchedule(listOf(schedule1Modified))
         val resultList = localDataSource.getSchedules()
-        resultList.shouldContainExactlyInAnyOrder(schedule1Modified)
+        assertContentEquals(listOf(schedule1Modified), resultList)
     }
 
     @Test
-    fun submitSchedule_ShouldClearSchedules_WhenEmptyListSubmitted() = runTest {
+    fun `clears schedules when empty list submitted`() = runTest {
         localDataSource.submitSchedule(listOf(schedule1, schedule2, schedule3))
         localDataSource.submitSchedule(listOf())
         val resultList = localDataSource.getSchedules()
-        resultList.size shouldBe 0
+        assertTrue(resultList.isEmpty())
     }
 }

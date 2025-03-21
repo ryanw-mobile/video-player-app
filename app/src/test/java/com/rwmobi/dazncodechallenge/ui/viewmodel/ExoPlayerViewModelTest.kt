@@ -1,10 +1,15 @@
+/*
+ * Copyright (c) 2025. Ryan Wong
+ * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
+ */
+
 package com.rwmobi.dazncodechallenge.ui.viewmodel
 
 import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
 import com.rwmobi.dazncodechallenge.test.PlaybackExceptionSampleData
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.just
@@ -18,6 +23,10 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
@@ -36,23 +45,25 @@ internal class ExoPlayerViewModelTest {
         viewModel = ExoPlayerViewModel(player = mockPlayer)
     }
 
+    // Test function names reviewed by Gemini for consistency
+
     @Test
-    fun uiState_initialState_ShouldBeCorrect() {
+    fun `has empty error messages and video not loaded initially`() {
         val uiState = viewModel.uiState.value
-        assert(uiState.errorMessages.isEmpty())
-        assert(!uiState.hasVideoLoaded)
+        assertTrue(uiState.errorMessages.isEmpty())
+        assertFalse(uiState.hasVideoLoaded)
     }
 
     @Test
-    fun playVideo_withNewVideoUrl_ShouldPlayVideoAndSetLoaded() = runTest {
+    fun `sets hasVideoLoaded to true when new video URL is played`() = runTest {
         val videoUrl = "http://fakevideo.com/video.mp4"
         viewModel.playVideo(videoUrl)
         val uiState = viewModel.uiState.value
-        uiState.hasVideoLoaded shouldBe true
+        assertTrue(uiState.hasVideoLoaded)
     }
 
     @Test
-    fun onVideoSizeChanged_ShouldUpdateUiState() = runTest {
+    fun `updates video width and height in UI state when video size changes`() = runTest {
         val expectedVideoWidth = 640
         val expectedVideoHeight = 1080
         every { mockPlayer.play() } answers {
@@ -62,13 +73,13 @@ internal class ExoPlayerViewModelTest {
         viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
 
         with(viewModel.uiState.value) {
-            this.videoWidth shouldBe expectedVideoWidth
-            this.videoHeight shouldBe expectedVideoHeight
+            assertEquals(expectedVideoWidth, this.videoWidth)
+            assertEquals(expectedVideoHeight, this.videoHeight)
         }
     }
 
     @Test
-    fun onPlayerError_withHTTPError_ShouldUpdateUIState() = runTest {
+    fun `updates UI state with HTTP error message when player encounters HTTP error`() = runTest {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.invalidResponseCodeException)
         }
@@ -76,12 +87,12 @@ internal class ExoPlayerViewModelTest {
         viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
 
         val errorMessages = viewModel.uiState.value.errorMessages
-        errorMessages.size shouldBe 1
-        errorMessages[0].message shouldBe "HTTP Error ${PlaybackExceptionSampleData.invalidResponseCodeExceptionErrorCode}"
+        assertEquals(1, errorMessages.size)
+        assertEquals("HTTP Error ${PlaybackExceptionSampleData.invalidResponseCodeExceptionErrorCode}", errorMessages[0].message)
     }
 
     @Test
-    fun onPlayerError_withHttpDataSourceException_ShouldUpdateUIState() = runTest {
+    fun `updates UI state with HttpDataSourceException message when player encounters HttpDataSourceException`() = runTest {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.httpDataSourceException)
         }
@@ -89,12 +100,12 @@ internal class ExoPlayerViewModelTest {
         viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
 
         val errorMessages = viewModel.uiState.value.errorMessages
-        errorMessages.size shouldBe 1
-        errorMessages[0].message shouldBe PlaybackExceptionSampleData.httpDataSourceExceptionMessage
+        assertEquals(1, errorMessages.size)
+        assertEquals(PlaybackExceptionSampleData.httpDataSourceExceptionMessage, errorMessages[0].message)
     }
 
     @Test
-    fun onPlayerError_withOtherExceptions_ShouldUpdateUIState() = runTest {
+    fun `updates UI state with generic exception message when player encounters generic exception`() = runTest {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
         }
@@ -102,19 +113,19 @@ internal class ExoPlayerViewModelTest {
         viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
 
         val errorMessages = viewModel.uiState.value.errorMessages
-        errorMessages.size shouldBe 1
-        errorMessages[0].message shouldBe PlaybackExceptionSampleData.genericExceptionMessage
+        assertEquals(1, errorMessages.size)
+        assertEquals(PlaybackExceptionSampleData.genericExceptionMessage, errorMessages[0].message)
     }
 
     @Test
-    fun getPlayer_ShouldReturnCorrectInstance() {
+    fun `returns the correct player instance`() {
         val expectedPlayer = mockPlayer
         val player = viewModel.getPlayer()
-        player shouldBeSameInstanceAs expectedPlayer
+        assertSame(expectedPlayer, player)
     }
 
     @Test
-    fun restorePlaybackState_whenPlayingBefore_ShouldResumePlaying() {
+    fun `resumes playing when playback was active before state restoration`() {
         every { mockPlayer.isPlaying } answers { true }
         viewModel.savePlaybackState()
 
@@ -125,7 +136,7 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
-    fun restorePlaybackState_whenPausedBefore_ShouldNotResumePlaying() {
+    fun `does not resume playing when playback was paused before state restoration`() {
         every { mockPlayer.isPlaying } answers { false }
         viewModel.savePlaybackState()
 
@@ -136,16 +147,16 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
-    fun setFullScreenMode_ShouldUpdateUiState() = runTest {
+    fun `updates UI state with full-screen mode when set`() = runTest {
         viewModel.setFullScreenMode(isFullScreenMode = true)
-        viewModel.uiState.value.isFullScreenMode shouldBe true
+        assertTrue(viewModel.uiState.value.isFullScreenMode)
 
         viewModel.setFullScreenMode(isFullScreenMode = false)
-        viewModel.uiState.value.isFullScreenMode shouldBe false
+        assertFalse(viewModel.uiState.value.isFullScreenMode)
     }
 
     @Test
-    fun refresh_ShouldAccumulateErrorMessages_OnMultipleFailures() {
+    fun `accumulates error messages on multiple failures`() {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
         }
@@ -157,13 +168,13 @@ internal class ExoPlayerViewModelTest {
         viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 2
-        uiState.errorMessages[0].message shouldBe PlaybackExceptionSampleData.genericExceptionMessage
-        uiState.errorMessages[1].message shouldBe PlaybackExceptionSampleData.ioExceptionMessage
+        assertEquals(2, uiState.errorMessages.size)
+        assertEquals(PlaybackExceptionSampleData.genericExceptionMessage, uiState.errorMessages[0].message)
+        assertEquals(PlaybackExceptionSampleData.ioExceptionMessage, uiState.errorMessages[1].message)
     }
 
     @Test
-    fun refresh_ShouldNotAccumulateDuplicatedErrorMessages_OnMultipleFailures() {
+    fun `does not accumulate duplicate error messages on multiple failures`() {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
         }
@@ -173,12 +184,12 @@ internal class ExoPlayerViewModelTest {
         }
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages[0].message shouldBe PlaybackExceptionSampleData.genericExceptionMessage
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals(PlaybackExceptionSampleData.genericExceptionMessage, uiState.errorMessages[0].message)
     }
 
     @Test
-    fun errorShown_ShouldClearErrorMessage_WhenCalledWithValidId() {
+    fun `clears error message when errorShown is called with valid ID`() {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
         }
@@ -188,6 +199,6 @@ internal class ExoPlayerViewModelTest {
         viewModel.errorShown(errorId)
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages shouldBe emptyList()
+        assertTrue(uiState.errorMessages.isEmpty())
     }
 }

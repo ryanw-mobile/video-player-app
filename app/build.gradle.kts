@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024. Ryan Wong
+ * Copyright (c) 2025. Ryan Wong
  * https://github.com/ryanw-mobile
  * Sponsored by RW MobiMedia UK Limited
  *
@@ -252,12 +252,14 @@ dependencies {
     implementation(libs.timber)
 
     // testing
+    testImplementation(kotlin("test"))
+    testImplementation(kotlin("test-common"))
+    testImplementation(kotlin("test-annotations-common"))
     testImplementation(libs.junit)
     testImplementation(libs.androidx.test.core.ktx)
     testImplementation(libs.jetbrains.kotlinx.coroutines.test)
     testImplementation(libs.robolectric)
     testImplementation(libs.mockk.android)
-    testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.androidx.media3.test.utils)
 
     // For instrumented tests - with Kotlin
@@ -268,7 +270,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.uiautomator)
     androidTestImplementation(libs.androidx.ui.test.junit4)
-    androidTestImplementation(libs.kotest.assertions.core)
     androidTestImplementation(libs.jetbrains.kotlinx.coroutines.test)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.androidx.media3.test.utils)

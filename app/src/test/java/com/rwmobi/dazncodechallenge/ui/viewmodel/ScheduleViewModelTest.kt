@@ -1,7 +1,9 @@
 /*
-* Copyright (c) 2021. Ryan Wong (hello@ryanwong.co.uk)
-*
-*/
+ * Copyright (c) 2025. Ryan Wong
+ * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
+ */
 
 package com.rwmobi.dazncodechallenge.ui.viewmodel
 
@@ -10,15 +12,17 @@ import com.rwmobi.dazncodechallenge.data.repository.FakeRepository
 import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule1
 import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule2
 import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule3
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 internal class ScheduleViewModelTest {
@@ -39,22 +43,22 @@ internal class ScheduleViewModelTest {
         )
     }
 
-    // Test function names reviewed by ChatGPT for consistency
+    // Test function names reviewed by Gemini for consistency
 
     @Test
-    fun fetchCacheAndRefresh_ShouldDisplayRefreshedSchedules_WhenSuccessful() {
+    fun `displays refreshed schedules when fetchCacheAndRefresh is successful`() {
         fakeRepository.setRemoteSchedulesForTest(listOf(schedule1, schedule2))
         fakeRepository.setLocalSchedulesForTest(listOf(schedule3))
 
         viewModel.fetchCacheAndRefresh()
 
         val uiState = viewModel.uiState.value
-        uiState.isLoading shouldBe false
-        uiState.schedules shouldContainExactly listOf(schedule1, schedule2)
+        assertFalse(uiState.isLoading)
+        assertEquals(listOf(schedule1, schedule2), uiState.schedules)
     }
 
     @Test
-    fun fetchCacheAndRefresh_ShouldShowError_WhenRepositoryFails() {
+    fun `shows error when fetchCacheAndRefresh fails`() {
         val exceptionMessage = "repository error"
         fakeRepository.setExceptionForTest(IOException(exceptionMessage))
         fakeRepository.setRemoteSchedulesForTest(listOf(schedule1, schedule2))
@@ -62,14 +66,14 @@ internal class ScheduleViewModelTest {
         viewModel.fetchCacheAndRefresh()
 
         val uiState = viewModel.uiState.value
-        uiState.isLoading shouldBe false
-        uiState.schedules shouldBe null
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages[0].message shouldBe "Error getting data: $exceptionMessage"
+        assertFalse(uiState.isLoading)
+        assertNull(uiState.schedules)
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals("Error getting data: $exceptionMessage", uiState.errorMessages[0].message)
     }
 
     @Test
-    fun refresh_ShouldUpdateSchedulesSuccessfully_WhenCalled() {
+    fun `updates schedules successfully when refresh is called`() {
         fakeRepository.setRemoteSchedulesForTest(listOf(schedule1, schedule2))
         fakeRepository.setLocalSchedulesForTest(listOf(schedule3))
         viewModel.fetchCacheAndRefresh()
@@ -77,12 +81,12 @@ internal class ScheduleViewModelTest {
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
-        uiState.isLoading shouldBe false
-        uiState.schedules shouldContainExactly listOf(schedule1, schedule2)
+        assertFalse(uiState.isLoading)
+        assertEquals(listOf(schedule1, schedule2), uiState.schedules)
     }
 
     @Test
-    fun refresh_ShouldRetainCachedSchedulesAndShowError_OnFailure() {
+    fun `retains cached schedules and shows error when refresh fails`() {
         fakeRepository.setRemoteSchedulesForTest(listOf(schedule3))
         viewModel.fetchCacheAndRefresh()
 
@@ -91,14 +95,14 @@ internal class ScheduleViewModelTest {
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
-        uiState.isLoading shouldBe false
-        uiState.schedules shouldContainExactly listOf(schedule3)
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages[0].message shouldBe exceptionMessage
+        assertFalse(uiState.isLoading)
+        assertEquals(listOf(schedule3), uiState.schedules)
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals(exceptionMessage, uiState.errorMessages[0].message)
     }
 
     @Test
-    fun refresh_ShouldDisplayErrorMessage_OnFetchFailure() {
+    fun `displays error message when refresh fetch fails`() {
         viewModel.fetchCacheAndRefresh()
         val errorMessage = "Test error"
         fakeRepository.setExceptionForTest(Exception(errorMessage))
@@ -106,12 +110,12 @@ internal class ScheduleViewModelTest {
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages.first().message shouldBe errorMessage
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals(errorMessage, uiState.errorMessages[0].message)
     }
 
     @Test
-    fun refresh_ShouldAccumulateErrorMessages_OnMultipleFailures() {
+    fun `accumulates error messages when multiple refresh calls fail`() {
         viewModel.fetchCacheAndRefresh()
         val errorMessage1 = "Test error 1"
         val errorMessage2 = "Test error 2"
@@ -122,13 +126,13 @@ internal class ScheduleViewModelTest {
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 2
-        uiState.errorMessages[0].message shouldBe errorMessage1
-        uiState.errorMessages[1].message shouldBe errorMessage2
+        assertEquals(2, uiState.errorMessages.size)
+        assertEquals(errorMessage1, uiState.errorMessages[0].message)
+        assertEquals(errorMessage2, uiState.errorMessages[1].message)
     }
 
     @Test
-    fun refresh_ShouldNotAccumulateDuplicatedErrorMessages_OnMultipleFailures() {
+    fun `does not accumulate duplicated error messages when multiple refresh calls fail`() {
         viewModel.fetchCacheAndRefresh()
         val errorMessage1 = "Test error 1"
 
@@ -138,12 +142,12 @@ internal class ScheduleViewModelTest {
         }
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages.size shouldBe 1
-        uiState.errorMessages[0].message shouldBe errorMessage1
+        assertEquals(1, uiState.errorMessages.size)
+        assertEquals(errorMessage1, uiState.errorMessages[0].message)
     }
 
     @Test
-    fun errorShown_ShouldClearErrorMessage_WhenCalledWithValidId() {
+    fun `clears error message when errorShown is called with valid ID`() {
         viewModel.fetchCacheAndRefresh()
         val errorMessage = "Test error"
         fakeRepository.setExceptionForTest(Exception(errorMessage))
@@ -153,23 +157,24 @@ internal class ScheduleViewModelTest {
         viewModel.errorShown(errorId)
 
         val uiState = viewModel.uiState.value
-        uiState.errorMessages shouldBe emptyList()
+        assertTrue(uiState.errorMessages.isEmpty())
     }
 
     @Test
-    fun requestScrollToTop_ShouldEnableScrollToTop_WhenRequested() {
-        viewModel.fetchCacheAndRefresh()
+    fun `enables scroll to top when requestScrollToTop is called`() {
         val expectedRequestScrollToTop = true
+        viewModel.fetchCacheAndRefresh()
         viewModel.requestScrollToTop(enabled = expectedRequestScrollToTop)
+
         val uiState = viewModel.uiState.value
-        uiState.requestScrollToTop shouldBe expectedRequestScrollToTop
+        assertEquals(expectedRequestScrollToTop, uiState.requestScrollToTop)
     }
 
     @Test
-    fun getImageLoader_ShouldReturnCorrectInstance() {
+    fun `returns correct imageLoader instance when getImageLoader is called`() {
         viewModel.fetchCacheAndRefresh()
         val expectedImageLoader = mockImageLoader
         val imageLoader = viewModel.getImageLoader()
-        imageLoader shouldBeSameInstanceAs expectedImageLoader
+        assertSame(expectedImageLoader, imageLoader)
     }
 }
