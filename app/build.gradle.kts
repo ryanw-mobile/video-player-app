@@ -260,7 +260,6 @@ dependencies {
     testImplementation(libs.jetbrains.kotlinx.coroutines.test)
     testImplementation(libs.robolectric)
     testImplementation(libs.mockk.android)
-    testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.androidx.media3.test.utils)
 
     // For instrumented tests - with Kotlin
@@ -271,7 +270,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.uiautomator)
     androidTestImplementation(libs.androidx.ui.test.junit4)
-    androidTestImplementation(libs.kotest.assertions.core)
     androidTestImplementation(libs.jetbrains.kotlinx.coroutines.test)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.androidx.media3.test.utils)
