@@ -16,10 +16,10 @@ import kotlin.test.assertEquals
 
 internal class DomainModelMappersTest {
 
-    // Test function names reviewed by ChatGPT for consistency
+    // Test function names reviewed by Gemini for consistency
 
     @Test
-    fun convertEventNetworkDtoToEvent_ShouldMapFieldsCorrectly_ForSingleDto() {
+    fun `returns mapped event when single event network dto is provided`() {
         val dtos = listOf(
             EventNetworkDtoSampleData.event1,
         )
@@ -37,7 +37,7 @@ internal class DomainModelMappersTest {
     }
 
     @Test
-    fun convertEventNetworkDtosToEvents_ShouldMapFieldsCorrectly_ForMultipleDtos() {
+    fun `returns mapped events when multiple event network dtos are provided`() {
         val dtos = listOf(
             EventNetworkDtoSampleData.event1,
             EventNetworkDtoSampleData.event2,
@@ -60,7 +60,7 @@ internal class DomainModelMappersTest {
     }
 
     @Test
-    fun convertScheduleNetworkDtoToSchedule_ShouldMapFieldsCorrectly_ForSingleDto() {
+    fun `returns mapped schedule when single schedule network dto is provided`() {
         val dtos = listOf(
             ScheduleNetworkDtoSampleData.schedule1,
         )
@@ -77,7 +77,7 @@ internal class DomainModelMappersTest {
     }
 
     @Test
-    fun convertScheduleNetworkDtosToSchedules_ShouldMapFieldsCorrectly_ForMultipleDtos() {
+    fun `returns mapped schedules when multiple schedule network dtos are provided`() {
         val dtos = listOf(
             ScheduleNetworkDtoSampleData.schedule1,
             ScheduleNetworkDtoSampleData.schedule2,

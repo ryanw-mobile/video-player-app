@@ -43,10 +43,12 @@ internal class EventsViewModelTest {
         )
     }
 
-    // Test function names reviewed by ChatGPT for consistency
+    // Test function names reviewed by Gemini for consistency
 
     @Test
-    fun fetchCacheAndRefresh_ShouldDisplayRefreshedEvents_WhenSuccessful() {
+    fun `displays refreshed events when fetchCacheAndRefresh is successful`() {
+        // GIVEN: The repository returns remote events (event1, event2) and local events (event3)
+        // WHEN: fetchCacheAndRefresh is called
         fakeRepository.setRemoteEventsForTest(listOf(event1, event2))
         fakeRepository.setLocalEventsForTest(listOf(event3))
 
@@ -58,7 +60,9 @@ internal class EventsViewModelTest {
     }
 
     @Test
-    fun fetchCacheAndRefresh_ShouldShowError_WhenRepositoryFails() {
+    fun `shows error and no events when fetchCacheAndRefresh fails`() {
+        // GIVEN: The repository is set to throw an error
+        // WHEN: fetchCacheAndRefresh is called
         val exceptionMessage = "repository error"
         fakeRepository.setExceptionForTest(IOException(exceptionMessage))
         fakeRepository.setRemoteEventsForTest(listOf(event1, event2))
@@ -73,7 +77,9 @@ internal class EventsViewModelTest {
     }
 
     @Test
-    fun refresh_ShouldUpdateEventsSuccessfully_WhenCalled() {
+    fun `updates events successfully when refresh is called`() {
+        // GIVEN: The repository returns remote events (event1, event2) and local events (event3)
+        // WHEN: refresh is called after initial fetch
         fakeRepository.setRemoteEventsForTest(listOf(event1, event2))
         fakeRepository.setLocalEventsForTest(listOf(event3))
         viewModel.fetchCacheAndRefresh()
@@ -86,7 +92,9 @@ internal class EventsViewModelTest {
     }
 
     @Test
-    fun refresh_ShouldRetainCachedEventsAndShowError_OnFailure() {
+    fun `retains cached events and shows error when refresh fails`() {
+        // GIVEN: Initial data fetch and an error set for the repository
+        // WHEN: refresh is called
         fakeRepository.setRemoteEventsForTest(listOf(event3))
         viewModel.fetchCacheAndRefresh()
 
@@ -102,7 +110,9 @@ internal class EventsViewModelTest {
     }
 
     @Test
-    fun refresh_ShouldDisplayErrorMessage_OnFetchFailure() {
+    fun `displays error message when refresh fetch fails`() {
+        // GIVEN: Initial fetch and an error set for the repository
+        // WHEN: refresh is called
         viewModel.fetchCacheAndRefresh()
         val exceptionMessage = "Test error"
         fakeRepository.setExceptionForTest(Exception(exceptionMessage))
@@ -115,7 +125,9 @@ internal class EventsViewModelTest {
     }
 
     @Test
-    fun refresh_ShouldAccumulateErrorMessages_OnMultipleFailures() {
+    fun `accumulates error messages on multiple refresh failures`() {
+        // GIVEN: Initial fetch and multiple errors set for the repository
+        // WHEN: refresh is called multiple times with different errors
         viewModel.fetchCacheAndRefresh()
         val exceptionMessage1 = "Test error 1"
         val exceptionMessage2 = "Test error 2"
@@ -132,7 +144,9 @@ internal class EventsViewModelTest {
     }
 
     @Test
-    fun refresh_ShouldNotAccumulateDuplicatedErrorMessages_OnMultipleFailures() {
+    fun `does not accumulate duplicated error messages on multiple refresh failures`() {
+        // GIVEN: Initial fetch and multiple identical errors set for the repository
+        // WHEN: refresh is called multiple times with the same error
         viewModel.fetchCacheAndRefresh()
         val exceptionMessage = "Test error 1"
 
@@ -147,7 +161,9 @@ internal class EventsViewModelTest {
     }
 
     @Test
-    fun errorShown_ShouldClearErrorMessage_WhenCalledWithValidId() {
+    fun `clears error message when errorShown is called with valid id`() {
+        // GIVEN: An error message present in the UI state
+        // WHEN: errorShown is called with the correct error id
         viewModel.fetchCacheAndRefresh()
         val errorMessage = "Test error"
         fakeRepository.setExceptionForTest(Exception(errorMessage))
@@ -161,7 +177,9 @@ internal class EventsViewModelTest {
     }
 
     @Test
-    fun requestScrollToTop_ShouldEnableScrollToTop_WhenRequested() {
+    fun `enables scroll to top when requestScrollToTop is requested`() {
+        // GIVEN: Any initial state
+        // WHEN: requestScrollToTop is called with true
         val expectedRequestScrollToTop = true
         viewModel.fetchCacheAndRefresh()
         viewModel.requestScrollToTop(enabled = expectedRequestScrollToTop)
@@ -171,7 +189,9 @@ internal class EventsViewModelTest {
     }
 
     @Test
-    fun getImageLoader_ShouldReturnCorrectInstance() {
+    fun `returns correct image loader instance`() {
+        // GIVEN: Any initial state
+        // WHEN: getImageLoader is called
         viewModel.fetchCacheAndRefresh()
         val imageLoader = viewModel.getImageLoader()
         val expectedImageLoader = mockImageLoader

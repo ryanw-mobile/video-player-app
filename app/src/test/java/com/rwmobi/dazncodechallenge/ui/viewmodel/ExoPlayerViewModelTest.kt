@@ -45,15 +45,17 @@ internal class ExoPlayerViewModelTest {
         viewModel = ExoPlayerViewModel(player = mockPlayer)
     }
 
+    // Test function names reviewed by Gemini for consistency
+
     @Test
-    fun uiState_initialState_ShouldBeCorrect() {
+    fun `has empty error messages and video not loaded initially`() {
         val uiState = viewModel.uiState.value
         assertTrue(uiState.errorMessages.isEmpty())
         assertFalse(uiState.hasVideoLoaded)
     }
 
     @Test
-    fun playVideo_withNewVideoUrl_ShouldPlayVideoAndSetLoaded() = runTest {
+    fun `sets hasVideoLoaded to true when new video URL is played`() = runTest {
         val videoUrl = "http://fakevideo.com/video.mp4"
         viewModel.playVideo(videoUrl)
         val uiState = viewModel.uiState.value
@@ -61,7 +63,7 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
-    fun onVideoSizeChanged_ShouldUpdateUiState() = runTest {
+    fun `updates video width and height in UI state when video size changes`() = runTest {
         val expectedVideoWidth = 640
         val expectedVideoHeight = 1080
         every { mockPlayer.play() } answers {
@@ -77,7 +79,7 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
-    fun onPlayerError_withHTTPError_ShouldUpdateUIState() = runTest {
+    fun `updates UI state with HTTP error message when player encounters HTTP error`() = runTest {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.invalidResponseCodeException)
         }
@@ -90,7 +92,7 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
-    fun onPlayerError_withHttpDataSourceException_ShouldUpdateUIState() = runTest {
+    fun `updates UI state with HttpDataSourceException message when player encounters HttpDataSourceException`() = runTest {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.httpDataSourceException)
         }
@@ -103,7 +105,7 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
-    fun onPlayerError_withOtherExceptions_ShouldUpdateUIState() = runTest {
+    fun `updates UI state with generic exception message when player encounters generic exception`() = runTest {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
         }
@@ -116,14 +118,14 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
-    fun getPlayer_ShouldReturnCorrectInstance() {
+    fun `returns the correct player instance`() {
         val expectedPlayer = mockPlayer
         val player = viewModel.getPlayer()
         assertSame(expectedPlayer, player)
     }
 
     @Test
-    fun restorePlaybackState_whenPlayingBefore_ShouldResumePlaying() {
+    fun `resumes playing when playback was active before state restoration`() {
         every { mockPlayer.isPlaying } answers { true }
         viewModel.savePlaybackState()
 
@@ -134,7 +136,7 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
-    fun restorePlaybackState_whenPausedBefore_ShouldNotResumePlaying() {
+    fun `does not resume playing when playback was paused before state restoration`() {
         every { mockPlayer.isPlaying } answers { false }
         viewModel.savePlaybackState()
 
@@ -145,7 +147,7 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
-    fun setFullScreenMode_ShouldUpdateUiState() = runTest {
+    fun `updates UI state with full-screen mode when set`() = runTest {
         viewModel.setFullScreenMode(isFullScreenMode = true)
         assertTrue(viewModel.uiState.value.isFullScreenMode)
 
@@ -154,7 +156,7 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
-    fun refresh_ShouldAccumulateErrorMessages_OnMultipleFailures() {
+    fun `accumulates error messages on multiple failures`() {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
         }
@@ -172,7 +174,7 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
-    fun refresh_ShouldNotAccumulateDuplicatedErrorMessages_OnMultipleFailures() {
+    fun `does not accumulate duplicate error messages on multiple failures`() {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
         }
@@ -187,7 +189,7 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
-    fun errorShown_ShouldClearErrorMessage_WhenCalledWithValidId() {
+    fun `clears error message when errorShown is called with valid ID`() {
         every { mockPlayer.play() } answers {
             listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
         }

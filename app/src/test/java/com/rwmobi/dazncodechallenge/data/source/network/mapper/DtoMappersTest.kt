@@ -15,10 +15,10 @@ import kotlin.test.assertEquals
 
 internal class DtoMappersTest {
 
-    // Test function names reviewed by ChatGPT for consistency
+    // Test function names reviewed by Gemini for consistency
 
     @Test
-    fun convertEventToEventNetworkDto_ShouldMapFieldsCorrectly_ForSingleEvent() {
+    fun `maps event fields correctly when converting a single event to event network DTO`() {
         val event = EventSampleData.event1
         val dto = event.toNetworkDto()
         with(dto) {
@@ -32,7 +32,7 @@ internal class DtoMappersTest {
     }
 
     @Test
-    fun convertEventsToEventNetworkDtos_ShouldMapFieldsCorrectly_ForMultipleEvents() {
+    fun `maps event fields correctly when converting multiple events to event network DTOs`() {
         val events = listOf(
             EventSampleData.event1,
             EventSampleData.event2,
@@ -54,7 +54,7 @@ internal class DtoMappersTest {
     }
 
     @Test
-    fun convertScheduleToScheduleNetworkDto_ShouldMapFieldsCorrectly_ForSingleSchedule() {
+    fun `maps schedule fields correctly when converting a single schedule to schedule network DTO`() {
         val schedule = ScheduleSampleData.schedule1
         val dto = schedule.toNetworkDto()
         with(dto) {
@@ -67,7 +67,7 @@ internal class DtoMappersTest {
     }
 
     @Test
-    fun convertSchedulesToScheduleNetworkDtos_ShouldMapFieldsCorrectly_ForMultipleSchedules() {
+    fun `maps schedule fields correctly when converting multiple schedules to schedule network DTOs`() {
         val schedules = listOf(
             ScheduleSampleData.schedule1,
             ScheduleSampleData.schedule2,

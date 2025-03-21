@@ -48,10 +48,10 @@ internal class ScheduleDaoTest {
         database.close()
     }
 
-    // Test function names reviewed by ChatGPT for consistency
+    // Test function names reviewed by Gemini for consistency
 
     @Test
-    fun getScheduleById_ShouldReturnInsertedSchedule() = runTest {
+    fun `returns inserted schedule when schedule is inserted`() = runTest {
         // GIVEN - empty database
         database.scheduleDao.insert(schedule1)
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
@@ -59,7 +59,7 @@ internal class ScheduleDaoTest {
     }
 
     @Test
-    fun getSchedules_ShouldReturnAllInsertedSchedules() = runTest {
+    fun `returns all inserted schedules when schedules are inserted`() = runTest {
         // GIVEN - Empty database
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
         val result = database.scheduleDao.getSchedules()
@@ -67,7 +67,7 @@ internal class ScheduleDaoTest {
     }
 
     @Test
-    fun getScheduleById_ShouldReturnUpdatedScheduleAfterUpsert() = runTest {
+    fun `returns updated schedule when upserting the schedule`() = runTest {
         database.scheduleDao.insert(schedule1)
         database.scheduleDao.insert(schedule1Modified)
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
@@ -75,7 +75,7 @@ internal class ScheduleDaoTest {
     }
 
     @Test
-    fun getScheduleById_ShouldReturnNullAfterScheduleDeletion() = runTest {
+    fun `returns null when schedule is deleted`() = runTest {
         database.scheduleDao.insert(schedule1)
         database.scheduleDao.delete(schedule1.scheduleId)
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
@@ -83,7 +83,7 @@ internal class ScheduleDaoTest {
     }
 
     @Test
-    fun getScheduleById_ShouldReturnNullAfterDeletingSchedule() = runTest {
+    fun `returns null when deleting schedule from multiple`() = runTest {
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
         database.scheduleDao.delete(schedule1.scheduleId)
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
@@ -91,7 +91,7 @@ internal class ScheduleDaoTest {
     }
 
     @Test
-    fun getSchedules_ShouldReturnEmptyListAfterClear() = runTest {
+    fun `returns empty list when clearing all schedules`() = runTest {
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
         database.scheduleDao.clear()
         val result = database.scheduleDao.getSchedules()
@@ -100,15 +100,14 @@ internal class ScheduleDaoTest {
 
     // Dirty bit testing
     @Test
-    fun getScheduleById_ShouldReturnScheduleWithDirtyFlagFalseAfterInsert() = runTest {
-        // GIVEN - empty database
+    fun `returns schedule with dirty flag false when schedule is inserted`() = runTest {
         database.scheduleDao.insert(schedule1)
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
         assertFalse(result.dirty)
     }
 
     @Test
-    fun getScheduleById_ShouldReturnScheduleWithDirtyFlagTrueAfterMarkDirty() = runTest {
+    fun `returns schedule with dirty flag true when marking dirty`() = runTest {
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
         database.scheduleDao.markDirty()
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
@@ -116,7 +115,7 @@ internal class ScheduleDaoTest {
     }
 
     @Test
-    fun getScheduleById_ShouldReturnScheduleWithDirtyFlagFalseAfterUpdate() = runTest {
+    fun `returns schedule with dirty flag false when updating schedule after mark dirty`() = runTest {
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
         database.scheduleDao.markDirty()
 
@@ -127,7 +126,7 @@ internal class ScheduleDaoTest {
     }
 
     @Test
-    fun getSchedules_ShouldReturnNonDirtySchedulesAfterDeleteDirty() = runTest {
+    fun `returns non dirty schedules when deleting dirty schedules`() = runTest {
         database.scheduleDao.insertAll(listOf(schedule1, schedule3))
         database.scheduleDao.markDirty()
 

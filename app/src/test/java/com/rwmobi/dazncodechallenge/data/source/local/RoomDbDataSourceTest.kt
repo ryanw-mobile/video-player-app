@@ -57,18 +57,18 @@ internal class RoomDbDataSourceTest {
         database.close()
     }
 
-    // Test function names reviewed by ChatGPT for consistency
+    // Test function names reviewed by Gemini for consistency
     // Test coverage: basic CRUD on both events and schedule
 
     @Test
-    fun submitEvents_ShouldReturnOneEvent_WhenOneEventSubmittedToEmptyList() = runTest {
+    fun `returns one event when one event submitted to empty list`() = runTest {
         localDataSource.submitEvents(listOf(event1))
         val resultList = localDataSource.getEvents()
         assertContentEquals(listOf(event1), resultList)
     }
 
     @Test
-    fun submitEvents_ShouldUpdateEvent_WhenEventUpserted() = runTest {
+    fun `updates event when event upserted`() = runTest {
         localDataSource.submitEvents(listOf(event1))
         localDataSource.submitEvents(listOf(event1Modified))
         val resultList = localDataSource.getEvents()
@@ -76,7 +76,7 @@ internal class RoomDbDataSourceTest {
     }
 
     @Test
-    fun submitEvents_ShouldClearEvents_WhenEmptyListSubmitted() = runTest {
+    fun `clears events when empty list submitted`() = runTest {
         localDataSource.submitEvents(listOf(event1, event2, event3))
         localDataSource.submitEvents(listOf())
         val resultList = localDataSource.getEvents()
@@ -84,14 +84,14 @@ internal class RoomDbDataSourceTest {
     }
 
     @Test
-    fun submitSchedule_ShouldReturnOneSchedule_WhenOneScheduleSubmittedToEmptyList() = runTest {
+    fun `returns one schedule when one schedule submitted to empty list`() = runTest {
         localDataSource.submitSchedule(listOf(schedule1))
         val resultList = localDataSource.getSchedules()
         assertContentEquals(listOf(schedule1), resultList)
     }
 
     @Test
-    fun submitSchedule_ShouldUpdateSchedule_WhenScheduleUpserted() = runTest {
+    fun `updates schedule when schedule upserted`() = runTest {
         localDataSource.submitSchedule(listOf(schedule1))
         localDataSource.submitSchedule(listOf(schedule1Modified))
         val resultList = localDataSource.getSchedules()
@@ -99,7 +99,7 @@ internal class RoomDbDataSourceTest {
     }
 
     @Test
-    fun submitSchedule_ShouldClearSchedules_WhenEmptyListSubmitted() = runTest {
+    fun `clears schedules when empty list submitted`() = runTest {
         localDataSource.submitSchedule(listOf(schedule1, schedule2, schedule3))
         localDataSource.submitSchedule(listOf())
         val resultList = localDataSource.getSchedules()
