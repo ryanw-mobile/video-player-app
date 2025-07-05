@@ -8,9 +8,7 @@
 package com.rwmobi.dazncodechallenge.di
 
 import android.content.Context
-import coil.ImageLoader
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
+import coil3.ImageLoader
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,14 +22,8 @@ object CoilModule {
     @Singleton
     @Provides
     fun provideCoilImageLoader(@ApplicationContext context: Context): ImageLoader {
-        return ImageLoader.Builder(context)
-            .components {
-                if (android.os.Build.VERSION.SDK_INT >= 28) {
-                    add(ImageDecoderDecoder.Factory())
-                } else {
-                    add(GifDecoder.Factory())
-                }
-            }
+        return ImageLoader
+            .Builder(context)
             .build()
     }
 }
