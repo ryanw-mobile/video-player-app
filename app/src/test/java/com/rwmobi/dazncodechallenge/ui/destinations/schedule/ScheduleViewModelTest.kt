@@ -5,14 +5,10 @@
  *
  */
 
-package com.rwmobi.dazncodechallenge.ui.viewmodel
+package com.rwmobi.dazncodechallenge.ui.destinations.schedule
 
-import coil.ImageLoader
 import com.rwmobi.dazncodechallenge.data.repository.FakeRepository
-import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule1
-import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule2
-import com.rwmobi.dazncodechallenge.test.ScheduleSampleData.schedule3
-import io.mockk.mockk
+import com.rwmobi.dazncodechallenge.test.ScheduleSampleData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
@@ -21,13 +17,11 @@ import java.io.IOException
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
-import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 internal class ScheduleViewModelTest {
     private lateinit var fakeRepository: FakeRepository
-    private lateinit var mockImageLoader: ImageLoader
 
     // Subject under test
     private lateinit var viewModel: ScheduleViewModel
@@ -35,10 +29,8 @@ internal class ScheduleViewModelTest {
     @Before
     fun init() {
         fakeRepository = FakeRepository()
-        mockImageLoader = mockk(relaxed = true)
         viewModel = ScheduleViewModel(
             repository = fakeRepository,
-            imageLoader = mockImageLoader,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }
@@ -47,21 +39,34 @@ internal class ScheduleViewModelTest {
 
     @Test
     fun `displays refreshed schedules when fetchCacheAndRefresh is successful`() {
-        fakeRepository.setRemoteSchedulesForTest(listOf(schedule1, schedule2))
-        fakeRepository.setLocalSchedulesForTest(listOf(schedule3))
+        fakeRepository.setRemoteSchedulesForTest(
+            listOf(
+                ScheduleSampleData.schedule1,
+                ScheduleSampleData.schedule2,
+            ),
+        )
+        fakeRepository.setLocalSchedulesForTest(listOf(ScheduleSampleData.schedule3))
 
         viewModel.fetchCacheAndRefresh()
 
         val uiState = viewModel.uiState.value
         assertFalse(uiState.isLoading)
-        assertEquals(listOf(schedule1, schedule2), uiState.schedules)
+        assertEquals(
+            listOf(ScheduleSampleData.schedule1, ScheduleSampleData.schedule2),
+            uiState.schedules,
+        )
     }
 
     @Test
     fun `shows error when fetchCacheAndRefresh fails`() {
         val exceptionMessage = "repository error"
         fakeRepository.setExceptionForTest(IOException(exceptionMessage))
-        fakeRepository.setRemoteSchedulesForTest(listOf(schedule1, schedule2))
+        fakeRepository.setRemoteSchedulesForTest(
+            listOf(
+                ScheduleSampleData.schedule1,
+                ScheduleSampleData.schedule2,
+            ),
+        )
 
         viewModel.fetchCacheAndRefresh()
 
@@ -74,20 +79,28 @@ internal class ScheduleViewModelTest {
 
     @Test
     fun `updates schedules successfully when refresh is called`() {
-        fakeRepository.setRemoteSchedulesForTest(listOf(schedule1, schedule2))
-        fakeRepository.setLocalSchedulesForTest(listOf(schedule3))
+        fakeRepository.setRemoteSchedulesForTest(
+            listOf(
+                ScheduleSampleData.schedule1,
+                ScheduleSampleData.schedule2,
+            ),
+        )
+        fakeRepository.setLocalSchedulesForTest(listOf(ScheduleSampleData.schedule3))
         viewModel.fetchCacheAndRefresh()
 
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
         assertFalse(uiState.isLoading)
-        assertEquals(listOf(schedule1, schedule2), uiState.schedules)
+        assertEquals(
+            listOf(ScheduleSampleData.schedule1, ScheduleSampleData.schedule2),
+            uiState.schedules,
+        )
     }
 
     @Test
     fun `retains cached schedules and shows error when refresh fails`() {
-        fakeRepository.setRemoteSchedulesForTest(listOf(schedule3))
+        fakeRepository.setRemoteSchedulesForTest(listOf(ScheduleSampleData.schedule3))
         viewModel.fetchCacheAndRefresh()
 
         val exceptionMessage = "repository error"
@@ -96,7 +109,7 @@ internal class ScheduleViewModelTest {
 
         val uiState = viewModel.uiState.value
         assertFalse(uiState.isLoading)
-        assertEquals(listOf(schedule3), uiState.schedules)
+        assertEquals(listOf(ScheduleSampleData.schedule3), uiState.schedules)
         assertEquals(1, uiState.errorMessages.size)
         assertEquals(exceptionMessage, uiState.errorMessages[0].message)
     }
@@ -168,13 +181,5 @@ internal class ScheduleViewModelTest {
 
         val uiState = viewModel.uiState.value
         assertEquals(expectedRequestScrollToTop, uiState.requestScrollToTop)
-    }
-
-    @Test
-    fun `returns correct imageLoader instance when getImageLoader is called`() {
-        viewModel.fetchCacheAndRefresh()
-        val expectedImageLoader = mockImageLoader
-        val imageLoader = viewModel.getImageLoader()
-        assertSame(expectedImageLoader, imageLoader)
     }
 }

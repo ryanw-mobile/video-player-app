@@ -27,10 +27,12 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import kotlin.test.assertContentEquals
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
+@Config(sdk = [35])
 @RunWith(RobolectricTestRunner::class)
 internal class RoomDbDataSourceTest {
 

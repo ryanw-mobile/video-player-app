@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.dazncodechallenge.ui.viewmodel
+package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
 
 import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModel
@@ -15,7 +15,6 @@ import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.HttpDataSource
-import com.rwmobi.dazncodechallenge.ui.destinations.exoplayer.ExoPlayerUIState
 import com.rwmobi.dazncodechallenge.ui.model.ErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.collections.plus
 
 @HiltViewModel
 @OptIn(UnstableApi::class)

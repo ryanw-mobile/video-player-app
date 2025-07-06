@@ -227,7 +227,9 @@ dependencies {
 
     // Glide for Images
     implementation(libs.coil)
+    implementation(libs.coil.network.okhttp)
     implementation(libs.coil.gif)
+    implementation(libs.coil.test)
 
     // Retrofit 2
     implementation(libs.retrofit)

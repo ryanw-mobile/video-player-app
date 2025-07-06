@@ -34,11 +34,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import coil3.ImageLoader
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavHost
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
 import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
@@ -75,6 +77,7 @@ fun DAZNCodeChallengeApp(
     isInPictureInPictureMode: Boolean,
     isPipModeSupported: Boolean,
     windowSizeClass: WindowSizeClass,
+    imageLoader: ImageLoader,
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
 ) {
@@ -139,6 +142,7 @@ fun DAZNCodeChallengeApp(
                     .fillMaxSize()
                     .padding(paddingValues),
                 navController = navController,
+                imageLoader = imageLoader,
                 lastDoubleTappedNavItem = lastDoubleTappedNavItem.value,
                 isInPictureInPictureMode = isInPictureInPictureMode,
                 isPipModeSupported = isPipModeSupported,
@@ -171,6 +175,7 @@ private fun Preview() {
                 isInPictureInPictureMode = false,
                 isPipModeSupported = false,
                 windowSizeClass = getPreviewWindowSizeClass(),
+                imageLoader = ImageLoader(LocalContext.current),
                 navController = rememberNavController(),
                 snackbarHostState = remember { SnackbarHostState() },
             )

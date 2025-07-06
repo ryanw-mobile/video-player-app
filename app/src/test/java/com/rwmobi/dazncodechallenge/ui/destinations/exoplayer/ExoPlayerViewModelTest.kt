@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.dazncodechallenge.ui.viewmodel
+package com.rwmobi.dazncodechallenge.ui.destinations.exoplayer
 
 import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
@@ -23,12 +23,14 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
+@Config(sdk = [35])
 @RunWith(RobolectricTestRunner::class)
 internal class ExoPlayerViewModelTest {
     private lateinit var mockPlayer: Player
@@ -67,7 +69,12 @@ internal class ExoPlayerViewModelTest {
         val expectedVideoWidth = 640
         val expectedVideoHeight = 1080
         every { mockPlayer.play() } answers {
-            listenerSlot.captured.onVideoSizeChanged(VideoSize(expectedVideoWidth, expectedVideoHeight))
+            listenerSlot.captured.onVideoSizeChanged(
+                VideoSize(
+                    expectedVideoWidth,
+                    expectedVideoHeight,
+                ),
+            )
         }
 
         viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
@@ -88,34 +95,45 @@ internal class ExoPlayerViewModelTest {
 
         val errorMessages = viewModel.uiState.value.errorMessages
         assertEquals(1, errorMessages.size)
-        assertEquals("HTTP Error ${PlaybackExceptionSampleData.invalidResponseCodeExceptionErrorCode}", errorMessages[0].message)
+        assertEquals(
+            "HTTP Error ${PlaybackExceptionSampleData.invalidResponseCodeExceptionErrorCode}",
+            errorMessages[0].message,
+        )
     }
 
     @Test
-    fun `updates UI state with HttpDataSourceException message when player encounters HttpDataSourceException`() = runTest {
-        every { mockPlayer.play() } answers {
-            listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.httpDataSourceException)
+    fun `updates UI state with HttpDataSourceException message when player encounters HttpDataSourceException`() =
+        runTest {
+            every { mockPlayer.play() } answers {
+                listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.httpDataSourceException)
+            }
+
+            viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
+
+            val errorMessages = viewModel.uiState.value.errorMessages
+            assertEquals(1, errorMessages.size)
+            assertEquals(
+                PlaybackExceptionSampleData.httpDataSourceExceptionMessage,
+                errorMessages[0].message,
+            )
         }
-
-        viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
-
-        val errorMessages = viewModel.uiState.value.errorMessages
-        assertEquals(1, errorMessages.size)
-        assertEquals(PlaybackExceptionSampleData.httpDataSourceExceptionMessage, errorMessages[0].message)
-    }
 
     @Test
-    fun `updates UI state with generic exception message when player encounters generic exception`() = runTest {
-        every { mockPlayer.play() } answers {
-            listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
+    fun `updates UI state with generic exception message when player encounters generic exception`() =
+        runTest {
+            every { mockPlayer.play() } answers {
+                listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
+            }
+
+            viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
+
+            val errorMessages = viewModel.uiState.value.errorMessages
+            assertEquals(1, errorMessages.size)
+            assertEquals(
+                PlaybackExceptionSampleData.genericExceptionMessage,
+                errorMessages[0].message,
+            )
         }
-
-        viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
-
-        val errorMessages = viewModel.uiState.value.errorMessages
-        assertEquals(1, errorMessages.size)
-        assertEquals(PlaybackExceptionSampleData.genericExceptionMessage, errorMessages[0].message)
-    }
 
     @Test
     fun `returns the correct player instance`() {
@@ -169,8 +187,14 @@ internal class ExoPlayerViewModelTest {
 
         val uiState = viewModel.uiState.value
         assertEquals(2, uiState.errorMessages.size)
-        assertEquals(PlaybackExceptionSampleData.genericExceptionMessage, uiState.errorMessages[0].message)
-        assertEquals(PlaybackExceptionSampleData.ioExceptionMessage, uiState.errorMessages[1].message)
+        assertEquals(
+            PlaybackExceptionSampleData.genericExceptionMessage,
+            uiState.errorMessages[0].message,
+        )
+        assertEquals(
+            PlaybackExceptionSampleData.ioExceptionMessage,
+            uiState.errorMessages[1].message,
+        )
     }
 
     @Test
@@ -185,7 +209,10 @@ internal class ExoPlayerViewModelTest {
 
         val uiState = viewModel.uiState.value
         assertEquals(1, uiState.errorMessages.size)
-        assertEquals(PlaybackExceptionSampleData.genericExceptionMessage, uiState.errorMessages[0].message)
+        assertEquals(
+            PlaybackExceptionSampleData.genericExceptionMessage,
+            uiState.errorMessages[0].message,
+        )
     }
 
     @Test

@@ -26,16 +26,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
+import coil3.ImageLoader
 import com.rwmobi.dazncodechallenge.ui.components.DAZNCodeChallengeApp
 import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
 import com.rwmobi.dazncodechallenge.ui.utils.hasPictureInPicturePermission
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    @Inject
+    lateinit var imageLoader: ImageLoader
     private var isInPipMode by mutableStateOf(isInPictureInPictureMode)
     private var isPipModeSupported by mutableStateOf(false)
 
@@ -55,6 +59,7 @@ class MainActivity : ComponentActivity() {
                         .imePadding()
                         .safeDrawingPadding(),
                     windowSizeClass = calculateWindowSizeClass(this),
+                    imageLoader = imageLoader,
                     isPipModeSupported = isPipModeSupported,
                     isInPictureInPictureMode = isInPipMode,
                     navController = navController,

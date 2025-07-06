@@ -23,18 +23,19 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import coil3.ImageLoader
 import com.rwmobi.dazncodechallenge.ui.destinations.events.EventsScreen
 import com.rwmobi.dazncodechallenge.ui.destinations.events.EventsUIEvent
+import com.rwmobi.dazncodechallenge.ui.destinations.events.EventsViewModel
 import com.rwmobi.dazncodechallenge.ui.destinations.exoplayer.ExoPlayerScreen
 import com.rwmobi.dazncodechallenge.ui.destinations.exoplayer.ExoPlayerUIEvent
+import com.rwmobi.dazncodechallenge.ui.destinations.exoplayer.ExoPlayerViewModel
 import com.rwmobi.dazncodechallenge.ui.destinations.schedule.ScheduleScreen
 import com.rwmobi.dazncodechallenge.ui.destinations.schedule.ScheduleUIEvent
+import com.rwmobi.dazncodechallenge.ui.destinations.schedule.ScheduleViewModel
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_background
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_surface
 import com.rwmobi.dazncodechallenge.ui.utils.enterPIPMode
-import com.rwmobi.dazncodechallenge.ui.viewmodel.EventsViewModel
-import com.rwmobi.dazncodechallenge.ui.viewmodel.ExoPlayerViewModel
-import com.rwmobi.dazncodechallenge.ui.viewmodel.ScheduleViewModel
 
 @Composable
 fun AppNavHost(
@@ -43,6 +44,7 @@ fun AppNavHost(
     isInPictureInPictureMode: Boolean,
     isPipModeSupported: Boolean,
     lastDoubleTappedNavItem: AppNavItem?,
+    imageLoader: ImageLoader,
     onShowSnackbar: suspend (String) -> Unit,
     onScrolledToTop: (AppNavItem) -> Unit,
 ) {
@@ -64,7 +66,7 @@ fun AppNavHost(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(color = dazn_surface),
-                imageLoader = viewModel.getImageLoader(),
+                imageLoader = imageLoader,
                 uiState = uiState,
                 uiEvent = EventsUIEvent(
                     onInitialLoad = { viewModel.fetchCacheAndRefresh() },
@@ -93,7 +95,7 @@ fun AppNavHost(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(color = dazn_surface),
-                imageLoader = viewModel.getImageLoader(),
+                imageLoader = imageLoader,
                 uiState = uiState,
                 uiEvent = ScheduleUIEvent(
                     onInitialLoad = { viewModel.fetchCacheAndRefresh() },
