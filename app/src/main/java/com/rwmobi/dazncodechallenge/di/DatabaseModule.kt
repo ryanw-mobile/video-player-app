@@ -30,7 +30,7 @@ object DatabaseModule {
             DaznApiDatabase::class.java,
             "dazn_api_database",
         )
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(true)
             .build()
     }
 }

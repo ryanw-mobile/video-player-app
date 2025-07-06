@@ -105,7 +105,7 @@ internal class ScheduleDaoTest {
     fun `returns schedule with dirty flag false when schedule is inserted`() = runTest {
         database.scheduleDao.insert(schedule1)
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        assertFalse(result.dirty)
+        assertFalse(result!!.dirty)
     }
 
     @Test
@@ -113,7 +113,7 @@ internal class ScheduleDaoTest {
         database.scheduleDao.insertAll(listOf(schedule1, schedule2, schedule3))
         database.scheduleDao.markDirty()
         val result = database.scheduleDao.getScheduleById(schedule1.scheduleId)
-        assertTrue(result.dirty)
+        assertTrue(result!!.dirty)
     }
 
     @Test
@@ -124,7 +124,7 @@ internal class ScheduleDaoTest {
         database.scheduleDao.insert(schedule1Modified)
 
         val result = database.scheduleDao.getScheduleById(schedule1Modified.scheduleId)
-        assertFalse(result.dirty)
+        assertFalse(result!!.dirty)
     }
 
     @Test

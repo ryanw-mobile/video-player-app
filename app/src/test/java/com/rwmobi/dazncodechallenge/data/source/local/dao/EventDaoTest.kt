@@ -116,7 +116,7 @@ internal class EventDaoTest {
         database.eventsDao.insertAll(listOf(event1, event2, event3))
         database.eventsDao.markDirty()
         val result = database.eventsDao.getEventById(event1.eventId)
-        assertTrue(result.dirty)
+        assertTrue(result!!.dirty)
     }
 
     @Test
@@ -127,7 +127,7 @@ internal class EventDaoTest {
         database.eventsDao.insert(event1Modified)
 
         val result = database.eventsDao.getEventById(event1Modified.eventId)
-        assertFalse(result.dirty)
+        assertFalse(result!!.dirty)
     }
 
     @Test
