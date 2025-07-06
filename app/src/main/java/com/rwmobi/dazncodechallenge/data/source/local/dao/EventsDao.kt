@@ -25,7 +25,7 @@ sealed interface EventsDao {
     suspend fun getEvents(): List<EventDbEntity>
 
     @Query("SELECT * FROM event_table WHERE event_id = :eventId LIMIT 1")
-    suspend fun getEventById(eventId: Int): EventDbEntity
+    suspend fun getEventById(eventId: Int): EventDbEntity?
 
     // For unit tests
     @Query("SELECT * FROM event_table WHERE dirty = 1")

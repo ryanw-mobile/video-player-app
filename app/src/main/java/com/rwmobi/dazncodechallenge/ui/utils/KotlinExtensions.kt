@@ -51,6 +51,7 @@ internal fun Activity.enterPIPMode(aspectRatio: Rational) {
     enterPictureInPictureMode(params)
 }
 
+@Suppress("DEPRECATION")
 internal fun Activity.enterFullScreenMode() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         val controller = window.insetsController
@@ -66,6 +67,7 @@ internal fun Activity.enterFullScreenMode() {
     }
 }
 
+@Suppress("DEPRECATION")
 internal fun Activity.exitFullScreenMode() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         val controller = window.insetsController

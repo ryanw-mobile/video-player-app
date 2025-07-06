@@ -25,7 +25,7 @@ sealed interface ScheduleDao {
     suspend fun getSchedules(): List<ScheduleDbEntity>
 
     @Query("SELECT * FROM schedule_table WHERE schedule_id = :scheduleId LIMIT 1")
-    suspend fun getScheduleById(scheduleId: Int): ScheduleDbEntity
+    suspend fun getScheduleById(scheduleId: Int): ScheduleDbEntity?
 
     // For unit tests
     @Query("SELECT * FROM schedule_table WHERE dirty = 1")
