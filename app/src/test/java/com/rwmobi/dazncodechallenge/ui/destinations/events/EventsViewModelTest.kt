@@ -5,14 +5,10 @@
  *
  */
 
-package com.rwmobi.dazncodechallenge.ui.viewmodel
+package com.rwmobi.dazncodechallenge.ui.destinations.events
 
-import coil.ImageLoader
 import com.rwmobi.dazncodechallenge.data.repository.FakeRepository
-import com.rwmobi.dazncodechallenge.test.EventSampleData.event1
-import com.rwmobi.dazncodechallenge.test.EventSampleData.event2
-import com.rwmobi.dazncodechallenge.test.EventSampleData.event3
-import io.mockk.mockk
+import com.rwmobi.dazncodechallenge.test.EventSampleData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
@@ -21,13 +17,11 @@ import java.io.IOException
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
-import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 internal class EventsViewModelTest {
     private lateinit var fakeRepository: FakeRepository
-    private lateinit var mockImageLoader: ImageLoader
 
     // Subject under test
     private lateinit var viewModel: EventsViewModel
@@ -35,10 +29,8 @@ internal class EventsViewModelTest {
     @Before
     fun init() {
         fakeRepository = FakeRepository()
-        mockImageLoader = mockk(relaxed = true)
         viewModel = EventsViewModel(
             repository = fakeRepository,
-            imageLoader = mockImageLoader,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }
@@ -49,14 +41,14 @@ internal class EventsViewModelTest {
     fun `displays refreshed events when fetchCacheAndRefresh is successful`() {
         // GIVEN: The repository returns remote events (event1, event2) and local events (event3)
         // WHEN: fetchCacheAndRefresh is called
-        fakeRepository.setRemoteEventsForTest(listOf(event1, event2))
-        fakeRepository.setLocalEventsForTest(listOf(event3))
+        fakeRepository.setRemoteEventsForTest(listOf(EventSampleData.event1, EventSampleData.event2))
+        fakeRepository.setLocalEventsForTest(listOf(EventSampleData.event3))
 
         viewModel.fetchCacheAndRefresh()
 
         val uiState = viewModel.uiState.value
         assertFalse(uiState.isLoading)
-        assertEquals(listOf(event1, event2), uiState.events)
+        assertEquals(listOf(EventSampleData.event1, EventSampleData.event2), uiState.events)
     }
 
     @Test
@@ -65,7 +57,7 @@ internal class EventsViewModelTest {
         // WHEN: fetchCacheAndRefresh is called
         val exceptionMessage = "repository error"
         fakeRepository.setExceptionForTest(IOException(exceptionMessage))
-        fakeRepository.setRemoteEventsForTest(listOf(event1, event2))
+        fakeRepository.setRemoteEventsForTest(listOf(EventSampleData.event1, EventSampleData.event2))
 
         viewModel.fetchCacheAndRefresh()
 
@@ -80,22 +72,22 @@ internal class EventsViewModelTest {
     fun `updates events successfully when refresh is called`() {
         // GIVEN: The repository returns remote events (event1, event2) and local events (event3)
         // WHEN: refresh is called after initial fetch
-        fakeRepository.setRemoteEventsForTest(listOf(event1, event2))
-        fakeRepository.setLocalEventsForTest(listOf(event3))
+        fakeRepository.setRemoteEventsForTest(listOf(EventSampleData.event1, EventSampleData.event2))
+        fakeRepository.setLocalEventsForTest(listOf(EventSampleData.event3))
         viewModel.fetchCacheAndRefresh()
 
         viewModel.refresh()
 
         val uiState = viewModel.uiState.value
         assertFalse(uiState.isLoading)
-        assertEquals(listOf(event1, event2), uiState.events)
+        assertEquals(listOf(EventSampleData.event1, EventSampleData.event2), uiState.events)
     }
 
     @Test
     fun `retains cached events and shows error when refresh fails`() {
         // GIVEN: Initial data fetch and an error set for the repository
         // WHEN: refresh is called
-        fakeRepository.setRemoteEventsForTest(listOf(event3))
+        fakeRepository.setRemoteEventsForTest(listOf(EventSampleData.event3))
         viewModel.fetchCacheAndRefresh()
 
         val exceptionMessage = "repository error"
@@ -104,7 +96,7 @@ internal class EventsViewModelTest {
 
         val uiState = viewModel.uiState.value
         assertFalse(uiState.isLoading)
-        assertEquals(listOf(event3), uiState.events)
+        assertEquals(listOf(EventSampleData.event3), uiState.events)
         assertEquals(1, uiState.errorMessages.size)
         assertEquals(exceptionMessage, uiState.errorMessages[0].message)
     }
@@ -186,15 +178,5 @@ internal class EventsViewModelTest {
 
         val uiState = viewModel.uiState.value
         assertEquals(expectedRequestScrollToTop, uiState.requestScrollToTop)
-    }
-
-    @Test
-    fun `returns correct image loader instance`() {
-        // GIVEN: Any initial state
-        // WHEN: getImageLoader is called
-        viewModel.fetchCacheAndRefresh()
-        val imageLoader = viewModel.getImageLoader()
-        val expectedImageLoader = mockImageLoader
-        assertSame(expectedImageLoader, imageLoader)
     }
 }

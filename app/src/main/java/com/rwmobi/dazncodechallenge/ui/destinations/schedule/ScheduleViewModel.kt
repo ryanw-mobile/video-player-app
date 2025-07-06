@@ -5,14 +5,12 @@
  *
  */
 
-package com.rwmobi.dazncodechallenge.ui.viewmodel
+package com.rwmobi.dazncodechallenge.ui.destinations.schedule
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.ImageLoader
 import com.rwmobi.dazncodechallenge.di.DispatcherModule
 import com.rwmobi.dazncodechallenge.domain.repository.Repository
-import com.rwmobi.dazncodechallenge.ui.destinations.events.EventsUIState
 import com.rwmobi.dazncodechallenge.ui.model.ErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,14 +21,15 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.collections.plus
 
 @HiltViewModel
-class EventsViewModel @Inject constructor(
+class ScheduleViewModel @Inject constructor(
     private val repository: Repository,
-    private val imageLoader: ImageLoader,
     @DispatcherModule.IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<EventsUIState> = MutableStateFlow(EventsUIState(isLoading = true))
+    private val _uiState: MutableStateFlow<ScheduleUIState> =
+        MutableStateFlow(ScheduleUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
     fun errorShown(errorId: Long) {
@@ -48,12 +47,10 @@ class EventsViewModel @Inject constructor(
         }
     }
 
-    fun getImageLoader() = imageLoader
-
     fun fetchCacheAndRefresh() {
         startLoading()
         viewModelScope.launch(dispatcher) {
-            val isSuccess = getEvents(setLoadingCompleted = false)
+            val isSuccess = getSchedule(setLoadingCompleted = false)
             if (isSuccess) {
                 refresh()
             }
@@ -64,27 +61,27 @@ class EventsViewModel @Inject constructor(
         startLoading()
 
         viewModelScope.launch(dispatcher) {
-            val refreshResult = repository.refreshEvents()
+            val refreshResult = repository.refreshSchedule()
             refreshResult.fold(
                 onSuccess = {
-                    getEvents()
+                    getSchedule()
                 },
                 onFailure = { exception ->
-                    Timber.tag("refresh").e(exception)
+                    Timber.Forest.tag("refresh").e(exception)
                     updateUIForError(exception.message ?: "Unknown network communication error")
                 },
             )
         }
     }
 
-    private suspend fun getEvents(setLoadingCompleted: Boolean = true): Boolean {
-        val getEventsResult = repository.getEvents()
-        return getEventsResult.fold(
-            onSuccess = { events ->
+    private suspend fun getSchedule(setLoadingCompleted: Boolean = true): Boolean {
+        val getScheduleResult = repository.getSchedule()
+        return getScheduleResult.fold(
+            onSuccess = { schedules ->
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
                         isLoading = !setLoadingCompleted,
-                        events = events,
+                        schedules = schedules,
                     )
                 }
                 true

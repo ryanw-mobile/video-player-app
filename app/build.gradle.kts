@@ -227,7 +227,7 @@ dependencies {
 
     // Glide for Images
     implementation(libs.coil)
-    implementation(libs.coil.network.ktor3)
+    implementation(libs.coil.network.okhttp)
     implementation(libs.coil.gif)
     implementation(libs.coil.test)
 

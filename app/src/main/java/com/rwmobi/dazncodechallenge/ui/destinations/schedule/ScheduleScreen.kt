@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import coil.ImageLoader
+import coil3.ImageLoader
 import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.components.NoDataScreen
 import kotlinx.coroutines.delay
