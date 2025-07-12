@@ -21,9 +21,7 @@ import javax.inject.Singleton
 object CoilModule {
     @Singleton
     @Provides
-    fun provideCoilImageLoader(@ApplicationContext context: Context): ImageLoader {
-        return ImageLoader
-            .Builder(context)
-            .build()
-    }
+    fun provideCoilImageLoader(@ApplicationContext context: Context): ImageLoader = ImageLoader
+        .Builder(context)
+        .build()
 }

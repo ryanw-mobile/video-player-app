@@ -28,23 +28,19 @@ object DataSourceModule {
     fun provideLocalDataSource(
         database: DaznApiDatabase,
         @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
-    ): LocalDataSource {
-        return RoomDbDataSource(
-            eventsDao = database.eventsDao,
-            scheduleDao = database.scheduleDao,
-            dispatcher = dispatcher,
-        )
-    }
+    ): LocalDataSource = RoomDbDataSource(
+        eventsDao = database.eventsDao,
+        scheduleDao = database.scheduleDao,
+        dispatcher = dispatcher,
+    )
 
     @Provides
     @Singleton
     fun provideNetworkDataSource(
         retrofitService: DaznApiService,
         @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
-    ): NetworkDataSource {
-        return SandBoxAPIDataSource(
-            retrofitService = retrofitService,
-            dispatcher = dispatcher,
-        )
-    }
+    ): NetworkDataSource = SandBoxAPIDataSource(
+        retrofitService = retrofitService,
+        dispatcher = dispatcher,
+    )
 }

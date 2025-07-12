@@ -31,22 +31,18 @@ class FakeUITestRepository @Inject constructor() : Repository {
         } ?: Result.success(localSchedules) // Note: we do not sort by date
     }
 
-    override suspend fun refreshEvents(): Result<Unit> {
-        return exception?.let {
-            Result.failure(it)
-        } ?: run {
-            localEvents = remoteEvents
-            Result.success(Unit)
-        }
+    override suspend fun refreshEvents(): Result<Unit> = exception?.let {
+        Result.failure(it)
+    } ?: run {
+        localEvents = remoteEvents
+        Result.success(Unit)
     }
 
-    override suspend fun refreshSchedule(): Result<Unit> {
-        return exception?.let {
-            Result.failure(it)
-        } ?: run {
-            localSchedules = remoteSchedules
-            Result.success(Unit)
-        }
+    override suspend fun refreshSchedule(): Result<Unit> = exception?.let {
+        Result.failure(it)
+    } ?: run {
+        localSchedules = remoteSchedules
+        Result.success(Unit)
     }
 
     fun setExceptionForTest(exception: Throwable) {

@@ -28,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -43,7 +42,7 @@ import androidx.media3.ui.PlayerView
 import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.components.PictureInPictureButton
 import com.rwmobi.dazncodechallenge.ui.model.ControllerTransitionState
-import com.rwmobi.dazncodechallenge.ui.theme.getDimension
+import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.utils.enterFullScreenMode
 import com.rwmobi.dazncodechallenge.ui.utils.exitFullScreenMode
 
@@ -57,7 +56,6 @@ fun ExoPlayerScreen(
     uiEvent: ExoPlayerUIEvent,
 ) {
     val localContext = LocalContext.current
-    val dimension = LocalConfiguration.current.getDimension()
     var lifecycle by remember { mutableStateOf(Lifecycle.Event.ON_CREATE) }
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -162,7 +160,7 @@ fun ExoPlayerScreen(
         AnimatedVisibility(
             modifier = Modifier
                 .align(alignment = Alignment.TopEnd)
-                .padding(all = dimension.defaultFullPadding),
+                .padding(all = VideoPlayerAppTheme.dimens.defaultFullPadding),
             visible = shouldShowPiPButton && (controllerVisibility == ControllerTransitionState.VISIBLE || controllerVisibility == ControllerTransitionState.APPEARING),
             enter = slideInVertically(),
             exit = slideOutVertically(),

@@ -15,12 +15,8 @@ class DateTypeConverters {
     // but Room does not know how to store them without these converters
     // (that convert them between Date and Long)
     @TypeConverter
-    fun toDate(value: Long?): Date? {
-        return value?.let { Date(it) }
-    }
+    fun toDate(value: Long?): Date? = value?.let { Date(it) }
 
     @TypeConverter
-    fun fromDate(date: Date?): Long? {
-        return date?.time
-    }
+    fun fromDate(date: Date?): Long? = date?.time
 }

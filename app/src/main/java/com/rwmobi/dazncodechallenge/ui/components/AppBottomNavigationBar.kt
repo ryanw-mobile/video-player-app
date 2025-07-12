@@ -10,7 +10,6 @@ package com.rwmobi.dazncodechallenge.ui.components
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
@@ -49,7 +48,7 @@ fun AppBottomNavigationBar(
             contentDescription = context.getString(R.string.content_description_navigation_bar)
         },
         tonalElevation = 0.dp,
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = VideoPlayerAppTheme.colorScheme.background,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -79,7 +78,7 @@ fun AppBottomNavigationBar(
                 label = {
                     Text(
                         text = stringResource(id = item.titleResId).uppercase(),
-                        style = MaterialTheme.typography.labelMedium,
+                        style = VideoPlayerAppTheme.typography.labelMedium,
                     )
                 },
                 colors = NavigationBarItemColors(

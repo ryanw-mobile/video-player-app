@@ -27,10 +27,8 @@ object FakeDatabaseModule {
     @Singleton
     fun provideDatabase(
         @ApplicationContext appContext: Context,
-    ): DaznApiDatabase {
-        return Room.inMemoryDatabaseBuilder(
-            appContext,
-            DaznApiDatabase::class.java,
-        ).allowMainThreadQueries().build()
-    }
+    ): DaznApiDatabase = Room.inMemoryDatabaseBuilder(
+        appContext,
+        DaznApiDatabase::class.java,
+    ).allowMainThreadQueries().build()
 }

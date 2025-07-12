@@ -16,19 +16,17 @@ internal enum class ControllerTransitionState {
     DISAPPEARING,
     ;
 
-    fun updateState(visibility: Int, isControllerFullyVisible: Boolean): ControllerTransitionState {
-        return when {
-            visibility == View.INVISIBLE && !isControllerFullyVisible -> GONE
-            visibility == View.VISIBLE && isControllerFullyVisible -> VISIBLE
-            visibility == View.VISIBLE && !isControllerFullyVisible -> {
-                when (this) {
-                    VISIBLE -> DISAPPEARING
-                    GONE -> APPEARING
-                    else -> DISAPPEARING
-                }
+    fun updateState(visibility: Int, isControllerFullyVisible: Boolean): ControllerTransitionState = when {
+        visibility == View.INVISIBLE && !isControllerFullyVisible -> GONE
+        visibility == View.VISIBLE && isControllerFullyVisible -> VISIBLE
+        visibility == View.VISIBLE && !isControllerFullyVisible -> {
+            when (this) {
+                VISIBLE -> DISAPPEARING
+                GONE -> APPEARING
+                else -> DISAPPEARING
             }
-
-            else -> GONE
         }
+
+        else -> GONE
     }
 }

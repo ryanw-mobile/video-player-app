@@ -23,7 +23,5 @@ import javax.inject.Singleton
 object FakeBaseRepositoryModule {
     @Provides
     @Singleton
-    fun provideFakeRepository(): Repository {
-        return FakeUITestRepository()
-    }
+    fun provideFakeRepository(): Repository = FakeUITestRepository()
 }

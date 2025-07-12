@@ -18,14 +18,12 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -40,7 +38,6 @@ import com.rwmobi.dazncodechallenge.ui.previewparameter.EventProvider
 import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_accent
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
-import com.rwmobi.dazncodechallenge.ui.theme.getDimension
 import com.rwmobi.dazncodechallenge.ui.utils.toRelativeDateTimeString
 
 @Composable
@@ -50,7 +47,6 @@ fun EventListItem(
     imageLoader: ImageLoader,
     onItemClicked: (videoUrl: String) -> Unit,
 ) {
-    val dimension = LocalConfiguration.current.getDimension()
     val context = LocalContext.current
 
     Row(
@@ -62,7 +58,7 @@ fun EventListItem(
             modifier = Modifier
                 .fillMaxHeight()
                 .aspectRatio(ratio = (4f / 3f))
-                .background(color = MaterialTheme.colorScheme.surfaceDim.copy(alpha = 0.3f)),
+                .background(color = VideoPlayerAppTheme.colorScheme.surfaceDim.copy(alpha = 0.3f)),
             model = ImageRequest
                 .Builder(LocalContext.current)
                 .data(event.imageUrl)
@@ -81,13 +77,13 @@ fun EventListItem(
                 .fillMaxHeight()
                 .weight(weight = 1f)
                 .padding(
-                    horizontal = dimension.defaultFullPadding,
-                    vertical = dimension.defaultHalfPadding,
+                    horizontal = VideoPlayerAppTheme.dimens.defaultFullPadding,
+                    vertical = VideoPlayerAppTheme.dimens.defaultHalfPadding,
                 ),
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = VideoPlayerAppTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Black,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -95,7 +91,7 @@ fun EventListItem(
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = VideoPlayerAppTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Normal,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -105,13 +101,13 @@ fun EventListItem(
             Spacer(
                 Modifier
                     .weight(weight = 1f)
-                    .padding(vertical = dimension.defaultFullPadding),
+                    .padding(vertical = VideoPlayerAppTheme.dimens.defaultFullPadding),
             )
 
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = VideoPlayerAppTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Normal,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

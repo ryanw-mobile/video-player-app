@@ -35,19 +35,17 @@ object RetrofitModule {
      */
     @Provides
     @Singleton
-    fun provideMoshi(): Moshi =
-        Moshi.Builder()
-            .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
-            .add(KotlinJsonAdapterFactory())
-            .build()
+    fun provideMoshi(): Moshi = Moshi.Builder()
+        .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
+        .add(KotlinJsonAdapterFactory())
+        .build()
 
     @Provides
     @Singleton
-    fun provideRetrofit(moshi: Moshi): Retrofit =
-        Retrofit.Builder()
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .baseUrl(BASE_URL)
-            .build()
+    fun provideRetrofit(moshi: Moshi): Retrofit = Retrofit.Builder()
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .baseUrl(BASE_URL)
+        .build()
 
     @Provides
     @Singleton

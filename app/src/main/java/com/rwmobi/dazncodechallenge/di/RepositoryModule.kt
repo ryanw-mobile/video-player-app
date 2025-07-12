@@ -27,11 +27,9 @@ object RepositoryModule {
         networkDataSource: NetworkDataSource,
         localDataSource: LocalDataSource,
         @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
-    ): Repository {
-        return LocalCacheRepository(
-            networkDataSource = networkDataSource,
-            localDataSource = localDataSource,
-            dispatcher = dispatcher,
-        )
-    }
+    ): Repository = LocalCacheRepository(
+        networkDataSource = networkDataSource,
+        localDataSource = localDataSource,
+        dispatcher = dispatcher,
+    )
 }

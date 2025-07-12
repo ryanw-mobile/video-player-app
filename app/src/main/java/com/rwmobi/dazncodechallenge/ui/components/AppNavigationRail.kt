@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.NavigationRailItemColors
@@ -21,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,7 +35,6 @@ import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
 import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_navigation_checked
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_navigation_unchecked
-import com.rwmobi.dazncodechallenge.ui.theme.getDimension
 
 @Composable
 fun AppNavigationRail(
@@ -51,11 +48,10 @@ fun AppNavigationRail(
         modifier = modifier.semantics {
             contentDescription = context.getString(R.string.content_description_navigation_rail)
         },
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = VideoPlayerAppTheme.colorScheme.background,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
-        val dimension = LocalConfiguration.current.getDimension()
 
         Spacer(Modifier.weight(1f))
 
@@ -64,7 +60,7 @@ fun AppNavigationRail(
 
             NavigationRailItem(
                 modifier = Modifier
-                    .padding(vertical = dimension.defaultFullPadding)
+                    .padding(vertical = VideoPlayerAppTheme.dimens.defaultFullPadding)
                     .semantics { contentDescription = context.getString(item.titleResId) },
                 selected = selected,
                 onClick = {
@@ -86,7 +82,7 @@ fun AppNavigationRail(
                 label = {
                     Text(
                         text = stringResource(id = item.titleResId).uppercase(),
-                        style = MaterialTheme.typography.labelMedium,
+                        style = VideoPlayerAppTheme.typography.labelMedium,
                     )
                 },
                 colors = NavigationRailItemColors(

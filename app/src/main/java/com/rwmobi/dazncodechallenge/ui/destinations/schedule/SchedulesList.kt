@@ -18,7 +18,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -33,7 +32,6 @@ import com.rwmobi.dazncodechallenge.ui.components.ScheduleListItem
 import com.rwmobi.dazncodechallenge.ui.previewparameter.SchedulesProvider
 import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
-import com.rwmobi.dazncodechallenge.ui.theme.getDimension
 
 @Composable
 internal fun SchedulesList(
@@ -43,7 +41,6 @@ internal fun SchedulesList(
     requestScrollToTop: Boolean,
     onScrolledToTop: () -> Unit,
 ) {
-    val dimension = LocalConfiguration.current.getDimension()
     val lazyListState = rememberLazyListState()
     val context = LocalContext.current
 
@@ -67,7 +64,7 @@ internal fun SchedulesList(
                 HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = dimension.grid_0_5),
+                        .padding(vertical = VideoPlayerAppTheme.dimens.grid_0_5),
                     thickness = 1.dp,
                     color = dazn_divider,
                 )

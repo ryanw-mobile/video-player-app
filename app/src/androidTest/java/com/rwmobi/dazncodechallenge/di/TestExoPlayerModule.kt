@@ -28,7 +28,5 @@ object TestExoPlayerModule {
     @ViewModelScoped
     fun provideExoPlayer(
         @ApplicationContext appContext: Context,
-    ): Player {
-        return TestExoPlayerBuilder(appContext).build()
-    }
+    ): Player = TestExoPlayerBuilder(appContext).build()
 }
