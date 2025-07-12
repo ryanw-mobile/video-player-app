@@ -27,37 +27,29 @@ class LocalCacheRepository @Inject constructor(
     private val localDataSource: LocalDataSource,
     @DispatcherModule.DefaultDispatcher private val dispatcher: CoroutineDispatcher,
 ) : Repository {
-    override suspend fun getEvents(): Result<List<Event>> {
-        return withContext(dispatcher) {
-            Result.runCatching {
-                localDataSource.getEvents().toEvent()
-            }.except<CancellationException, _>()
-        }
-    }
-
-    override suspend fun getSchedule(): Result<List<Schedule>> {
-        return withContext(dispatcher) {
-            Result.runCatching {
-                localDataSource.getSchedules().toSchedule()
-            }.except<CancellationException, _>()
-        }
-    }
-
-    override suspend fun refreshEvents(): Result<Unit> {
-        return withContext(dispatcher) {
-            Result.runCatching {
-                val remoteEvents = networkDataSource.getEvents().map { it.toDbEntity() }
-                localDataSource.submitEvents(events = remoteEvents)
-            }.except<CancellationException, _>()
-        }
-    }
-
-    override suspend fun refreshSchedule(): Result<Unit> {
-        return withContext(dispatcher) {
-            Result.runCatching {
-                val remoteSchedules = networkDataSource.getSchedules().map { it.toDbEntity() }
-                localDataSource.submitSchedule(schedules = remoteSchedules)
-            }
+    override suspend fun getEvents(): Result<List<Event>> = withContext(dispatcher) {
+        Result.runCatching {
+            localDataSource.getEvents().toEvent()
         }.except<CancellationException, _>()
     }
+
+    override suspend fun getSchedule(): Result<List<Schedule>> = withContext(dispatcher) {
+        Result.runCatching {
+            localDataSource.getSchedules().toSchedule()
+        }.except<CancellationException, _>()
+    }
+
+    override suspend fun refreshEvents(): Result<Unit> = withContext(dispatcher) {
+        Result.runCatching {
+            val remoteEvents = networkDataSource.getEvents().map { it.toDbEntity() }
+            localDataSource.submitEvents(events = remoteEvents)
+        }.except<CancellationException, _>()
+    }
+
+    override suspend fun refreshSchedule(): Result<Unit> = withContext(dispatcher) {
+        Result.runCatching {
+            val remoteSchedules = networkDataSource.getSchedules().map { it.toDbEntity() }
+            localDataSource.submitSchedule(schedules = remoteSchedules)
+        }
+    }.except<CancellationException, _>()
 }

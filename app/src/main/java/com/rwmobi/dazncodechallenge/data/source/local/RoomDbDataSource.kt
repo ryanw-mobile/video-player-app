@@ -23,37 +23,33 @@ class RoomDbDataSource @Inject constructor(
     private val scheduleDao: ScheduleDao,
     @DispatcherModule.IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : LocalDataSource {
-    override suspend fun getEvents(): List<EventDbEntity> =
-        withContext(dispatcher) {
-            eventsDao.getEvents()
-        }
+    override suspend fun getEvents(): List<EventDbEntity> = withContext(dispatcher) {
+        eventsDao.getEvents()
+    }
 
-    override suspend fun getSchedules(): List<ScheduleDbEntity> =
-        withContext(dispatcher) {
-            scheduleDao.getSchedules()
-        }
+    override suspend fun getSchedules(): List<ScheduleDbEntity> = withContext(dispatcher) {
+        scheduleDao.getSchedules()
+    }
 
     // Implementation note:
     // Since the provided RestAPIs have no paging design and no synchronization mechanism
     // We assume each time calling to submit*(..) will have a complete dataset supplied, and we overwrite our local DB
     // Afterwards, any cached data no longer in the new dataset will be deleted using the dirty bit approach
-    override suspend fun submitEvents(events: List<EventDbEntity>) =
-        withContext(dispatcher) {
-            Timber.d("syncEvents() - processed ${events.size} items")
-            with(eventsDao) {
-                markDirty()
-                insertAll(eventDBEntities = events)
-                deleteDirty()
-            }
+    override suspend fun submitEvents(events: List<EventDbEntity>) = withContext(dispatcher) {
+        Timber.d("syncEvents() - processed ${events.size} items")
+        with(eventsDao) {
+            markDirty()
+            insertAll(eventDBEntities = events)
+            deleteDirty()
         }
+    }
 
-    override suspend fun submitSchedule(schedules: List<ScheduleDbEntity>) =
-        withContext(dispatcher) {
-            Timber.d("syncSchedule() - processed ${schedules.size} items")
-            with(scheduleDao) {
-                markDirty()
-                insertAll(scheduleDBEntities = schedules)
-                deleteDirty()
-            }
+    override suspend fun submitSchedule(schedules: List<ScheduleDbEntity>) = withContext(dispatcher) {
+        Timber.d("syncSchedule() - processed ${schedules.size} items")
+        with(scheduleDao) {
+            markDirty()
+            insertAll(scheduleDBEntities = schedules)
+            deleteDirty()
         }
+    }
 }

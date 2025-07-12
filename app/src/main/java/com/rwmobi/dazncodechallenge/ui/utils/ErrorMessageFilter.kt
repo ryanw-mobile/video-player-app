@@ -19,8 +19,7 @@ import com.rwmobi.dazncodechallenge.R
 fun filterErrorMessage(
     context: Context,
     message: String,
-): String =
-    when (BuildConfig.DEBUG) {
-        true -> "${context.getString(R.string.generic_error_string)} ($message)"
-        false -> context.getString(R.string.generic_error_string)
-    }
+): String = when (BuildConfig.DEBUG) {
+    true -> "${context.getString(R.string.generic_error_string)} ($message)"
+    false -> context.getString(R.string.generic_error_string)
+}

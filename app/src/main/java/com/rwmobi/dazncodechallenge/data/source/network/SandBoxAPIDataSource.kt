@@ -20,15 +20,11 @@ class SandBoxAPIDataSource @Inject constructor(
     @DispatcherModule.IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : NetworkDataSource {
 
-    override suspend fun getEvents(): List<EventNetworkDto> {
-        return withContext(dispatcher) {
-            retrofitService.getEvents()
-        }
+    override suspend fun getEvents(): List<EventNetworkDto> = withContext(dispatcher) {
+        retrofitService.getEvents()
     }
 
-    override suspend fun getSchedules(): List<ScheduleNetworkDto> {
-        return withContext(dispatcher) {
-            retrofitService.getSchedule()
-        }
+    override suspend fun getSchedules(): List<ScheduleNetworkDto> = withContext(dispatcher) {
+        retrofitService.getSchedule()
     }
 }

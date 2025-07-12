@@ -24,13 +24,11 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(
         @ApplicationContext appContext: Context,
-    ): DaznApiDatabase {
-        return Room.databaseBuilder(
-            appContext.applicationContext,
-            DaznApiDatabase::class.java,
-            "dazn_api_database",
-        )
-            .fallbackToDestructiveMigration(true)
-            .build()
-    }
+    ): DaznApiDatabase = Room.databaseBuilder(
+        appContext.applicationContext,
+        DaznApiDatabase::class.java,
+        "dazn_api_database",
+    )
+        .fallbackToDestructiveMigration(true)
+        .build()
 }

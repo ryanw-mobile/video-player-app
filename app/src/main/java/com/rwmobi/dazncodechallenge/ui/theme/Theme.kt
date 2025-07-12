@@ -9,13 +9,22 @@ package com.rwmobi.dazncodechallenge.ui.theme
 
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 
 private val LightColors = lightColorScheme(
@@ -83,12 +92,16 @@ private val DarkColors = darkColorScheme(
 )
 
 @Composable
-fun DAZNCodeChallengeTheme(
+fun VideoPlayerAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+, but this app we won't use it
     // dynamicColor: Boolean = false,
     content: @Composable () -> Unit,
 ) {
+    val containerSize = LocalWindowInfo.current.containerSize
+    val density = LocalDensity.current
+    val dimension = if (containerSize.width <= with(density) { 360.dp.toPx() }) smallDimension else sw360Dimension
+
     val colorScheme = LightColors // This app has a fixed color theme
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -99,9 +112,42 @@ fun DAZNCodeChallengeTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = appTypography,
-        content = content,
-    )
+    ProvideDimens(dimensions = dimension) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = appTypography,
+            content = content,
+        )
+    }
+}
+
+@Composable
+fun ProvideDimens(
+    dimensions: Dimension,
+    content: @Composable () -> Unit,
+) {
+    val dimensionSet = remember { dimensions }
+    CompositionLocalProvider(LocalAppDimens provides dimensionSet, content = content)
+}
+
+private val LocalAppDimens = staticCompositionLocalOf {
+    smallDimension
+}
+
+object VideoPlayerAppTheme {
+    val colorScheme: ColorScheme
+        @Composable
+        get() = MaterialTheme.colorScheme
+
+    val dimens: Dimension
+        @Composable
+        get() = LocalAppDimens.current
+
+    val typography: Typography
+        @Composable
+        get() = MaterialTheme.typography
+
+    val shapes: Shapes
+        @Composable
+        get() = MaterialTheme.shapes
 }

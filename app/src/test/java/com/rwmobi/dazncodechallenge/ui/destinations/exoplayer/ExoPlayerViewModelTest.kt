@@ -102,38 +102,36 @@ internal class ExoPlayerViewModelTest {
     }
 
     @Test
-    fun `updates UI state with HttpDataSourceException message when player encounters HttpDataSourceException`() =
-        runTest {
-            every { mockPlayer.play() } answers {
-                listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.httpDataSourceException)
-            }
-
-            viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
-
-            val errorMessages = viewModel.uiState.value.errorMessages
-            assertEquals(1, errorMessages.size)
-            assertEquals(
-                PlaybackExceptionSampleData.httpDataSourceExceptionMessage,
-                errorMessages[0].message,
-            )
+    fun `updates UI state with HttpDataSourceException message when player encounters HttpDataSourceException`() = runTest {
+        every { mockPlayer.play() } answers {
+            listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.httpDataSourceException)
         }
+
+        viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
+
+        val errorMessages = viewModel.uiState.value.errorMessages
+        assertEquals(1, errorMessages.size)
+        assertEquals(
+            PlaybackExceptionSampleData.httpDataSourceExceptionMessage,
+            errorMessages[0].message,
+        )
+    }
 
     @Test
-    fun `updates UI state with generic exception message when player encounters generic exception`() =
-        runTest {
-            every { mockPlayer.play() } answers {
-                listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
-            }
-
-            viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
-
-            val errorMessages = viewModel.uiState.value.errorMessages
-            assertEquals(1, errorMessages.size)
-            assertEquals(
-                PlaybackExceptionSampleData.genericExceptionMessage,
-                errorMessages[0].message,
-            )
+    fun `updates UI state with generic exception message when player encounters generic exception`() = runTest {
+        every { mockPlayer.play() } answers {
+            listenerSlot.captured.onPlayerError(PlaybackExceptionSampleData.genericException)
         }
+
+        viewModel.playVideo(videoUrl = "http://somehost.com/someview.mp4")
+
+        val errorMessages = viewModel.uiState.value.errorMessages
+        assertEquals(1, errorMessages.size)
+        assertEquals(
+            PlaybackExceptionSampleData.genericExceptionMessage,
+            errorMessages[0].message,
+        )
+    }
 
     @Test
     fun `returns the correct player instance`() {

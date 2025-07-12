@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -43,7 +42,7 @@ import androidx.navigation.compose.rememberNavController
 import coil3.ImageLoader
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavHost
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
-import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.utils.getPreviewWindowSizeClass
 
@@ -164,11 +163,11 @@ fun DAZNCodeChallengeApp(
 @PreviewScreenSizes
 @Composable
 private fun Preview() {
-    DAZNCodeChallengeTheme {
+    VideoPlayerAppTheme {
         Surface(
             modifier = Modifier
                 .fillMaxSize(),
-            color = MaterialTheme.colorScheme.surface,
+            color = VideoPlayerAppTheme.colorScheme.surface,
         ) {
             DAZNCodeChallengeApp(
                 modifier = Modifier.fillMaxSize(),
