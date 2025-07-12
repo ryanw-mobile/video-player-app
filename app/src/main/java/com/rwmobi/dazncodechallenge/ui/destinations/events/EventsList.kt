@@ -31,7 +31,7 @@ import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.ui.components.EventListItem
 import com.rwmobi.dazncodechallenge.ui.previewparameter.EventsProvider
-import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
 
@@ -91,7 +91,7 @@ internal fun EventsList(
 private fun Preview(
     @PreviewParameter(EventsProvider::class) events: List<Event>,
 ) {
-    DAZNCodeChallengeTheme {
+    VideoPlayerAppTheme {
         Surface {
             EventsList(
                 modifier = Modifier.fillMaxSize(),

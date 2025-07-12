@@ -34,7 +34,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
-import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_navigation_checked
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_navigation_unchecked
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
@@ -108,7 +108,7 @@ fun AppNavigationRail(
 @PreviewLightDark
 @Composable
 private fun NavigationRailPreview() {
-    DAZNCodeChallengeTheme {
+    VideoPlayerAppTheme {
         Surface {
             AppNavigationRail(
                 modifier = Modifier

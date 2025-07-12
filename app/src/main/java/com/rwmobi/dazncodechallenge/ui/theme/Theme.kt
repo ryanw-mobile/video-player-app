@@ -83,7 +83,7 @@ private val DarkColors = darkColorScheme(
 )
 
 @Composable
-fun DAZNCodeChallengeTheme(
+fun VideoPlayerAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+, but this app we won't use it
     // dynamicColor: Boolean = false,

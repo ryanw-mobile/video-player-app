@@ -43,7 +43,7 @@ import androidx.navigation.compose.rememberNavController
 import coil3.ImageLoader
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavHost
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
-import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.utils.getPreviewWindowSizeClass
 
@@ -164,7 +164,7 @@ fun DAZNCodeChallengeApp(
 @PreviewScreenSizes
 @Composable
 private fun Preview() {
-    DAZNCodeChallengeTheme {
+    VideoPlayerAppTheme {
         Surface(
             modifier = Modifier
                 .fillMaxSize(),

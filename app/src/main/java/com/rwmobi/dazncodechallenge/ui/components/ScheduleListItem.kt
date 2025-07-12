@@ -36,7 +36,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
 import com.rwmobi.dazncodechallenge.ui.previewparameter.ScheduleProvider
-import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_accent
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
@@ -123,7 +123,7 @@ fun ScheduleListItem(
 private fun Preview(
     @PreviewParameter(ScheduleProvider::class) schedule: Schedule,
 ) {
-    DAZNCodeChallengeTheme {
+    VideoPlayerAppTheme {
         Surface {
             ScheduleListItem(
                 modifier = Modifier.fillMaxWidth(),

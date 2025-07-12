@@ -31,7 +31,7 @@ import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
 import com.rwmobi.dazncodechallenge.ui.components.ScheduleListItem
 import com.rwmobi.dazncodechallenge.ui.previewparameter.SchedulesProvider
-import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
 
@@ -89,7 +89,7 @@ internal fun SchedulesList(
 private fun Preview(
     @PreviewParameter(SchedulesProvider::class) schedules: List<Schedule>,
 ) {
-    DAZNCodeChallengeTheme {
+    VideoPlayerAppTheme {
         Surface {
             SchedulesList(
                 modifier = Modifier.fillMaxSize(),

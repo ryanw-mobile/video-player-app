@@ -37,7 +37,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.ui.previewparameter.EventProvider
-import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_accent
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
@@ -127,7 +127,7 @@ fun EventListItem(
 private fun Preview(
     @PreviewParameter(EventProvider::class) event: Event,
 ) {
-    DAZNCodeChallengeTheme {
+    VideoPlayerAppTheme {
         Surface {
             EventListItem(
                 modifier = Modifier.fillMaxWidth(),

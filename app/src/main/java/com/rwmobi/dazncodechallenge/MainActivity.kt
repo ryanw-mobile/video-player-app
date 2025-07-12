@@ -28,7 +28,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import coil3.ImageLoader
 import com.rwmobi.dazncodechallenge.ui.components.DAZNCodeChallengeApp
-import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.utils.hasPictureInPicturePermission
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val snackbarHostState = remember { SnackbarHostState() }
 
-            DAZNCodeChallengeTheme {
+            VideoPlayerAppTheme {
                 DAZNCodeChallengeApp(
                     modifier = Modifier
                         .fillMaxSize()

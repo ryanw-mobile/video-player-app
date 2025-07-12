@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rwmobi.dazncodechallenge.R
-import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.getDimension
 
 @Composable
@@ -68,7 +68,7 @@ fun NoDataScreen(
 @Preview(showSystemUi = true)
 @Composable
 private fun NoDataScreenPreview() {
-    DAZNCodeChallengeTheme {
+    VideoPlayerAppTheme {
         Surface {
             NoDataScreen(modifier = Modifier.fillMaxSize())
         }

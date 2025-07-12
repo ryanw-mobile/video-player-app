@@ -32,7 +32,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.rwmobi.dazncodechallenge.R
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
-import com.rwmobi.dazncodechallenge.ui.theme.DAZNCodeChallengeTheme
+import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_navigation_checked
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_navigation_unchecked
 
@@ -99,7 +99,7 @@ fun AppBottomNavigationBar(
 @PreviewLightDark
 @Composable
 private fun Preview() {
-    DAZNCodeChallengeTheme {
+    VideoPlayerAppTheme {
         Surface {
             AppBottomNavigationBar(
                 modifier = Modifier
