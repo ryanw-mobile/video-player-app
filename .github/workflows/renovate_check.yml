@@ -18,13 +18,6 @@ jobs:
           sudo udevadm trigger --name-match=kvm
           ls /dev/kvm
 
-      - name: Decode Keystore
-        id: decode_keystore
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: 'release.jks'
-          encodedString: ${{ secrets.KEYSTORE }}
-
       - uses: actions/checkout@v4
 
       - name: set up JDK 17
@@ -37,14 +30,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Install Xvfb
+        run: sudo apt-get install -y xvfb
+
       - name: Debug Android Test
-        run: ./gradlew :app:pixel2Api34DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1 -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=180
-        env:
-          CI: 'true'
-          KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
+        run: xvfb-run  ./gradlew :app:pixel2Api34DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1 -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=180
 
       - name: Gradle Check
-        run: ./gradlew check assembleDebug --no-daemon
-        env:
-          CI: 'true'
-          KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
+        run: ./gradlew check assembleDebug
