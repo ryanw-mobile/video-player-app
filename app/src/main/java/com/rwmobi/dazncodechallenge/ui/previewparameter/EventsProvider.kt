@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.rwmobi.dazncodechallenge.domain.model.Event
 import com.rwmobi.dazncodechallenge.ui.utils.parseTimeStamp
 
+@Suppress("MaxLineLength")
 class EventsProvider : PreviewParameterProvider<List<Event>> {
     override val values: Sequence<List<Event>>
         get() = sequenceOf(

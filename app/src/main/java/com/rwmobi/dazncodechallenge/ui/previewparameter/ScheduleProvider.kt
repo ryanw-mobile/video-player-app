@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.rwmobi.dazncodechallenge.domain.model.Schedule
 import com.rwmobi.dazncodechallenge.ui.utils.parseTimeStamp
 
+@Suppress("MaxLineLength")
 class ScheduleProvider : PreviewParameterProvider<Schedule> {
     override val values: Sequence<Schedule>
         get() = sequenceOf(

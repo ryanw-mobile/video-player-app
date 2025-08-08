@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 /**
  * Source: https://proandroiddev.com/supporting-different-screen-sizes-on-android-with-jetpack-compose-f215c13081bd
  */
-
+@Suppress("ConstructorParameterNaming", "LongParameterList")
 class Dimension(
     val grid_0_25: Dp,
     val grid_0_5: Dp,

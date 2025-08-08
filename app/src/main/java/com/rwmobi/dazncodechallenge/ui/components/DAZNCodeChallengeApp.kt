@@ -160,6 +160,7 @@ fun DAZNCodeChallengeApp(
     }
 }
 
+@Suppress("UnusedPrivateMember")
 @PreviewScreenSizes
 @Composable
 private fun Preview() {
