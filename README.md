@@ -69,84 +69,124 @@ now [logged as issues](https://github.com/ryanw-mobile/video-player-app/issues?q
 
 ### Dependencies
 
-* [AndroidX Core KTX](https://developer.android.com/jetpack/androidx/releases/core) - Apache 2.0 - Extensions to Java APIs for Android development
-* [AndroidX Media3](https://developer.android.com/jetpack/androidx/releases/media3) - Apache 2.0 - Media support libraries
-* [JUnit](https://junit.org/junit5/) - EPL 2.0 - A simple framework to write repeatable tests
-* [AndroidX Espresso](https://developer.android.com/training/testing/espresso) - Apache 2.0 - UI testing framework
-* [Jetpack Compose](https://developer.android.com/jetpack/compose) - Apache 2.0 - Modern toolkit for building native UI
-* [AndroidX Benchmark](https://developer.android.com/jetpack/androidx/releases/benchmark) - Apache 2.0 - Benchmarking library
-* [AndroidX DataStore](https://developer.android.com/jetpack/androidx/releases/datastore) - Apache 2.0 - Data storage solution
-* [AndroidX Legacy Support](https://developer.android.com/jetpack/androidx/releases/legacy) - Apache 2.0 - Legacy libraries
-* [AndroidX Lifecycle](https://developer.android.com/jetpack/androidx/releases/lifecycle) - Apache 2.0 - Lifecycles-aware components
-* [AndroidX Room](https://developer.android.com/jetpack/androidx/releases/room) - Apache 2.0 - Persistence library
-* [Retrofit](https://square.github.io/retrofit/) - Apache 2.0 - A type-safe HTTP client for Android and Java
-* [Moshi](https://github.com/square/moshi) - Apache 2.0 - A modern JSON library for Android and Java
-* [OkHttp Logging Interceptor](https://square.github.io/okhttp/) - Apache 2.0 - Logging interceptor for OkHttp
-* [Timber](https://github.com/JakeWharton/timber) - Apache 2.0 - A logger with a small, extensible API
-* [Coil](https://coil-kt.github.io/coil/) - Apache 2.0 - An image loading library for Android backed by Kotlin Coroutines
+* [AndroidX Core KTX](https://developer.android.com/jetpack/androidx/releases/core) - Apache 2.0 - Kotlin extensions for core Android APIs
+* [AndroidX Activity Compose](https://developer.android.com/jetpack/androidx/releases/activity) - Apache 2.0 - Jetpack Compose integration with Activity
+* [Jetpack Compose](https://developer.android.com/jetpack/androidx/releases/compose) - Apache 2.0 - Modern toolkit for building native UI
+* [AndroidX Material 3](https://developer.android.com/jetpack/androidx/releases/compose-material3) - Apache 2.0 - Material Design 3 components for Compose
+* [AndroidX Material 3 Window Size Class](https://developer.android.com/jetpack/compose/layouts/adaptive) - Apache 2.0 - Adaptive layout window size classes for Compose
+* [AndroidX DataStore Preferences](https://developer.android.com/jetpack/androidx/releases/datastore) - Apache 2.0 - Typed data storage backed by Kotlin coroutines and Flow
+* [AndroidX Core SplashScreen](https://developer.android.com/jetpack/androidx/releases/core) - Apache 2.0 - Splash screen API for consistent app startup
+* [AndroidX Legacy Support v4](https://developer.android.com/jetpack/androidx/releases/legacy) - Apache 2.0 - Backwards-compatibility support libraries
+* [AndroidX Lifecycle](https://developer.android.com/jetpack/androidx/releases/lifecycle) - Apache 2.0 - Lifecycle-aware components including Runtime KTX, ViewModel KTX, Runtime Compose, and Extensions
+* [AndroidX Room](https://developer.android.com/jetpack/androidx/releases/room) - Apache 2.0 - SQLite object mapping library (Runtime, KTX, Compiler)
+* [AndroidX Benchmark](https://developer.android.com/jetpack/androidx/releases/benchmark) - Apache 2.0 - Macrobenchmarking for performance testing
+* [AndroidX Profile Installer](https://developer.android.com/jetpack/androidx/releases/profileinstaller) - Apache 2.0 - Install baseline profiles to improve app startup
+* [AndroidX Test](https://developer.android.com/jetpack/androidx/releases/test) - Apache 2.0 - Testing libraries including Test Core KTX, JUnit extensions, and Test Rules
+* [AndroidX UI Automator](https://developer.android.com/training/testing/ui-automator) - Apache 2.0 - UI automation testing framework
+* [AndroidX Media3](https://developer.android.com/guide/topics/media/media3/getting-started) - Apache 2.0 - Media components including ExoPlayer, DASH, Session, UI, and Test Utils
+* [JUnit](https://junit.org/junit4/) - EPL 1.0 - Unit testing framework for Java
+* [Espresso](https://developer.android.com/training/testing/espresso) - Apache 2.0 - Android UI testing framework
+* [Retrofit](https://square.github.io/retrofit/) - Apache 2.0 - Type-safe HTTP client for Android and Java
+* [Moshi](https://github.com/square/moshi) - Apache 2.0 - JSON library for Android and Java (Adapters, Kotlin)
+* [OkHttp Logging Interceptor](https://square.github.io/okhttp/) - Apache 2.0 - HTTP request/response logging
+* [Coil 3](https://github.com/coil-kt/coil) - Apache 2.0 - Image loading for Android (Compose, GIF, Network OkHttp, Test)
+* [Kotlinx Coroutines](https://github.com/Kotlin/kotlinx.coroutines) - Apache 2.0 - Asynchronous programming for Kotlin (Android, Test)
+* [Kotlinx DateTime](https://github.com/Kotlin/kotlinx-datetime) - Apache 2.0 - Multiplatform date and time library
+* [Robolectric](http://robolectric.org/) - Apache 2.0 - Unit testing framework for Android
 * [MockK](https://mockk.io/) - Apache 2.0 - Mocking library for Kotlin
-* [Robolectric](http://robolectric.org/) - MIT - A framework that brings fast, reliable unit tests to Android
-* [Hilt](https://dagger.dev/hilt/) - Apache 2.0 - A dependency injection library for Android that reduces the boilerplate of doing manual dependency injection
-* [LeakCanary](https://square.github.io/leakcanary/) - Apache 2.0 - A memory leak detection library for Android
-* [AndroidX Profile Installer](https://developer.android.com/jetpack/androidx/releases/profileinstaller) - Apache 2.0 - Install profiles for faster startup
+* [Timber](https://github.com/JakeWharton/timber) - Apache 2.0 - Logging utility for Android
 
 ### Plugins
 
 * [Android Application Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) - Google - Plugin for building Android applications
-* [Jetbrains Kotlin Android Plugin](https://kotlinlang.org/docs/gradle.html) - JetBrains - Plugin for Kotlin Android projects
-* [Hilt Android Plugin](https://dagger.dev/hilt/gradle-setup.html) - Google - Plugin for Hilt dependency injection
-* [Compose Compiler Plugin](https://developer.android.com/jetpack/compose) - JetBrains - Plugin for Jetpack Compose
+* [Kotlin Android Plugin](https://kotlinlang.org/docs/gradle.html#targeting-android) - JetBrains - Kotlin Android support
+* [Hilt Android Plugin](https://dagger.dev/hilt/gradle-setup) - Google - Dependency injection with Hilt
+* [Compose Compiler Plugin](https://developer.android.com/jetpack/compose) - JetBrains - Kotlin compiler plugin for Jetpack Compose
 * [Kover Plugin](https://github.com/Kotlin/kotlinx-kover) - JetBrains - Code coverage tool for Kotlin
-* [Ktlint Plugin](https://github.com/JLLeitschuh/ktlint-gradle) - JLLeitschuh - Plugin for Kotlin linter
-* [Google DevTools KSP](https://github.com/google/ksp) - Google - Kotlin Symbol Processing API plugin
-* [Android Test Plugin](https://developer.android.com/studio/test) - Google - Plugin for Android testing
-* [Baseline Profile Plugin](https://developer.android.com/studio/profile/baselineprofile) - AndroidX - Plugin for generating baseline profiles
+* [KSP Plugin](https://github.com/google/ksp) - Google - Kotlin Symbol Processing API
+* [Android Test Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) - Google - Plugin for Android test projects
+* [Baseline Profile Plugin](https://developer.android.com/studio/profile/baselineprofile) - AndroidX - Generate and package baseline profiles
+* [Serialization Plugin](https://github.com/Kotlin/kotlinx.serialization) - JetBrains - Kotlin serialization compiler plugin
+* [Detekt Plugin](https://detekt.dev/) - Artur Bosch - Static code analysis for Kotlin
+* [Kotlinter Plugin](https://github.com/jeremymailen/kotlinter-gradle) - Jeremy Mailen - Kotlin linter and formatter
 
 ## Building the App
 
-### Setting up the keystore
+### Without Keystore (Debug Builds)
 
-Release builds will be signed if either the keystore file or environment variables are set.
-Otherwise, the app will be built unsigned.
+By default, debug builds do not require a keystore. You can run:
 
-### Local
+```bash
+./gradlew assembleDebug
+```
 
-* Android Keystore is not being stored in this repository. You need your own Keystore to generate
-  the apk / App Bundle
+No signing config is required unless you explicitly build a release variant.
 
-* If your project folder is at `/app/video-player-app/`, the Keystore file
-  and `keystore.properties`
-  should be placed at `/app/`
+### With Keystore (Release Builds)
 
-* The format of `keystore.properties` is:
-  ```
-     store=/app/release-key.keystore
-     alias=<alias>
-     pass=<alias password>
-     storePass=<keystore password>
-  ```
+Signing configuration is only triggered when:
+- the task includes "Release" or "Bundle"
+- or the environment variable `CI=true` is set
 
-### CI environment
+There are two ways to supply the keystore:
 
-* This project has been configured to support automated CI builds.
+#### 1. Environment Variables (For CI)
 
-* The following environment variables have been set to provide the keystore:
-  ```
-     CI = true
-     HOME = <the home directory of the bitrise environment>
-     CI_ANDROID_KEYSTORE_PASSWORD = <your keystore password>
-     CI_ANDROID_KEYSTORE_ALIAS = <your keystore alias>
-     CI_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD = <your keystore private key password>
-  ```
+Provide the following environment variables (e.g. in GitHub Secrets):
 
-### Build and install on the connected device
+```
+KEYSTORE_LOCATION=./keystore.jks
+CI_ANDROID_KEYSTORE_ALIAS=yourAlias
+CI_ANDROID_KEYSTORE_PASSWORD=yourKeystorePassword
+CI_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD=yourPrivateKeyPassword
+```
 
-This app has two build variants: `Debug` and `Release`. The most common build commands are:
+#### 2. `keystore.properties` File (For Local Builds)
 
-* `./gradlew clean installDebug`
-* `./gradlew clean instal`
-* `./gradlew clean bundleRelease`
-* `./gradlew clean assembleRelease`
+Create a `keystore.properties` file at the root:
 
-The generated apk(s) will be stored under `app/build/outputs/`
-Debug builds will have an App package name suffix `.debug`
+```properties
+alias=yourAlias
+pass=yourPrivateKeyPassword
+store=path/to/keystore.jks
+storePass=yourKeystorePassword
+```
+
+Then build:
+
+```bash
+./gradlew bundleRelease
+```
+
+### Output Format
+
+Release builds are timestamped using the format:
+
+```
+<app-name>-<buildType>-<versionName>-<yyyyMMdd-HHmmss>.apk
+```
+
+This applies to both APK and AAB artifacts.
+
+## Workflow Overview
+
+The `.github/workflows/tag_create_release.yml` file defines the CI/CD pipeline. It performs the following:
+
+1. Checks out the code.
+2. Sets up JDK 17.
+3. Builds the APK and AAB using Gradle.
+4. Creates a GitHub Release.
+5. Uploads the outputs as release assets.
+
+Trigger the workflow by tagging a commit with the format: `release/*`, e.g. `release/1.2.3`.
+
+### Usage
+
+To trigger the CI pipeline:
+
+```bash
+git tag release/1.0.0
+git push origin release/1.0.0
+```
+
+GitHub Actions will build the release and publish it with assets.
