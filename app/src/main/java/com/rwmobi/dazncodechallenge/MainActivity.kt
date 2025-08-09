@@ -11,12 +11,15 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.getValue
@@ -24,6 +27,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import coil3.ImageLoader
@@ -47,24 +52,37 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
             val snackbarHostState = remember { SnackbarHostState() }
 
+            enableEdgeToEdge(
+                statusBarStyle = SystemBarStyle.dark(
+                    scrim = Color.Transparent.toArgb(),
+                ),
+                navigationBarStyle = SystemBarStyle.dark(
+                    scrim = Color.Transparent.toArgb(),
+                ),
+            )
+
             VideoPlayerAppTheme {
-                DAZNCodeChallengeApp(
+                Surface(
                     modifier = Modifier
+                        .background(color = VideoPlayerAppTheme.colorScheme.background)
                         .fillMaxSize()
-                        .imePadding()
                         .safeDrawingPadding(),
-                    windowSizeClass = calculateWindowSizeClass(this),
-                    imageLoader = imageLoader,
-                    isPipModeSupported = isPipModeSupported,
-                    isInPictureInPictureMode = isInPipMode,
-                    navController = navController,
-                    snackbarHostState = snackbarHostState,
-                )
+                    color = VideoPlayerAppTheme.colorScheme.background,
+                ) {
+                    DAZNCodeChallengeApp(
+                        modifier = Modifier.fillMaxSize(),
+                        windowSizeClass = calculateWindowSizeClass(this),
+                        imageLoader = imageLoader,
+                        isPipModeSupported = isPipModeSupported,
+                        isInPictureInPictureMode = isInPipMode,
+                        navController = navController,
+                        snackbarHostState = snackbarHostState,
+                    )
+                }
             }
         }
     }

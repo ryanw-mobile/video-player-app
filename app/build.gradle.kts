@@ -6,19 +6,12 @@
  */
 
 import com.android.build.api.dsl.ManagedVirtualDevice
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Properties
-
-/*
- * Copyright (c) 2024. Ryan Wong
- * https://github.com/ryanw-mobile
- * Sponsored by RW MobiMedia UK Limited
- *
- */
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -26,111 +19,31 @@ plugins {
     alias(libs.plugins.hiltAndroidPlugin)
     alias(libs.plugins.kotlinxKover)
     alias(libs.plugins.devtoolsKsp)
-    alias(libs.plugins.gradleKtlint)
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlinter)
 }
 
+// Configuration
+val productApkName = "dazncodechallenge"
+val productNamespace = "com.rwmobi.dazncodechallenge"
+val isRunningOnCI = System.getenv("CI") == "true"
+
 android {
-    namespace = "com.rwmobi.dazncodechallenge"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    namespace = productNamespace
 
-    signingConfigs {
-        create("release") {
-            val isRunningOnCI = System.getenv("CI") == "true"
-            val keystorePropertiesFile = file("../../keystore.properties")
-
-            if (isRunningOnCI) {
-                println("Signing Config: using environment variables")
-                keyAlias = System.getenv("CI_ANDROID_KEYSTORE_ALIAS")
-                keyPassword = System.getenv("CI_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
-                storeFile = file(System.getenv("KEYSTORE_LOCATION"))
-                storePassword = System.getenv("CI_ANDROID_KEYSTORE_PASSWORD")
-            } else if (keystorePropertiesFile.exists()) {
-                println("Signing Config: using keystore properties")
-                val properties = Properties()
-                InputStreamReader(
-                    FileInputStream(keystorePropertiesFile),
-                    Charsets.UTF_8,
-                ).use { reader ->
-                    properties.load(reader)
-                }
-
-                keyAlias = properties.getProperty("alias")
-                keyPassword = properties.getProperty("pass")
-                storeFile = file(properties.getProperty("store"))
-                storePassword = properties.getProperty("storePass")
-            } else {
-                println("Signing Config: skipping signing")
-            }
-        }
-    }
+    setupSdkVersionsFromVersionCatalog()
+    setupSigningAndBuildTypes()
+    setupPackagingResourcesDeduplication()
 
     defaultConfig {
-        applicationId = "com.rwmobi.dazncodechallenge"
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
-        buildToolsVersion = libs.versions.buildToolsVersion.get()
-        versionCode = libs.versions.versionCode.get().toInt()
-        versionName = libs.versions.versionName.get()
+        applicationId = productNamespace
 
         resourceConfigurations += setOf("en")
 
         testInstrumentationRunner = "com.rwmobi.dazncodechallenge.ui.test.CustomTestRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
-
-        // Bundle output filename
-        val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
-        setProperty("archivesBaseName", "dazncodechallenge-$versionName-$timestamp")
-    }
-
-    buildTypes {
-        fun setOutputFileName() {
-            applicationVariants.all {
-                val variant = this
-                variant.outputs
-                    .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
-                    .forEach { output ->
-                        val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
-                        val outputFileName =
-                            "dazncodechallenge-${variant.versionName}-$timestamp-${variant.name}.apk"
-                        output.outputFileName = outputFileName
-                    }
-            }
-        }
-
-        getByName("debug") {
-            applicationIdSuffix = ".debug"
-            isMinifyEnabled = false
-            isShrinkResources = false
-            isDebuggable = true
-            setOutputFileName()
-        }
-
-        getByName("release") {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            isDebuggable = false
-            setProguardFiles(
-                listOf(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro",
-                ),
-            )
-
-            signingConfigs.getByName("release").keyAlias?.let {
-                signingConfig = signingConfigs.getByName("release")
-            }
-
-            setOutputFileName()
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        vectorDrawables { useSupportLibrary = true }
     }
 
     buildFeatures {
@@ -138,25 +51,7 @@ android {
         buildConfig = true
     }
 
-    packaging {
-        resources {
-            excludes += listOf(
-                "META-INF/AL2.0",
-                "META-INF/LGPL2.1",
-                "META-INF/licenses/ASM",
-            )
-            pickFirsts += listOf(
-                "win32-x86-64/attach_hotspot_windows.dll",
-                "win32-x86/attach_hotspot_windows.dll",
-            )
-        }
-    }
-
-    sourceSets {
-        named("test") {
-            java.srcDirs("src/testFixtures/java")
-        }
-    }
+    sourceSets.named("test") { java.srcDirs("src/testFixtures/java") }
 
     testOptions {
         animationsDisabled = true
@@ -167,11 +62,12 @@ android {
         }
 
         managedDevices {
-            devices {
+            allDevices {
                 create<ManagedVirtualDevice>("pixel2Api34") {
                     device = "Pixel 2"
                     apiLevel = 34
                     systemImageSource = "aosp-atd"
+                    testedAbi = "arm64-v8a" // better performance on CI and Macs
                 }
             }
         }
@@ -185,13 +81,19 @@ android {
         enable = true
         androidResources = true
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 }
 
 kotlin {
-    jvmToolchain(17)
     compilerOptions {
+        optIn.add("kotlin.time.ExperimentalTime")
         freeCompilerArgs.add("-Xannotation-default-target=param-property")
     }
+    jvmToolchain(17)
 }
 
 dependencies {
@@ -280,63 +182,187 @@ dependencies {
     androidTestImplementation(libs.androidx.media3.test.utils)
 }
 
-configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-    android.set(true)
-    ignoreFailures.set(true)
-    reporters {
-        reporter(ReporterType.PLAIN)
-        reporter(ReporterType.CHECKSTYLE)
-        reporter(ReporterType.SARIF)
+tasks {
+    copyBaselineProfileAfterBuild()
+    check { dependsOn("detekt") }
+    preBuild { dependsOn("formatKotlin") }
+}
+
+detekt { parallel = true }
+
+kover {
+    useJacoco()
+    reports.filters.excludes {
+        packages(
+            "$productNamespace.ui.*",
+            "$productNamespace.di",
+            "$productNamespace.ui.components",
+            "$productNamespace.ui.destinations",
+            "$productNamespace.ui.navigation",
+            "$productNamespace.ui.previewparameter",
+            "$productNamespace.ui.theme",
+            "$productNamespace.ui.utils",
+            "androidx",
+            "dagger.hilt.internal.aggregatedroot.codegen",
+            "hilt_aggregated_deps",
+        )
+
+        classes(
+            "dagger.hilt.internal.aggregatedroot.codegen.*",
+            "hilt_aggregated_deps.*",
+            "$productNamespace.*.Hilt_*",
+            "$productNamespace.*.*_Factory*",
+            "$productNamespace.*.*_HiltModules*",
+            "$productNamespace.*.*Module_*",
+            "$productNamespace.*.*MembersInjector*",
+            "$productNamespace.*.*_Impl*",
+            "$productNamespace.ComposableSingletons*",
+            "$productNamespace.BuildConfig*",
+            "$productNamespace.*.Fake*",
+            "$productNamespace.*.previewparameter*",
+            "$productNamespace.DaznApplication*",
+            "$productNamespace.data.source.local.*_Impl*",
+            "$productNamespace.data.source.local.*Impl_Factory",
+            "$productNamespace.BR",
+            "$productNamespace.Hilt*",
+            "*Fragment",
+            "*Fragment\$*",
+            "*Activity",
+            "*Activity\$*",
+            "*.databinding.*",
+            "*.BuildConfig",
+            "*.DebugUtil",
+        )
     }
 }
 
-tasks.named("preBuild") {
-    dependsOn(tasks.named("ktlintFormat"))
+// Gradle Build Utilities
+private fun BaseAppModuleExtension.setupSdkVersionsFromVersionCatalog() {
+    compileSdk = libs.versions.compileSdk.get().toInt()
+    defaultConfig {
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
+    }
 }
 
-kover {
-    reports {
-        // common filters for all reports of all variants
-        filters {
-            // exclusions for reports
-            excludes {
-                // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
-                classes(
-                    listOf(
-                        "com.rwmobi.dazncodechallenge.DaznApplication",
-                        "com.rwmobi.dazncodechallenge.*.*MembersInjector",
-                        "com.rwmobi.dazncodechallenge.*.*Factory",
-                        "com.rwmobi.dazncodechallenge.*.*HiltModules*",
-                        "com.rwmobi.dazncodechallenge.data.source.local.*_Impl*",
-                        "com.rwmobi.dazncodechallenge.data.source.local.*Impl_Factory",
-                        "com.rwmobi.dazncodechallenge.BR",
-                        "com.rwmobi.dazncodechallenge.BuildConfig",
-                        "com.rwmobi.dazncodechallenge.Hilt*",
-                        "com.rwmobi.dazncodechallenge.*.Hilt_*",
-                        "com.rwmobi.dazncodechallenge.ComposableSingletons*",
-                        "*Fragment",
-                        "*Fragment\$*",
-                        "*Activity",
-                        "*Activity\$*",
-                        "*.BuildConfig",
-                        "*.DebugUtil",
-                    ),
-                )
-                // excludes all classes located in specified package and it subpackages, wildcards '*' and '?' are available
-                packages(
-                    listOf(
-                        "com.rwmobi.dazncodechallenge.di",
-                        "com.rwmobi.dazncodechallenge.ui.components",
-                        "com.rwmobi.dazncodechallenge.ui.destinations",
-                        "com.rwmobi.dazncodechallenge.ui.navigation",
-                        "com.rwmobi.dazncodechallenge.ui.previewparameter",
-                        "com.rwmobi.dazncodechallenge.ui.theme",
-                        "com.rwmobi.dazncodechallenge.ui.utils",
-                        "androidx",
-                        "dagger.hilt.internal.aggregatedroot.codegen",
-                        "hilt_aggregated_deps",
-                    ),
-                )
+private fun BaseAppModuleExtension.setupPackagingResourcesDeduplication() {
+    packaging.resources {
+        excludes.addAll(
+            listOf(
+                "META-INF/*.md",
+                "META-INF/proguard/*",
+                "META-INF/*.kotlin_module",
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.*",
+                "META-INF/LICENSE-notice.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.*",
+                "META-INF/AL2.0",
+                "META-INF/LGPL2.1",
+                "META-INF/*.properties",
+                "/*.properties",
+            ),
+        )
+    }
+}
+
+private fun BaseAppModuleExtension.setupSigningAndBuildTypes() {
+    val releaseSigningConfigName = "releaseSigningConfig"
+    val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
+    val baseName = "$productApkName-${libs.versions.versionName.get()}-$timestamp"
+    val isReleaseBuild = gradle.startParameter.taskNames.any {
+        it.contains("Release", ignoreCase = true)
+                || it.contains("Bundle", ignoreCase = true)
+                || it.equals("build", ignoreCase = true)
+    }
+
+    extensions.configure<BasePluginExtension> { archivesName.set(baseName) }
+
+    signingConfigs.create(releaseSigningConfigName) {
+        // Only initialise the signing config when a Release or Bundle task is being executed.
+        // This prevents Gradle sync or debug builds from attempting to load the keystore,
+        // which could fail if the keystore or environment variables are not available.
+        // SigningConfig itself is only wired to the 'release' build type, so this guard avoids unnecessary setup.
+        if (isReleaseBuild) {
+            val keystorePropertiesFile = file("../../keystore.properties")
+
+            if (isRunningOnCI || !keystorePropertiesFile.exists()) {
+                println("⚠\uFE0F Signing Config: using environment variables")
+                keyAlias = System.getenv("CI_ANDROID_KEYSTORE_ALIAS")
+                keyPassword = System.getenv("CI_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+                storeFile = file(System.getenv("KEYSTORE_LOCATION"))
+                storePassword = System.getenv("CI_ANDROID_KEYSTORE_PASSWORD")
+            } else {
+                println("⚠\uFE0F Signing Config: using keystore properties")
+                val properties = Properties()
+                InputStreamReader(
+                    FileInputStream(keystorePropertiesFile),
+                    Charsets.UTF_8,
+                ).use { reader ->
+                    properties.load(reader)
+                }
+
+                keyAlias = properties.getProperty("alias")
+                keyPassword = properties.getProperty("pass")
+                storeFile = file(properties.getProperty("store"))
+                storePassword = properties.getProperty("storePass")
+            }
+        } else {
+            println("⚠\uFE0F Signing Config: not created for non-release builds.")
+        }
+    }
+
+    buildTypes {
+        fun setOutputFileName() {
+            applicationVariants.all {
+                outputs
+                    .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+                    .forEach { output ->
+                        val outputFileName = "$productApkName-$name-$versionName-$timestamp.apk"
+                        output.outputFileName = outputFileName
+                    }
+            }
+        }
+
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
+            isMinifyEnabled = false
+            isDebuggable = true
+            setOutputFileName()
+        }
+
+        getByName("release") {
+            isShrinkResources = true
+            isMinifyEnabled = true
+            isDebuggable = false
+            setProguardFiles(
+                listOf(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro",
+                ),
+            )
+            signingConfig = signingConfigs.getByName(name = releaseSigningConfigName)
+            setOutputFileName()
+        }
+    }
+}
+
+private fun TaskContainerScope.copyBaselineProfileAfterBuild() {
+    afterEvaluate {
+        named("generateReleaseBaselineProfile") {
+            doLast {
+                val outputFile =
+                    File(
+                        "$projectDir/src/release/generated/baselineProfiles/baseline-prof.txt",
+                    )
+                val destinationDir = File("$projectDir/src/main")
+                destinationDir.mkdirs()
+                val destinationFile = File(destinationDir, outputFile.name)
+                println("Moving file $outputFile to $destinationDir")
+                outputFile.renameTo(destinationFile)
             }
         }
     }

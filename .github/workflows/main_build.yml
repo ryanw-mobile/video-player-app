@@ -33,7 +33,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Gradle build
-        run: ./gradlew :app:buildReleasePreBundle :app:koverXmlReportRelease --no-daemon
+        run: ./gradlew :app:buildReleasePreBundle :app:koverXmlReportRelease
         env:
           CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
