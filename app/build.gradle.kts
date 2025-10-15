@@ -97,9 +97,8 @@ kotlin {
 }
 
 dependencies {
-    // Accompanist Pager
-    implementation(libs.google.accompanist.pager)
-    implementation(libs.google.accompanist.pager.indicators)
+    // Pager
+    implementation("androidx.compose.foundation:foundation:1.9.2")
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.core.splashscreen)
