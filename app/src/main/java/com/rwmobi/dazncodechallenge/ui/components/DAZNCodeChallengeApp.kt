@@ -108,7 +108,6 @@ fun DAZNCodeChallengeApp(
         )
     }
 
-    // ✅ 在这里指定 pageCount
     val pagerState = rememberPagerState(
         pageCount = { mainPages.size },
         initialPage = mainPages.indexOfFirst {
@@ -119,7 +118,6 @@ fun DAZNCodeChallengeApp(
     val coroutineScope = rememberCoroutineScope()
     val actionLabel = stringResource(android.R.string.ok)
 
-    // 滑动同步导航
     LaunchedEffect(pagerState.currentPage) {
         val targetRoute = mainPages[pagerState.currentPage].screenRoute
         if (currentRoute?.startsWith(targetRoute) != true) {
@@ -131,7 +129,6 @@ fun DAZNCodeChallengeApp(
         }
     }
 
-    // 导航点击同步 pager
     LaunchedEffect(currentRoute) {
         val index = mainPages.indexOfFirst { currentRoute?.startsWith(it.screenRoute) == true }
         if (index != -1 && pagerState.currentPage != index) {
@@ -183,7 +180,6 @@ fun DAZNCodeChallengeApp(
             },
         ) { paddingValues ->
 
-            // ✅ 新版 HorizontalPager 用法（pageCount 来源于 pagerState）
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
