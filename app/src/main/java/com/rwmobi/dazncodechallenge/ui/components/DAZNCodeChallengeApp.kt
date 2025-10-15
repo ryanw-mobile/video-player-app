@@ -13,12 +13,16 @@ import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -34,18 +38,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil3.ImageLoader
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavHost
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
 import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
@@ -77,7 +80,7 @@ private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?, isI
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DAZNCodeChallengeApp(
     modifier: Modifier = Modifier,
@@ -97,7 +100,7 @@ fun DAZNCodeChallengeApp(
         isInPictureInPictureMode = isInPictureInPictureMode,
     )
 
-    // 这里定义你要能左右滑动的主要页面路由顺序（ Here I define the routing order of the main pages I want to be able to slide left and right）
+    // 可滑动主页面
     val mainPages = remember {
         listOf(
             AppNavItem.Events,
@@ -105,7 +108,9 @@ fun DAZNCodeChallengeApp(
         )
     }
 
+    // ✅ 在这里指定 pageCount
     val pagerState = rememberPagerState(
+        pageCount = { mainPages.size },
         initialPage = mainPages.indexOfFirst {
             currentRoute?.startsWith(it.screenRoute) == true
         }.coerceAtLeast(0),
@@ -114,8 +119,7 @@ fun DAZNCodeChallengeApp(
     val coroutineScope = rememberCoroutineScope()
     val actionLabel = stringResource(android.R.string.ok)
 
-    // 当滑动时自动切换导航( Automatically switch navigation when swiping)
-
+    // 滑动同步导航
     LaunchedEffect(pagerState.currentPage) {
         val targetRoute = mainPages[pagerState.currentPage].screenRoute
         if (currentRoute?.startsWith(targetRoute) != true) {
@@ -127,7 +131,7 @@ fun DAZNCodeChallengeApp(
         }
     }
 
-    // 当外部导航点击时同步 Pager(Synchronize Pager when external navigation is clicked)
+    // 导航点击同步 pager
     LaunchedEffect(currentRoute) {
         val index = mainPages.indexOfFirst { currentRoute?.startsWith(it.screenRoute) == true }
         if (index != -1 && pagerState.currentPage != index) {
@@ -178,13 +182,20 @@ fun DAZNCodeChallengeApp(
                 }
             },
         ) { paddingValues ->
-            // 加入 HorizontalPager 容器(Add the HorizontalPager container)
+
+            // ✅ 新版 HorizontalPager 用法（pageCount 来源于 pagerState）
             HorizontalPager(
                 state = pagerState,
-                count = mainPages.size,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .padding(paddingValues),
-            ) { page: Int ->
+                pageSpacing = 0.dp,
+                contentPadding = PaddingValues(0.dp),
+                verticalAlignment = Alignment.Top,
+                userScrollEnabled = true,
+                reverseLayout = false,
+            ) { page ->
+
                 AppNavHost(
                     modifier = Modifier.fillMaxSize(),
                     navController = navController,
