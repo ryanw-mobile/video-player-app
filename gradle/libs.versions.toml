@@ -11,6 +11,7 @@ coreSplashscreen = "1.0.1"
 datastoreVersion = "1.1.7"
 devtoolsksp = "2.2.20-2.0.3"
 espressoCore = "3.7.0"
+foundation = "1.9.2"
 hilt = "2.57.2"
 hiltNavigationCompose = "1.3.0"
 jetbrainsKotlinxCoroutinesTest = "1.10.2"
@@ -115,6 +116,7 @@ androidx-material3-adaptive-android = { group = "androidx.compose.material3", na
 androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 
+androidx-compose-foundation = {group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation"}
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
