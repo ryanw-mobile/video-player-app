@@ -13,12 +13,16 @@ import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -29,13 +33,18 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -45,6 +54,7 @@ import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
 import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.utils.getPreviewWindowSizeClass
+import java.lang.ProcessBuilder.Redirect.to
 
 private enum class NavigationLayoutType {
     BOTTOM_NAVIGATION,
@@ -70,6 +80,7 @@ private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?, isI
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DAZNCodeChallengeApp(
     modifier: Modifier = Modifier,
@@ -83,10 +94,47 @@ fun DAZNCodeChallengeApp(
     val lastDoubleTappedNavItem = remember { mutableStateOf<AppNavItem?>(null) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
     val navigationLayoutType = windowSizeClass.calculateNavigationLayout(
         currentRoute = currentRoute,
         isInPictureInPictureMode = isInPictureInPictureMode,
     )
+
+    // 可滑动主页面
+    val mainPages = remember {
+        listOf(
+            AppNavItem.Events,
+            AppNavItem.Schedule,
+        )
+    }
+
+    val pagerState = rememberPagerState(
+        pageCount = { mainPages.size },
+        initialPage = mainPages.indexOfFirst {
+            currentRoute?.startsWith(it.screenRoute) == true
+        }.coerceAtLeast(0),
+    )
+
+    val coroutineScope = rememberCoroutineScope()
+    val actionLabel = stringResource(android.R.string.ok)
+
+    LaunchedEffect(pagerState.currentPage) {
+        val targetRoute = mainPages[pagerState.currentPage].screenRoute
+        if (currentRoute?.startsWith(targetRoute) != true) {
+            navController.navigate(targetRoute) {
+                popUpTo(navController.graph.startDestinationId) { saveState = true }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
+    }
+
+    LaunchedEffect(currentRoute) {
+        val index = mainPages.indexOfFirst { currentRoute?.startsWith(it.screenRoute) == true }
+        if (index != -1 && pagerState.currentPage != index) {
+            pagerState.scrollToPage(index)
+        }
+    }
 
     Row(modifier = modifier) {
         AnimatedVisibility(
@@ -110,11 +158,7 @@ fun DAZNCodeChallengeApp(
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = snackbarHostState,
-                )
-            },
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
             bottomBar = {
                 AnimatedVisibility(
                     visible = (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION),
@@ -135,27 +179,38 @@ fun DAZNCodeChallengeApp(
                 }
             },
         ) { paddingValues ->
-            val actionLabel = stringResource(android.R.string.ok)
-            AppNavHost(
+
+            HorizontalPager(
+                state = pagerState,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
-                navController = navController,
-                imageLoader = imageLoader,
-                lastDoubleTappedNavItem = lastDoubleTappedNavItem.value,
-                isInPictureInPictureMode = isInPictureInPictureMode,
-                isPipModeSupported = isPipModeSupported,
-                onShowSnackbar = { errorMessageText ->
-                    if (!isInPictureInPictureMode) {
-                        snackbarHostState.showSnackbar(
-                            message = errorMessageText,
-                            actionLabel = actionLabel,
-                            duration = SnackbarDuration.Long,
-                        )
-                    }
-                },
-                onScrolledToTop = { lastDoubleTappedNavItem.value = null },
-            )
+                pageSpacing = 0.dp,
+                contentPadding = PaddingValues(0.dp),
+                verticalAlignment = Alignment.Top,
+                userScrollEnabled = true,
+                reverseLayout = false,
+            ) { page ->
+
+                AppNavHost(
+                    modifier = Modifier.fillMaxSize(),
+                    navController = navController,
+                    imageLoader = imageLoader,
+                    lastDoubleTappedNavItem = lastDoubleTappedNavItem.value,
+                    isInPictureInPictureMode = isInPictureInPictureMode,
+                    isPipModeSupported = isPipModeSupported,
+                    onShowSnackbar = { errorMessageText ->
+                        if (!isInPictureInPictureMode) {
+                            snackbarHostState.showSnackbar(
+                                message = errorMessageText,
+                                actionLabel = actionLabel,
+                                duration = SnackbarDuration.Long,
+                            )
+                        }
+                    },
+                    onScrolledToTop = { lastDoubleTappedNavItem.value = null },
+                )
+            }
         }
     }
 }

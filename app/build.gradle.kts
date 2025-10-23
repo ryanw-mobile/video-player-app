@@ -97,6 +97,10 @@ kotlin {
 }
 
 dependencies {
+    // Pager
+//    implementation("androidx.compose.foundation:foundation:1.9.2")
+    implementation(libs.androidx.compose.foundation)
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.core.ktx)
