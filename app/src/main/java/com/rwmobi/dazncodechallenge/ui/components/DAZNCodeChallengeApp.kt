@@ -29,22 +29,29 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil3.ImageLoader
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavHost
 import com.rwmobi.dazncodechallenge.ui.navigation.AppNavItem
 import com.rwmobi.dazncodechallenge.ui.theme.VideoPlayerAppTheme
 import com.rwmobi.dazncodechallenge.ui.theme.dazn_divider
 import com.rwmobi.dazncodechallenge.ui.utils.getPreviewWindowSizeClass
+import java.lang.ProcessBuilder.Redirect.to
 
 private enum class NavigationLayoutType {
     BOTTOM_NAVIGATION,
@@ -70,6 +77,7 @@ private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?, isI
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun DAZNCodeChallengeApp(
     modifier: Modifier = Modifier,
@@ -83,10 +91,49 @@ fun DAZNCodeChallengeApp(
     val lastDoubleTappedNavItem = remember { mutableStateOf<AppNavItem?>(null) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
     val navigationLayoutType = windowSizeClass.calculateNavigationLayout(
         currentRoute = currentRoute,
         isInPictureInPictureMode = isInPictureInPictureMode,
     )
+
+    // 这里定义你要能左右滑动的主要页面路由顺序（ Here I define the routing order of the main pages I want to be able to slide left and right）
+    val mainPages = remember {
+        listOf(
+            AppNavItem.Events,
+            AppNavItem.Schedule,
+        )
+    }
+
+    val pagerState = rememberPagerState(
+        initialPage = mainPages.indexOfFirst {
+            currentRoute?.startsWith(it.screenRoute) == true
+        }.coerceAtLeast(0),
+    )
+
+    val coroutineScope = rememberCoroutineScope()
+    val actionLabel = stringResource(android.R.string.ok)
+
+    // 当滑动时自动切换导航( Automatically switch navigation when swiping)
+
+    LaunchedEffect(pagerState.currentPage) {
+        val targetRoute = mainPages[pagerState.currentPage].screenRoute
+        if (currentRoute?.startsWith(targetRoute) != true) {
+            navController.navigate(targetRoute) {
+                popUpTo(navController.graph.startDestinationId) { saveState = true }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
+    }
+
+    // 当外部导航点击时同步 Pager(Synchronize Pager when external navigation is clicked)
+    LaunchedEffect(currentRoute) {
+        val index = mainPages.indexOfFirst { currentRoute?.startsWith(it.screenRoute) == true }
+        if (index != -1 && pagerState.currentPage != index) {
+            pagerState.scrollToPage(index)
+        }
+    }
 
     Row(modifier = modifier) {
         AnimatedVisibility(
@@ -110,11 +157,7 @@ fun DAZNCodeChallengeApp(
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = snackbarHostState,
-                )
-            },
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
             bottomBar = {
                 AnimatedVisibility(
                     visible = (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION),
@@ -135,27 +178,32 @@ fun DAZNCodeChallengeApp(
                 }
             },
         ) { paddingValues ->
-            val actionLabel = stringResource(android.R.string.ok)
-            AppNavHost(
-                modifier = Modifier
-                    .fillMaxSize()
+            // 加入 HorizontalPager 容器(Add the HorizontalPager container)
+            HorizontalPager(
+                state = pagerState,
+                count = mainPages.size,
+                modifier = Modifier.fillMaxSize()
                     .padding(paddingValues),
-                navController = navController,
-                imageLoader = imageLoader,
-                lastDoubleTappedNavItem = lastDoubleTappedNavItem.value,
-                isInPictureInPictureMode = isInPictureInPictureMode,
-                isPipModeSupported = isPipModeSupported,
-                onShowSnackbar = { errorMessageText ->
-                    if (!isInPictureInPictureMode) {
-                        snackbarHostState.showSnackbar(
-                            message = errorMessageText,
-                            actionLabel = actionLabel,
-                            duration = SnackbarDuration.Long,
-                        )
-                    }
-                },
-                onScrolledToTop = { lastDoubleTappedNavItem.value = null },
-            )
+            ) { page: Int ->
+                AppNavHost(
+                    modifier = Modifier.fillMaxSize(),
+                    navController = navController,
+                    imageLoader = imageLoader,
+                    lastDoubleTappedNavItem = lastDoubleTappedNavItem.value,
+                    isInPictureInPictureMode = isInPictureInPictureMode,
+                    isPipModeSupported = isPipModeSupported,
+                    onShowSnackbar = { errorMessageText ->
+                        if (!isInPictureInPictureMode) {
+                            snackbarHostState.showSnackbar(
+                                message = errorMessageText,
+                                actionLabel = actionLabel,
+                                duration = SnackbarDuration.Long,
+                            )
+                        }
+                    },
+                    onScrolledToTop = { lastDoubleTappedNavItem.value = null },
+                )
+            }
         }
     }
 }
