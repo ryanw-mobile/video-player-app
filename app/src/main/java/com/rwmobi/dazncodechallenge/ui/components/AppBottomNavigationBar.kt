@@ -19,7 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -41,11 +41,11 @@ fun AppBottomNavigationBar(
     navController: NavController,
     onCurrentRouteSecondTapped: (item: AppNavItem) -> Unit,
 ) {
-    val context = LocalContext.current
+    val resources = LocalResources.current
 
     NavigationBar(
         modifier = modifier.semantics {
-            contentDescription = context.getString(R.string.content_description_navigation_bar)
+            contentDescription = resources.getString(R.string.content_description_navigation_bar)
         },
         tonalElevation = 0.dp,
         containerColor = VideoPlayerAppTheme.colorScheme.background,
@@ -57,7 +57,7 @@ fun AppBottomNavigationBar(
             val selected = currentRoute == item.screenRoute
 
             NavigationBarItem(
-                modifier = Modifier.semantics { contentDescription = context.getString(item.titleResId) },
+                modifier = Modifier.semantics { contentDescription = resources.getString(item.titleResId) },
                 selected = selected,
                 onClick = {
                     if (!selected) {
