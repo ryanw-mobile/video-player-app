@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import coil3.ImageLoader
@@ -41,9 +41,9 @@ fun EventsScreen(
         }
     }
 
-    val context = LocalContext.current
+    val resources = LocalResources.current
     PullToRefreshBox(
-        modifier = modifier.semantics { contentDescription = context.getString(R.string.content_description_pull_to_refresh) },
+        modifier = modifier.semantics { contentDescription = resources.getString(R.string.content_description_pull_to_refresh) },
         isRefreshing = uiState.isLoading,
         onRefresh = {
             uiEvent.onRefresh()

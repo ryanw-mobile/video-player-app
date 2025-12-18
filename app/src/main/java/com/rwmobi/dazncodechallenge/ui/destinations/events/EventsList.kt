@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewFontScale
@@ -43,12 +44,12 @@ internal fun EventsList(
     onPlayVideo: (videoUrl: String) -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
-    val context = LocalContext.current
+    val resources = LocalResources.current
 
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .semantics { contentDescription = context.getString(R.string.content_description_events_list) },
+            .semantics { contentDescription = resources.getString(R.string.content_description_events_list) },
         state = lazyListState,
     ) {
         itemsIndexed(

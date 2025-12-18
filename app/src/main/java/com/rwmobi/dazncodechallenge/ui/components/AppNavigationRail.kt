@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -42,11 +42,11 @@ fun AppNavigationRail(
     navController: NavController,
     onCurrentRouteSecondTapped: (item: AppNavItem) -> Unit,
 ) {
-    val context = LocalContext.current
+    val resources = LocalResources.current
 
     NavigationRail(
         modifier = modifier.semantics {
-            contentDescription = context.getString(R.string.content_description_navigation_rail)
+            contentDescription = resources.getString(R.string.content_description_navigation_rail)
         },
         containerColor = VideoPlayerAppTheme.colorScheme.background,
     ) {
@@ -61,7 +61,7 @@ fun AppNavigationRail(
             NavigationRailItem(
                 modifier = Modifier
                     .padding(vertical = VideoPlayerAppTheme.dimens.defaultFullPadding)
-                    .semantics { contentDescription = context.getString(item.titleResId) },
+                    .semantics { contentDescription = resources.getString(item.titleResId) },
                 selected = selected,
                 onClick = {
                     if (!selected) {
