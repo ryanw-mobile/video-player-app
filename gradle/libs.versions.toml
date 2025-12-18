@@ -37,7 +37,7 @@ material3AdaptiveAndroid = "1.0.0-alpha06"
 uiautomator = "2.3.0"
 baselineprofile = "1.4.1"
 profileinstaller = "1.4.1"
-media3Exoplayer = "1.8.0"
+media3Exoplayer = "1.9.0"
 kotlinter = "5.2.0"
 detekt = "1.23.8"
 
