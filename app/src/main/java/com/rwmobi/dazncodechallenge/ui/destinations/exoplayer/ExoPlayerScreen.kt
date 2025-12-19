@@ -133,10 +133,8 @@ fun ExoPlayerScreen(
                 }
             },
             update = { playerView ->
-                /**
-                 * In Android 7.0 and later, you should pause and resume video playback when the system calls your activity's onStop() and onStart().
-                 * By doing this, you can avoid having to check if your app is in PiP mode in onPause() and explicitly continuing playback.
-                 */
+                // In Android 7.0 and later, you should pause and resume video playback when the system calls your activity's onStop() and onStart().
+                // By doing this, you can avoid having to check if your app is in PiP mode in onPause() and explicitly continuing playback.
                 when (lifecycle) {
                     Lifecycle.Event.ON_PAUSE -> {
                         playerView.hideController()
