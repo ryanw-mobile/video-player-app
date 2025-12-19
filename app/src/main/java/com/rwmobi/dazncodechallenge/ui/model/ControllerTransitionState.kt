@@ -18,7 +18,9 @@ internal enum class ControllerTransitionState {
 
     fun updateState(visibility: Int, isControllerFullyVisible: Boolean): ControllerTransitionState = when {
         visibility == View.INVISIBLE && !isControllerFullyVisible -> GONE
+
         visibility == View.VISIBLE && isControllerFullyVisible -> VISIBLE
+
         visibility == View.VISIBLE && !isControllerFullyVisible -> {
             when (this) {
                 VISIBLE -> DISAPPEARING
