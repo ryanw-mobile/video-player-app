@@ -15,7 +15,6 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.hiltAndroidPlugin)
     alias(libs.plugins.kotlinxKover)
     alias(libs.plugins.devtoolsKsp)
