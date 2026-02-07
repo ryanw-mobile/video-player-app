@@ -173,7 +173,7 @@ This applies to both APK and AAB artifacts.
 The `.github/workflows/tag_create_release.yml` file defines the CI/CD pipeline. It performs the following:
 
 1. Checks out the code.
-2. Sets up JDK 17.
+2. Sets up JDK 21.
 3. Builds the APK and AAB using Gradle.
 4. Creates a GitHub Release.
 5. Uploads the outputs as release assets.
