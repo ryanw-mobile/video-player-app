@@ -1,6 +1,6 @@
 [versions]
 activityCompose = "1.12.3"
-agp = "8.13.2"
+agp = "9.0.0"
 benchmarkMacroJunit4 = "1.4.1"
 coil = "3.3.0"
 composeBom = "2026.01.01"
@@ -11,7 +11,7 @@ coreSplashscreen = "1.2.0"
 datastoreVersion = "1.2.0"
 devtoolsksp = "2.3.5"
 espressoCore = "3.7.0"
-hilt = "2.58"
+hilt = "2.59.1"
 hiltNavigationCompose = "1.3.0"
 jetbrainsKotlinxCoroutinesTest = "1.10.2"
 junit = "4.13.2"
@@ -35,11 +35,12 @@ testRules = "1.7.0"
 timber = "5.0.1"
 material3AdaptiveAndroid = "1.0.0-alpha06"
 uiautomator = "2.3.0"
-baselineprofile = "1.4.1"
+baselineprofile = "1.5.0-alpha02"
 profileinstaller = "1.4.1"
 media3Exoplayer = "1.9.2"
 kotlinter = "5.4.0"
 detekt = "1.23.8"
+kotlinTestJunit = "2.3.10"
 
 # App configurations, not dependencies
 minSdk = "28"
@@ -114,10 +115,10 @@ leakcanary-android = { group = "com.squareup.leakcanary", name = "leakcanary-and
 androidx-material3-adaptive-android = { group = "androidx.compose.material3", name = "material3-adaptive-android", version.ref = "material3AdaptiveAndroid" }
 androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlinTestJunit" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
-jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hiltAndroidPlugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinxKover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }

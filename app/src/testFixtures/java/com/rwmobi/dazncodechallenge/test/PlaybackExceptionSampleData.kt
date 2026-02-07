@@ -15,6 +15,8 @@ import java.io.IOException
 
 object PlaybackExceptionSampleData {
     val invalidResponseCodeExceptionErrorCode = 403
+
+    @androidx.media3.common.util.UnstableApi
     val invalidResponseCodeException = PlaybackException(
         "Connection Failed",
         HttpDataSource.InvalidResponseCodeException(
@@ -29,6 +31,8 @@ object PlaybackExceptionSampleData {
     )
 
     val httpDataSourceExceptionMessage = "Some IO Exception"
+
+    @androidx.media3.common.util.UnstableApi
     val httpDataSourceException = PlaybackException(
         "Connection Failed",
         HttpDataSource.HttpDataSourceException(
@@ -42,6 +46,8 @@ object PlaybackExceptionSampleData {
     )
 
     val genericExceptionMessage = "Some generic exception"
+
+    @androidx.media3.common.util.UnstableApi
     val genericException = PlaybackException(
         "Connection Failed",
         Exception(genericExceptionMessage),
@@ -49,6 +55,8 @@ object PlaybackExceptionSampleData {
     )
 
     val ioExceptionMessage = "Some IO exception"
+
+    @androidx.media3.common.util.UnstableApi
     val ioException = PlaybackException(
         "Connection Failed",
         Exception(ioExceptionMessage),
