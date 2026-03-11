@@ -33,7 +33,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Gradle build
-        run: ./gradlew :app:buildReleasePreBundle :app:koverXmlReportDebug
+        run: ./gradlew :app:buildReleasePreBundle :app:jacocoTestReportDebug
         env:
           CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
@@ -46,3 +46,6 @@ jobs:
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: app/build/reports/kover/reportDebug.xml
+          files: app/build/reports/jacoco/jacocoTestReportDebug/jacocoTestReportDebug.xml
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}

@@ -16,7 +16,7 @@ hiltNavigationCompose = "1.3.0"
 jetbrainsKotlinxCoroutinesTest = "1.10.2"
 junit = "4.13.2"
 kotlin = "2.3.10"
-kover = "0.9.7"
+jacoco = "0.8.12"
 leakcanary = "2.14"
 legacySupportV4 = "1.0.0"
 lifecycleExtensions = "2.2.0"
@@ -121,7 +121,6 @@ kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 hiltAndroidPlugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotlinxKover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 devtoolsKsp = { id = "com.google.devtools.ksp", version.ref = "devtoolsksp" }
 androidTest = { id = "com.android.test", version.ref = "agp" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }

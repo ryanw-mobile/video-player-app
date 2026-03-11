@@ -102,7 +102,7 @@ now [logged as issues](https://github.com/ryanw-mobile/video-player-app/issues?q
 * [Kotlin Android Plugin](https://kotlinlang.org/docs/gradle.html#targeting-android) - JetBrains - Kotlin Android support
 * [Hilt Android Plugin](https://dagger.dev/hilt/gradle-setup) - Google - Dependency injection with Hilt
 * [Compose Compiler Plugin](https://developer.android.com/jetpack/compose) - JetBrains - Kotlin compiler plugin for Jetpack Compose
-* [Kover Plugin](https://github.com/Kotlin/kotlinx-kover) - JetBrains - Code coverage tool for Kotlin
+* [JaCoCo Gradle Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html) - Code coverage tool for Java and Kotlin
 * [KSP Plugin](https://github.com/google/ksp) - Google - Kotlin Symbol Processing API
 * [Android Test Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) - Google - Plugin for Android test projects
 * [Baseline Profile Plugin](https://developer.android.com/studio/profile/baselineprofile) - AndroidX - Generate and package baseline profiles
