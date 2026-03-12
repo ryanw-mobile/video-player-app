@@ -17,12 +17,72 @@ import kotlin.text.toInt
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.hiltAndroidPlugin)
-    alias(libs.plugins.kotlinxKover)
+    jacoco
     alias(libs.plugins.devtoolsKsp)
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.detekt)
     alias(libs.plugins.kotlinter)
+}
+
+jacoco {
+    toolVersion = libs.versions.jacoco.get()
+}
+
+tasks.register<JacocoReport>("jacocoTestReportDebug") {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    val fileFilter = listOf(
+        "**/R.class",
+        "**/R$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        "**/*Test*.*",
+        "android/**/*.*",
+        "**/androidx/**/*.*",
+        "**/dagger/hilt/internal/aggregatedroot/codegen/**",
+        "**/hilt_aggregated_deps/**",
+        "**/*_HiltModules*.*",
+        "**/*_Factory*.*",
+        "**/*_MembersInjector*.*",
+        "**/*Module_*.*",
+        "**/*_Impl*.*",
+        "**/*Fragment*.*",
+        "**/*Activity*.*",
+        "**/ComposableSingletons*.*",
+        "**/DebugUtil*.*",
+        "**/BR.class",
+        "**/Hilt*.*",
+        "**/DaznApplication*.*",
+        "**/data/source/local/*_Impl*.*",
+        "**/data/source/local/*Impl_Factory*.*",
+        "**/previewparameter/**",
+        "**/ui/theme/**",
+        "**/ui/navigation/**",
+        "**/ui/destinations/**",
+        "**/ui/components/**",
+        "**/ui/utils/**",
+        "**/ui/**",
+        "**/di/**",
+    )
+
+    val debugTree = fileTree("${project.layout.buildDirectory.get()}/intermediates/built_in_kotlinc/debug/compileDebugKotlin/classes") {
+        exclude(fileFilter)
+    }
+    val javaTree = fileTree("${project.layout.buildDirectory.get()}/intermediates/javac/debug/compileDebugJavaWithJavac/classes") {
+        exclude(fileFilter)
+    }
+
+    sourceDirectories.setFrom(files("src/main/java", "src/debug/java"))
+    classDirectories.setFrom(files(debugTree, javaTree))
+    executionData.setFrom(fileTree(project.layout.buildDirectory.get()) {
+        include("jacoco/testDebugUnitTest.exec")
+    })
 }
 
 // Configuration
@@ -196,52 +256,6 @@ tasks {
 }
 
 detekt { parallel = true }
-
-kover {
-    useJacoco()
-    reports.filters.excludes {
-        packages(
-            "$productNamespace.ui.*",
-            "$productNamespace.di",
-            "$productNamespace.ui.components",
-            "$productNamespace.ui.destinations",
-            "$productNamespace.ui.navigation",
-            "$productNamespace.ui.previewparameter",
-            "$productNamespace.ui.theme",
-            "$productNamespace.ui.utils",
-            "androidx",
-            "dagger.hilt.internal.aggregatedroot.codegen",
-            "hilt_aggregated_deps",
-        )
-
-        classes(
-            "dagger.hilt.internal.aggregatedroot.codegen.*",
-            "hilt_aggregated_deps.*",
-            "$productNamespace.*.Hilt_*",
-            "$productNamespace.*.*_Factory*",
-            "$productNamespace.*.*_HiltModules*",
-            "$productNamespace.*.*Module_*",
-            "$productNamespace.*.*MembersInjector*",
-            "$productNamespace.*.*_Impl*",
-            "$productNamespace.ComposableSingletons*",
-            "$productNamespace.BuildConfig*",
-            "$productNamespace.*.Fake*",
-            "$productNamespace.*.previewparameter*",
-            "$productNamespace.DaznApplication*",
-            "$productNamespace.data.source.local.*_Impl*",
-            "$productNamespace.data.source.local.*Impl_Factory",
-            "$productNamespace.BR",
-            "$productNamespace.Hilt*",
-            "*Fragment",
-            "*Fragment\$*",
-            "*Activity",
-            "*Activity\$*",
-            "*.databinding.*",
-            "*.BuildConfig",
-            "*.DebugUtil",
-        )
-    }
-}
 
 // Gradle Build Utilities - Revision 2026.01.22.01
 private fun ApplicationExtension.setupSdkVersionsFromVersionCatalog() {
