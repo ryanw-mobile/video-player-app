@@ -10,7 +10,6 @@ package com.rwmobi.dazncodechallenge.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -27,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import coil3.ImageLoader
@@ -51,7 +51,7 @@ fun EventListItem(
 
     Row(
         modifier = modifier
-            .height(intrinsicSize = IntrinsicSize.Min)
+            .height(96.dp)
             .clickable(onClick = { onItemClicked(event.videoUrl) }),
     ) {
         AsyncImage(
