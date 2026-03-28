@@ -7,15 +7,17 @@
 
 package com.rwmobi.dazncodechallenge.di
 
+import android.content.Context
 import com.rwmobi.dazncodechallenge.data.source.local.DaznApiDatabase
 import com.rwmobi.dazncodechallenge.data.source.local.RoomDbDataSource
 import com.rwmobi.dazncodechallenge.data.source.local.interfaces.LocalDataSource
-import com.rwmobi.dazncodechallenge.data.source.network.DaznApiService
-import com.rwmobi.dazncodechallenge.data.source.network.SandBoxAPIDataSource
+import com.rwmobi.dazncodechallenge.data.source.network.AssetFileDataSource
 import com.rwmobi.dazncodechallenge.data.source.network.interfaces.NetworkDataSource
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Singleton
@@ -37,10 +39,12 @@ object DataSourceModule {
     @Provides
     @Singleton
     fun provideNetworkDataSource(
-        retrofitService: DaznApiService,
+        @ApplicationContext context: Context,
+        moshi: Moshi,
         @DispatcherModule.IoDispatcher dispatcher: CoroutineDispatcher,
-    ): NetworkDataSource = SandBoxAPIDataSource(
-        retrofitService = retrofitService,
+    ): NetworkDataSource = AssetFileDataSource(
+        context = context,
+        moshi = moshi,
         dispatcher = dispatcher,
     )
 }
