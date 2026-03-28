@@ -7,8 +7,6 @@
 
 package com.rwmobi.dazncodechallenge.ui.theme
 
-import android.app.Activity
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -16,15 +14,11 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowCompat
 
 private val UniversalColors = lightColorScheme(
     primary = md_theme_light_primary,
@@ -60,7 +54,6 @@ private val UniversalColors = lightColorScheme(
 
 @Composable
 fun VideoPlayerAppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+, but this app we won't use it
     // dynamicColor: Boolean = false,
     content: @Composable () -> Unit,
@@ -70,14 +63,6 @@ fun VideoPlayerAppTheme(
     val dimension = if (containerSize.width <= with(density) { 360.dp.toPx() }) smallDimension else sw360Dimension
 
     val colorScheme = UniversalColors // This app has a fixed color theme
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-        }
-    }
 
     ProvideDimens(dimensions = dimension) {
         MaterialTheme(

@@ -16,7 +16,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -50,20 +49,19 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(
+                scrim = Color.Transparent.toArgb(),
+            ),
+            navigationBarStyle = SystemBarStyle.dark(
+                scrim = Color.Transparent.toArgb(),
+            ),
+        )
 
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
             val snackbarHostState = remember { SnackbarHostState() }
-
-            enableEdgeToEdge(
-                statusBarStyle = SystemBarStyle.dark(
-                    scrim = Color.Transparent.toArgb(),
-                ),
-                navigationBarStyle = SystemBarStyle.dark(
-                    scrim = Color.Transparent.toArgb(),
-                ),
-            )
 
             VideoPlayerAppTheme {
                 Surface(

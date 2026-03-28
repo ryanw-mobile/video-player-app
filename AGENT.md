@@ -32,6 +32,9 @@ The project uses Gradle with the Kotlin DSL and Version Catalog.
 *   **Run Unit Tests:**
     ```bash
     ./gradlew test
+    # Run a single test class or method:
+    ./gradlew test --tests "com.rwmobi.dazncodechallenge.data.repository.LocalCacheRepositoryTest"
+    ./gradlew test --tests "com.rwmobi.dazncodechallenge.data.repository.LocalCacheRepositoryTest.refreshEvents*"
     ```
 *   **Run Instrumented Tests:**
     ```bash
@@ -66,6 +69,42 @@ The project uses Gradle with the Kotlin DSL and Version Catalog.
     *   UI tests should use the Robot pattern for better maintainability (see `MainActivityTestRobot.kt`).
 *   **Coding Style:** Follow the project's formatting rules (enforced by `kotlinter` and `detekt`).
 *   **Version Management:** All dependency versions are managed in `gradle/libs.versions.toml`.
+
+## Architecture Details
+
+### Cache Synchronization (Dirty Bit Pattern)
+
+`RoomDbDataSource` replaces the cache atomically in three steps rather than delete-and-insert:
+1. Mark all existing rows `dirty = true`
+2. `insertAll()` with `REPLACE` conflict strategy (new rows arrive with `dirty = false`)
+3. Delete remaining rows where `dirty = true`
+
+This safely handles full-dataset API responses. The repository separates reads from refreshes — `get*()` always reads local DB only; `refresh*()` fetches from network and writes to local DB.
+
+### UIEvent Function Interfaces
+
+Screens do not call ViewModels directly. Each destination defines a `*UIEvent` data class of lambdas that is constructed in the navigation graph and passed into the screen composable. This decouples screens from ViewModel types and simplifies Compose Previews.
+
+### Adaptive Layout
+
+`DAZNCodeChallengeApp` maps `WindowWidthSizeClass` to an internal `NavigationLayoutType` enum:
+- `COMPACT` → `BOTTOM_NAVIGATION`
+- `MEDIUM` / `EXPANDED` → `NAVIGATION_RAIL`
+- ExoPlayer route **or** PiP active → `FULL_SCREEN` (no navigation chrome)
+
+The ExoPlayer destination is not listed in the navigation bar entries (`AppNavItem`); it is reached via `"exoplayer/{videoUrl}"` with a URL-encoded path parameter.
+
+### Error Message Queue
+
+ViewModels hold a `List<ErrorMessage>` in UI state, each entry keyed by a `UUID`. Calling `onErrorShown(id)` filters that ID from the list, preventing duplicate Snackbars and allowing per-error dismissal.
+
+### Testing: testFixtures
+
+Shared test data lives in `app/src/testFixtures/` and provides domain model instances, DB entity instances, network DTO instances, and fake implementations (`FakeRepository`, `FakeLocalDataSource`, `FakeRemoteDataSource`). Inject `UnconfinedTestDispatcher()` in place of the real IO dispatcher for synchronous coroutine execution in unit tests.
+
+### Code Quality Gate
+
+Detekt is configured with `maxIssues: 0` in `config/detekt/detekt.yml` — any new violation fails the build. Notable non-default thresholds: `LongMethod` is 120 lines but excludes `@Composable` functions; `LongParameterList` ignores `@Composable` and data class constructors.
 
 ## Key Files
 
