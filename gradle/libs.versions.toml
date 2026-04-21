@@ -1,6 +1,6 @@
 [versions]
 activityCompose = "1.13.0"
-agp = "9.1.1"
+agp = "9.2.0"
 benchmarkMacroJunit4 = "1.4.1"
 coil = "3.4.0"
 composeBom = "2026.03.01"
