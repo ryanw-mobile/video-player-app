@@ -100,10 +100,12 @@ android {
     defaultConfig {
         applicationId = productNamespace
 
-        resourceConfigurations += setOf("en")
-
         testInstrumentationRunner = "com.rwmobi.dazncodechallenge.ui.test.CustomTestRunner"
         vectorDrawables { useSupportLibrary = true }
+    }
+
+    androidResources {
+        localeFilters += setOf("en")
     }
 
     buildFeatures {
@@ -111,7 +113,7 @@ android {
         buildConfig = true
     }
 
-    sourceSets.named("test") { java.srcDirs("src/testFixtures/java") }
+    sourceSets.named("test") { java.directories.add("src/testFixtures/java") }
 
     testOptions {
         animationsDisabled = true
@@ -150,7 +152,6 @@ android {
 kotlin {
     compilerOptions {
         optIn.add("kotlin.time.ExperimentalTime")
-        freeCompilerArgs.add("-Xannotation-default-target=param-property")
     }
     jvmToolchain(21)
 }
